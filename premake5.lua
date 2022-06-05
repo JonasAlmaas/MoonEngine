@@ -70,6 +70,11 @@ project "Engine"
 		defines "ME_DEBUG"
 		runtime "Debug"
 		symbols "on"
+
+        defines
+        {
+            "ME_ENABLE_ASSERTS"
+        }
 	
 	filter "configurations:Release"
 		defines "ME_RELEASE"

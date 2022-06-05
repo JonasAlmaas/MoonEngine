@@ -12,4 +12,13 @@
 #endif
 
 
+#ifdef FN_ENABLE_ASSERTS
+	#define ME_ASSERT(x, ...)		{ if (!(x))	{ ME_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak}}
+	#define ME_CORE_ASSERT(x, ...)	{ if (!(x))	{ ME_CORE_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak}}
+#else
+	#define ME_ASSERT(x, ...)
+	#define ME_CORE_ASSERT(x, ...)
+#endif
+
+
 #define BIT(x) (1 << x)
