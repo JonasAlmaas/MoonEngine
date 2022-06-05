@@ -11,8 +11,7 @@ namespace Moon {
 	struct WindowProps
 	{
 		std::string Title;
-		unsigned int Width;
-		unsigned int Height;
+		unsigned int Width, Height;
 
 		WindowProps(const std::string& title = "Moon Engine",
 					unsigned int width = 1280,
@@ -37,8 +36,8 @@ namespace Moon {
 
 		// Window attributes
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
-		virtual void SetVsync(bool enabled) = 0;
-		virtual bool IsVsync() const = 0;
+		virtual void SetVSync(bool enabled) = 0;
+		virtual bool IsVSync() const = 0;
 
 		static Window* Create(const WindowProps& props = WindowProps());
 	};
