@@ -10,9 +10,10 @@
 	
 	int main(int argc, char** argv)
 	{
+		Moon::Log::Init();
+
 		auto app = Moon::CreateApplication();
 		app->Run();
 		delete app;
 	}
 
-#endif
