@@ -2,8 +2,6 @@
 
 #include "Moon/Core/Base.h"
 
-#include <memory>
-
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 
