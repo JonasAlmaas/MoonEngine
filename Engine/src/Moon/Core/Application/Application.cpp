@@ -31,7 +31,16 @@ namespace Moon {
 
 	void Application::OnEvent(Event& e)
 	{
-		ME_CORE_INFO("{0}", e);
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClosed));
+
+		ME_CORE_TRACE("{0}", e);
+	}
+
+	bool Application::OnWindowClosed(WindowCloseEvent& e)
+	{
+		m_Running = false;
+		return true;
 	}
 
 }
