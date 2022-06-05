@@ -1,6 +1,10 @@
 # Binaries
 **/bin/
 bin-int/
+
+# Moon files
+*.log
+
 # Visual Studio files and folder
 .vs/
 **.sln
