@@ -13,4 +13,9 @@ namespace Moon {
 
 	}
 
+	void Application::Run()
+	{
+		while (true);
+	}
+
 }

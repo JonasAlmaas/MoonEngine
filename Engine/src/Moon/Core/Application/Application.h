@@ -10,6 +10,8 @@ namespace Moon {
 	public:
 		Application();
 		virtual ~Application();
+		
+		void Run();
 	};
 
 }
