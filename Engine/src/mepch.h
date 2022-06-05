@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Moon/Core/Log/Log.h"
+
 #include <iostream>
 #include <memory>
 #include <utility>

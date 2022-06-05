@@ -1,8 +1,6 @@
 #include "mepch.h"
 #include "Platform/Windows/Window/WindowsWindow.h"
 
-#include "Moon/Core/Log/Log.h"
-
 
 namespace Moon {
 
