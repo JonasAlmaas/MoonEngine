@@ -9,7 +9,7 @@
 
 namespace Moon {
 	
-	class MOON_API Application
+	class Application
 	{
 	public:
 		Application();

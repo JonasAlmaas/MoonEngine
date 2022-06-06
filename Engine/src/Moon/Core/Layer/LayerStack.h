@@ -6,7 +6,7 @@
 
 namespace Moon {
 
-	class MOON_API LayerStack
+	class LayerStack
 	{
 	public:
 		LayerStack();

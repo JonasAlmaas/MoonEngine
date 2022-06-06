@@ -11,7 +11,9 @@ workspace "MoonEngine"
 		"Dist",
 	}
 
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+
 
 group "Dependencies"
     include "Engine/vendor/Glad"
@@ -19,12 +21,13 @@ group "Dependencies"
     include "Engine/vendor/ImGui"
 group ""
 
+
 project "Engine"
     location "Engine"
-    kind "SharedLib"
+    kind "StaticLib"
     language "C++"
     cppdialect "C++20"
-    staticruntime "off"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -69,12 +72,6 @@ project "Engine"
         defines
         {
             "ME_PLATFORM_WINDOWS",
-            "ME_BUILD_DLL",
-        }
-
-        postbuildcommands
-        {
-            ("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
         }
 
     filter "configurations:Debug"
@@ -98,7 +95,7 @@ project "Sandbox"
     kind "ConsoleApp"
 	language "C++"
     cppdialect "C++20"
-    staticruntime "off"
+    staticruntime "on"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -115,6 +112,7 @@ project "Sandbox"
         "Engine/vendor/spdlog/include",
 
         "%{IncludeDir.glm}",
+        "%{IncludeDir.ImGui}",
     }
 
     links
