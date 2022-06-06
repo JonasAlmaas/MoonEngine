@@ -36,6 +36,20 @@ namespace Moon {
 		}
 	}
 
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+
+	void Application::PushOverlay(Layer* overlay)
+	{
+		m_LayerStack.PushOverlay(overlay);
+		overlay->OnAttach();
+	}
+
+	// ---- Event handling ----
+
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
@@ -49,18 +63,6 @@ namespace Moon {
 				break;
 		}
 	}
-
-	void Application::PushLayer(Layer* layer)
-	{
-		m_LayerStack.PushLayer(layer);
-	}
-
-	void Application::PushOverlay(Layer* overlay)
-	{
-		m_LayerStack.PushOverlay(overlay);
-	}
-
-	// ---- Event handling ----
 
 	bool Application::OnWindowClosed(WindowCloseEvent& e)
 	{
