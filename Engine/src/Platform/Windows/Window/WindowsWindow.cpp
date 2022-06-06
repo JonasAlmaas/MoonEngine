@@ -85,8 +85,17 @@ namespace Moon {
 			data.EventCallback(e);
 		});
 
+		// Key Typed Event
+		glfwSetCharCallback(m_Window, [](GLFWwindow* window, unsigned int keycode)
+		{
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+
+			KeyTypedEvent e(keycode);
+			data.EventCallback(e);
+		});
+
 		// Key Events
-		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+		glfwSetKeyCallback(m_Window, [](GLFWwindow* window, int keycode, int scancode, int action, int mods)
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
@@ -94,19 +103,19 @@ namespace Moon {
 			{
 				case GLFW_PRESS:
 				{
-					KeyPressedEvent e(key, 0);
+					KeyPressedEvent e(keycode, 0);
 					data.EventCallback(e);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					KeyReleasedEvent e(key);
+					KeyReleasedEvent e(keycode);
 					data.EventCallback(e);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
-					KeyPressedEvent e(key, 1);
+					KeyPressedEvent e(keycode, 1);
 					data.EventCallback(e);
 					break;
 				}
