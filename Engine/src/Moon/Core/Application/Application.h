@@ -35,7 +35,7 @@ namespace Moon {
 		std::unique_ptr<Window> m_Window;
 
 		LayerStack m_LayerStack;
-		std::unique_ptr<ImGuiLayer> m_ImGuiLayer;
+		ImGuiLayer* m_ImGuiLayer;
 
 		bool m_Running = true;
 	};
