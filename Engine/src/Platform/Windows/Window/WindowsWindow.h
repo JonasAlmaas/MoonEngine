@@ -23,6 +23,8 @@ namespace Moon {
 		void SetVSync(bool enabled) override;
 		bool IsVSync() const override;
 
+		virtual inline void* GetNativeWindow() const override { return m_Window; };
+
 	private:
 		virtual void Init(const WindowProps& props);
 		virtual void Shutdown();
