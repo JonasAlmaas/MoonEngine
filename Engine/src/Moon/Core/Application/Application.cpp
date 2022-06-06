@@ -5,8 +5,6 @@
 
 
 namespace Moon {
-	
-	#define BIND_EVENT_FN(x) std::bind(&Application::x, this, std::placeholders::_1)
 
 	Application* Application::s_Instance = nullptr;
 	
@@ -16,7 +14,7 @@ namespace Moon {
 		s_Instance = this;
 
 		m_Window = std::unique_ptr<Window>(Window::Create());
-		m_Window->SetEventCallback(BIND_EVENT_FN(OnEvent));
+		m_Window->SetEventCallback(ME_BIND_EVENT_FN(Application::OnEvent));
 	}
 
 	Application::~Application()
@@ -41,7 +39,7 @@ namespace Moon {
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(BIND_EVENT_FN(OnWindowClosed));
+		dispatcher.Dispatch<WindowCloseEvent>(ME_BIND_EVENT_FN(Application::OnWindowClosed));
 
 		// Send events to layers
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
