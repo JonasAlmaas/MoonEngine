@@ -17,7 +17,7 @@ public:
 
 	void OnEvent(Moon::Event& e) override
 	{
-		ME_TRACE("{0}", e);
+
 	}
 };
 
