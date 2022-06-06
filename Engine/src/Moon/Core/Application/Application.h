@@ -21,15 +21,19 @@ namespace Moon {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* overlay);
 
+		inline static Application& Get() { return *s_Instance; }
+
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
 
 	private:
 		bool m_Running = true;
+		static Application* s_Instance;
 
 		std::unique_ptr<Window> m_Window;
 		LayerStack m_LayerStack;
 
+		bool m_Running = true;
 	};
 
 	// To be defined in client
