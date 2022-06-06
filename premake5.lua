@@ -1,3 +1,4 @@
+include "Dependencies.lua"
 
 workspace "MoonEngine"
     architecture "x86_64"
@@ -11,11 +12,6 @@ workspace "MoonEngine"
 	}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-
--- Include directories relative to root folder (solution directory)
-IncludeDir = {}
-IncludeDir["GLFW"] = "Engine/vendor/GLFW/include"
-IncludeDir["Glad"] = "Engine/vendor/Glad/include"
 
 group "Dependencies"
     include "Engine/vendor/GLFW"
