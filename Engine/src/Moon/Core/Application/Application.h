@@ -4,6 +4,7 @@
 #include "Moon/Core/Layer/LayerStack.h"
 #include "Moon/Core/Window/Window.h"
 #include "Moon/Events/ApplicationEvent.h"
+#include "Moon/ImGui/ImGuiLayer.h"
 
 
 namespace Moon {
@@ -32,7 +33,9 @@ namespace Moon {
 		static Application* s_Instance;
 
 		std::unique_ptr<Window> m_Window;
+
 		LayerStack m_LayerStack;
+		std::unique_ptr<ImGuiLayer> m_ImGuiLayer;
 
 		bool m_Running = true;
 	};
