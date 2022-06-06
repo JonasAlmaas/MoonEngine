@@ -38,6 +38,12 @@ project "Engine"
         "%{prj.name}/src/**.cpp",
     }
 
+    defines
+    {
+        "_CRT_SECURE_NO_WARNINGS",
+        "GLFW_INCLUDE_NONE",
+	}
+
     includedirs
     {
         "%{prj.name}/src",
@@ -50,12 +56,12 @@ project "Engine"
     }
 
     links
-    {
-        "Glad",
-        "GLFW",
-        "imgui",
-        "opengl32.lib",
-    }
+	{
+		"Glad",
+		"GLFW",
+		"ImGui",
+		"opengl32.lib",
+	}
 
     filter "system:windows"
         systemversion "latest"
@@ -64,7 +70,6 @@ project "Engine"
         {
             "ME_PLATFORM_WINDOWS",
             "ME_BUILD_DLL",
-            "GLFW_INCLUDE_NONE",
         }
 
         postbuildcommands
