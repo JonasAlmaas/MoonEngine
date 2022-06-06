@@ -24,7 +24,7 @@ project "Engine"
     kind "SharedLib"
     language "C++"
     cppdialect "C++20"
-    staticruntime "On"
+    staticruntime "off"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -74,7 +74,6 @@ project "Engine"
     filter "configurations:Debug"
 		defines "ME_DEBUG"
 		runtime "Debug"
-        buildoptions "/MDd"
 		symbols "on"
         
         defines
@@ -85,13 +84,11 @@ project "Engine"
     filter "configurations:Release"
 		defines "ME_RELEASE"
 		runtime "Release"
-        buildoptions "/MD"
 		optimize "on"
         
     filter "configurations:Dist"
 		defines "ME_DIST"
 		runtime "Release"
-        buildoptions "/MD"
 		optimize "on"
 
 
@@ -100,7 +97,7 @@ project "Sandbox"
     kind "ConsoleApp"
 	language "C++"
     cppdialect "C++20"
-	staticruntime "on"
+    staticruntime "off"
 
     targetdir ("bin/" .. outputdir .. "/%{prj.name}")
     objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -133,17 +130,14 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "FN_DEBUG"
 		runtime "Debug"
-        buildoptions "/MDd"
 		symbols "on"
 	
 	filter "configurations:Release"
 		defines "FN_RELEASE"
 		runtime "Release"
-        buildoptions "/MD"
 		optimize "on"
 
 	filter "configurations:Dist"
 		defines "FN_DIST"
 		runtime "Release"
-        buildoptions "/MD"
 		optimize "on"
