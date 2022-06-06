@@ -45,6 +45,7 @@ project "Engine"
 
         "%{IncludeDir.Glad}",
         "%{IncludeDir.GLFW}",
+        "%{IncludeDir.glm}",
         "%{IncludeDir.ImGui}",
     }
 
@@ -107,6 +108,8 @@ project "Sandbox"
     {
         "Engine/src",
         "Engine/vendor/spdlog/include",
+
+        "%{IncludeDir.glm}",
     }
 
     links
