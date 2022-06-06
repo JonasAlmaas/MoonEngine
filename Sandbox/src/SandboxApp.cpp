@@ -1,12 +1,18 @@
 #include <Moon.h>
 #include <Moon/Core/Application/Entrypoint.h>
 
+#include <imgui.h>
+
 
 class ExampleLayer : public Moon::Layer
 {
 public:
 	ExampleLayer()
 		: Layer("Example")
+	{
+	}
+
+	virtual void OnImGuiRender() override
 	{
 	}
 
