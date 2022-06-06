@@ -8,7 +8,7 @@
 #include <backends/imgui_impl_opengl3.h>
 
 // TEMPORARY
-//#include <GLFW/glfw3.h>
+#include <GLFW/glfw3.h>
 //#include <glad/glad.h>
 
 
@@ -25,16 +25,6 @@ namespace Moon {
 
 	void ImGuiLayer::OnAttach()
 	{
-		ImGui::CreateContext();
-		ImGui::StyleColorsDark();
-		
-		ImGuiIO& io = ImGui::GetIO();
-		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
-
-		ImGui_ImplOpenGL3_Init("#version 410");
-
-		/*
 		IMGUI_CHECKVERSION();
 
 		// Setup ImGui context
@@ -70,30 +60,24 @@ namespace Moon {
 		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 		ImGui_ImplOpenGL3_Init("#version 410");
-		*/
 	}
 
 	void ImGuiLayer::OnDetach()
 	{
-		/*
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
-		*/
 	}
 
 	void ImGuiLayer::Begin()
 	{
-		/*
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-		*/
 	}
 
 	void ImGuiLayer::End()
 	{
-		/*
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
@@ -109,12 +93,10 @@ namespace Moon {
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
 		}
-		*/
 	}
 
 	void ImGuiLayer::SetDarkThemeColors()
 	{
-		/*
 		auto& colors = ImGui::GetStyle().Colors;
 
 		// Window
@@ -146,15 +128,13 @@ namespace Moon {
 		colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
 		colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-		*/
+
 	}
 
 	void ImGuiLayer::OnImGuiRender()
 	{
-		/*
 		static bool show = true;
 		ImGui::ShowDemoWindow(&show);
-		*/
 	}
 
 }
