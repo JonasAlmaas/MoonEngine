@@ -2,7 +2,7 @@
 
 #include "Moon/Core/Window/Window.h"
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 
 namespace Moon {

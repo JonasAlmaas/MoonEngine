@@ -63,6 +63,7 @@ project "Engine"
         {
             "ME_PLATFORM_WINDOWS",
             "ME_BUILD_DLL",
+            "GLFW_INCLUDE_NONE",
         }
 
         postbuildcommands
