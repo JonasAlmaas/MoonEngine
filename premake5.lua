@@ -14,8 +14,9 @@ workspace "MoonEngine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
-    include "Engine/vendor/GLFW"
     include "Engine/vendor/Glad"
+    include "Engine/vendor/GLFW"
+    include "Engine/vendor/ImGui"
 group ""
 
 project "Engine"
@@ -41,15 +42,18 @@ project "Engine"
     {
         "%{prj.name}/src",
         "%{prj.name}/vendor/spdlog/include",
-        "%{IncludeDir.GLFW}",
+
         "%{IncludeDir.Glad}",
+        "%{IncludeDir.GLFW}",
+        "%{IncludeDir.ImGui}",
     }
 
     links
     {
-        "GLFW",
         "Glad",
-        "opengl32.lib"
+        "GLFW",
+        "imgui",
+        "opengl32.lib",
     }
 
     filter "system:windows"
