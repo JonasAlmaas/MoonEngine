@@ -3,12 +3,12 @@ workspace "MoonEngine"
     architecture "x86_64"
     startproject "Sandbox"
 
-    configurations  {
+    configurations 
+	{
 		"Debug",
 		"Release",
 		"Dist",
 	}
-
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
