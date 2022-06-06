@@ -69,21 +69,24 @@ project "Engine"
     filter "configurations:Debug"
 		defines "ME_DEBUG"
 		runtime "Debug"
+        buildoptions "/MDd"
 		symbols "on"
-
+        
         defines
         {
             "ME_ENABLE_ASSERTS"
         }
-	
-	filter "configurations:Release"
+        
+    filter "configurations:Release"
 		defines "ME_RELEASE"
 		runtime "Release"
+        buildoptions "/MD"
 		optimize "on"
-
-	filter "configurations:Dist"
+        
+    filter "configurations:Dist"
 		defines "ME_DIST"
 		runtime "Release"
+        buildoptions "/MD"
 		optimize "on"
 
 
@@ -125,14 +128,17 @@ project "Sandbox"
 	filter "configurations:Debug"
 		defines "FN_DEBUG"
 		runtime "Debug"
+        buildoptions "/MDd"
 		symbols "on"
 	
 	filter "configurations:Release"
 		defines "FN_RELEASE"
 		runtime "Release"
+        buildoptions "/MD"
 		optimize "on"
 
 	filter "configurations:Dist"
 		defines "FN_DIST"
 		runtime "Release"
+        buildoptions "/MD"
 		optimize "on"
