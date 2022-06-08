@@ -15,8 +15,12 @@ namespace Moon {
 		virtual void Bind() const override;
 		virtual void UnBind() const override;
 
+		virtual const VertexBufferLayout& GetLayout() const override { return m_Layout; };
+		virtual void SetLayout(const VertexBufferLayout& layout) override { m_Layout = layout; };
+
 	private:
 		uint32_t m_RendererID;
+		VertexBufferLayout m_Layout;
 
 	};
 
