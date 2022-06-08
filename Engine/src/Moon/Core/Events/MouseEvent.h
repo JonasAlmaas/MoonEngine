@@ -1,7 +1,7 @@
 #pragma once
 
 #include "mepch.h"
-#include "Moon/Events/Event.h"
+#include "Moon/Core/Events/Event.h"
 
 
 namespace Moon {
