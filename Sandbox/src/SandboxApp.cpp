@@ -1,5 +1,5 @@
 #include <Moon.h>
-#include <Moon/Core/Application/Entrypoint.h>
+#include <Moon/Core/Entrypoint.h>
 
 #include <imgui.h>
 
