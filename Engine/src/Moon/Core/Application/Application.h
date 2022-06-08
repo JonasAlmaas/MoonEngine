@@ -6,6 +6,9 @@
 #include "Moon/Events/ApplicationEvent.h"
 #include "Moon/ImGui/Layer/ImGuiLayer.h"
 
+// TEMPORARY
+#include "Moon/Renderer/Shader/Shader.h"
+
 
 namespace Moon {
 	
@@ -40,6 +43,7 @@ namespace Moon {
 
 		// TEOPORARY
 		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 
 	private:
 		static Application* s_Instance;
