@@ -1,5 +1,5 @@
 #include "mepch.h"
-#include "Moon/Renderer/Shader/Shader.h"
+#include "Moon/Core/Renderer/Shader/Shader.h"
 
 #include <glad/glad.h>
 
