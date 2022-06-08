@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Moon/Core/Renderer/GraphicsContext.h"
+#include "Moon/Core/Renderer/GraphicsContext/GraphicsContext.h"
 
 struct GLFWwindow;
 
