@@ -3,6 +3,8 @@
 #include "Moon/Core/Base.h"
 #include "Moon/Core/Event/ApplicationEvent.h"
 #include "Moon/Core/Layer/LayerStack.h"
+#include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/IndexBuffer/IndexBuffer.h"
 #include "Moon/Core/Window/Window.h"
 #include "Moon/ImGui/Layer/ImGuiLayer.h"
 
@@ -33,7 +35,6 @@ namespace Moon {
 		bool OnWindowClosed(WindowCloseEvent& e);
 
 	private:
-
 		std::unique_ptr<Window> m_Window;
 
 		LayerStack m_LayerStack;
@@ -42,8 +43,10 @@ namespace Moon {
 		bool m_Running = true;
 
 		// TEOPORARY
-		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		unsigned int m_VertexArray;
 		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
 
 	private:
 		static Application* s_Instance;
