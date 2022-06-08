@@ -3,8 +3,8 @@
 #include "Moon/Core/Base.h"
 #include "Moon/Core/Event/ApplicationEvent.h"
 #include "Moon/Core/Layer/LayerStack.h"
-#include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
-#include "Moon/Core/Renderer/Buffer/IndexBuffer/IndexBuffer.h"
+#include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
+#include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
 #include "Moon/Core/Window/Window.h"
 #include "Moon/ImGui/Layer/ImGuiLayer.h"
 

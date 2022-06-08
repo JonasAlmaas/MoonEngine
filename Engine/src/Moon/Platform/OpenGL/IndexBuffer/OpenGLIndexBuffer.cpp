@@ -1,5 +1,5 @@
 #include "mepch.h"
-#include "Moon/Platform/OpenGL/Buffer/IndexBuffer/OpenGLIndexBuffer.h"
+#include "Moon/Platform/OpenGL/IndexBuffer/OpenGLIndexBuffer.h"
 
 #include <glad/glad.h>
 

@@ -1,7 +1,7 @@
 #include "mepch.h"
 #include "Moon/Core/Application/Application.h"
 
-#include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBufferLayout.h"
+#include "Moon/Core/Renderer/VertexBuffer/VertexBufferLayout.h"
 
 // TEMPORARY
 #include <glad/glad.h>
