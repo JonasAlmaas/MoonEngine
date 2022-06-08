@@ -1,9 +1,9 @@
 #include "mepch.h"
 #include "Platform/Windows/Window/WindowsWindow.h"
 
-#include "Moon/Core/Events/ApplicationEvent.h"
-#include "Moon/Core/Events/KeyEvent.h"
-#include "Moon/Core/Events/MouseEvent.h"
+#include "Moon/Core/Event/ApplicationEvent.h"
+#include "Moon/Core/Event/KeyEvent.h"
+#include "Moon/Core/Event/MouseEvent.h"
 
 #include "Platform/OpenGL/GraphicsContext/OpenGLContext.h"
 
