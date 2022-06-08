@@ -1,5 +1,5 @@
 #include "mepch.h"
-#include "Platform/OpenGL/Buffer/VertexBuffer/OpenGLVertexBuffer.h"
+#include "Moon/Platform/OpenGL/Buffer/VertexBuffer/OpenGLVertexBuffer.h"
 
 #include <glad/glad.h>
 

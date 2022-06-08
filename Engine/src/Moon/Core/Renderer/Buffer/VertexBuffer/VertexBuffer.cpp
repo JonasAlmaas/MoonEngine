@@ -2,8 +2,7 @@
 #include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
 
 #include "Moon/Core/Renderer/Renderer.h"
-
-#include "Platform/OpenGL/Buffer/VertexBuffer/OpenGLVertexBuffer.h"
+#include "Moon/Platform/OpenGL/Buffer/VertexBuffer/OpenGLVertexBuffer.h"
 
 
 namespace Moon {

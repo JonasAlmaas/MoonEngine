@@ -1,11 +1,10 @@
 #include "mepch.h"
-#include "Platform/Windows/Window/WindowsWindow.h"
+#include "Moon/Platform/Windows/Window/WindowsWindow.h"
 
 #include "Moon/Core/Event/ApplicationEvent.h"
 #include "Moon/Core/Event/KeyEvent.h"
 #include "Moon/Core/Event/MouseEvent.h"
-
-#include "Platform/OpenGL/GraphicsContext/OpenGLContext.h"
+#include "Moon/Platform/OpenGL/GraphicsContext/OpenGLContext.h"
 
 #include <GLFW/glfw3.h>
 
