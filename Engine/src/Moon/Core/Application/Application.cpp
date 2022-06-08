@@ -29,6 +29,7 @@ namespace Moon {
 	{
 		while (m_Running)
 		{
+			// TODO: Remove glad once this is gone!
 			glClearColor(1, 0, 1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Moon/Core/Window/Window.h"
+#include "Moon/Renderer/GraphicsContext.h"
 
 struct GLFWwindow;
 
@@ -31,6 +32,8 @@ namespace Moon {
 
 	private:
 		GLFWwindow* m_Window;
+
+		GraphicsContext* m_Context;
 
 		struct WindowData
 		{
