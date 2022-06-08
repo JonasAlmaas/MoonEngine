@@ -30,7 +30,6 @@ namespace Moon {
 		bool OnWindowClosed(WindowCloseEvent& e);
 
 	private:
-		static Application* s_Instance;
 
 		std::unique_ptr<Window> m_Window;
 
@@ -38,6 +37,13 @@ namespace Moon {
 		ImGuiLayer* m_ImGuiLayer;
 
 		bool m_Running = true;
+
+		// TEOPORARY
+		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+
+	private:
+		static Application* s_Instance;
+
 	};
 
 	// To be defined in client
