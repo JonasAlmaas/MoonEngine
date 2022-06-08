@@ -1,15 +1,19 @@
 #pragma once
 
 #include "Moon/Core/Base.h"
-#include "Moon/Core/Event/ApplicationEvent.h"
-#include "Moon/Core/Layer/LayerStack.h"
-#include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
-#include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
-#include "Moon/Core/Window/Window.h"
-#include "Moon/ImGui/Layer/ImGuiLayer.h"
 
-// TEMPORARY
+#include "Moon/Core/Event/ApplicationEvent.h"
+
+#include "Moon/Core/Layer/LayerStack.h"
+
+#include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
 #include "Moon/Core/Renderer/Shader/Shader.h"
+#include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
+#include "Moon/Core/Renderer/VertexArray/VertexArray.h"
+
+#include "Moon/Core/Window/Window.h"
+
+#include "Moon/ImGui/Layer/ImGuiLayer.h"
 
 
 namespace Moon {
@@ -42,11 +46,9 @@ namespace Moon {
 
 		bool m_Running = true;
 
-		// TEOPORARY
-		unsigned int m_VertexArray;
-		std::unique_ptr<Shader> m_Shader;
-		std::unique_ptr<VertexBuffer> m_VertexBuffer;
-		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_SquareVA;
+		std::shared_ptr<VertexArray> m_TriangleVA;
 
 	private:
 		static Application* s_Instance;

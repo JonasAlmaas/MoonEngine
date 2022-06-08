@@ -10,28 +10,6 @@
 namespace Moon {
 
 	Application* Application::s_Instance = nullptr;
-
-	// TEMPORARY
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-			case Moon::ShaderDataType::Bool:		return GL_BOOL;
-			case Moon::ShaderDataType::Int:			return GL_INT;
-			case Moon::ShaderDataType::Int2:		return GL_INT;
-			case Moon::ShaderDataType::Int3:		return GL_INT;
-			case Moon::ShaderDataType::Int4:		return GL_INT;
-			case Moon::ShaderDataType::Float:		return GL_FLOAT;
-			case Moon::ShaderDataType::Float2:		return GL_FLOAT;
-			case Moon::ShaderDataType::Float3:		return GL_FLOAT;
-			case Moon::ShaderDataType::Float4:		return GL_FLOAT;
-			case Moon::ShaderDataType::Mat3:		return GL_FLOAT;
-			case Moon::ShaderDataType::Mat4:		return GL_FLOAT;
-		}
-		
-		ME_CORE_ASSERT(false, "Unknows ShaderDataType!");
-		return 0;
-	}
 	
 	Application::Application()
 	{
@@ -43,40 +21,68 @@ namespace Moon {
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlay(m_ImGuiLayer);
-
-		// TEOPORARY
-		glGenVertexArrays(1, &m_VertexArray);
-		glBindVertexArray(m_VertexArray);
-
-		float vertices[7 * 3] = {
-		//   x      y     z     r     g     b     a
-			-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-			 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
-		};
-
-		m_VertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-
+		
+		// ---- Square ----
 		{
-			VertexBufferLayout layout = {
-				{ ShaderDataType::Float3, "a_Position" },
-				{ ShaderDataType::Float4, "a_Color" },
+			m_SquareVA.reset(VertexArray::Create());
+
+			float vertices[7 * 4] = {
+				//   x      y     z     r     g     b     a
+					-0.75f, -0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+					 0.75f, -0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+					 0.75f,  0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+					-0.75f,  0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
 			};
-			m_VertexBuffer->SetLayout(layout);
+			std::shared_ptr<VertexBuffer> VB;
+			VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+			VertexBufferLayout layout = {
+				{ ShaderDataType::Float3, "Position XYZ" },
+				{ ShaderDataType::Float4, "Color RGBA"},
+			};
+			VB->SetLayout(layout);
+			m_SquareVA->AddVertexBuffer(VB);
+
+			uint32_t indices[3 * 2] = {
+				0, 1, 2,
+				0, 2, 3
+			};
+			std::shared_ptr<IndexBuffer> IB;
+			IB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+
+			m_SquareVA->SetIndexBuffer(IB);
 		}
 
-		uint32_t index = 0;
-		const auto& layout = m_VertexBuffer->GetLayout();
-		for (const auto& element : layout)
+		// ---- Triangle ----
 		{
-			glEnableVertexAttribArray(index);
-			glVertexAttribPointer(index, element.GetComponentCount(), ShaderDataTypeToOpenGLBaseType(element.Type), element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)element.Offset);
-			index++;
+			m_TriangleVA.reset(VertexArray::Create());
+
+			float vertices[7 * 3] = {
+				//   x      y     z     r     g     b     a
+					-0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+					 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+					 0.0f,  0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+			};
+			std::shared_ptr<VertexBuffer> VB;
+			VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+			VertexBufferLayout layout = {
+				{ ShaderDataType::Float3, "Position XYZ" },
+				{ ShaderDataType::Float4, "Color RGBA"},
+			};
+			VB->SetLayout(layout);
+			m_TriangleVA->AddVertexBuffer(VB);
+
+			uint32_t indices[3] = {
+				0, 1, 2
+			};
+			std::shared_ptr<IndexBuffer> IB;
+			IB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+
+			m_TriangleVA->SetIndexBuffer(IB);
 		}
 
-		uint32_t indices[] = { 0, 1, 2 };
-		m_IndexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
-
+		// ---- Basic Temp Shader ----
 		std::string vertexSrc = R"(
 			#version 330 core
 
@@ -125,8 +131,13 @@ namespace Moon {
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			m_Shader->Bind();
-			glBindVertexArray(m_VertexArray);
-			glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+			
+			m_SquareVA->Bind();
+			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
+			m_TriangleVA->Bind();
+			glDrawElements(GL_TRIANGLES, m_TriangleVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+
 			// ----
 
 			for (Layer* layer : m_LayerStack)
