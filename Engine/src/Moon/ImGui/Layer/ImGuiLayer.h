@@ -23,7 +23,7 @@ namespace Moon {
 		void End();
 
 	private:
-		void SetDarkThemeColors();
+		void SetStyle();
 
 	};
 
