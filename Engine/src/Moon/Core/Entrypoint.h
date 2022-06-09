@@ -5,8 +5,6 @@
 
 
 #ifdef ME_PLATFORM_WINDOWS
-	
-	extern Moon::Application* Moon::CreateApplication();
 
 	int main(int argc, char** argv)
 	{
