@@ -14,6 +14,7 @@ public:
 
 	virtual void OnImGuiRender() override
 	{
+
 	}
 
 	void OnUpdate() override
@@ -25,6 +26,7 @@ public:
 	{
 
 	}
+
 };
 
 class Sandbox : public Moon::Application
