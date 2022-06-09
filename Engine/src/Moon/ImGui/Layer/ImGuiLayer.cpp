@@ -2,7 +2,6 @@
 #include "Moon/ImGui/Layer/ImGuiLayer.h"
 
 #include "Moon/Core/Application/Application.h"
-#include "Moon/Core/Utils/Color.h"
 #include "Moon/Core/Customization/Color.h"
 
 #include <imgui.h>
@@ -90,46 +89,49 @@ namespace Moon {
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
 
+		// TODO: This is only ment for 4k monitors, should be a setting you can set in the editor.
+		io.FontGlobalScale = 1.5f;
+
 		style.Alpha = 1.0f;
 		style.DisabledAlpha = 1.0f;
-		//style.WindowPadding = ImVec2(4.0f, 4.0f);
-		//style.WindowRounding =
-		//style.WindowBorderSize = 
-		//style.WindowMinSize = 
-		//style.WindowTitleAlign = 
-		//style.WindowMenuButtonPosition = 
-		//style.ChildRounding = 
-		//style.ChildBorderSize = 
-		//style.PopupRounding = 
-		//style.PopupBorderSize = 
-		//style.FramePadding = 
-		//style.FrameRounding = 
-		style.FrameBorderSize = 0;
-		//style.ItemSpacing = 
-		//style.ItemInnerSpacing = 
-		//style.CellPadding = 
-		//style.TouchExtraPadding = 
-		//style.IndentSpacing = 
-		//style.ColumnsMinSpacing = 
-		//style.ScrollbarSize = 
-		//style.ScrollbarRounding = 
-		//style.GrabMinSize = 
-		//style.GrabRounding = 
-		//style.LogSliderDeadzone = 
-		//style.TabRounding = 
-		//style.TabBorderSize = 
-		//style.TabMinWidthForCloseButton = 
-		//style.ColorButtonPosition = 
-		//style.ButtonTextAlign = 
-		//style.SelectableTextAlign = 
-		//style.DisplayWindowPadding = 
-		//style.DisplaySafeAreaPadding = 
-		//style.MouseCursorScale = 
-		//style.AntiAliasedLines = 
-		//style.AntiAliasedLinesUseTex = 
-		//style.AntiAliasedFill = 
-		//style.CurveTessellationTol = 
-		//style.CircleTessellationMaxError =
+		style.WindowPadding = ImVec2(8.0f, 8.0f);
+		style.WindowRounding = 0.0f;
+		style.WindowBorderSize = 0.0f;
+		style.WindowMinSize = ImVec2(10.0f, 10.0f);
+		style.WindowTitleAlign = ImVec2(0, 0.5f);
+		style.WindowMenuButtonPosition = ImGuiDir_Left;
+		style.ChildRounding = 0.0f;
+		style.ChildBorderSize = 0.0f;
+		style.PopupRounding = 4.0f;
+		style.PopupBorderSize = 0.0f;
+		style.FramePadding = ImVec2(4.0f, 2.0f);
+		style.FrameRounding = 4.0f;
+		style.FrameBorderSize = 0.0f;
+		style.ItemSpacing = ImVec2(10.0f, 5.0f);
+		style.ItemInnerSpacing = ImVec2(5.0f, 5.0f);
+		style.CellPadding = ImVec2(4.0f, 2.0f);
+		style.TouchExtraPadding = ImVec2(0.0f, 0.0f);
+		style.IndentSpacing = 21.0f;
+		style.ColumnsMinSpacing = 6.0f;
+		style.ScrollbarSize = 15.0f;
+		style.ScrollbarRounding = 9.0f;
+		style.GrabMinSize = 10.0f;
+		style.GrabRounding = 0.0f;
+		style.LogSliderDeadzone = 4.0f;
+		style.TabRounding = 4.0f;
+		style.TabBorderSize = 0.0f;
+		style.TabMinWidthForCloseButton = 0.0f;
+		style.ColorButtonPosition = ImGuiDir_Right;
+		style.ButtonTextAlign = ImVec2(0.5f, 0.5f);
+		style.SelectableTextAlign = ImVec2(0.0f, 0.0f);
+		style.DisplayWindowPadding = ImVec2(19.0f, 19.0f);
+		style.DisplaySafeAreaPadding = ImVec2(3.0f, 3.0f);
+		style.MouseCursorScale = 1.0f;
+		style.AntiAliasedLines = true;
+		style.AntiAliasedLinesUseTex = true;
+		style.AntiAliasedFill = true;
+		style.CurveTessellationTol = 1.25f;
+		style.CircleTessellationMaxError = 0.5f;
 
 		style.Colors[ImGuiCol_Text]						= Colors::Text.ToImVec4();
 		style.Colors[ImGuiCol_TextDisabled]				= Colors::TextDisabled.ToImVec4();
