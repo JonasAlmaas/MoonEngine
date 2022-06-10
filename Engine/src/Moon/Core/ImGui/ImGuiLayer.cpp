@@ -203,14 +203,6 @@ namespace Moon {
 		style.Colors[ImGuiCol_NavWindowingHighlight]	= UIColor::NavWindowingHighlight;	// Highlight window when using CTRL+TAB
 		style.Colors[ImGuiCol_NavWindowingDimBg]		= UIColor::NavWindowingDimBg;		// Darken/colorize entire screen behind the CTRL+TAB window list, when active
 		style.Colors[ImGuiCol_ModalWindowDimBg]			= UIColor::ModalWindowDimBg;		// Darken/colorize entire screen behind a modal window, when one is active
-
-		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-		{
-			style.WindowBorderSize = 0.0f;
-			style.WindowRounding = 0.0f;
-			style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-		}
 	}
 
 	void ImGuiLayer::OnImGuiRender()
