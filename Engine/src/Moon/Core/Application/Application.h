@@ -1,18 +1,9 @@
 #pragma once
 
 #include "Moon/Core/Base.h"
-
 #include "Moon/Core/Event/ApplicationEvent.h"
-
 #include "Moon/Core/Layer/LayerStack.h"
-
-#include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
-#include "Moon/Core/Renderer/Shader/Shader.h"
-#include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
-#include "Moon/Core/Renderer/VertexArray/VertexArray.h"
-
 #include "Moon/Core/Window/Window.h"
-
 #include "Moon/ImGui/ImGuiLayer.h"
 
 
@@ -45,10 +36,6 @@ namespace Moon {
 		ImGuiLayer* m_ImGuiLayer;
 
 		bool m_Running = true;
-
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_SquareVA;
-		std::shared_ptr<VertexArray> m_TriangleVA;
 
 	private:
 		static Application* s_Instance;

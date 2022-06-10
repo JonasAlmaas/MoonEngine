@@ -12,6 +12,100 @@ namespace Moon {
 		ExampleLayer()
 			: Layer("Example")
 		{
+			// ---- Square ----
+			{
+				m_SquareVA.reset(VertexArray::Create());
+
+				float vertices[7 * 4] = {
+					//   x      y     z     r     g     b     a
+						-0.75f, -0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+						 0.75f, -0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+						 0.75f,  0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+						-0.75f,  0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+				};
+				std::shared_ptr<VertexBuffer> VB;
+				VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+				VertexBufferLayout layout = {
+					{ ShaderDataType::Float3, "Position XYZ" },
+					{ ShaderDataType::Float4, "Color RGBA"},
+				};
+				VB->SetLayout(layout);
+				m_SquareVA->AddVertexBuffer(VB);
+
+				uint32_t indices[3 * 2] = {
+					0, 1, 2,
+					0, 2, 3
+				};
+				std::shared_ptr<IndexBuffer> IB;
+				IB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+
+				m_SquareVA->SetIndexBuffer(IB);
+			}
+
+			// ---- Triangle ----
+			{
+				m_TriangleVA.reset(VertexArray::Create());
+
+				float vertices[7 * 3] = {
+					//   x      y     z     r     g     b     a
+						-0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+						 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+						 0.0f,  0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+				};
+				std::shared_ptr<VertexBuffer> VB;
+				VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+
+				VertexBufferLayout layout = {
+					{ ShaderDataType::Float3, "Position XYZ" },
+					{ ShaderDataType::Float4, "Color RGBA"},
+				};
+				VB->SetLayout(layout);
+				m_TriangleVA->AddVertexBuffer(VB);
+
+				uint32_t indices[3] = {
+					0, 1, 2
+				};
+				std::shared_ptr<IndexBuffer> IB;
+				IB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+
+				m_TriangleVA->SetIndexBuffer(IB);
+			}
+
+			// ---- Basic Temp Shader ----
+			std::string vertexSrc = R"(
+				#version 330 core
+
+				layout(location = 0) in vec3 a_Position;
+				layout(location = 1) in vec4 a_Color;
+
+				out vec3 v_Position;
+				out vec4 v_Color;
+
+				void main()
+				{
+					v_Position = a_Position;
+					v_Color = a_Color;
+
+					gl_Position = vec4(a_Position, 1.0);
+				}
+			)";
+
+			std::string fragmentSrc = R"(
+				#version 330 core
+
+				layout(location = 0) out vec4 o_Color;
+
+				in vec3 v_Position;
+				in vec4 v_Color;
+
+				void main()
+				{
+					o_Color = v_Color;
+				}
+			)";
+
+			m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
 		}
 
 		virtual void OnImGuiRender() override
@@ -21,13 +115,28 @@ namespace Moon {
 
 		void OnUpdate() override
 		{
+			RenderCommand::SetClearColor({ ColorFormat::RGBADecimal, 25 });
+			RenderCommand::Clear();
 
+			Renderer::BeginScene();
+			{
+				m_Shader->Bind();
+				Renderer::Submit(m_SquareVA);
+
+				Renderer::Submit(m_TriangleVA);
+			}
+			Renderer::EndScene();
 		}
 
 		void OnEvent(Event& e) override
 		{
 
 		}
+
+	private:
+		std::shared_ptr<Shader> m_Shader;
+		std::shared_ptr<VertexArray> m_SquareVA;
+		std::shared_ptr<VertexArray> m_TriangleVA;
 
 	};
 
