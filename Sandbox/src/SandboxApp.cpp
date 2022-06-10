@@ -170,7 +170,7 @@ namespace Moon {
 		OrthographicCamera m_Camera;
 
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
-		glm::vec2 m_LastMousePosition;
+		glm::vec2 m_LastMousePosition = { 0.0f, 0.0f };
 
 	};
 
