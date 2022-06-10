@@ -16,19 +16,17 @@ namespace Moon {
 			{
 				m_SquareVA.reset(VertexArray::Create());
 
-				float vertices[7 * 4] = {
-					//   x      y     z     r     g     b     a
-						-0.75f, -0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
-						 0.75f, -0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
-						 0.75f,  0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
-						-0.75f,  0.75f, 0.0f, 0.8f, 0.2f, 0.3f, 1.0f,
+				float vertices[3 * 4] = {
+					-0.5f, -0.5f, 0.0f,
+					 0.5f, -0.5f, 0.0f,
+					 0.5f,  0.5f, 0.0f,
+					-0.5f,  0.5f, 0.0f,
 				};
 				std::shared_ptr<VertexBuffer> VB;
 				VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 				VertexBufferLayout layout = {
 					{ ShaderDataType::Float3, "Position XYZ" },
-					{ ShaderDataType::Float4, "Color RGBA"},
 				};
 				VB->SetLayout(layout);
 				m_SquareVA->AddVertexBuffer(VB);
@@ -47,18 +45,16 @@ namespace Moon {
 			{
 				m_TriangleVA.reset(VertexArray::Create());
 
-				float vertices[7 * 3] = {
-					//   x      y     z     r     g     b     a
-						-0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-						 0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
-						 0.0f,  0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+				float vertices[3 * 3] = {
+						-0.5f, -0.5f, 0.0f,
+						 0.5f, -0.5f, 0.0f,
+						 0.0f,  0.5f, 0.0f,
 				};
 				std::shared_ptr<VertexBuffer> VB;
 				VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 				VertexBufferLayout layout = {
 					{ ShaderDataType::Float3, "Position XYZ" },
-					{ ShaderDataType::Float4, "Color RGBA"},
 				};
 				VB->SetLayout(layout);
 				m_TriangleVA->AddVertexBuffer(VB);
@@ -77,18 +73,15 @@ namespace Moon {
 				#version 330 core
 
 				layout(location = 0) in vec3 a_Position;
-				layout(location = 1) in vec4 a_Color;
 
 				uniform mat4 u_ViewProjection;
 				uniform mat4 u_Transform;
 
 				out vec3 v_Position;
-				out vec4 v_Color;
 
 				void main()
 				{
 					v_Position = a_Position;
-					v_Color = a_Color;
 
 					gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 				}
@@ -102,9 +95,11 @@ namespace Moon {
 				in vec3 v_Position;
 				in vec4 v_Color;
 
+				uniform vec4 u_Color;
+
 				void main()
 				{
-					o_Color = v_Color;
+					o_Color = u_Color;
 				}
 			)";
 
