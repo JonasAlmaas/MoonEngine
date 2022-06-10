@@ -3,6 +3,7 @@
 
 #include "Moon/Core/Application/Application.h"
 #include "Moon/Core/Customization/Color.h"
+#include "Moon/Core/Customization/UIColor.h"
 
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
@@ -130,78 +131,78 @@ namespace Moon {
 		style.CurveTessellationTol = 1.25f;
 		style.CircleTessellationMaxError = 0.5f;
 
-		style.Colors[ImGuiCol_Text]						= Colors::Text.ToImVec4();
-		style.Colors[ImGuiCol_TextDisabled]				= Colors::TextDisabled.ToImVec4();
+		style.Colors[ImGuiCol_Text]						= UIColor::Text.ToImVec4();
+		style.Colors[ImGuiCol_TextDisabled]				= UIColor::TextDisabled.ToImVec4();
 		
-		style.Colors[ImGuiCol_WindowBg]					= Colors::WindowBg.ToImVec4();					// Background of normal windows
-		style.Colors[ImGuiCol_ChildBg]					= Colors::ChildBg.ToImVec4();					// Background of child windows
-		style.Colors[ImGuiCol_PopupBg]					= Colors::PopupBg.ToImVec4();					// Background of popups, menus, tooltips windows
+		style.Colors[ImGuiCol_WindowBg]					= UIColor::WindowBg.ToImVec4();					// Background of normal windows
+		style.Colors[ImGuiCol_ChildBg]					= UIColor::ChildBg.ToImVec4();					// Background of child windows
+		style.Colors[ImGuiCol_PopupBg]					= UIColor::PopupBg.ToImVec4();					// Background of popups, menus, tooltips windows
 		
-		style.Colors[ImGuiCol_Border]					= Colors::Border.ToImVec4();
-		style.Colors[ImGuiCol_BorderShadow]				= Colors::ElementOutline.ToImVec4();
+		style.Colors[ImGuiCol_Border]					= UIColor::Border.ToImVec4();
+		style.Colors[ImGuiCol_BorderShadow]				= UIColor::ElementOutline.ToImVec4();
 		
-		style.Colors[ImGuiCol_FrameBg]					= Colors::ElementBg.ToImVec4();					// Background of checkbox, radio button, plot, slider, text input
-		style.Colors[ImGuiCol_FrameBgHovered]			= Colors::ElementHovered.ToImVec4();
-		style.Colors[ImGuiCol_FrameBgActive]			= Colors::ElementActive.ToImVec4();
+		style.Colors[ImGuiCol_FrameBg]					= UIColor::ElementBg.ToImVec4();				// Background of checkbox, radio button, plot, slider, text input
+		style.Colors[ImGuiCol_FrameBgHovered]			= UIColor::ElementHovered.ToImVec4();
+		style.Colors[ImGuiCol_FrameBgActive]			= UIColor::ElementActive.ToImVec4();
 		
-		style.Colors[ImGuiCol_TitleBg]					= Colors::TitleBg.ToImVec4();
-		style.Colors[ImGuiCol_TitleBgActive]			= Colors::TitleBgActive.ToImVec4();
-		style.Colors[ImGuiCol_TitleBgCollapsed]			= Colors::TitleBgCollapsed.ToImVec4();
-		style.Colors[ImGuiCol_MenuBarBg]				= Colors::MenuBarBg.ToImVec4();
+		style.Colors[ImGuiCol_TitleBg]					= UIColor::TitleBg.ToImVec4();
+		style.Colors[ImGuiCol_TitleBgActive]			= UIColor::TitleBgActive.ToImVec4();
+		style.Colors[ImGuiCol_TitleBgCollapsed]			= UIColor::TitleBgCollapsed.ToImVec4();
+		style.Colors[ImGuiCol_MenuBarBg]				= UIColor::MenuBarBg.ToImVec4();
 
-		style.Colors[ImGuiCol_ScrollbarBg]				= Colors::ScrollbarBg.ToImVec4();
-		style.Colors[ImGuiCol_ScrollbarGrab]			= Colors::ScrollbarGrab.ToImVec4();
-		style.Colors[ImGuiCol_ScrollbarGrabHovered]		= Colors::ScrollbarGrabHovered.ToImVec4();
-		style.Colors[ImGuiCol_ScrollbarGrabActive]		= Colors::ScrollbarGrabActive.ToImVec4();
+		style.Colors[ImGuiCol_ScrollbarBg]				= UIColor::ScrollbarBg.ToImVec4();
+		style.Colors[ImGuiCol_ScrollbarGrab]			= UIColor::ScrollbarGrab.ToImVec4();
+		style.Colors[ImGuiCol_ScrollbarGrabHovered]		= UIColor::ScrollbarGrabHovered.ToImVec4();
+		style.Colors[ImGuiCol_ScrollbarGrabActive]		= UIColor::ScrollbarGrabActive.ToImVec4();
 
-		style.Colors[ImGuiCol_CheckMark]				= Colors::Primary.ToImVec4();
-		style.Colors[ImGuiCol_SliderGrab]				= Colors::Primary.ToImVec4();
-		style.Colors[ImGuiCol_SliderGrabActive]			= Colors::PrimaryHover.ToImVec4();
+		style.Colors[ImGuiCol_CheckMark]				= UIColor::Primary.ToImVec4();
+		style.Colors[ImGuiCol_SliderGrab]				= UIColor::Primary.ToImVec4();
+		style.Colors[ImGuiCol_SliderGrabActive]			= UIColor::PrimaryHover.ToImVec4();
 
-		style.Colors[ImGuiCol_Button]					= Colors::Button.ToImVec4();
-		style.Colors[ImGuiCol_ButtonHovered]			= Colors::ButtonHovered.ToImVec4();
-		style.Colors[ImGuiCol_ButtonActive]				= Colors::ButtonActive.ToImVec4();
+		style.Colors[ImGuiCol_Button]					= UIColor::Button.ToImVec4();
+		style.Colors[ImGuiCol_ButtonHovered]			= UIColor::ButtonHovered.ToImVec4();
+		style.Colors[ImGuiCol_ButtonActive]				= UIColor::ButtonActive.ToImVec4();
 
-		style.Colors[ImGuiCol_Header]					= Colors::Header.ToImVec4();					// Header* colors are used for CollapsingHeader, TreeNode, Selectable, MenuItem
-		style.Colors[ImGuiCol_HeaderHovered]			= Colors::HeaderHovered.ToImVec4();
-		style.Colors[ImGuiCol_HeaderActive]				= Colors::HeaderActive.ToImVec4();
+		style.Colors[ImGuiCol_Header]					= UIColor::Header.ToImVec4();					// Header* colors are used for CollapsingHeader, TreeNode, Selectable, MenuItem
+		style.Colors[ImGuiCol_HeaderHovered]			= UIColor::HeaderHovered.ToImVec4();
+		style.Colors[ImGuiCol_HeaderActive]				= UIColor::HeaderActive.ToImVec4();
 
-		style.Colors[ImGuiCol_Separator]				= Colors::Separator.ToImVec4();
-		style.Colors[ImGuiCol_SeparatorHovered]			= Colors::SeparatorHovered.ToImVec4();
-		style.Colors[ImGuiCol_SeparatorActive]			= Colors::SeparatorActive.ToImVec4();
+		style.Colors[ImGuiCol_Separator]				= UIColor::Separator.ToImVec4();
+		style.Colors[ImGuiCol_SeparatorHovered]			= UIColor::SeparatorHovered.ToImVec4();
+		style.Colors[ImGuiCol_SeparatorActive]			= UIColor::SeparatorActive.ToImVec4();
 
-		style.Colors[ImGuiCol_ResizeGrip]				= Colors::ResizeGrip.ToImVec4();
-		style.Colors[ImGuiCol_ResizeGripHovered]		= Colors::ResizeGripHovered.ToImVec4();
-		style.Colors[ImGuiCol_ResizeGripActive]			= Colors::ResizeGripActive.ToImVec4();
+		style.Colors[ImGuiCol_ResizeGrip]				= UIColor::ResizeGrip.ToImVec4();
+		style.Colors[ImGuiCol_ResizeGripHovered]		= UIColor::ResizeGripHovered.ToImVec4();
+		style.Colors[ImGuiCol_ResizeGripActive]			= UIColor::ResizeGripActive.ToImVec4();
 
-		style.Colors[ImGuiCol_Tab]						= Colors::Tab.ToImVec4();
-		style.Colors[ImGuiCol_TabHovered]				= Colors::TabHovered.ToImVec4();
-		style.Colors[ImGuiCol_TabActive]				= Colors::TabActive.ToImVec4();
-		style.Colors[ImGuiCol_TabUnfocused]				= Colors::TabUnfocused.ToImVec4();
-		style.Colors[ImGuiCol_TabUnfocusedActive]		= Colors::TabUnfocusedActive.ToImVec4();
+		style.Colors[ImGuiCol_Tab]						= UIColor::Tab.ToImVec4();
+		style.Colors[ImGuiCol_TabHovered]				= UIColor::TabHovered.ToImVec4();
+		style.Colors[ImGuiCol_TabActive]				= UIColor::TabActive.ToImVec4();
+		style.Colors[ImGuiCol_TabUnfocused]				= UIColor::TabUnfocused.ToImVec4();
+		style.Colors[ImGuiCol_TabUnfocusedActive]		= UIColor::TabUnfocusedActive.ToImVec4();
 
-		style.Colors[ImGuiCol_DockingPreview]			= Colors::DockingPreview.ToImVec4();			// Preview overlay color when about to docking something
-		style.Colors[ImGuiCol_DockingEmptyBg]			= Colors::DockingEmptyBg.ToImVec4();			// Background color for empty node (e.g. CentralNode with no window docked into it)
+		style.Colors[ImGuiCol_DockingPreview]			= UIColor::DockingPreview.ToImVec4();			// Preview overlay color when about to docking something
+		style.Colors[ImGuiCol_DockingEmptyBg]			= UIColor::DockingEmptyBg.ToImVec4();			// Background color for empty node (e.g. CentralNode with no window docked into it)
 
-		style.Colors[ImGuiCol_PlotLines]				= Colors::PlotLines.ToImVec4();
-		style.Colors[ImGuiCol_PlotLinesHovered]			= Colors::PlotLinesHovered.ToImVec4();
-		style.Colors[ImGuiCol_PlotHistogram]			= Colors::PlotHistogram.ToImVec4();
-		style.Colors[ImGuiCol_PlotHistogramHovered]		= Colors::PlotHistogramHovered.ToImVec4();
+		style.Colors[ImGuiCol_PlotLines]				= UIColor::PlotLines.ToImVec4();
+		style.Colors[ImGuiCol_PlotLinesHovered]			= UIColor::PlotLinesHovered.ToImVec4();
+		style.Colors[ImGuiCol_PlotHistogram]			= UIColor::PlotHistogram.ToImVec4();
+		style.Colors[ImGuiCol_PlotHistogramHovered]		= UIColor::PlotHistogramHovered.ToImVec4();
 
-		style.Colors[ImGuiCol_TableHeaderBg]			= Colors::TableHeaderBg.ToImVec4();				// Table header background
-		style.Colors[ImGuiCol_TableBorderStrong]		= Colors::TableBorderStrong.ToImVec4();			// Table outer and header borders (prefer using Alpha=1.0 here)
-		style.Colors[ImGuiCol_TableBorderLight]			= Colors::TableBorderLight.ToImVec4();			// Table inner borders (prefer using Alpha=1.0 here)
-		style.Colors[ImGuiCol_TableRowBg]				= Colors::TableRowBg.ToImVec4();				// Table row background (even rows)
-		style.Colors[ImGuiCol_TableRowBgAlt]			= Colors::TableRowBgAlt.ToImVec4();				// Table row background (odd rows)
+		style.Colors[ImGuiCol_TableHeaderBg]			= UIColor::TableHeaderBg.ToImVec4();			// Table header background
+		style.Colors[ImGuiCol_TableBorderStrong]		= UIColor::TableBorderStrong.ToImVec4();		// Table outer and header borders (prefer using Alpha=1.0 here)
+		style.Colors[ImGuiCol_TableBorderLight]			= UIColor::TableBorderLight.ToImVec4();			// Table inner borders (prefer using Alpha=1.0 here)
+		style.Colors[ImGuiCol_TableRowBg]				= UIColor::TableRowBg.ToImVec4();				// Table row background (even rows)
+		style.Colors[ImGuiCol_TableRowBgAlt]			= UIColor::TableRowBgAlt.ToImVec4();			// Table row background (odd rows)
 		
-		style.Colors[ImGuiCol_TextSelectedBg]			= Colors::TextSelectedBg.ToImVec4();
+		style.Colors[ImGuiCol_TextSelectedBg]			= UIColor::TextSelectedBg.ToImVec4();
 		
-		style.Colors[ImGuiCol_DragDropTarget]			= Colors::DragDropTarget.ToImVec4();
-		style.Colors[ImGuiCol_NavHighlight]				= Colors::NavHighlight.ToImVec4();				// Gamepad/keyboard: current highlighted item
+		style.Colors[ImGuiCol_DragDropTarget]			= UIColor::DragDropTarget.ToImVec4();
+		style.Colors[ImGuiCol_NavHighlight]				= UIColor::NavHighlight.ToImVec4();				// Gamepad/keyboard: current highlighted item
 
-		style.Colors[ImGuiCol_NavWindowingHighlight]	= Colors::NavWindowingHighlight.ToImVec4();		// Highlight window when using CTRL+TAB
-		style.Colors[ImGuiCol_NavWindowingDimBg]		= Colors::NavWindowingDimBg.ToImVec4();			// Darken/colorize entire screen behind the CTRL+TAB window list, when active
-		style.Colors[ImGuiCol_ModalWindowDimBg]			= Colors::ModalWindowDimBg.ToImVec4();			// Darken/colorize entire screen behind a modal window, when one is active
+		style.Colors[ImGuiCol_NavWindowingHighlight]	= UIColor::NavWindowingHighlight.ToImVec4();	// Highlight window when using CTRL+TAB
+		style.Colors[ImGuiCol_NavWindowingDimBg]		= UIColor::NavWindowingDimBg.ToImVec4();		// Darken/colorize entire screen behind the CTRL+TAB window list, when active
+		style.Colors[ImGuiCol_ModalWindowDimBg]			= UIColor::ModalWindowDimBg.ToImVec4();			// Darken/colorize entire screen behind a modal window, when one is active
 
 		// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
 		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
