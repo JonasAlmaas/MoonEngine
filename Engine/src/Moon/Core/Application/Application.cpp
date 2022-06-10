@@ -1,8 +1,6 @@
 #include "mepch.h"
 #include "Moon/Core/Application/Application.h"
 
-#include "Moon/Core/Timestep.h"
-
 // TODO: TEMPORARY
 #include <GLFW/glfw3.h>
 
