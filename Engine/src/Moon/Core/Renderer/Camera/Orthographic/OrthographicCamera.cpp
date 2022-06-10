@@ -20,13 +20,19 @@ namespace Moon {
 
 	void OrthographicCamera::SetRotationDegrees(float rotation)
 	{
-		m_RotationDegrees = rotation;
+		m_RotationRadians = glm::radians(rotation);
+		RecalculateViewMatrix();
+	}
+
+	void OrthographicCamera::SetRotationRadians(float rotation)
+	{
+		m_RotationRadians = rotation;
 		RecalculateViewMatrix();
 	}
 
 	void OrthographicCamera::RecalculateViewMatrix()
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position) * glm::rotate(glm::mat4(1.0f), glm::radians(m_RotationDegrees), glm::vec3(0, 0, 1));
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), m_Position) * glm::rotate(glm::mat4(1.0f), m_RotationRadians, glm::vec3(0, 0, 1));
 		m_ViewMatrix = glm::inverse(transform);
 
 		m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
