@@ -8,6 +8,8 @@
 // ---- Customization ----
 #include "Moon/Core/Customization/UIColor.h"
 
+// ---- ImGui ----
+#include "Moon/Core/ImGui/ImGuiLayer.h"
 
 // ---- Input ----
 #include "Moon/Core/Input/Input.h"
@@ -31,6 +33,3 @@
 
 // ---- Type ----
 #include "Moon/Core/Type/Color.h"
-
-// ---- ImGui ----
-#include "Moon/ImGui/ImGuiLayer.h"
