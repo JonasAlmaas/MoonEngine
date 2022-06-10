@@ -118,42 +118,17 @@ namespace Moon {
 
 		void OnUpdate(Timestep ts) override
 		{
-			if (Input::IsKeyPressed(Key::W))
+			if (Input::IsMouseButtonPressed(Mouse::Button2))
 			{
-				m_CameraPosition.x -= m_CameraMoveSpeed * ts * sin(glm::radians(m_CameraRotation));
-				m_CameraPosition.y += m_CameraMoveSpeed * ts * cos(glm::radians(m_CameraRotation));
-			}
+				auto [x, y] = Input::GetMousePosition();
 
-			if (Input::IsKeyPressed(Key::A))
-			{
-				m_CameraPosition.x -= m_CameraMoveSpeed * ts * cos(glm::radians(m_CameraRotation));
-				m_CameraPosition.y -= m_CameraMoveSpeed * ts * sin(glm::radians(m_CameraRotation));
-			}
+				m_CameraPosition.x += (m_LastMousePosition.x - x) * 0.0016666666666667f;
+				m_CameraPosition.y -= (m_LastMousePosition.y - y) * 0.00140625f;
 
-			if (Input::IsKeyPressed(Key::S))
-			{
-				m_CameraPosition.x += m_CameraMoveSpeed * ts * sin(glm::radians(m_CameraRotation));
-				m_CameraPosition.y -= m_CameraMoveSpeed * ts * cos(glm::radians(m_CameraRotation));
-			}
+				m_LastMousePosition = { x, y };
 
-			if (Input::IsKeyPressed(Key::D))
-			{
-				m_CameraPosition.x += m_CameraMoveSpeed * ts * cos(glm::radians(m_CameraRotation));
-				m_CameraPosition.y += m_CameraMoveSpeed * ts * sin(glm::radians(m_CameraRotation));
+				m_Camera.SetPosition(m_CameraPosition);
 			}
-
-			if (Input::IsKeyPressed(Key::Q))
-			{
-				m_CameraRotation += m_CameraRotationSpeed * ts;
-			}
-
-			if (Input::IsKeyPressed(Key::E))
-			{
-				m_CameraRotation -= m_CameraRotationSpeed * ts;
-			}
-
-			m_Camera.SetPosition(m_CameraPosition);
-			m_Camera.SetRotationDegrees(m_CameraRotation);
 
 			RenderCommand::SetClearColor({ ColorFormat::RGBADecimal, 25 });
 			RenderCommand::Clear();
@@ -170,7 +145,21 @@ namespace Moon {
 
 		void OnEvent(Event& e) override
 		{
+			EventDispatcher dispatcher(e);
 
+			dispatcher.Dispatch<MouseButtonPressedEvent>(ME_BIND_EVENT_FN(ExampleLayer::OnMouseButtonPressedEvent));
+		}
+
+		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e)
+		{
+			// Middle mouse
+			if (e.GetMouseButton() == Mouse::Button2)
+			{
+				auto [x, y] = Input::GetMousePosition();
+				m_LastMousePosition = { x, y };
+			}
+			
+			return false;
 		}
 
 	private:
@@ -181,9 +170,7 @@ namespace Moon {
 		OrthographicCamera m_Camera;
 
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
-		float m_CameraRotation = 0.0f;
-		float m_CameraRotationSpeed = 40.0f;
-		float m_CameraMoveSpeed = 1.0f;
+		glm::vec2 m_LastMousePosition;
 
 	};
 
