@@ -117,8 +117,6 @@ namespace Moon {
 
 		void OnUpdate(Timestep ts) override
 		{
-			ME_TRACE("Delta time {0}s, {1}ms", ts.GetSeconds(), ts.GetMilliseconds());
-
 			if (Input::IsKeyPressed(Key::W))
 			{
 				m_CameraPosition.x -= m_CameraMoveSpeed * ts * sin(glm::radians(m_CameraRotation));
