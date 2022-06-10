@@ -1,6 +1,8 @@
 #pragma once
 
+#include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
+#include "Moon/Core/Renderer/Shader/Shader.h"
 
 
 namespace Moon {
@@ -11,12 +13,7 @@ namespace Moon {
 		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();
 
-		/**
-		 * Renders a given vertex array.
-		 *
-		 * @param VertexArray for the object you wish to render.
-		 */
-		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray);
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
