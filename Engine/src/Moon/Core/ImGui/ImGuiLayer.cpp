@@ -94,14 +94,14 @@ namespace Moon {
 		style.DisabledAlpha = 1.0f;
 		style.WindowPadding = ImVec2(8.0f, 8.0f);
 		style.WindowRounding = 0.0f;
-		style.WindowBorderSize = 0.0f;
+		style.WindowBorderSize = 1.0f;
 		style.WindowMinSize = ImVec2(10.0f, 10.0f);
 		style.WindowTitleAlign = ImVec2(0, 0.5f);
 		style.WindowMenuButtonPosition = ImGuiDir_Left;
 		style.ChildRounding = 0.0f;
-		style.ChildBorderSize = 0.0f;
+		style.ChildBorderSize = 1.0f;
 		style.PopupRounding = 4.0f;
-		style.PopupBorderSize = 0.0f;
+		style.PopupBorderSize = 1.0f;
 		style.FramePadding = ImVec2(4.0f, 2.0f);
 		style.FrameRounding = 4.0f;
 		style.FrameBorderSize = 0.0f;
