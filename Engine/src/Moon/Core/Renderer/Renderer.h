@@ -8,7 +8,7 @@ namespace Moon {
 	class Renderer
 	{
 	public:
-		static void BeginScene();
+		static void BeginScene(OrthographicCamera& camera);
 		static void EndScene();
 
 		/**
@@ -20,6 +20,13 @@ namespace Moon {
 
 		inline static RendererAPI::API GetAPI() { return RendererAPI::GetAPI(); }
 
+	private:
+		struct SceneData
+		{
+			glm::mat4 ViewProjectionMatrix;
+		};
+
+		static SceneData* m_SceneData;
 	};
 
 }
