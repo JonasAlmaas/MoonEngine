@@ -1,10 +1,10 @@
 #include "mepch.h"
 #include "Moon/Core/Application/Application.h"
 
-#include "Moon/Core/Renderer/VertexBuffer/VertexBufferLayout.h"
+#include "Moon/Core/Renderer/Renderer.h"
 
 // TEMPORARY
-#include <glad/glad.h>
+#include "Moon/Core/Renderer/VertexBuffer/VertexBufferLayout.h"
 
 
 namespace Moon {
@@ -126,19 +126,17 @@ namespace Moon {
 	{
 		while (m_Running)
 		{
-			// TODO: Remove glad once this is gone!
-			glClearColor(0.1, 0.1, 0.1, 1.0);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor({ ColorFormat::RGBADecimal, 25 });
+			RenderCommand::Clear();
 
-			m_Shader->Bind();
-			
-			m_SquareVA->Bind();
-			glDrawElements(GL_TRIANGLES, m_SquareVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::BeginScene();
+			{
+				m_Shader->Bind();
+				Renderer::Submit(m_SquareVA);
 
-			m_TriangleVA->Bind();
-			glDrawElements(GL_TRIANGLES, m_TriangleVA->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
-
-			// ----
+				Renderer::Submit(m_TriangleVA);
+			}
+			Renderer::EndScene();
 
 			for (Layer* layer : m_LayerStack)
 				layer->OnUpdate();
