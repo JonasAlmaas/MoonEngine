@@ -27,7 +27,7 @@ namespace Moon {
 					 0.5f,  0.5f, 0.0f,
 					-0.5f,  0.5f, 0.0f,
 				};
-				std::shared_ptr<VertexBuffer> VB;
+				Ref<VertexBuffer> VB;
 				VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 				VertexBufferLayout layout = {
@@ -40,7 +40,7 @@ namespace Moon {
 					0, 1, 2,
 					0, 2, 3
 				};
-				std::shared_ptr<IndexBuffer> IB;
+				Ref<IndexBuffer> IB;
 				IB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
 				m_SquareVA->SetIndexBuffer(IB);
@@ -55,7 +55,7 @@ namespace Moon {
 						 0.5f, -0.5f, 0.0f,
 						 0.0f,  0.5f, 0.0f,
 				};
-				std::shared_ptr<VertexBuffer> VB;
+				Ref<VertexBuffer> VB;
 				VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 				VertexBufferLayout layout = {
@@ -67,7 +67,7 @@ namespace Moon {
 				uint32_t indices[3] = {
 					0, 1, 2
 				};
-				std::shared_ptr<IndexBuffer> IB;
+				Ref<IndexBuffer> IB;
 				IB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 
 				m_TriangleVA->SetIndexBuffer(IB);
@@ -189,9 +189,9 @@ namespace Moon {
 		}
 
 	private:
-		std::shared_ptr<Shader> m_Shader;
-		std::shared_ptr<VertexArray> m_SquareVA;
-		std::shared_ptr<VertexArray> m_TriangleVA;
+		Ref<Shader> m_Shader;
+		Ref<VertexArray> m_SquareVA;
+		Ref<VertexArray> m_TriangleVA;
 
 		OrthographicCamera m_Camera;
 

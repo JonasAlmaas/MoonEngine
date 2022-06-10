@@ -1,5 +1,8 @@
 #pragma once
 
+#include "Moon/Core/Assert.h"
+
+
 #ifdef ME_DEBUG
 	#if defined(ME_PLATFORM_WINDOWS)
 		#define ME_DEBUGBREAK() __debugbreak()
@@ -18,4 +21,13 @@
 
 #define ME_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
-#include "Moon/Core/Assert.h"
+
+namespace Moon {
+
+	template<typename T>
+	using Scope = std::unique_ptr<T>;
+
+	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+}
