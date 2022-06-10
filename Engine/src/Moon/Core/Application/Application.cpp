@@ -1,6 +1,11 @@
 #include "mepch.h"
 #include "Moon/Core/Application/Application.h"
 
+#include "Moon/Core/Timestep.h"
+
+// TODO: TEMPORARY
+#include <GLFW/glfw3.h>
+
 
 namespace Moon {
 
@@ -26,8 +31,13 @@ namespace Moon {
 	{
 		while (m_Running)
 		{
+			// Get delta time
+			float time = glfwGetTime();	// Platfrom::GetTime();
+			Timestep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
+
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(timestep);
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

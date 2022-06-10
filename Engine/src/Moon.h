@@ -2,6 +2,9 @@
 
 // For use by Moon engine applications only
 
+// ---- Core ----
+#include "Moon/Core/Timestep.h"
+
 // ---- Application ----
 #include "Moon/Core/Application/Application.h"
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Moon/Core/Base.h"
+#include "Moon/Core/Timestep.h"
 #include "Moon/Core/Event/Event.h"
 
 
@@ -14,7 +15,7 @@ namespace Moon {
 
 		virtual void OnAttach() {}
 		virtual void OnDetach() {}
-		virtual void OnUpdate() {}
+		virtual void OnUpdate(Timestep ts) {}
 		virtual void OnImGuiRender() {}
 		virtual void OnEvent(Event& e) {}
 
