@@ -10,7 +10,7 @@ namespace Moon {
 	{
 	public:
 		ExampleLayer()
-			: Layer("Example")
+			: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
 		{
 			// ---- Square ----
 			{
@@ -79,6 +79,8 @@ namespace Moon {
 				layout(location = 0) in vec3 a_Position;
 				layout(location = 1) in vec4 a_Color;
 
+				uniform mat4 u_ViewProjection;
+
 				out vec3 v_Position;
 				out vec4 v_Color;
 
@@ -87,7 +89,7 @@ namespace Moon {
 					v_Position = a_Position;
 					v_Color = a_Color;
 
-					gl_Position = vec4(a_Position, 1.0);
+					gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 				}
 			)";
 
@@ -118,13 +120,11 @@ namespace Moon {
 			RenderCommand::SetClearColor({ ColorFormat::RGBADecimal, 25 });
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
-			{
-				m_Shader->Bind();
-				Renderer::Submit(m_SquareVA);
+			Renderer::BeginScene(m_Camera);
 
-				Renderer::Submit(m_TriangleVA);
-			}
+			Renderer::Submit(m_Shader, m_SquareVA);
+			Renderer::Submit(m_Shader, m_TriangleVA);
+			
 			Renderer::EndScene();
 		}
 
@@ -137,6 +137,8 @@ namespace Moon {
 		std::shared_ptr<Shader> m_Shader;
 		std::shared_ptr<VertexArray> m_SquareVA;
 		std::shared_ptr<VertexArray> m_TriangleVA;
+
+		OrthographicCamera m_Camera;
 
 	};
 
