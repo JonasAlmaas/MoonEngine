@@ -47,6 +47,15 @@ namespace Moon {
 		constexpr Color(ColorFormat _format, float _r, float _g, float _b, float _a)
 			: r(_r), g(_g), b(_b), a(_a), Format(_format) {}
 
+		operator ImVec4() const
+		{
+			switch (Format)
+			{
+				case ColorFormat::RGBADecimal:		return { r * DecimalToNormalizedFactor, g * DecimalToNormalizedFactor, b * DecimalToNormalizedFactor, a * DecimalToNormalizedFactor };
+			}
+			return { r, g, b, a };
+		}
+
 		/**
 		 * @return A new instance of Color.
 		 */
@@ -91,20 +100,6 @@ namespace Moon {
 			Color c = this->Copy();
 			c.Normalize();
 			return c;
-		}
-
-		/**
-		 * Converts an instance of the Color struct to an ImVec4 struct.
-		 * 
-		 * @return Color as an ImVec4.
-		 */
-		ImVec4 ToImVec4() const
-		{
-			switch (Format)
-			{
-				case ColorFormat::RGBADecimal:			return { r * DecimalToNormalizedStep, g * DecimalToNormalizedStep, b * DecimalToNormalizedStep, a * DecimalToNormalizedStep };
-			}
-			return { r, g, b, a };
 		}
 
 	private:
