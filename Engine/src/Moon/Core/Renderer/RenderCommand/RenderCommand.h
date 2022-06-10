@@ -13,7 +13,7 @@ namespace Moon {
 		 *
 		 * @param Color, an instance of the Color class.
 		 */
-		inline static void SetClearColor(Color color)
+		inline static void SetClearColor(const Color& color)
 		{
 			s_RendererAPI->SetClearColor(color);
 		}
