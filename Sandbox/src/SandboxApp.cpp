@@ -117,6 +117,43 @@ namespace Moon {
 
 		void OnUpdate() override
 		{
+			if (Input::IsKeyPressed(Key::W))
+			{
+				m_CameraPosition.x -= m_CameraMoveSpeed * sin(glm::radians(m_CameraRotation));
+				m_CameraPosition.y += m_CameraMoveSpeed * cos(glm::radians(m_CameraRotation));
+			}
+
+			if (Input::IsKeyPressed(Key::A))
+			{
+				m_CameraPosition.x -= m_CameraMoveSpeed * cos(glm::radians(m_CameraRotation));
+				m_CameraPosition.y -= m_CameraMoveSpeed * sin(glm::radians(m_CameraRotation));
+			}
+
+			if (Input::IsKeyPressed(Key::S))
+			{
+				m_CameraPosition.x += m_CameraMoveSpeed * sin(glm::radians(m_CameraRotation));
+				m_CameraPosition.y -= m_CameraMoveSpeed * cos(glm::radians(m_CameraRotation));
+			}
+
+			if (Input::IsKeyPressed(Key::D))
+			{
+				m_CameraPosition.x += m_CameraMoveSpeed * cos(glm::radians(m_CameraRotation));
+				m_CameraPosition.y += m_CameraMoveSpeed * sin(glm::radians(m_CameraRotation));
+			}
+
+			if (Input::IsKeyPressed(Key::Q))
+			{
+				m_CameraRotation += m_CameraRotationSpeed;
+			}
+
+			if (Input::IsKeyPressed(Key::E))
+			{
+				m_CameraRotation -= m_CameraRotationSpeed;
+			}
+
+			m_Camera.SetPosition(m_CameraPosition);
+			m_Camera.SetRotationDegrees(m_CameraRotation);
+
 			RenderCommand::SetClearColor({ ColorFormat::RGBADecimal, 25 });
 			RenderCommand::Clear();
 
@@ -127,6 +164,8 @@ namespace Moon {
 			
 			Renderer::EndScene();
 		}
+
+		// ---- Event handling ----
 
 		void OnEvent(Event& e) override
 		{
@@ -139,6 +178,11 @@ namespace Moon {
 		std::shared_ptr<VertexArray> m_TriangleVA;
 
 		OrthographicCamera m_Camera;
+
+		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
+		float m_CameraRotation = 0.0f;
+		float m_CameraRotationSpeed = 0.5f;
+		float m_CameraMoveSpeed = 0.01f;
 
 	};
 
