@@ -1,10 +1,23 @@
 #include "mepch.h"
 #include "Moon/Core/Renderer/Renderer.h"
 
+#include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
+
 
 namespace Moon {
 	
-	// TODO: Should be set at runtime
-	RendererAPI Renderer::s_RendererAPI = RendererAPI::OpenGL;
+	void Renderer::BeginScene()
+	{
+	}
+	
+	void Renderer::EndScene()
+	{
+	}
+
+	void Renderer::Submit(const std::shared_ptr<VertexArray>& vertexArray)
+	{
+		vertexArray->Bind();
+		RenderCommand::DrawIndexed(vertexArray);
+	}
 
 }
