@@ -5,14 +5,14 @@
 
 namespace Moon {
 
-	/** @enum Moon::ColorFormat
+	/**
 	 * @brief Helps with knowing how to tream values.
 	 */
 	enum class ColorFormat
 	{
 		None = 0,
-		RGBADecimal,		/**< value between 0 -> 255 */
-		RGBANormalized,		/**< value between 0 -> 1 */
+		RGBADecimal,		/**< range: 0 to 255 */
+		RGBANormalized,		/**< range: 0 to 1 */
 	};
 
 	struct Color
@@ -55,6 +55,24 @@ namespace Moon {
 		void SetColorFormat(ColorFormat _format) { Format = _format; }
 
 		/**
+		 * @brief Converts the color into a 0 to 1 range.
+		 * This only happends if it is not already normalized.
+		 */
+		void Normalize()
+		{
+			switch (Format)
+			{
+				case ColorFormat::RGBADecimal:
+				{
+					r = r * DecimalToNormalizedStep;
+					g = g * DecimalToNormalizedStep;
+					b = b * DecimalToNormalizedStep;
+					a = a * DecimalToNormalizedStep;
+				}
+			}
+		}
+
+		/**
 		 * Converts an instance of the Color struct to an ImVec4 struct.
 		 * 
 		 * @return Color as an ImVec4.
@@ -64,7 +82,6 @@ namespace Moon {
 			switch (Format)
 			{
 				case ColorFormat::RGBADecimal:			return { r * DecimalToNormalizedStep, g * DecimalToNormalizedStep, b * DecimalToNormalizedStep, a * DecimalToNormalizedStep };
-				case ColorFormat::RGBANormalized:		return { r, g, b, a };
 			}
 			return { r, g, b, a };
 		}
@@ -72,10 +89,8 @@ namespace Moon {
 	private:
 		// I multiply by this instead of dividing by 255
 		// to save a microscopical amount of time :)
-		static const float DecimalToNormalizedStep;
+		static constexpr float DecimalToNormalizedStep = 0.003921568627451f;
 
 	};
-	const float Color::DecimalToNormalizedStep = 0.003921568627451f;
-
 
 }
