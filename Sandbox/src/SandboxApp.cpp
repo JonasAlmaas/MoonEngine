@@ -1,9 +1,12 @@
 #include <Moon.h>
 #include <Moon/Core/Entrypoint.h>
 
+#include "Moon/Platform/OpenGL/Shader/OpenGLShader.h"
+
 #include <imgui.h>
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 namespace Moon {
@@ -97,20 +100,25 @@ namespace Moon {
 				in vec3 v_Position;
 				in vec4 v_Color;
 
-				uniform vec4 u_Color;
+				uniform vec3 u_Color;
 
 				void main()
 				{
-					o_Color = u_Color;
+					o_Color = vec4(u_Color, 1.0);
 				}
 			)";
 
-			m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+			m_Shader.reset(Shader::Create(vertexSrc, fragmentSrc));
 		}
 
 		virtual void OnImGuiRender() override
 		{
+			ImGui::Begin("Settings");
 
+			ImGui::ColorEdit3("Color 1", glm::value_ptr(m_Color1));
+			ImGui::ColorEdit3("Color 2", glm::value_ptr(m_Color2));
+
+			ImGui::End();
 		}
 
 		void OnUpdate(Timestep ts) override
@@ -134,8 +142,7 @@ namespace Moon {
 
 			glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-			glm::vec4 colorRed(0.8f, 0.2f, 0.3f, 1.0f);
-			glm::vec4 colorBlue(0.3f, 0.2f, 0.8f, 1.0f);
+			m_Shader->Bind();
 
 			for (int x = 0; x < 20; x++)
 			{
@@ -145,18 +152,18 @@ namespace Moon {
 					glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * scale;
 					if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0))
 					{
-						m_Shader->UploadUniformFloat4("u_Color", colorRed);
+						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", m_Color1);
 					}
 					else {
-						m_Shader->UploadUniformFloat4("u_Color", colorBlue);
+						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", m_Color2);
 					}
 					Renderer::Submit(m_Shader, m_SquareVA, transform);
 				}
 			}
 
-			m_Shader->UploadUniformFloat4("u_Color", colorRed);
+			std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", { 0.8f, 0.2f, 0.3f });
 			Renderer::Submit(m_Shader, m_TriangleVA);
-			
+
 			Renderer::EndScene();
 		}
 
@@ -177,7 +184,7 @@ namespace Moon {
 				auto [x, y] = Input::GetMousePosition();
 				m_LastMousePosition = { x, y };
 			}
-			
+
 			return false;
 		}
 
@@ -190,6 +197,9 @@ namespace Moon {
 
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
 		glm::vec2 m_LastMousePosition = { 0.0f, 0.0f };
+
+		glm::vec3 m_Color1 = { 0.8f, 0.2f, 0.3f };
+		glm::vec3 m_Color2 = { 0.3f, 0.2f, 0.8f};
 
 	};
 
