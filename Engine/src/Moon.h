@@ -6,8 +6,8 @@
 #include "Moon/Core/Application/Application.h"
 
 // ---- Customization ----
-#include "Moon/Core/Customization/Color.h"
 #include "Moon/Core/Customization/UIColor.h"
+
 
 // ---- Input ----
 #include "Moon/Core/Input/Input.h"
@@ -28,6 +28,9 @@
 #include "Moon/Core/Renderer/Shader/Shader.h"
 #include "Moon/Core/Renderer/VertexArray/VertexArray.h"
 #include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
+
+// ---- Type ----
+#include "Moon/Core/Type/Color.h"
 
 // ---- ImGui ----
 #include "Moon/ImGui/ImGuiLayer.h"

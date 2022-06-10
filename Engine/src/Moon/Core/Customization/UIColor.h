@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Moon/Core/Customization/Color.h"
+#include "Moon/Core/Type/Color.h"
 
 
 namespace Moon {
