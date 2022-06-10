@@ -16,6 +16,7 @@
 
 #include "Moon/Core/Log/Log.h"
 
+#include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
 #include "Moon/Core/Renderer/Renderer.h"
 #include "Moon/Core/Renderer/Shader/Shader.h"
