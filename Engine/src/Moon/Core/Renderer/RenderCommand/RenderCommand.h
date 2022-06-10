@@ -8,11 +8,20 @@ namespace Moon {
 	class RenderCommand
 	{
 	public:
+		/**
+		 * Sets the color used when calling RenderCommand::Clear.
+		 *
+		 * @param Color, an instance of the Color class.
+		 */
 		inline static void SetClearColor(Color color)
 		{
 			s_RendererAPI->SetClearColor(color);
 		}
 
+		/**
+		 * @brief Clears the color buffer.
+		 * Set the color by calling RenderCommand::SetClearColor.
+		 */
 		inline static void Clear()
 		{
 			s_RendererAPI->Clear();
