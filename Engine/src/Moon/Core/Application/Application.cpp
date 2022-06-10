@@ -33,11 +33,11 @@ namespace Moon {
 		{
 			// Get delta time
 			float time = glfwGetTime();	// Platfrom::GetTime();
-			Timestep timestep = time - m_LastFrameTime;
+			m_Timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
 			for (Layer* layer : m_LayerStack)
-				layer->OnUpdate(timestep);
+				layer->OnUpdate(m_Timestep);
 
 			m_ImGuiLayer->Begin();
 			for (Layer* layer : m_LayerStack)

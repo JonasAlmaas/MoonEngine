@@ -41,6 +41,11 @@ namespace Moon {
 		 * @param A child class of Event.
 		 */
 		void OnEvent(Event& e);
+
+		/**
+		 * @return delta time in the Timestep format.
+		 */
+		Timestep GetTimestep() const { return m_Timestep; }
 		
 		inline Window& GetWindow() { return *m_Window; }
 
@@ -58,6 +63,7 @@ namespace Moon {
 		ImGuiLayer* m_ImGuiLayer;
 
 		float m_LastFrameTime = 0.0f;
+		Timestep m_Timestep = 0.0f;
 
 	private:
 		static Application* s_Instance;
