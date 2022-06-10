@@ -11,8 +11,8 @@ namespace Moon {
 	{
 		switch (Renderer::GetAPI())
 		{
-			case RendererAPI::None:			ME_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
-			case RendererAPI::OpenGL:		return new OpenGLIndexBuffer(indices, count);
+			case RendererAPI::API::None:			ME_CORE_ASSERT(false, "RendererAPI::None is currently not supported"); return nullptr;
+			case RendererAPI::API::OpenGL:			return new OpenGLIndexBuffer(indices, count);
 		}
 
 		ME_CORE_ASSERT(false, "Unknown RendererAPI!");
