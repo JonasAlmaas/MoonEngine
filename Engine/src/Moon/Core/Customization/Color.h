@@ -48,11 +48,22 @@ namespace Moon {
 			: r(_r), g(_g), b(_b), a(_a), Format(_format) {}
 
 		/**
+		 * @return A new instance of Color.
+		 */
+		Color Copy() const
+		{
+			return Color(Format, r, g, b, a);
+		}
+
+		/**
 		 * Sets the color format. This should only have to be used if Color was initialize Color without ColorFormat.
 		 * 
 		 * @param Format which is an enum from ColorFormat
 		 */
-		void SetColorFormat(ColorFormat _format) { Format = _format; }
+		void SetColorFormat(ColorFormat _format)
+		{
+			Format = _format;
+		}
 
 		/**
 		 * @brief Converts the color into a 0 to 1 range.
@@ -70,6 +81,16 @@ namespace Moon {
 					a = a * DecimalToNormalizedStep;
 				}
 			}
+		}
+
+		/**
+		 * @return A normalized copy of the Color.
+		*/
+		Color GetNormalized() const
+		{
+			Color c = this->Copy();
+			c.Normalize();
+			return c;
 		}
 
 		/**

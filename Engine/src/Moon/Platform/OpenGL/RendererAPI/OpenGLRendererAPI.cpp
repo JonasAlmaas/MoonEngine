@@ -8,8 +8,8 @@ namespace Moon {
 
 	void OpenGLRendererAPI::SetClearColor(Color color)
 	{
-		color.Normalize();
-		glClearColor(color.r, color.g, color.b, color.a);
+		Color c = color.GetNormalized();
+		glClearColor(c.r, c.g, c.b, c.a);
 	}
 
 	void OpenGLRendererAPI::Clear()
