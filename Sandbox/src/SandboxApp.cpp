@@ -115,40 +115,42 @@ namespace Moon {
 
 		}
 
-		void OnUpdate() override
+		void OnUpdate(Timestep ts) override
 		{
+			ME_TRACE("Delta time {0}s, {1}ms", ts.GetSeconds(), ts.GetMilliseconds());
+
 			if (Input::IsKeyPressed(Key::W))
 			{
-				m_CameraPosition.x -= m_CameraMoveSpeed * sin(glm::radians(m_CameraRotation));
-				m_CameraPosition.y += m_CameraMoveSpeed * cos(glm::radians(m_CameraRotation));
+				m_CameraPosition.x -= m_CameraMoveSpeed * ts * sin(glm::radians(m_CameraRotation));
+				m_CameraPosition.y += m_CameraMoveSpeed * ts * cos(glm::radians(m_CameraRotation));
 			}
 
 			if (Input::IsKeyPressed(Key::A))
 			{
-				m_CameraPosition.x -= m_CameraMoveSpeed * cos(glm::radians(m_CameraRotation));
-				m_CameraPosition.y -= m_CameraMoveSpeed * sin(glm::radians(m_CameraRotation));
+				m_CameraPosition.x -= m_CameraMoveSpeed * ts * cos(glm::radians(m_CameraRotation));
+				m_CameraPosition.y -= m_CameraMoveSpeed * ts * sin(glm::radians(m_CameraRotation));
 			}
 
 			if (Input::IsKeyPressed(Key::S))
 			{
-				m_CameraPosition.x += m_CameraMoveSpeed * sin(glm::radians(m_CameraRotation));
-				m_CameraPosition.y -= m_CameraMoveSpeed * cos(glm::radians(m_CameraRotation));
+				m_CameraPosition.x += m_CameraMoveSpeed * ts * sin(glm::radians(m_CameraRotation));
+				m_CameraPosition.y -= m_CameraMoveSpeed * ts * cos(glm::radians(m_CameraRotation));
 			}
 
 			if (Input::IsKeyPressed(Key::D))
 			{
-				m_CameraPosition.x += m_CameraMoveSpeed * cos(glm::radians(m_CameraRotation));
-				m_CameraPosition.y += m_CameraMoveSpeed * sin(glm::radians(m_CameraRotation));
+				m_CameraPosition.x += m_CameraMoveSpeed * ts * cos(glm::radians(m_CameraRotation));
+				m_CameraPosition.y += m_CameraMoveSpeed * ts * sin(glm::radians(m_CameraRotation));
 			}
 
 			if (Input::IsKeyPressed(Key::Q))
 			{
-				m_CameraRotation += m_CameraRotationSpeed;
+				m_CameraRotation += m_CameraRotationSpeed * ts;
 			}
 
 			if (Input::IsKeyPressed(Key::E))
 			{
-				m_CameraRotation -= m_CameraRotationSpeed;
+				m_CameraRotation -= m_CameraRotationSpeed * ts;
 			}
 
 			m_Camera.SetPosition(m_CameraPosition);
@@ -181,8 +183,8 @@ namespace Moon {
 
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
 		float m_CameraRotation = 0.0f;
-		float m_CameraRotationSpeed = 0.5f;
-		float m_CameraMoveSpeed = 0.01f;
+		float m_CameraRotationSpeed = 40.0f;
+		float m_CameraMoveSpeed = 1.0f;
 
 	};
 
