@@ -3,6 +3,8 @@
 
 #include <imgui.h>
 
+#include <glm/gtc/matrix_transform.hpp>
+
 
 namespace Moon {
 
@@ -130,7 +132,29 @@ namespace Moon {
 
 			Renderer::BeginScene(m_Camera);
 
-			Renderer::Submit(m_Shader, m_SquareVA);
+			glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+			glm::vec4 colorRed(0.8f, 0.2f, 0.3f, 1.0f);
+			glm::vec4 colorBlue(0.3f, 0.2f, 0.8f, 1.0f);
+
+			for (int x = 0; x < 20; x++)
+			{
+				for (int y = 0; y < 20; y++)
+				{
+					glm::vec3 position(x * 0.11f, y * 0.11f, 0.0f);
+					glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * scale;
+					if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0))
+					{
+						m_Shader->UploadUniformFloat4("u_Color", colorRed);
+					}
+					else {
+						m_Shader->UploadUniformFloat4("u_Color", colorBlue);
+					}
+					Renderer::Submit(m_Shader, m_SquareVA, transform);
+				}
+			}
+
+			m_Shader->UploadUniformFloat4("u_Color", colorRed);
 			Renderer::Submit(m_Shader, m_TriangleVA);
 			
 			Renderer::EndScene();
