@@ -16,13 +16,7 @@ namespace Moon {
 		void Bind() const;
 		void UnBind() const;
 
-		/*
-		 * Uploads a 4 * 4 matrix to the gpu.
-		 * Binding the shader has to be done before uploading to it!
-		 * 
-		 * @param name of the uniform.
-		 * @param matrix to upload.
-		 */
+		void UploadUniformFloat4(const std::string& name, const glm::vec4& float4);
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
 	private:

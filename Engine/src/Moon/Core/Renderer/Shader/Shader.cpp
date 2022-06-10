@@ -126,6 +126,14 @@ namespace Moon {
 		glUseProgram(0);
 	}
 
+	// ---- Upload Uniforms ----
+
+	void Shader::UploadUniformFloat4(const std::string& name, const glm::vec4& float4)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform4f(location, float4.x, float4.y, float4.z, float4.w);
+	}
+
 	void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
