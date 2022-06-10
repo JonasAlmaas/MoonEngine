@@ -75,10 +75,10 @@ namespace Moon {
 			{
 				case ColorFormat::RGBADecimal:
 				{
-					r = r * DecimalToNormalizedStep;
-					g = g * DecimalToNormalizedStep;
-					b = b * DecimalToNormalizedStep;
-					a = a * DecimalToNormalizedStep;
+					r = r * DecimalToNormalizedFactor;
+					g = g * DecimalToNormalizedFactor;
+					b = b * DecimalToNormalizedFactor;
+					a = a * DecimalToNormalizedFactor;
 				}
 			}
 		}
@@ -110,7 +110,7 @@ namespace Moon {
 	private:
 		// I multiply by this instead of dividing by 255
 		// to save a microscopical amount of time :)
-		static constexpr float DecimalToNormalizedStep = 0.003921568627451f;
+		static constexpr float DecimalToNormalizedFactor = 0.003921568627451f;
 
 	};
 
