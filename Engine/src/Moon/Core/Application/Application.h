@@ -15,11 +15,31 @@ namespace Moon {
 		Application();
 		virtual ~Application();
 		
+		/**
+		 * @brief Starts the main application loop.
+		 */
 		void Run();
 
+		/**
+		 * Adds a layer to the layer stack.
+		 * 
+		 * @param A child class of Layer. Initialized with the keyword new.
+		 */
 		void PushLayer(Layer* layer);
+
+		/**
+		 * Adds an overlay to the layer stack.
+		 *
+		 * @param A child class of Layer. Initialized with the keyword new.
+		 */
 		void PushOverlay(Layer* overlay);
 
+		/**
+		 * Handler for all application and input events.
+		 * Distributes events to the rest of the application.
+		 * 
+		 * @param A child class of Event.
+		 */
 		void OnEvent(Event& e);
 		
 		inline Window& GetWindow() { return *m_Window; }
