@@ -19,19 +19,19 @@ namespace Moon {
 		{
 			// ---- Square ----
 			{
-				m_SquareVA.reset(VertexArray::Create());
+				m_SquareVA = VertexArray::Create();
 
-				float vertices[3 * 4] = {
-					-0.5f, -0.5f, 0.0f,
-					 0.5f, -0.5f, 0.0f,
-					 0.5f,  0.5f, 0.0f,
-					-0.5f,  0.5f, 0.0f,
+				float vertices[5 * 4] = {
+					-0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+					 0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+					 0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+					-0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
 				};
-				Ref<VertexBuffer> VB;
-				VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+				Ref<VertexBuffer> VB = VertexBuffer::Create(vertices, sizeof(vertices));
 
 				VertexBufferLayout layout = {
 					{ ShaderDataType::Float3, "Position XYZ" },
+					{ ShaderDataType::Float2, "UV" },
 				};
 				VB->SetLayout(layout);
 				m_SquareVA->AddVertexBuffer(VB);
@@ -40,23 +40,21 @@ namespace Moon {
 					0, 1, 2,
 					0, 2, 3
 				};
-				Ref<IndexBuffer> IB;
-				IB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+				Ref<IndexBuffer> IB = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
 				m_SquareVA->SetIndexBuffer(IB);
 			}
 
 			// ---- Triangle ----
 			{
-				m_TriangleVA.reset(VertexArray::Create());
+				m_TriangleVA = VertexArray::Create();
 
 				float vertices[3 * 3] = {
 						-0.5f, -0.5f, 0.0f,
 						 0.5f, -0.5f, 0.0f,
 						 0.0f,  0.5f, 0.0f,
 				};
-				Ref<VertexBuffer> VB;
-				VB.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+				Ref<VertexBuffer> VB = VertexBuffer::Create(vertices, sizeof(vertices));
 
 				VertexBufferLayout layout = {
 					{ ShaderDataType::Float3, "Position XYZ" },
@@ -67,14 +65,13 @@ namespace Moon {
 				uint32_t indices[3] = {
 					0, 1, 2
 				};
-				Ref<IndexBuffer> IB;
-				IB.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+				Ref<IndexBuffer> IB = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 
 				m_TriangleVA->SetIndexBuffer(IB);
 			}
 
-			// ---- Basic Temp Shader ----
-			std::string vertexSrc = R"(
+			// ---- Flat Color Shader ----
+			std::string FlatColorShaderVertexSrc = R"(
 				#version 330 core
 
 				layout(location = 0) in vec3 a_Position;
@@ -82,23 +79,16 @@ namespace Moon {
 				uniform mat4 u_ViewProjection;
 				uniform mat4 u_Transform;
 
-				out vec3 v_Position;
-
 				void main()
 				{
-					v_Position = a_Position;
-
 					gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 				}
 			)";
 
-			std::string fragmentSrc = R"(
+			std::string FlatColorShaderFragmentSrc = R"(
 				#version 330 core
 
 				layout(location = 0) out vec4 o_Color;
-
-				in vec3 v_Position;
-				in vec4 v_Color;
 
 				uniform vec3 u_Color;
 
@@ -108,7 +98,48 @@ namespace Moon {
 				}
 			)";
 
-			m_Shader.reset(Shader::Create(vertexSrc, fragmentSrc));
+			m_FlatColorShader = Shader::Create(FlatColorShaderVertexSrc, FlatColorShaderFragmentSrc);
+
+			// ---- Texture Shader ----
+			std::string textureShaderVertexSrc = R"(
+				#version 330 core
+
+				layout(location = 0) in vec3 a_Position;
+				layout(location = 1) in vec2 a_UV;
+
+				out vec2 v_UV;
+
+				uniform mat4 u_ViewProjection;
+				uniform mat4 u_Transform;
+
+				void main()
+				{
+					v_UV = a_UV;
+
+					gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
+				}
+			)";
+
+			std::string textureShaderFragmentSrc = R"(
+				#version 330 core
+
+				layout(location = 0) out vec4 o_Color;
+
+				in vec2 v_UV;
+
+				uniform sampler2D u_Texture;
+
+				void main()
+				{
+					o_Color = texture(u_Texture, v_UV);
+				}
+			)";
+
+			m_TextureShader = Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc);
+
+			m_Texture = Texture2D::Create("assets/textures/Checkerboard.png");
+			m_TextureShader->Bind();
+			std::dynamic_pointer_cast<OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
 		}
 
 		virtual void OnImGuiRender() override
@@ -142,7 +173,7 @@ namespace Moon {
 
 			glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-			m_Shader->Bind();
+			m_FlatColorShader->Bind();
 
 			for (int x = 0; x < 20; x++)
 			{
@@ -152,17 +183,20 @@ namespace Moon {
 					glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * scale;
 					if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0))
 					{
-						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", m_Color1);
+						std::dynamic_pointer_cast<OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_Color1);
 					}
 					else {
-						std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", m_Color2);
+						std::dynamic_pointer_cast<OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_Color2);
 					}
-					Renderer::Submit(m_Shader, m_SquareVA, transform);
+					Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
 				}
 			}
 
-			std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", { 0.8f, 0.2f, 0.3f });
-			Renderer::Submit(m_Shader, m_TriangleVA);
+			m_Texture->Bind();
+			Renderer::Submit(m_TextureShader, m_SquareVA);
+
+			//std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", { 0.8f, 0.2f, 0.3f });
+			//Renderer::Submit(m_Shader, m_TriangleVA);
 
 			Renderer::EndScene();
 		}
@@ -189,11 +223,15 @@ namespace Moon {
 		}
 
 	private:
-		Ref<Shader> m_Shader;
+		Ref<Shader> m_FlatColorShader;
+		Ref<Shader> m_TextureShader;
+
 		Ref<VertexArray> m_SquareVA;
 		Ref<VertexArray> m_TriangleVA;
 
 		OrthographicCamera m_Camera;
+
+		Ref<Texture2D> m_Texture;
 
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
 		glm::vec2 m_LastMousePosition = { 0.0f, 0.0f };
