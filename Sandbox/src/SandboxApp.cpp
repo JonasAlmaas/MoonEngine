@@ -138,8 +138,11 @@ namespace Moon {
 			m_TextureShader = Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc);
 
 			m_Texture = Texture2D::Create("assets/textures/Checkerboard.png");
+			m_TransparentTexture = Texture2D::Create("assets/textures/TransparencyTest.png");
+
 			m_TextureShader->Bind();
 			std::dynamic_pointer_cast<OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+
 		}
 
 		virtual void OnImGuiRender() override
@@ -195,6 +198,9 @@ namespace Moon {
 			m_Texture->Bind();
 			Renderer::Submit(m_TextureShader, m_SquareVA);
 
+			m_TransparentTexture->Bind();
+			Renderer::Submit(m_TextureShader, m_SquareVA);
+
 			//std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", { 0.8f, 0.2f, 0.3f });
 			//Renderer::Submit(m_Shader, m_TriangleVA);
 
@@ -232,6 +238,7 @@ namespace Moon {
 		OrthographicCamera m_Camera;
 
 		Ref<Texture2D> m_Texture;
+		Ref<Texture2D> m_TransparentTexture;
 
 		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
 		glm::vec2 m_LastMousePosition = { 0.0f, 0.0f };
