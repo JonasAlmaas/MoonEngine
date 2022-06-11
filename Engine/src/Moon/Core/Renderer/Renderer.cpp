@@ -6,7 +6,7 @@
 
 namespace Moon {
 
-	Renderer::SceneData* Renderer::m_SceneData = new Renderer::SceneData;
+	Ref<Renderer::SceneData> Renderer::m_SceneData = CreateRef<Renderer::SceneData>();
 	
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{

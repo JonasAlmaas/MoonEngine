@@ -14,10 +14,10 @@ namespace Moon {
 		ME_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		m_Window = Scope<Window>(Window::Create());
+		m_Window = Window::Create();
 		m_Window->SetEventCallback(ME_BIND_EVENT_FN(Application::OnEvent));
 
-		m_ImGuiLayer = new ImGuiLayer();
+		m_ImGuiLayer = CreateRef<ImGuiLayer>();
 		PushOverlay(m_ImGuiLayer);
 	}
 
@@ -34,11 +34,11 @@ namespace Moon {
 			m_Timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			for (Layer* layer : m_LayerStack)
+			for (Ref<Layer> layer : m_LayerStack)
 				layer->OnUpdate(m_Timestep);
 
 			m_ImGuiLayer->Begin();
-			for (Layer* layer : m_LayerStack)
+			for (Ref<Layer> layer : m_LayerStack)
 				layer->OnImGuiRender();
 			m_ImGuiLayer->End();
 
@@ -46,13 +46,13 @@ namespace Moon {
 		}
 	}
 
-	void Application::PushLayer(Layer* layer)
+	void Application::PushLayer(Ref<Layer> layer)
 	{
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
-	void Application::PushOverlay(Layer* overlay)
+	void Application::PushOverlay(Ref<Layer> overlay)
 	{
 		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();

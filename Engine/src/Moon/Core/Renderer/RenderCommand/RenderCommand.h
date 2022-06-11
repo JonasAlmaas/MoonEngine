@@ -33,7 +33,7 @@ namespace Moon {
 		}
 
 	private:
-		static RendererAPI* s_RendererAPI;
+		static Ref<RendererAPI> s_RendererAPI;
 
 	};
 

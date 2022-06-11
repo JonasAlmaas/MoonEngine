@@ -26,14 +26,14 @@ namespace Moon {
 		 * 
 		 * @param A child class of Layer. Initialized with the keyword new.
 		 */
-		void PushLayer(Layer* layer);
+		void PushLayer(Ref<Layer> layer);
 
 		/**
 		 * Adds an overlay to the layer stack.
 		 *
 		 * @param A child class of Layer. Initialized with the keyword new.
 		 */
-		void PushOverlay(Layer* overlay);
+		void PushOverlay(Ref<Layer> overlay);
 
 		/**
 		 * Handler for all application and input events.
@@ -61,7 +61,7 @@ namespace Moon {
 		Scope<Window> m_Window;
 
 		LayerStack m_LayerStack;
-		ImGuiLayer* m_ImGuiLayer;
+		Ref<ImGuiLayer> m_ImGuiLayer;
 
 		float m_LastFrameTime = 0.0f;
 		Timestep m_Timestep = 0.0f;

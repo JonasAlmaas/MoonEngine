@@ -33,7 +33,7 @@ namespace Moon {
 	private:
 		GLFWwindow* m_Window;
 
-		GraphicsContext* m_Context;
+		Ref<GraphicsContext> m_Context;
 
 		struct WindowData
 		{

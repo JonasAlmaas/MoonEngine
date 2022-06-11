@@ -22,7 +22,7 @@ namespace Moon {
 		virtual float GetMouseYImpl() = 0;
 
 	private:
-		static Input* s_Instance;
+		static Ref<Input> s_Instance;
 	};
 
 }

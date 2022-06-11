@@ -8,7 +8,7 @@
 
 namespace Moon {
 
-	Input* Input::s_Instance = new WindowsInput();
+	Ref<Input> Input::s_Instance = CreateRef<WindowsInput>();
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{

@@ -6,6 +6,6 @@
 
 namespace Moon {
 
-	RendererAPI* RenderCommand::s_RendererAPI = new OpenGLRendererAPI;
+	Ref<RendererAPI> RenderCommand::s_RendererAPI = CreateRef<OpenGLRendererAPI>();
 
 }
