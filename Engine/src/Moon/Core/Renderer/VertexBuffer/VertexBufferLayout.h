@@ -8,7 +8,7 @@ namespace Moon {
 	class VertexBufferLayout
 	{
 	public:
-		VertexBufferLayout() {}
+		VertexBufferLayout() = default;
 
 		VertexBufferLayout(const std::initializer_list<VertexBufferElement>& elements);
 
