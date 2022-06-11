@@ -70,72 +70,8 @@ namespace Moon {
 				m_TriangleVA->SetIndexBuffer(IB);
 			}
 
-			// ---- Flat Color Shader ----
-			std::string FlatColorShaderVertexSrc = R"(
-				#version 330 core
-
-				layout(location = 0) in vec3 a_Position;
-
-				uniform mat4 u_ViewProjection;
-				uniform mat4 u_Transform;
-
-				void main()
-				{
-					gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-				}
-			)";
-
-			std::string FlatColorShaderFragmentSrc = R"(
-				#version 330 core
-
-				layout(location = 0) out vec4 o_Color;
-
-				uniform vec3 u_Color;
-
-				void main()
-				{
-					o_Color = vec4(u_Color, 1.0);
-				}
-			)";
-
-			m_FlatColorShader = Shader::Create(FlatColorShaderVertexSrc, FlatColorShaderFragmentSrc);
-
-			// ---- Texture Shader ----
-			std::string textureShaderVertexSrc = R"(
-				#version 330 core
-
-				layout(location = 0) in vec3 a_Position;
-				layout(location = 1) in vec2 a_UV;
-
-				out vec2 v_UV;
-
-				uniform mat4 u_ViewProjection;
-				uniform mat4 u_Transform;
-
-				void main()
-				{
-					v_UV = a_UV;
-
-					gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
-				}
-			)";
-
-			std::string textureShaderFragmentSrc = R"(
-				#version 330 core
-
-				layout(location = 0) out vec4 o_Color;
-
-				in vec2 v_UV;
-
-				uniform sampler2D u_Texture;
-
-				void main()
-				{
-					o_Color = texture(u_Texture, v_UV);
-				}
-			)";
-
-			m_TextureShader = Shader::Create(textureShaderVertexSrc, textureShaderFragmentSrc);
+			m_FlatColorShader = Shader::Create("assets/shaders/FlatColor.glsl");
+			m_TextureShader  = Shader::Create("assets/shaders/Texture.glsl");
 
 			m_Texture = Texture2D::Create("assets/textures/Checkerboard.png");
 			m_TransparentTexture = Texture2D::Create("assets/textures/TransparencyTest.png");
