@@ -14,6 +14,9 @@ project "Engine"
     {
         "src/**.h",
         "src/**.cpp",
+
+        "vendor/stb_image/**.h",
+        "vendor/stb_image/**.cpp",
     }
 
     defines
@@ -31,6 +34,7 @@ project "Engine"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.ImGui}",
+        "%{IncludeDir.stb_image}",
     }
 
     links
