@@ -28,12 +28,12 @@ project "Engine"
     includedirs
     {
         "src",
-        "vendor/spdlog/include",
 
         "%{IncludeDir.Glad}",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.ImGui}",
+        "%{IncludeDir.spdlog}",
         "%{IncludeDir.stb_image}",
     }
 
