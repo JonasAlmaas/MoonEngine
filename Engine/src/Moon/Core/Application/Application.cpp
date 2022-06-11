@@ -30,7 +30,7 @@ namespace Moon {
 		while (m_Running)
 		{
 			// Get delta time
-			float time = glfwGetTime();	// Platfrom::GetTime();
+			float time = (float)glfwGetTime();	// Platfrom::GetTime();
 			m_Timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
