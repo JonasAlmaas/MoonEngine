@@ -8,6 +8,8 @@ namespace Moon {
 	class OpenGLRendererAPI : public RendererAPI
 	{
 	public:
+		virtual void Init() override;
+
 		virtual void SetClearColor(const Color& color) override;
 		virtual void Clear() override;
 

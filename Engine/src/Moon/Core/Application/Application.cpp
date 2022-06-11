@@ -1,6 +1,8 @@
 #include "mepch.h"
 #include "Moon/Core/Application/Application.h"
 
+#include "Moon/Core/Renderer/Renderer.h"
+
 // TODO: TEMPORARY
 #include <GLFW/glfw3.h>
 
@@ -16,6 +18,8 @@ namespace Moon {
 
 		m_Window = Window::Create();
 		m_Window->SetEventCallback(ME_BIND_EVENT_FN(Application::OnEvent));
+
+		Renderer::Init();
 
 		m_ImGuiLayer = CreateRef<ImGuiLayer>();
 		PushOverlay(m_ImGuiLayer);

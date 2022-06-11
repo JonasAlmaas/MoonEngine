@@ -8,6 +8,11 @@ namespace Moon {
 	class RenderCommand
 	{
 	public:
+		inline static void Init()
+		{
+			s_RendererAPI->Init();
+		}
+
 		/**
 		 * Sets the color used when calling RenderCommand::Clear.
 		 *

@@ -16,6 +16,8 @@ namespace Moon {
 		};
 
 	public:
+		virtual void Init() = 0;
+
 		virtual void SetClearColor(const Color& color) = 0;
 		virtual void Clear() = 0;
 
