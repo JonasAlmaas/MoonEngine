@@ -24,10 +24,10 @@ namespace Moon {
 			{
 				auto [x, y] = Input::GetMousePosition();
 
-				float a = m_ZoomLevel * 2.0f / (float)Application::Get().GetWindow().GetHeight();
+				float pixelToUnitFactor = m_ZoomLevel * 2.0f / (float)Application::Get().GetWindow().GetHeight();
 
-				float distanceX = (m_LastMousePosition.x - x) * a;
-				float distanceY = (m_LastMousePosition.y - y) * a;
+				float distanceX = (m_LastMousePosition.x - x) * pixelToUnitFactor;
+				float distanceY = (m_LastMousePosition.y - y) * pixelToUnitFactor;
 
 				m_CameraPosition.x += distanceX * cos(glm::radians(m_CameraRotation));
 				m_CameraPosition.y += distanceX * sin(glm::radians(m_CameraRotation));
