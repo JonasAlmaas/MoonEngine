@@ -15,6 +15,9 @@ namespace Moon {
 	public:
 		Application();
 		virtual ~Application();
+
+		// To be defined in client
+		static Application* Create();
 		
 		/**
 		 * @brief Starts the main application loop.
@@ -73,8 +76,5 @@ namespace Moon {
 		static Application* s_Instance;
 
 	};
-
-	// To be defined in client
-	Application* CreateApplication();
 
 }

@@ -9,7 +9,7 @@
 	{
 		Moon::Log::Init();
 
-		auto app = Moon::CreateApplication();
+		auto app = Moon::Application::Create();
 		app->Run();
 		delete app;
 
