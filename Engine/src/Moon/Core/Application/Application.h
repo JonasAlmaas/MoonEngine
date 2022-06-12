@@ -53,7 +53,8 @@ namespace Moon {
 		inline static Application& Get() { return *s_Instance; }
 
 	private:
-		bool OnWindowClosed(WindowCloseEvent& e);
+		bool OnWindowClosedEvent(WindowCloseEvent& e);
+		bool OnWindowResizeEvent(WindowResizeEvent& e);
 
 	private:
 		bool m_Running = true;

@@ -62,12 +62,13 @@ namespace Moon {
 		overlay->OnAttach();
 	}
 
-	// ---- Event handling ----
+	// ---- Event Handling ----
 
 	void Application::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.Dispatch<WindowCloseEvent>(ME_BIND_EVENT_FN(Application::OnWindowClosed));
+		dispatcher.Dispatch<WindowCloseEvent>(ME_BIND_EVENT_FN(Application::OnWindowClosedEvent));
+		dispatcher.Dispatch<WindowResizeEvent>(ME_BIND_EVENT_FN(Application::OnWindowResizeEvent));
 
 		// Send events to layers
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
@@ -78,10 +79,17 @@ namespace Moon {
 		}
 	}
 
-	bool Application::OnWindowClosed(WindowCloseEvent& e)
+	bool Application::OnWindowClosedEvent(WindowCloseEvent& e)
 	{
 		m_Running = false;
 		return true;
+	}
+
+
+	bool Application::OnWindowResizeEvent(WindowResizeEvent& e)
+	{
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+		return false;
 	}
 
 }
