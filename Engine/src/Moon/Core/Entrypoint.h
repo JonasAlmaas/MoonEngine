@@ -13,6 +13,8 @@
 		auto app = Moon::CreateApplication();
 		app->Run();
 		delete app;
+
+		return 0;
 	}
 
 #endif
