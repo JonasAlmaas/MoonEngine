@@ -67,11 +67,21 @@ namespace Moon {
 		{
 			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
+			bool wasMinimized = (data.Width == 0 || data.Height == 0);
+			bool isMinimized = (width == 0 || height == 0);
+			bool sendMinimizeEvent = (!wasMinimized && isMinimized) || (wasMinimized && !isMinimized);
+
 			data.Width = width;
 			data.Height = height;
 
 			WindowResizeEvent e(width, height);		// Create event
 			data.EventCallback(e);					// Dispatch event
+
+			if (sendMinimizeEvent)
+			{
+				WindowMinimizeEvent e(isMinimized);
+				data.EventCallback(e);
+			}
 		});
 
 		// Window Close Event
