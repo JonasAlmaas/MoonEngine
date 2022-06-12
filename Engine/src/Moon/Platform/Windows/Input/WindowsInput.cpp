@@ -1,6 +1,7 @@
 #include "mepch.h"
 #include "Moon/Platform/Windows/Input/WindowsInput.h"
 
+#include "Moon/Core/Base.h"
 #include "Moon/Core/Application/Application.h"
 
 #include <GLFW/glfw3.h>

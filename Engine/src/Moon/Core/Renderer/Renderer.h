@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Moon/Core/Base.h"
 #include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
 #include "Moon/Core/Renderer/Shader/Shader.h"

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Base.h"
-
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
 

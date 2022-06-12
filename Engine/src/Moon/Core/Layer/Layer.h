@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Base.h"
 #include "Moon/Core/Event/Event.h"
 #include "Moon/Core/Type/Timestep.h"
 
