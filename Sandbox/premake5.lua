@@ -30,11 +30,6 @@ project "Sandbox"
 	filter "system:windows"
 		systemversion "latest"
 
-        defines
-        {
-            "ME_PLATFORM_WINDOWS",
-        }
-
 	filter "configurations:Debug"
 		defines "FN_DEBUG"
 		runtime "Debug"

@@ -2,6 +2,8 @@
 
 #include <filesystem>
 
+#include "Moon/Core/PlatformDetection.h"
+
 
 #ifdef ME_DEBUG
 	#if defined(ME_PLATFORM_WINDOWS)
