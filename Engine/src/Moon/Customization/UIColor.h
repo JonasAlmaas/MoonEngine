@@ -23,9 +23,9 @@ namespace Moon {
 		static constexpr Color PopupBg = { ColorFormat::RGBADecimal, 42 };
 
 		static constexpr Color Border = { ColorFormat::RGBADecimal, 56 };
+		static constexpr Color BorderShadow = { ColorFormat::RGBADecimal, 0, 0 };
 
 		static constexpr Color ElementBg = { ColorFormat::RGBADecimal, 20 };
-		static constexpr Color ElementOutline = { ColorFormat::RGBADecimal, 53 };
 		static constexpr Color ElementHovered = { ColorFormat::RGBADecimal, 26 };
 		static constexpr Color ElementActive = { ColorFormat::RGBADecimal, 26 };
 
@@ -55,10 +55,10 @@ namespace Moon {
 		static constexpr Color ResizeGripHovered = Primary;
 		static constexpr Color ResizeGripActive = Primary;
 
-		static constexpr Color Tab = WindowBg;
+		static constexpr Color Tab = TitleBg;
 		static constexpr Color TabHovered = { ColorFormat::RGBADecimal, 56 };
 		static constexpr Color TabActive = { ColorFormat::RGBADecimal, 56 };
-		static constexpr Color TabUnfocused = { ColorFormat::RGBADecimal, 56 };
+		static constexpr Color TabUnfocused = TitleBg;
 		static constexpr Color TabUnfocusedActive = { ColorFormat::RGBADecimal, 56 };
 
 		static constexpr Color DockingPreview = { ColorFormat::RGBADecimal, 44 };

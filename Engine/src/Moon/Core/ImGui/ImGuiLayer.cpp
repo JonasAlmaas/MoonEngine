@@ -91,17 +91,17 @@ namespace Moon {
 
 		style.Alpha = 1.0f;
 		style.DisabledAlpha = 1.0f;
-		style.WindowPadding = ImVec2(8.0f, 8.0f);
+		style.WindowPadding = ImVec2(10.0f, 10.0f);
 		style.WindowRounding = 0.0f;
 		style.WindowBorderSize = 1.0f;
 		style.WindowMinSize = ImVec2(10.0f, 10.0f);
-		style.WindowTitleAlign = ImVec2(0, 0.5f);
-		style.WindowMenuButtonPosition = ImGuiDir_Left;
+		style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
+		style.WindowMenuButtonPosition = ImGuiDir_None;
 		style.ChildRounding = 0.0f;
 		style.ChildBorderSize = 1.0f;
 		style.PopupRounding = 4.0f;
 		style.PopupBorderSize = 1.0f;
-		style.FramePadding = ImVec2(4.0f, 2.0f);
+		style.FramePadding = ImVec2(10.0f, 3.0f);
 		style.FrameRounding = 4.0f;
 		style.FrameBorderSize = 0.0f;
 		style.ItemSpacing = ImVec2(10.0f, 5.0f);
@@ -110,10 +110,10 @@ namespace Moon {
 		style.TouchExtraPadding = ImVec2(0.0f, 0.0f);
 		style.IndentSpacing = 21.0f;
 		style.ColumnsMinSpacing = 6.0f;
-		style.ScrollbarSize = 15.0f;
-		style.ScrollbarRounding = 9.0f;
-		style.GrabMinSize = 10.0f;
-		style.GrabRounding = 0.0f;
+		style.ScrollbarSize = 18.0f;
+		style.ScrollbarRounding = 100.0f;
+		style.GrabMinSize = 14.0f;
+		style.GrabRounding = 4.0f;
 		style.LogSliderDeadzone = 4.0f;
 		style.TabRounding = 4.0f;
 		style.TabBorderSize = 0.0f;
@@ -138,7 +138,7 @@ namespace Moon {
 		style.Colors[ImGuiCol_PopupBg]					= UIColor::PopupBg;					// Background of popups, menus, tooltips windows
 		
 		style.Colors[ImGuiCol_Border]					= UIColor::Border;
-		style.Colors[ImGuiCol_BorderShadow]				= UIColor::ElementOutline;
+		style.Colors[ImGuiCol_BorderShadow]				= UIColor::BorderShadow;
 		
 		style.Colors[ImGuiCol_FrameBg]					= UIColor::ElementBg;				// Background of checkbox, radio button, plot, slider, text input
 		style.Colors[ImGuiCol_FrameBgHovered]			= UIColor::ElementHovered;
