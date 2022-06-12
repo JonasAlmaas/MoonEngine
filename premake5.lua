@@ -11,9 +11,7 @@ workspace "MoonEngine"
 		"Dist",
 	}
 
-
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
-
 
 group "Dependencies"
     include "Engine/vendor/Glad"
@@ -21,6 +19,9 @@ group "Dependencies"
     include "Engine/vendor/ImGui"
 group ""
 
+group "Tools"
+    include "Asteroid"
+group ""
 
 include "Engine"
 include "Sandbox"
