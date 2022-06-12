@@ -15,7 +15,8 @@ namespace Moon {
 	{
 	public:
 		ExampleLayer()
-			: Layer("Example"), m_Camera(-1.6f, 1.6f, -0.9f, 0.9f)
+			: Layer("Example"),
+			m_CameraController((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight(), true, true, true)
 		{
 			// ---- Square ----
 			{
@@ -94,22 +95,14 @@ namespace Moon {
 
 		void OnUpdate(Timestep ts) override
 		{
-			if (Input::IsMouseButtonPressed(Mouse::Button2))
-			{
-				auto [x, y] = Input::GetMousePosition();
+			// Update
+			m_CameraController.OnUpdate(ts);
 
-				m_CameraPosition.x += (m_LastMousePosition.x - x) * 0.0016666666666667f;
-				m_CameraPosition.y -= (m_LastMousePosition.y - y) * 0.00140625f;
-
-				m_LastMousePosition = { x, y };
-
-				m_Camera.SetPosition(m_CameraPosition);
-			}
-
+			// Render
 			RenderCommand::SetClearColor({ ColorFormat::RGBADecimal, 25 });
 			RenderCommand::Clear();
 
-			Renderer::BeginScene(m_Camera);
+			Renderer::BeginScene(m_CameraController.GetCamera());
 
 			glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
@@ -141,46 +134,30 @@ namespace Moon {
 			m_TransparentTexture->Bind();
 			Renderer::Submit(textureShader, m_SquareVA);
 
-			std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", { 0.8f, 0.2f, 0.3f });
-			Renderer::Submit(flatColorShader, m_TriangleVA);
+			//std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", { 0.8f, 0.2f, 0.3f });
+			//Renderer::Submit(flatColorShader, m_TriangleVA);
 
 			Renderer::EndScene();
 		}
 
-		// ---- Event handling ----
+		// ---- Event Handling ----
 
 		void OnEvent(Event& e) override
 		{
-			EventDispatcher dispatcher(e);
-
-			dispatcher.Dispatch<MouseButtonPressedEvent>(ME_BIND_EVENT_FN(ExampleLayer::OnMouseButtonPressedEvent));
-		}
-
-		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e)
-		{
-			// Middle mouse
-			if (e.GetMouseButton() == Mouse::Button2)
-			{
-				auto [x, y] = Input::GetMousePosition();
-				m_LastMousePosition = { x, y };
-			}
-
-			return false;
+			// Update
+			m_CameraController.OnEvent(e);
 		}
 
 	private:
+		OrthographicCameraController m_CameraController;
+
 		ShaderLibrary m_ShaderLibrary;
 
 		Ref<VertexArray> m_SquareVA;
 		Ref<VertexArray> m_TriangleVA;
 
-		OrthographicCamera m_Camera;
-
 		Ref<Texture2D> m_Texture;
 		Ref<Texture2D> m_TransparentTexture;
-
-		glm::vec3 m_CameraPosition = { 0.0f, 0.0f, 0.0f };
-		glm::vec2 m_LastMousePosition = { 0.0f, 0.0f };
 
 		glm::vec3 m_Color1 = { 0.8f, 0.2f, 0.3f };
 		glm::vec3 m_Color2 = { 0.3f, 0.2f, 0.8f};
