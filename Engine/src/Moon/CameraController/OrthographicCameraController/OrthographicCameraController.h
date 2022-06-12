@@ -11,7 +11,7 @@ namespace Moon {
 	class OrthographicCameraController
 	{
 	public:
-		OrthographicCameraController(float aspectRatio, bool moveWASD = false, bool moveMMB = false, bool rotation = false);
+		OrthographicCameraController(float aspectRatio, bool moveWASD = false, bool moveMMB = false, bool zoom = false, bool rotation = false);
 
 		void OnUpdate(Timestep ts);
 		void OnEvent(Event& e);
@@ -33,6 +33,7 @@ namespace Moon {
 
 		bool m_MoveWASD;
 		bool m_MoveMMB;
+		bool m_Zoom;
 		bool m_Rotation;
 
 		OrthographicCamera m_Camera;

@@ -9,8 +9,8 @@
 
 namespace Moon {
 
-	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool moveWASD, bool moveMMB, bool rotation)
-		: m_AspectRatio(aspectRatio), m_Rotation(rotation), m_MoveWASD(moveWASD), m_MoveMMB(moveMMB),
+	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool moveWASD, bool moveMMB, bool zoom, bool rotation)
+		: m_AspectRatio(aspectRatio), m_MoveWASD(moveWASD), m_MoveMMB(moveMMB), m_Zoom(zoom), m_Rotation(rotation),
 			m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio* m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel)
 	{
 
@@ -106,9 +106,12 @@ namespace Moon {
 
 	bool OrthographicCameraController::OnMouseScrolledEvent(MouseScrolledEvent& e)
 	{
-		m_ZoomLevel -= e.GetYOffset() * 0.25f;
-		m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
-		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		if (m_Zoom)
+		{
+			m_ZoomLevel -= e.GetYOffset() * 0.25f;
+			m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
+			m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		}
 		return false;
 	}
 
