@@ -28,6 +28,7 @@
 #include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
 #include "Moon/Core/Renderer/Shader/Shader.h"
+#include "Moon/Core/Renderer/Shader/ShaderLibrary/ShaderLibrary.h"
 #include "Moon/Core/Renderer/Texture/Texture.h"
 #include "Moon/Core/Renderer/VertexArray/VertexArray.h"
 #include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
