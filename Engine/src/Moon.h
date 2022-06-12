@@ -2,14 +2,14 @@
 
 // For use by Moon engine applications only
 
-// ---- Application ----
-#include "Moon/Core/Application/Application.h"
-
 // ---- CameraController ----
-#include "Moon/Core/CameraController/OrthographicCameraController/OrthographicCameraController.h"
+#include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
 
 // ---- Customization ----
-#include "Moon/Core/Customization/UIColor.h"
+#include "Moon/Customization/UIColor.h"
+
+// ---- Application ----
+#include "Moon/Core/Application/Application.h"
 
 // ---- ImGui ----
 #include "Moon/Core/ImGui/ImGuiLayer.h"
