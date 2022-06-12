@@ -83,17 +83,7 @@ namespace Moon {
 
 		}
 
-		virtual void OnImGuiRender() override
-		{
-			ImGui::Begin("Settings");
-
-			ImGui::ColorEdit3("Color 1", glm::value_ptr(m_Color1));
-			ImGui::ColorEdit3("Color 2", glm::value_ptr(m_Color2));
-
-			ImGui::End();
-		}
-
-		void OnUpdate(Timestep ts) override
+		virtual void OnUpdate(Timestep ts) override
 		{
 			// Update
 			m_CameraController.OnUpdate(ts);
@@ -140,9 +130,19 @@ namespace Moon {
 			Renderer::EndScene();
 		}
 
+		virtual void OnImGuiRender() override
+		{
+			ImGui::Begin("Settings");
+
+			ImGui::ColorEdit3("Color 1", glm::value_ptr(m_Color1));
+			ImGui::ColorEdit3("Color 2", glm::value_ptr(m_Color2));
+
+			ImGui::End();
+		}
+
 		// ---- Event Handling ----
 
-		void OnEvent(Event& e) override
+		virtual void OnEvent(Event& e) override
 		{
 			m_CameraController.OnEvent(e);
 		}
