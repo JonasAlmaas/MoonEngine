@@ -144,7 +144,6 @@ namespace Moon {
 
 		void OnEvent(Event& e) override
 		{
-			// Update
 			m_CameraController.OnEvent(e);
 		}
 
