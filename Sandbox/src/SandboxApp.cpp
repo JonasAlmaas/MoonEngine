@@ -16,7 +16,7 @@ namespace Moon {
 	public:
 		ExampleLayer()
 			: Layer("Example"),
-			m_CameraController((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight(), true, true, true)
+			m_CameraController((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight(), true, true, true, true)
 		{
 			// ---- Square ----
 			{
