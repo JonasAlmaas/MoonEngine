@@ -133,7 +133,7 @@ namespace Moon {
 				}
 			}
 
-			Ref<Shader> textureShader = m_ShaderLibrary.Get("Texturse");
+			Ref<Shader> textureShader = m_ShaderLibrary.Get("Texture");
 
 			m_Texture->Bind();
 			Renderer::Submit(textureShader, m_SquareVA);
