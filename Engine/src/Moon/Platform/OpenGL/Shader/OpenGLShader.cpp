@@ -15,7 +15,7 @@ namespace Moon {
 		if (type == "vertex")								return GL_VERTEX_SHADER;
 		else if (type == "fragment" || type == "pixel")		return GL_FRAGMENT_SHADER;
 		
-		ME_CORE_ASSERT(false, "Unknown shader type '{0}'", type);
+		ME_CORE_ASSERT(false, "Unknown shader type!");
 		return 0;
 	}
 
@@ -24,9 +24,17 @@ namespace Moon {
 		std::string source = ReadFile(filepath);
 		auto shaderSources = PreProcess(source);
 		Compile(shaderSources);
+
+		// Extract name from filepath
+		size_t lastSlash = filepath.find_last_of("/\\");
+		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+		size_t lastDot = filepath.rfind(".");
+		size_t count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+		: m_Name(name)
 	{
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSrc;
@@ -43,7 +51,7 @@ namespace Moon {
 	{
 		std::string result;
 
-		std::ifstream in(filepath, std::ios::in, std::ios::binary);
+		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 		if (in)
 		{
 			in.seekg(0, std::ios::end);
@@ -88,7 +96,9 @@ namespace Moon {
 	{
 		GLuint program = glCreateProgram();
 
-		std::vector<GLenum> glShaderIDs(shaderSources.size());
+		ME_CORE_ASSERT(shaderSources.size() <= 2, "We only support two shaders for now");
+		std::array<GLenum, 2> glShaderIDs;
+		int glShaderIDIndex = 0;
 
 		for (auto& kv : shaderSources)
 		{
@@ -120,7 +130,7 @@ namespace Moon {
 			}
 
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[glShaderIDIndex++] = shader;
 		}
 
 		glLinkProgram(program);
