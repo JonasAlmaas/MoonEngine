@@ -54,10 +54,12 @@ namespace Moon {
 
 	private:
 		bool OnWindowClosedEvent(WindowCloseEvent& e);
+		bool OnWindowMinimizeEvent(WindowMinimizeEvent& e);
 		bool OnWindowResizeEvent(WindowResizeEvent& e);
 
 	private:
 		bool m_Running = true;
+		bool m_Minimized = false;
 
 		Scope<Window> m_Window;
 

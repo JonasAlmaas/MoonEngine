@@ -38,8 +38,11 @@ namespace Moon {
 			m_Timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
-			for (Ref<Layer> layer : m_LayerStack)
-				layer->OnUpdate(m_Timestep);
+			if (!m_Minimized)
+			{
+				for (Ref<Layer> layer : m_LayerStack)
+					layer->OnUpdate(m_Timestep);
+			}
 
 			m_ImGuiLayer->Begin();
 			for (Ref<Layer> layer : m_LayerStack)
@@ -69,6 +72,7 @@ namespace Moon {
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(ME_BIND_EVENT_FN(Application::OnWindowClosedEvent));
 		dispatcher.Dispatch<WindowResizeEvent>(ME_BIND_EVENT_FN(Application::OnWindowResizeEvent));
+		dispatcher.Dispatch<WindowMinimizeEvent>(ME_BIND_EVENT_FN(Application::OnWindowMinimizeEvent));
 
 		// Send events to layers
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
@@ -85,6 +89,11 @@ namespace Moon {
 		return true;
 	}
 
+	bool Application::OnWindowMinimizeEvent(WindowMinimizeEvent& e)
+	{
+		m_Minimized = e.GetMinimizedState();
+		return false;
+	}
 
 	bool Application::OnWindowResizeEvent(WindowResizeEvent& e)
 	{
