@@ -1,5 +1,5 @@
 #include "mepch.h"
-#include "Moon/Core/CameraController/OrthographicCameraController/OrthographicCameraController.h"
+#include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
 
 #include "Moon/Core/Application/Application.h"
 #include "Moon/Core/Input/Input.h"
