@@ -70,14 +70,15 @@ namespace Moon {
 				m_TriangleVA->SetIndexBuffer(IB);
 			}
 
-			m_FlatColorShader = Shader::Create("assets/shaders/FlatColor.glsl");
-			m_TextureShader  = Shader::Create("assets/shaders/Texture.glsl");
+			m_ShaderLibrary.Load("assets/shaders/FlatColor.glsl");
+			m_ShaderLibrary.Load("assets/shaders/Texture.glsl");
 
 			m_Texture = Texture2D::Create("assets/textures/Checkerboard.png");
 			m_TransparentTexture = Texture2D::Create("assets/textures/TransparencyTest.png");
 
-			m_TextureShader->Bind();
-			std::dynamic_pointer_cast<OpenGLShader>(m_TextureShader)->UploadUniformInt("u_Texture", 0);
+			Ref<Shader> textureShader = m_ShaderLibrary.Get("Texture");
+			textureShader->Bind();
+			std::dynamic_pointer_cast<OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
 
 		}
 
@@ -112,7 +113,8 @@ namespace Moon {
 
 			glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
-			m_FlatColorShader->Bind();
+			Ref<Shader> flatColorShader = m_ShaderLibrary.Get("FlatColor");
+			flatColorShader->Bind();
 
 			for (int x = 0; x < 20; x++)
 			{
@@ -122,23 +124,25 @@ namespace Moon {
 					glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * scale;
 					if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0))
 					{
-						std::dynamic_pointer_cast<OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_Color1);
+						std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", m_Color1);
 					}
 					else {
-						std::dynamic_pointer_cast<OpenGLShader>(m_FlatColorShader)->UploadUniformFloat3("u_Color", m_Color2);
+						std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", m_Color2);
 					}
-					Renderer::Submit(m_FlatColorShader, m_SquareVA, transform);
+					Renderer::Submit(flatColorShader, m_SquareVA, transform);
 				}
 			}
 
+			Ref<Shader> textureShader = m_ShaderLibrary.Get("Texturse");
+
 			m_Texture->Bind();
-			Renderer::Submit(m_TextureShader, m_SquareVA);
+			Renderer::Submit(textureShader, m_SquareVA);
 
 			m_TransparentTexture->Bind();
-			Renderer::Submit(m_TextureShader, m_SquareVA);
+			Renderer::Submit(textureShader, m_SquareVA);
 
-			//std::dynamic_pointer_cast<OpenGLShader>(m_Shader)->UploadUniformFloat3("u_Color", { 0.8f, 0.2f, 0.3f });
-			//Renderer::Submit(m_Shader, m_TriangleVA);
+			std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", { 0.8f, 0.2f, 0.3f });
+			Renderer::Submit(flatColorShader, m_TriangleVA);
 
 			Renderer::EndScene();
 		}
@@ -165,8 +169,7 @@ namespace Moon {
 		}
 
 	private:
-		Ref<Shader> m_FlatColorShader;
-		Ref<Shader> m_TextureShader;
+		ShaderLibrary m_ShaderLibrary;
 
 		Ref<VertexArray> m_SquareVA;
 		Ref<VertexArray> m_TriangleVA;
