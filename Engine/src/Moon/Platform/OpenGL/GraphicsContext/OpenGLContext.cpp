@@ -27,6 +27,8 @@ namespace Moon {
 		ME_CORE_INFO("  Vendor: {0}", glGetString(GL_VENDOR));
 		ME_CORE_INFO("  Renderer: {0}", glGetString(GL_RENDERER));
 		ME_CORE_INFO("  Version: {0}", glGetString(GL_VERSION));
+
+		ME_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 5), "Moon Engine requires at least OpenGL version 4.5!");
 	}
 
 	void OpenGLContext::SwapBuffers()
