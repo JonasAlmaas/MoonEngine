@@ -15,6 +15,8 @@ project "Sandbox"
     
     includedirs
     {
+        "src",
+
         "../Engine/src",
         "../Engine/vendor/spdlog/include",
 
