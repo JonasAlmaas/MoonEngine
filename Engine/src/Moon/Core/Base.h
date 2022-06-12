@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Moon/Core/Assert.h"
+#include <filesystem>
+
 
 #ifdef ME_DEBUG
 	#if defined(ME_PLATFORM_WINDOWS)
@@ -42,3 +43,5 @@ namespace Moon {
 	}
 
 }
+
+#include "Moon/Core/Assert.h"
