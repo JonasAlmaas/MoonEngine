@@ -3,6 +3,7 @@
 
 #include "Application/AsteroidApp.h"
 
+
 namespace Moon {
 
 	Application* Application::Create()
