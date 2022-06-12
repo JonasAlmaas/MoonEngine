@@ -88,6 +88,7 @@ namespace Moon {
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
+
 		dispatcher.Dispatch<MouseButtonPressedEvent>(ME_BIND_EVENT_FN(OrthographicCameraController::OnMouseButtonPressedEvent));
 		dispatcher.Dispatch<MouseScrolledEvent>(ME_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolledEvent));
 		dispatcher.Dispatch<WindowResizeEvent>(ME_BIND_EVENT_FN(OrthographicCameraController::OnWindowResizeEvent));
