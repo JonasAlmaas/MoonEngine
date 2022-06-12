@@ -5,7 +5,7 @@
 
 namespace Moon {
 
-	Application* CreateApplication()
+	Application* Application::Create()
 	{
 		return new SandboxApp();
 	}
