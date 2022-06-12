@@ -5,6 +5,9 @@
 #include "Moon/Core/Customization/UIColor.h"
 #include "Moon/Core/Type/Color.h"
 
+// Emedded font
+#include "Font/Roboto-Regular.embed"
+
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -199,6 +202,12 @@ namespace Moon {
 		style.Colors[ImGuiCol_NavWindowingHighlight]	= UIColor::NavWindowingHighlight;	// Highlight window when using CTRL+TAB
 		style.Colors[ImGuiCol_NavWindowingDimBg]		= UIColor::NavWindowingDimBg;		// Darken/colorize entire screen behind the CTRL+TAB window list, when active
 		style.Colors[ImGuiCol_ModalWindowDimBg]			= UIColor::ModalWindowDimBg;		// Darken/colorize entire screen behind a modal window, when one is active
+
+		// Load default font
+		ImFontConfig fontConfig;
+		fontConfig.FontDataOwnedByAtlas = false;
+		ImFont* robotoFont = io.Fonts->AddFontFromMemoryTTF((void*)g_RobotoRegular, sizeof(g_RobotoRegular), 20.0f, &fontConfig);
+		io.FontDefault = robotoFont;
 	}
 
 	void ImGuiLayer::OnImGuiRender()

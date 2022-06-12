@@ -28,6 +28,7 @@ project "Engine"
     includedirs
     {
         "src",
+        "resource",
 
         "%{IncludeDir.Glad}",
         "%{IncludeDir.GLFW}",
