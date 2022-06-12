@@ -5,6 +5,9 @@
 // ---- Application ----
 #include "Moon/Core/Application/Application.h"
 
+// ---- CameraController ----
+#include "Moon/Core/CameraController/OrthographicCameraController/OrthographicCameraController.h"
+
 // ---- Customization ----
 #include "Moon/Core/Customization/UIColor.h"
 
