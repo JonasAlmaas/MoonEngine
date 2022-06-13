@@ -82,8 +82,6 @@ namespace Moon {
 
 	void Renderer2D::Super_DrawQuad(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& color)
 	{
-		s_Data->Shader->Bind();
-
 		s_Data->Shader->SetFloat4("u_Color", color);
 		s_Data->Shader->SetFloat2("u_TileFactor", tileFactor);
 
