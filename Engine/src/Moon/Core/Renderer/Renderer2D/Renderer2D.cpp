@@ -7,9 +7,6 @@
 #include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
 #include "Moon/Core/Renderer/Shader/Shader.h"
 
-// TODO: REMOVE!
-#include "Moon/Platform/OpenGL/Shader/OpenGLShader.h"
-
 #include <glm/gtc/matrix_transform.hpp>
 
 
@@ -63,9 +60,7 @@ namespace Moon {
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		s_Data->Shader->Bind();
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->Shader)->UploadUniformMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
-
-		//m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+		s_Data->Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
@@ -78,11 +73,11 @@ namespace Moon {
 	{
 		s_Data->Shader->Bind();
 
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->Shader)->UploadUniformFloat3("u_Color", color);
+		s_Data->Shader->SetFloat4("u_Color", color);
 
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0 });
 		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * scale;
-		std::dynamic_pointer_cast<OpenGLShader>(s_Data->Shader)->UploadUniformMat4("u_Transform", transform);
+		s_Data->Shader->SetMat4("u_Transform", transform);
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
