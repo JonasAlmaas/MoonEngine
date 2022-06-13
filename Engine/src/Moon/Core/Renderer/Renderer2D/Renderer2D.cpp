@@ -103,6 +103,26 @@ namespace Moon {
 
 	// -- Draw Quad --
 
+	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const glm::vec3& color)
+	{
+		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const glm::vec4& color)
+	{
+		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const glm::vec3& color)
+	{
+		Super_DrawQuad(position, 0.0f, { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const glm::vec4& color)
+	{
+		Super_DrawQuad(position, 0.0f, { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
+	}
+
 	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
@@ -322,6 +342,26 @@ namespace Moon {
 	}
 
 	// -- Draw Rotated Quad --
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const glm::vec3& color)
+	{
+		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const glm::vec4& color)
+	{
+		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const glm::vec3& color)
+	{
+		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const glm::vec4& color)
+	{
+		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
+	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture)
 	{
