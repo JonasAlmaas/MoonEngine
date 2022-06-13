@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include "Moon/Core/Base.h"
+
 #include <string>
 #include <chrono>
 #include <algorithm>
