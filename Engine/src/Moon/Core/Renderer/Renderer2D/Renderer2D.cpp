@@ -97,6 +97,8 @@ namespace Moon {
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+
+		texture->Unbind();
 	}
 
 	// -- Draw Quad --

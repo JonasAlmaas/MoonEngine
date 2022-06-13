@@ -91,4 +91,9 @@ namespace Moon {
 		glBindTextureUnit(slot, m_RendererID);
 	}
 
+	void OpenGLTexture2D::Unbind() const
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
 }
