@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Log/Log.h"
-
 #include <iostream>
 #include <memory>
 #include <utility>
@@ -18,3 +16,6 @@
 #ifdef ME_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif
+
+#include "Moon/Core/Log/Log.h"
+#include "Moon/Debug/Instrumentor.h"
