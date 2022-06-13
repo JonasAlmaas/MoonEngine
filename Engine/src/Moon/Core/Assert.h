@@ -3,7 +3,7 @@
 #include "Moon/Core/Log/Log.h"
 
 
-#ifdef ME_ENABLE_ASSERTS
+#if ME_ENABLE_ASSERTS
 	// Alteratively we could use the same "default" message for both "WITH_MSG" and "NO_MSG" and
 	// provide support for custom formatting by concatenating the formatting string instead of having the format inside the default message
 	#define ME_INTERNAL_ASSERT_IMPL(type, check, msg, ...) { if(!(check)) { ME##type##ERROR(msg, __VA_ARGS__); ME_DEBUGBREAK(); } }
