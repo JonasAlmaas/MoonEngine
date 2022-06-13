@@ -46,7 +46,7 @@ void Sandbox2D::OnUpdate(Timestep ts)
 		}
 	}
 
-	Renderer2D::DrawRotatedQuad({ -1.0f, -1.0f, }, 45.0f, 1.0f, m_Texture, m_Color2);
+	Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1 }, 45.0f, 10.0f, m_Texture, 10.0f);
 
 	Renderer2D::EndScene();
 }
