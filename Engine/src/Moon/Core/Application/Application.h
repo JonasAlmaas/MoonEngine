@@ -49,7 +49,7 @@ namespace Moon {
 		/**
 		 * @return delta time in the Timestep format.
 		 */
-		Timestep GetTimestep() const { return m_Timestep; }
+		inline Timestep GetTimestep() const { return m_Timestep; }
 		
 		inline Window& GetWindow() { return *m_Window; }
 
