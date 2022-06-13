@@ -10,12 +10,16 @@ namespace Moon {
 	
 	void Renderer::Init()
 	{
+		ME_PROFILE_FUNCTION();
+
 		RenderCommand::Init();
 		Renderer2D::Init();
 	}
 
 	void Renderer::Shutdown()
 	{
+		ME_PROFILE_FUNCTION();
+
 		Renderer2D::Shutdown();
 	}
 
@@ -26,15 +30,20 @@ namespace Moon {
 
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
+		ME_PROFILE_FUNCTION();
+
 		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
 	}
 	
 	void Renderer::EndScene()
 	{
+		ME_PROFILE_FUNCTION();
 	}
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
+		ME_PROFILE_FUNCTION();
+
 		shader->Bind();
 		shader->SetMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
 		shader->SetMat4("u_Transform", transform);

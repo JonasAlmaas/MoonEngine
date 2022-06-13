@@ -13,6 +13,8 @@ namespace Moon {
 	
 	Application::Application()
 	{
+		ME_PROFILE_FUNCTION();
+
 		ME_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
@@ -27,12 +29,18 @@ namespace Moon {
 
 	Application::~Application()
 	{
+		ME_PROFILE_FUNCTION();
+
 	}
 
 	void Application::Run()
 	{
+		ME_PROFILE_FUNCTION();
+
 		while (m_Running)
 		{
+			ME_PROFILE_SCOPE("RunLoop");
+
 			// Get delta time
 			float time = (float)glfwGetTime();	// Platfrom::GetTime();
 			m_Timestep = time - m_LastFrameTime;
@@ -55,12 +63,16 @@ namespace Moon {
 
 	void Application::PushLayer(Ref<Layer> layer)
 	{
+		ME_PROFILE_FUNCTION();
+
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
 	}
 
 	void Application::PushOverlay(Ref<Layer> overlay)
 	{
+		ME_PROFILE_FUNCTION();
+
 		m_LayerStack.PushOverlay(overlay);
 		overlay->OnAttach();
 	}
@@ -69,6 +81,8 @@ namespace Moon {
 
 	void Application::OnEvent(Event& e)
 	{
+		ME_PROFILE_FUNCTION();
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowCloseEvent>(ME_BIND_EVENT_FN(Application::OnWindowClosedEvent));
 		dispatcher.Dispatch<WindowResizeEvent>(ME_BIND_EVENT_FN(Application::OnWindowResizeEvent));
@@ -85,18 +99,24 @@ namespace Moon {
 
 	bool Application::OnWindowClosedEvent(WindowCloseEvent& e)
 	{
+		ME_PROFILE_FUNCTION();
+
 		m_Running = false;
 		return true;
 	}
 
 	bool Application::OnWindowMinimizeEvent(WindowMinimizeEvent& e)
 	{
+		ME_PROFILE_FUNCTION();
+
 		m_Minimized = e.GetMinimizedState();
 		return false;
 	}
 
 	bool Application::OnWindowResizeEvent(WindowResizeEvent& e)
 	{
+		ME_PROFILE_FUNCTION();
+
 		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
 		return false;
 	}

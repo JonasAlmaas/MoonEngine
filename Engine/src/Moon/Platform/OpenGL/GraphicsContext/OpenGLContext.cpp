@@ -17,6 +17,8 @@ namespace Moon {
 
 	void OpenGLContext::Init()
 	{
+		ME_PROFILE_FUNCTION();
+
 		glfwMakeContextCurrent(m_WindowHandle);
 
 		// Initialize Glad
@@ -33,6 +35,8 @@ namespace Moon {
 
 	void OpenGLContext::SwapBuffers()
 	{
+		ME_PROFILE_FUNCTION();
+
 		glfwSwapBuffers(m_WindowHandle);
 	}
 

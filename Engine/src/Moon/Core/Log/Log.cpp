@@ -10,6 +10,8 @@ namespace Moon {
 
 	void Log::Init()
 	{
+		ME_PROFILE_FUNCTION();
+
 		spdlog::set_pattern("%^[%T] %n: %v%$");
 
 		s_CoreLogger = spdlog::stdout_color_mt("[ENGINE]");

@@ -21,6 +21,8 @@ namespace Moon {
 
 		Renderer2DStorage()
 		{
+			ME_PROFILE_FUNCTION();
+
 			WhiteTexture = Texture2D::Create(1, 1);
 			uint32_t textureData = 0xffffffff;
 			WhiteTexture->SetData(&textureData, sizeof(uint32_t));
@@ -31,6 +33,8 @@ namespace Moon {
 
 	void Renderer2D::Init()
 	{
+		ME_PROFILE_FUNCTION();
+
 		s_Data = new Renderer2DStorage();
 
 		s_Data->QuadVertexArray = VertexArray::Create();
@@ -65,23 +69,30 @@ namespace Moon {
 
 	void Renderer2D::Shutdown()
 	{
+		ME_PROFILE_FUNCTION();
+
 		delete s_Data;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
+		ME_PROFILE_FUNCTION();
+
 		s_Data->Shader->Bind();
 		s_Data->Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 	}
 
 	void Renderer2D::EndScene()
 	{
+		ME_PROFILE_FUNCTION();
 	}
 
 	// ---- Primitives ----
 
 	void Renderer2D::Super_DrawQuad(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& color)
 	{
+		ME_PROFILE_FUNCTION();
+
 		s_Data->Shader->SetFloat4("u_Color", color);
 		s_Data->Shader->SetFloat2("u_TileFactor", tileFactor);
 

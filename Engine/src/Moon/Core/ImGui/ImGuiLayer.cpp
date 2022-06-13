@@ -25,6 +25,8 @@ namespace Moon {
 
 	void ImGuiLayer::OnAttach()
 	{
+		ME_PROFILE_FUNCTION();
+
 		IMGUI_CHECKVERSION();
 
 		// Setup ImGui context
@@ -50,6 +52,8 @@ namespace Moon {
 
 	void ImGuiLayer::OnDetach()
 	{
+		ME_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
@@ -57,6 +61,8 @@ namespace Moon {
 
 	void ImGuiLayer::Begin()
 	{
+		ME_PROFILE_FUNCTION();
+
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -64,6 +70,8 @@ namespace Moon {
 
 	void ImGuiLayer::End()
 	{
+		ME_PROFILE_FUNCTION();
+
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
@@ -83,6 +91,8 @@ namespace Moon {
 
 	void ImGuiLayer::SetStyle()
 	{
+		ME_PROFILE_FUNCTION();
+
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
 

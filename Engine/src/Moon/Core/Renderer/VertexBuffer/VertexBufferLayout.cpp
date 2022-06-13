@@ -12,6 +12,8 @@ namespace Moon {
 
 	void VertexBufferLayout::CalculateOffsetAndStride()
 	{
+		ME_PROFILE_FUNCTION();
+
 		uint32_t offset = 0;
 		m_Stride = 0;
 		for (auto& element : m_Elements)

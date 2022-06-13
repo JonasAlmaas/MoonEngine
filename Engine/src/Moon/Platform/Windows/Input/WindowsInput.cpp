@@ -13,6 +13,8 @@ namespace Moon {
 
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
+		ME_PROFILE_FUNCTION();
+
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		int state = glfwGetKey(window, keycode);
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
@@ -20,6 +22,8 @@ namespace Moon {
 
 	bool WindowsInput::IsMouseButtonPressedImpl(int button)
 	{
+		ME_PROFILE_FUNCTION();
+
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		int state = glfwGetMouseButton(window, button);
 		return state == GLFW_PRESS;
@@ -27,6 +31,8 @@ namespace Moon {
 
 	std::pair<float, float> WindowsInput::GetMousePositionImpl()
 	{
+		ME_PROFILE_FUNCTION();
+
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		double x, y;
 		glfwGetCursorPos(window, &x, &y);
