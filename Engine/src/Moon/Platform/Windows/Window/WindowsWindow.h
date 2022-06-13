@@ -25,6 +25,9 @@ namespace Moon {
 		virtual void SetVSync(bool enabled) override;
 		virtual bool IsVSync() const override;
 
+		virtual void EnableCursor() override;
+		virtual void DisableCursor() override;
+
 		virtual inline void* GetNativeWindow() const override { return m_Window; };
 
 	private:
