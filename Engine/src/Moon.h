@@ -2,17 +2,14 @@
 
 // For use by Moon engine applications only
 
-// ---- CameraController ----
-#include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
-
-// ---- Customization ----
-#include "Moon/Customization/UIColor.h"
-
 // ---- Application ----
 #include "Moon/Core/Application/Application.h"
 
 // ---- ImGui ----
 #include "Moon/Core/ImGui/ImGuiLayer.h"
+
+// ---- Customization ----
+#include "Moon/Customization/UIColor.h"
 
 // ---- Input ----
 #include "Moon/Core/Input/Input.h"
@@ -27,14 +24,20 @@
 
 // ---- Renderer ----
 #include "Moon/Core/Renderer/Renderer.h"
-#include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
-#include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
+#include "Moon/Core/Renderer/Renderer2D/Renderer2D.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
+
 #include "Moon/Core/Renderer/Shader/Shader.h"
 #include "Moon/Core/Renderer/Shader/ShaderLibrary/ShaderLibrary.h"
 #include "Moon/Core/Renderer/Texture/Texture.h"
+
+#include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
 #include "Moon/Core/Renderer/VertexArray/VertexArray.h"
 #include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
+
+// ---- Camera ----
+#include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
+#include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
 
 // ---- Type ----
 #include "Moon/Core/Type/Color.h"
