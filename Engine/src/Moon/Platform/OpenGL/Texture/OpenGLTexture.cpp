@@ -9,6 +9,8 @@ namespace Moon {
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height)
 		: m_Width(width), m_Height(height)
 	{
+		ME_CORE_ASSERT(width != 0 && height != 0, "Texture2D can not be smaller than 1x1!");
+
 		m_InternalFormat = GL_RGBA8;
 		m_DataFormat = GL_RGBA;
 
@@ -31,6 +33,7 @@ namespace Moon {
 
 		unsigned char* data = data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 		ME_CORE_ASSERT(data, "Failed to load image!");
+		ME_CORE_ASSERT(width != 0 && height != 0, "Texture2D can not be smaller than 1x1!");
 
 		m_Width = width;
 		m_Height = height;
