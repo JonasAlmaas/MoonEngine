@@ -32,16 +32,18 @@ void Sandbox2D::OnUpdate(Timestep ts)
 
 	float offset = 1.1f;
 
+	Renderer2D::DrawQuad({ 10.0f, 10.0f, -0.1 }, 5.0f, m_Texture, 2.0f);
+
 	for (int x = 0; x < 20; x++)
 	{
 		for (int y = 0; y < 20; y++)
 		{
 			if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0))
 			{
-				Renderer2D::DrawQuad({ x * offset, y * offset }, { 1.0f, 1.0f }, m_Color1);
+				Renderer2D::DrawQuad({ x * offset, y * offset }, 1.0f, m_Texture, m_Color1);
 			}
 			else {
-				Renderer2D::DrawQuad({ x * offset, y * offset }, { 1.0f, 1.0f }, m_Color2);
+				Renderer2D::DrawQuad({ x * offset, y * offset }, 1.0f, m_Texture, m_Color2);
 			}
 		}
 	}
@@ -55,8 +57,8 @@ void Sandbox2D::OnImGuiRender()
 {
 	ImGui::Begin("2D Settings");
 
-	ImGui::ColorEdit3("Color 1", glm::value_ptr(m_Color1));
-	ImGui::ColorEdit3("Color 2", glm::value_ptr(m_Color2));
+	ImGui::ColorEdit4("Color 1", glm::value_ptr(m_Color1));
+	ImGui::ColorEdit4("Color 2", glm::value_ptr(m_Color2));
 
 	ImGui::End();
 }
