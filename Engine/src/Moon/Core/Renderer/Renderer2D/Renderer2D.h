@@ -20,8 +20,13 @@ namespace Moon {
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec3& color);
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
 
+		static void DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const glm::vec3& color);
+		static void DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const glm::vec4& color);
+		static void DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const glm::vec3& color);
+		static void DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const glm::vec4& color);
+
 	private:
-		static void Super_DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
+		static void Super_DrawQuad(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const glm::vec4& color);
 
 	};
 

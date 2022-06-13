@@ -69,14 +69,17 @@ namespace Moon {
 
 	// ---- Primitives ----
 
-	void Renderer2D::Super_DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::Super_DrawQuad(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const glm::vec4& color)
 	{
 		s_Data->Shader->Bind();
 
 		s_Data->Shader->SetFloat4("u_Color", color);
 
-		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0 });
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * scale;
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
+		glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), rotationRadians, { 0.0f, 0.0f, 1.0f });
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
+
+		glm::mat4 transform = translation * rotation * scale;
 		s_Data->Shader->SetMat4("u_Transform", transform);
 
 		s_Data->QuadVertexArray->Bind();
@@ -85,22 +88,42 @@ namespace Moon {
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color)
 	{
-		Super_DrawQuad({ position, 0 }, size, { color, 1.0f });
+		Super_DrawQuad({ position, 0.0f }, 0.0f, size, { color, 1.0f });
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		Super_DrawQuad({ position, 0 }, size, color);
+		Super_DrawQuad({ position, 0.0f }, 0.0f, size, color);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec3& color)
 	{
-		Super_DrawQuad(position, size, { color, 1.0f });
+		Super_DrawQuad(position, 0.0f, size, { color, 1.0f });
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		Super_DrawQuad(position, size, color);
+		Super_DrawQuad(position, 0.0f, size, color);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const glm::vec3& color)
+	{
+		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, { color, 1.0f });
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const glm::vec4& color)
+	{
+		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, color);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const glm::vec3& color)
+	{
+		Super_DrawQuad(position, glm::radians(rotationDegrees), size, { color, 1.0f });
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const glm::vec4& color)
+	{
+		Super_DrawQuad(position, glm::radians(rotationDegrees), size, color);
 	}
 
 }
