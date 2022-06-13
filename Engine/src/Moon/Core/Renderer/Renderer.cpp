@@ -1,6 +1,9 @@
 #include "mepch.h"
 #include "Moon/Core/Renderer/Renderer.h"
 
+#include "Moon/Core/Renderer/Renderer2D/Renderer2D.h"
+
+// TODO: REMOVE!
 #include "Moon/Platform/OpenGL/Shader/OpenGLShader.h"
 
 
@@ -11,10 +14,12 @@ namespace Moon {
 	void Renderer::Init()
 	{
 		RenderCommand::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::Shutdown()
 	{
+		Renderer2D::Shutdown();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
