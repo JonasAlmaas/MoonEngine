@@ -1,7 +1,5 @@
 #include "ExampleLayer/ExampleLayer.h"
 
-#include <Moon/Platform/OpenGL/Shader/OpenGLShader.h>
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -75,7 +73,7 @@ void ExampleLayer::OnAttach()
 
 	Ref<Shader> textureShader = m_ShaderLibrary.Get("Texture");
 	textureShader->Bind();
-	std::dynamic_pointer_cast<OpenGLShader>(textureShader)->UploadUniformInt("u_Texture", 0);
+	textureShader->SetInt("u_Texture", 0);
 }
 
 void ExampleLayer::OnDetach()
@@ -108,10 +106,10 @@ void ExampleLayer::OnUpdate(Timestep ts)
 			glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * scale;
 			if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0))
 			{
-				std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", m_Color1);
+				flatColorShader->SetFloat4("u_Color", m_Color1);
 			}
 			else {
-				std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", m_Color2);
+				flatColorShader->SetFloat4("u_Color", m_Color2);
 			}
 			Renderer::Submit(flatColorShader, m_SquareVA, transform);
 		}
@@ -125,7 +123,7 @@ void ExampleLayer::OnUpdate(Timestep ts)
 	m_TransparentTexture->Bind();
 	Renderer::Submit(textureShader, m_SquareVA);
 
-	std::dynamic_pointer_cast<OpenGLShader>(flatColorShader)->UploadUniformFloat3("u_Color", { 0.8f, 0.2f, 0.3f });
+	flatColorShader->SetFloat4("u_Color", { 0.8f, 0.2f, 0.3f, 1.0f });
 	Renderer::Submit(flatColorShader, m_TriangleVA);
 
 	Renderer::EndScene();
@@ -135,8 +133,8 @@ void ExampleLayer::OnImGuiRender()
 {
 	ImGui::Begin("Example Settings");
 
-	ImGui::ColorEdit3("Color 1", glm::value_ptr(m_Color1));
-	ImGui::ColorEdit3("Color 2", glm::value_ptr(m_Color2));
+	ImGui::ColorEdit4("Color 1", glm::value_ptr(m_Color1));
+	ImGui::ColorEdit4("Color 2", glm::value_ptr(m_Color2));
 
 	ImGui::End();
 }

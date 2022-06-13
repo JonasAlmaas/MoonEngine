@@ -27,7 +27,7 @@ private:
 	Ref<Texture2D> m_Texture;
 	Ref<Texture2D> m_TransparentTexture;
 
-	glm::vec3 m_Color1 = { 0.8f, 0.2f, 0.3f };
-	glm::vec3 m_Color2 = { 0.3f, 0.2f, 0.8f };
+	glm::vec4 m_Color1 = { 0.8f, 0.2f, 0.3f, 1.0f };
+	glm::vec4 m_Color2 = { 0.3f, 0.2f, 0.8f, 1.0f };
 
 };
