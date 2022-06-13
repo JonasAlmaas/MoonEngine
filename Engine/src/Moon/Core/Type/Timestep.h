@@ -17,6 +17,7 @@ namespace Moon {
 		float GetMilliseconds() const { return m_Time * 1000.0f; }
 
 	private:
+		// Time in seconds
 		float m_Time;
 
 	};
