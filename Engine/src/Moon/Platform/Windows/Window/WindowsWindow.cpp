@@ -4,7 +4,6 @@
 #include "Moon/Core/Event/ApplicationEvent.h"
 #include "Moon/Core/Event/KeyEvent.h"
 #include "Moon/Core/Event/MouseEvent.h"
-#include "Moon/Platform/OpenGL/GraphicsContext/OpenGLContext.h"
 
 #include <GLFW/glfw3.h>
 
@@ -55,7 +54,7 @@ namespace Moon {
 
 		m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 		
-		m_Context = CreateRef<OpenGLContext>(m_Window);
+		m_Context = GraphicsContext::Create(m_Window);
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
