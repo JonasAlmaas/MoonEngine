@@ -31,6 +31,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
+		Renderer::Shutdown();
 	}
 
 	void Application::Run()
