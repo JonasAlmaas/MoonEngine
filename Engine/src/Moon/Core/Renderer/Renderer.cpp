@@ -1,7 +1,7 @@
 #include "mepch.h"
 #include "Moon/Core/Renderer/Renderer.h"
 
-#include "Moon/Core/Renderer/Renderer2D/Renderer2D.h"
+#include "Moon/Renderer/Renderer2D/Renderer2D.h"
 
 
 namespace Moon {
