@@ -2,6 +2,7 @@
 
 #include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 #include "Moon/Core/Renderer/Texture/Texture.h"
+#include "Moon/Core/Type/Color.h"
 
 
 namespace Moon {
