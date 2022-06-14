@@ -44,4 +44,20 @@ namespace Moon {
 			m_Layers.erase(it);
 	}
 
+	void LayerStack::OnUpdate(Timestep ts)
+	{
+		ME_PROFILE_FUNCTION();
+
+		for (Ref<Layer> layer : m_Layers)
+			layer->OnUpdate(ts);
+	}
+
+	void LayerStack::OnImGuiRender()
+	{
+		ME_PROFILE_FUNCTION();
+
+		for (Ref<Layer> layer : m_Layers)
+			layer->OnImGuiRender();
+	}
+
 }

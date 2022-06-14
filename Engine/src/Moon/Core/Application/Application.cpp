@@ -49,13 +49,11 @@ namespace Moon {
 
 			if (!m_Minimized)
 			{
-				for (Ref<Layer> layer : m_LayerStack)
-					layer->OnUpdate(m_Timestep);
+				m_LayerStack.OnUpdate(m_Timestep);
 			}
 
 			m_ImGuiLayer->Begin();
-			for (Ref<Layer> layer : m_LayerStack)
-				layer->OnImGuiRender();
+			m_LayerStack.OnImGuiRender();
 			m_ImGuiLayer->End();
 
 			m_Window->OnUpdate();
