@@ -5,9 +5,6 @@
 // ---- Application ----
 #include "Moon/Core/Application/Application.h"
 
-// ---- ImGui ----
-#include "Moon/Core/ImGui/ImGuiLayer.h"
-
 // ---- Customization ----
 #include "Moon/Customization/UIColor.h"
 
