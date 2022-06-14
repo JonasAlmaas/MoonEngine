@@ -19,6 +19,10 @@
 // ---- Log ----
 #include "Moon/Core/Log/Log.h"
 
+// ---- Platform ----
+#include "Moon/Core/Platform/Platform.h"
+#include "Moon/Core/Platform/FileDialog/FileDialog.h"
+
 // ---- Renderer ----
 #include "Moon/Core/Renderer/Renderer.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
