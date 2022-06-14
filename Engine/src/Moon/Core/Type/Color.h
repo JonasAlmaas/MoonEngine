@@ -111,8 +111,14 @@ namespace Moon {
 			Format = _format;
 		}
 
+		// ---- Getters ----
+		
+		/*
+		 * @return A pointer to the first value in the struct. In this case the float for Red. 
 		 */
+		inline float* GetValuePtr()
 		{
+			return &r;
 		}
 
 		/**
