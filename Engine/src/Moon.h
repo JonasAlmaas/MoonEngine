@@ -36,7 +36,7 @@
 #include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
 
 // ---- Camera ----
-#include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
+#include "Moon/Camera/Orthographic/OrthographicCamera.h"
 #include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
 
 // ---- Type ----
