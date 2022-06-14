@@ -42,7 +42,7 @@ namespace Moon {
 
 	void Renderer::Submit(const Ref<Shader>& shader, const Ref<VertexArray>& vertexArray, const glm::mat4& transform)
 	{
-		ME_PROFILE_FUNCTION();
+		ME_PROFILE_RENDERER_FUNCTION()
 
 		shader->Bind();
 		shader->SetMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);

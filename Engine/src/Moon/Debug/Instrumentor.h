@@ -144,3 +144,11 @@ namespace Moon {
 	#define ME_PROFILE_SCOPE(name)
 	#define ME_PROFILE_FUNCTION()
 #endif
+
+#if ME_ENABLE_PROFILING_RENDERER
+	#define ME_PROFILE_RENDERER_SCOPE(name)				::Moon::InstrumentationTimer time##__LINE__(name);
+	#define ME_PROFILE_RENDERER_FUNCTION()				ME_PROFILE_SCOPE(__FUNCSIG__)
+#else
+	#define ME_PROFILE_RENDERER_SCOPE(name)
+	#define ME_PROFILE_RENDERER_FUNCTION()
+#endif
