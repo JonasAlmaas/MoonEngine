@@ -93,7 +93,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		s_Data->Shader->SetFloat4("u_Color", tint);
+		s_Data->Shader->SetFloat4("u_Color", tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized());
 		s_Data->Shader->SetFloat2("u_TileFactor", tileFactor);
 
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
