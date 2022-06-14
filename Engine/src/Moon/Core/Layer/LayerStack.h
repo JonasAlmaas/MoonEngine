@@ -15,32 +15,32 @@ namespace Moon {
 		/*
 		 * Adds a layer to the layer stack.
 		 * 
-		 * @param layer to add.
+		 * @param Layer to add.
 		 */
 		void PushLayer(Ref<Layer> layer);
 
 		/*
 		 * Adds an overlay to the layer stack.
 		 *
-		 * @param overlay layer to add.
+		 * @param Overlay layer to add.
 		 */
 		void PushOverlay(Ref<Layer> overlay);
 
 		/*
 		 * Removes a layer from the layer stack.
 		 * 
-		 * @param layer to remove.
+		 * @param Layer to remove.
 		 * 
-		 * @return whether the layer was found and removed.
+		 * @return Whether the layer was found and removed.
 		 */
 		bool PopLayer(Ref<Layer> layer);
 		
 		/*
 		 * Removes an overlay from the layer stack.
 		 *
-		 * @param overlay layer to remove.
+		 * @param Overlay layer to remove.
 		 *
-		 * @return whether the overlay was found and removed.
+		 * @return Whether the overlay was found and removed.
 		 */
 		bool PopOverlay(Ref<Layer> overlay);
 

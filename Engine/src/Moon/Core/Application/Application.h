@@ -47,7 +47,7 @@ namespace Moon {
 		void OnEvent(Event& e);
 
 		/**
-		 * @return delta time in the Timestep format.
+		 * @return Delta time in the Timestep format.
 		 */
 		inline Timestep GetTimestep() const { return m_Timestep; }
 		
