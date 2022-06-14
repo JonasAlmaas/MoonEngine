@@ -89,11 +89,11 @@ namespace Moon {
 
 	// ---- Primitives ----
 
-	void Renderer2D::Super_DrawQuad(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& color)
+	void Renderer2D::Super_DrawQuad(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		ME_PROFILE_FUNCTION();
 
-		s_Data->Shader->SetFloat4("u_Color", color);
+		s_Data->Shader->SetFloat4("u_Color", tint);
 		s_Data->Shader->SetFloat2("u_TileFactor", tileFactor);
 
 		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
@@ -112,22 +112,12 @@ namespace Moon {
 
 	// -- Draw Quad --
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const glm::vec3& color)
-	{
-		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Color& color)
 	{
 		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const glm::vec3& color)
-	{
-		Super_DrawQuad(position, 0.0f, { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Color& color)
 	{
 		Super_DrawQuad(position, 0.0f, { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
 	}
@@ -168,94 +158,48 @@ namespace Moon {
 		Super_DrawQuad(position, 0.0f, { size, size * aspectRatio }, texture, tileFactor, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size * aspectRatio }, texture, { 1.0f, 1.0f }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size * aspectRatio }, texture, { 1.0f, 1.0f }, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<Texture2D>& texture, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad(position, 0.0f, { size, size * aspectRatio }, texture, { 1.0f, 1.0f }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad(position, 0.0f, { size, size * aspectRatio }, texture, { 1.0f, 1.0f }, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad(position, 0.0f, { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad(position, 0.0f, { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size * aspectRatio }, texture, tileFactor, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad({ position, 0.0f }, 0.0f, { size, size * aspectRatio }, texture, tileFactor, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad(position, 0.0f, { size, size * aspectRatio }, texture, tileFactor, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad(position, 0.0f, { size, size * aspectRatio }, texture, tileFactor, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color)
-	{
-		Super_DrawQuad({ position, 0.0f }, 0.0f, size, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Color& color)
 	{
 		Super_DrawQuad({ position, 0.0f }, 0.0f, size, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec3& color)
-	{
-		Super_DrawQuad(position, 0.0f, size, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Color& color)
 	{
 		Super_DrawQuad(position, 0.0f, size, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
 	}
@@ -290,84 +234,44 @@ namespace Moon {
 		Super_DrawQuad(position, 0.0f, size, texture, tileFactor, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec3& tint)
-	{
-		Super_DrawQuad({ position, 0.0f }, 0.0f, size, texture, { 1.0f, 1.0f }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		Super_DrawQuad({ position, 0.0f }, 0.0f, size, texture, { 1.0f, 1.0f }, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec3& tint)
-	{
-		Super_DrawQuad(position, 0.0f, size, texture, { 1.0f, 1.0f }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		Super_DrawQuad(position, 0.0f, size, texture, { 1.0f, 1.0f }, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec3& tint)
-	{
-		Super_DrawQuad({ position, 0.0f }, 0.0f, size, texture, { tileFactor, tileFactor }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
 	{
 		Super_DrawQuad({ position, 0.0f }, 0.0f, size, texture, { tileFactor, tileFactor }, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec3& tint)
-	{
-		Super_DrawQuad(position, 0.0f, size, texture, { tileFactor, tileFactor }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
 	{
 		Super_DrawQuad(position, 0.0f, size, texture, { tileFactor, tileFactor }, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec3& tint)
-	{
-		Super_DrawQuad({ position, 0.0f }, 0.0f, size, texture, tileFactor, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		Super_DrawQuad({ position, 0.0f }, 0.0f, size, texture, tileFactor, tint);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec3& tint)
-	{
-		Super_DrawQuad(position, 0.0f, size, texture, tileFactor, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		Super_DrawQuad(position, 0.0f, size, texture, tileFactor, tint);
 	}
 
 	// -- Draw Rotated Quad --
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const glm::vec3& color)
-	{
-		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Color& color)
 	{
 		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const glm::vec3& color)
-	{
-		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Color& color)
 	{
 		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
 	}
@@ -408,94 +312,48 @@ namespace Moon {
 		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, tileFactor, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { 1.0f, 1.0f }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { 1.0f, 1.0f }, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { 1.0f, 1.0f }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { 1.0f, 1.0f }, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, tileFactor, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, tileFactor, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec3& tint)
-	{
-		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, tileFactor, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
 		Super_DrawQuad(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, tileFactor, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const glm::vec3& color)
-	{
-		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Color& color)
 	{
 		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const glm::vec3& color)
-	{
-		Super_DrawQuad(position, glm::radians(rotationDegrees), size, s_Data->WhiteTexture, { 1.0f, 1.0f }, { color, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Color& color)
 	{
 		Super_DrawQuad(position, glm::radians(rotationDegrees), size, s_Data->WhiteTexture, { 1.0f, 1.0f }, color);
 	}
@@ -530,62 +388,32 @@ namespace Moon {
 		Super_DrawQuad(position, glm::radians(rotationDegrees), size, texture, tileFactor, { 1.0f, 1.0f, 1.0f, 1.0f });
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec3& tint)
-	{
-		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, { 1.0f, 1.0f }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, { 1.0f, 1.0f }, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec3& tint)
-	{
-		Super_DrawQuad(position, glm::radians(rotationDegrees), size, texture, { 1.0f, 1.0f }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		Super_DrawQuad(position, glm::radians(rotationDegrees), size, texture, { 1.0f, 1.0f }, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec3& tint)
-	{
-		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, { tileFactor, tileFactor }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
 	{
 		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, { tileFactor, tileFactor }, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec3& tint)
-	{
-		Super_DrawQuad(position, glm::radians(rotationDegrees), size, texture, { tileFactor, tileFactor }, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
 	{
 		Super_DrawQuad(position, glm::radians(rotationDegrees), size, texture, { tileFactor, tileFactor }, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec3& tint)
-	{
-		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, tileFactor, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		Super_DrawQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, tileFactor, tint);
 	}
 
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec3& tint)
-	{
-		Super_DrawQuad(position, glm::radians(rotationDegrees), size, texture, tileFactor, { tint, 1.0f });
-	}
-
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const glm::vec4& tint)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		Super_DrawQuad(position, glm::radians(rotationDegrees), size, texture, tileFactor, tint);
 	}
