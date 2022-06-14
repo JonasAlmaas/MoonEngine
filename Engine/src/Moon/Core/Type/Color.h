@@ -48,6 +48,12 @@ namespace Moon {
 		constexpr Color(ColorFormat _format, float _r, float _g, float _b, float _a)
 			: r(_r), g(_g), b(_b), a(_a), Format(_format) {}
 
+		// Copy constructor
+		constexpr Color(const Color& other)
+			: r(other.r), g(other.g), b(other.b), a(other.a), Format(other.Format) {}
+
+		// ---- Operator overrides ----
+
 		operator glm::vec3() const
 		{
 			return { r, g, b };
