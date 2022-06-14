@@ -35,7 +35,12 @@ namespace Moon {
 
 		stbi_set_flip_vertically_on_load(1);
 
-		unsigned char* data = data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+		unsigned char* data = nullptr;
+		{
+			ME_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
+			data = data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+		}
+
 		ME_CORE_ASSERT(data, "Failed to load image!");
 		ME_CORE_ASSERT(width != 0 && height != 0, "Texture2D can not be smaller than 1x1!");
 
