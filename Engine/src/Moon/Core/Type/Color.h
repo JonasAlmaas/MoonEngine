@@ -82,6 +82,26 @@ namespace Moon {
 		}
 
 		/**
+		 * @brief Converts the color into a 0 to 1 range.
+		 * This only happends if it is not already normalized.
+		 */
+		void Normalize()
+		{
+			switch (Format)
+			{
+			case ColorFormat::RGBADecimal:
+			{
+				r = r * DecimalToNormalizedFactor;
+				g = g * DecimalToNormalizedFactor;
+				b = b * DecimalToNormalizedFactor;
+				a = a * DecimalToNormalizedFactor;
+			}
+			}
+		}
+
+		// ---- Setters ----
+
+		/**
 		 * Sets the color format. This should only have to be used if Color was initialize Color without ColorFormat.
 		 * 
 		 * @param Format which is an enum from ColorFormat
@@ -91,22 +111,8 @@ namespace Moon {
 			Format = _format;
 		}
 
-		/**
-		 * @brief Converts the color into a 0 to 1 range.
-		 * This only happends if it is not already normalized.
 		 */
-		void Normalize()
 		{
-			switch (Format)
-			{
-				case ColorFormat::RGBADecimal:
-				{
-					r = r * DecimalToNormalizedFactor;
-					g = g * DecimalToNormalizedFactor;
-					b = b * DecimalToNormalizedFactor;
-					a = a * DecimalToNormalizedFactor;
-				}
-			}
 		}
 
 		/**
