@@ -12,9 +12,36 @@ namespace Moon {
 		LayerStack();
 		~LayerStack() = default;
 
+		/*
+		 * Adds a layer to the layer stack.
+		 * 
+		 * @param layer to add.
+		 */
 		void PushLayer(Ref<Layer> layer);
+
+		/*
+		 * Adds an overlay to the layer stack.
+		 *
+		 * @param overlay layer to add.
+		 */
 		void PushOverlay(Ref<Layer> overlay);
+
+		/*
+		 * Removes a layer from the layer stack.
+		 * 
+		 * @param layer to remove.
+		 * 
+		 * @return whether the layer was found and removed.
+		 */
 		bool PopLayer(Ref<Layer> layer);
+		
+		/*
+		 * Removes an overlay from the layer stack.
+		 *
+		 * @param overlay layer to remove.
+		 *
+		 * @return whether the overlay was found and removed.
+		 */
 		bool PopOverlay(Ref<Layer> overlay);
 
 		void OnUpdate(Timestep ts);
