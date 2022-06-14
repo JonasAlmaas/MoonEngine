@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include <imgui.h>
 
 
@@ -46,6 +47,16 @@ namespace Moon {
 
 		constexpr Color(ColorFormat _format, float _r, float _g, float _b, float _a)
 			: r(_r), g(_g), b(_b), a(_a), Format(_format) {}
+
+		operator glm::vec3() const
+		{
+			return { r, g, b };
+		}
+
+		operator glm::vec4() const
+		{
+			return { r, g, b, a };
+		}
 
 		operator ImVec4() const
 		{
