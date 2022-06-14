@@ -1,7 +1,5 @@
 #include "Sandbox2D/Sandbox2D.h"
 
-#include <glm/gtc/type_ptr.hpp>
-
 
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight(), false, true, true)
@@ -57,8 +55,8 @@ void Sandbox2D::OnImGuiRender()
 {
 	ImGui::Begin("2D Settings");
 
-	ImGui::ColorEdit4("Color 1", glm::value_ptr(m_Color1));
-	ImGui::ColorEdit4("Color 2", glm::value_ptr(m_Color2));
+	ImGui::ColorEdit4("Color 1", m_Color1.GetValuePtr());
+	ImGui::ColorEdit4("Color 2", m_Color2.GetValuePtr());
 
 	ImGui::End();
 }
