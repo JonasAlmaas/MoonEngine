@@ -17,11 +17,6 @@ namespace Moon {
 		ME_CORE_ERROR("GLFE Error ({0}): {1}", error, description);
 	}
 
-	Scope<Window> Window::Create(const WindowProps& props)
-	{
-		return CreateScope<WindowsWindow>(props);
-	}
-
 	WindowsWindow::WindowsWindow(const WindowProps& props)
 	{
 		ME_PROFILE_FUNCTION();
