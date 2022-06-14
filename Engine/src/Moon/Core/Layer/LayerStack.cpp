@@ -23,7 +23,7 @@ namespace Moon {
 		m_Layers.emplace_back(overlay);
 	}
 
-	void LayerStack::PopLayer(Ref<Layer> layer)
+	bool LayerStack::PopLayer(Ref<Layer> layer)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -32,16 +32,24 @@ namespace Moon {
 		{
 			m_Layers.erase(it);
 			m_LayerInsertIndex--;
+			return true;
 		}
+
+		return false;
 	}
 
-	void LayerStack::PopOverlay(Ref<Layer> overlay)
+	bool LayerStack::PopOverlay(Ref<Layer> overlay)
 	{
 		ME_PROFILE_FUNCTION();
 
 		auto it = std::find(m_Layers.begin(), m_Layers.end(), overlay);
 		if (it != m_Layers.end())
+		{
 			m_Layers.erase(it);
+			return true;
+		}
+
+		return false;
 	}
 
 	void LayerStack::OnUpdate(Timestep ts)

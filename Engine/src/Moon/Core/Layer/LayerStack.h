@@ -14,8 +14,8 @@ namespace Moon {
 
 		void PushLayer(Ref<Layer> layer);
 		void PushOverlay(Ref<Layer> overlay);
-		void PopLayer(Ref<Layer> layer);
-		void PopOverlay(Ref<Layer> overlay);
+		bool PopLayer(Ref<Layer> layer);
+		bool PopOverlay(Ref<Layer> overlay);
 
 		void OnUpdate(Timestep ts);
 		void OnImGuiRender();
