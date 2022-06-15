@@ -198,6 +198,13 @@ namespace Moon {
 		UploadUniformInt(name, value);
 	}
 
+	void OpenGLShader::SetFloat(const std::string& name, float value)
+	{
+		ME_PROFILE_FUNCTION();
+
+		UploadUniformFloat(name, value);
+	}
+
 	void OpenGLShader::SetFloat2(const std::string& name, const glm::vec2& value)
 	{
 		ME_PROFILE_FUNCTION();
