@@ -20,7 +20,7 @@ group "Dependencies"
 group ""
 
 group "Tools"
-    include "Asteroid"
+    include "Editor"
 group ""
 
 include "Engine"
