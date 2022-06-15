@@ -19,10 +19,6 @@
 // ---- Log ----
 #include "Moon/Core/Log/Log.h"
 
-// ---- Platform ----
-#include "Moon/Core/Platform/Platform.h"
-#include "Moon/Core/Platform/FileDialog/FileDialog.h"
-
 // ---- Renderer ----
 #include "Moon/Core/Renderer/Renderer.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
@@ -43,3 +39,8 @@
 // ---- Type ----
 #include "Moon/Core/Type/Color.h"
 #include "Moon/Core/Type/Timestep.h"
+
+// ---- Util ----
+#include "Moon/Core/Util/Util.h"
+#include "Moon/Core/Util/Platform/FileDialog/FileDialog.h"
+#include "Moon/Core/Util/Random/Random.h"
