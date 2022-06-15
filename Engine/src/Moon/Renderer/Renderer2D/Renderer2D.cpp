@@ -89,6 +89,22 @@ namespace Moon {
 
 	// ---- Primitives ----
 	
+	void Renderer2D::Ultra_DrawQuad(const glm::mat4& transform, const Ref<Texture> texture, const glm::vec2& tileFactor, const Color& tint)
+	{
+		ME_PROFILE_FUNCTION();
+
+		s_Data->Shader->SetFloat4("u_Color", tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized());
+		s_Data->Shader->SetFloat2("u_TileFactor", tileFactor);
+		s_Data->Shader->SetMat4("u_Transform", transform);
+
+		texture->Bind();
+
+		s_Data->QuadVertexArray->Bind();
+		RenderCommand::DrawIndexed(s_Data->QuadVertexArray);
+
+		texture->Unbind();
+	}
+
 	void Renderer2D::Super_DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		ME_PROFILE_FUNCTION();
