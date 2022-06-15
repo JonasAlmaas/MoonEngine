@@ -1,8 +1,11 @@
 #include "mepch.h"
 #include "Moon/Core/Application/Application.h"
 
-#include "Moon/Core/Platform/Platform.h"
 #include "Moon/Core/Renderer/Renderer.h"
+#include "Moon/Core/Util/Util.h"
+
+// TODO: TEMP!
+#include "Moon/Core/Util/Random/Random.h"
 
 
 namespace Moon {
@@ -20,7 +23,7 @@ namespace Moon {
 		m_Window->SetEventCallback(ME_BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
-		Platform::Init();
+		Util::Init();
 
 		m_ImGuiLayer = CreateRef<ImGuiLayer>();
 		PushOverlay(m_ImGuiLayer);
@@ -38,11 +41,11 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		while (m_Running)
-		{
+		{	
 			ME_PROFILE_SCOPE("RunLoop");
 
 			// Get delta time
-			float time = Platform::GetTime();
+			float time = Util::GetTime();
 			m_Timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
