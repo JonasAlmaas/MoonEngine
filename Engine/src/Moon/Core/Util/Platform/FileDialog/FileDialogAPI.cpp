@@ -1,8 +1,8 @@
 #include "mepch.h"
-#include "Moon/Core/Platform/FileDialog/FileDialogAPI.h"
+#include "Moon/Core/Util/Platform/FileDialog/FileDialogAPI.h"
 
 #include "Moon/Core/Renderer/Renderer.h"
-#include "Moon/Platform/Windows/Platform/FileDialog/WindowsFileDialogAPI.h"
+#include "Moon/Platform/Windows/Util/FileDialog/WindowsFileDialogAPI.h"
 
 
 namespace Moon {
