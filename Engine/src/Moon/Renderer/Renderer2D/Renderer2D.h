@@ -16,6 +16,9 @@ namespace Moon {
 		static void BeginScene(const OrthographicCamera& camera);
 		static void EndScene();
 
+		static void StartBatch();
+		static void Flush();
+
 		// ---- Primitives ----
 
 		static void DrawQuad(const glm::vec2& position, float size, const Color& color);
