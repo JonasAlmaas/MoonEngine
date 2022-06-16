@@ -28,10 +28,9 @@ void Sandbox2D::OnUpdate(Timestep ts)
 
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-	float offset = 1.1f;
-
 	Renderer2D::DrawQuad({ 10.0f, 10.0f, -0.1 }, 5.0f, m_Texture, 2.0f);
 
+	float offset = 1.1f;
 	for (int x = 0; x < 20; x++)
 	{
 		for (int y = 0; y < 20; y++)
