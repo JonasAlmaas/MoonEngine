@@ -4,21 +4,24 @@
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight(), false, true, true)
 {
-
 }
 
 void Sandbox2D::OnAttach()
 {
+	ME_PROFILE_FUNCTION();
+
 	m_Texture = Texture2D::Create("assets/textures/Checkerboard.png");
 }
 
 void Sandbox2D::OnDetach()
 {
-
+	ME_PROFILE_FUNCTION();
 }
 
 void Sandbox2D::OnUpdate(Timestep ts)
 {
+	ME_PROFILE_FUNCTION();
+
 	// ---- Update ----
 	m_CameraController.OnUpdate(ts);
 
@@ -54,6 +57,8 @@ void Sandbox2D::OnUpdate(Timestep ts)
 
 void Sandbox2D::OnImGuiRender()
 {
+	ME_PROFILE_FUNCTION();
+
 	ImGui::Begin("2D Settings");
 
 	ImGui::ColorEdit4("Color 1", m_Color1.GetValuePtr());
