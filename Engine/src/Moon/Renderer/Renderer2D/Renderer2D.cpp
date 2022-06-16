@@ -24,7 +24,7 @@ namespace Moon {
 	struct Renderer2DData
 	{
 		// Max per drawcall
-		static const uint32_t MaxQuads = 10000;
+		static const uint32_t MaxQuads = 20000;
 		static const uint32_t MaxVertices = MaxQuads * 4;
 		static const uint32_t MaxIndices = MaxQuads * 6;
 		static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
@@ -46,6 +46,10 @@ namespace Moon {
 
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		uint32_t TextureSlotIndex = 1; // 0 = White texture
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			Renderer2D::Statistics Stats;
+		#endif
 	};
 
 	static Renderer2DData s_Data;
@@ -54,13 +58,13 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		int32_t samplers[s_Data.MaxTextureSlots];
-		for (uint32_t i = 0; i < s_Data.MaxTextureSlots; i++)
+		int32_t samplers[Renderer2DData::MaxTextureSlots];
+		for (uint32_t i = 0; i < Renderer2DData::MaxTextureSlots; i++)
 			samplers[i] = i;
 
 		s_Data.Shader = Shader::Create("assets/shaders/2D.glsl");
 		s_Data.Shader->Bind();
-		s_Data.Shader->SetIntArray("u_Textures", samplers, s_Data.MaxTextureSlots);
+		s_Data.Shader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
 
 		// Generate a 1x1 white texture
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
@@ -76,7 +80,7 @@ namespace Moon {
 
 		s_Data.QuadVertexArray = VertexArray::Create();
 
-		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxQuads * sizeof(QuadVertex));
+		s_Data.QuadVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(QuadVertex));
 
 		VertexBufferLayout layout = {
 			{ ShaderDataType::Float3, "Position XYZ" },
@@ -88,12 +92,11 @@ namespace Moon {
 
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
-		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
+		s_Data.QuadVertexBufferBase = new QuadVertex[Renderer2DData::MaxVertices];
 
-		// Create indices for "s_Data.MaxQuads" quads.
-		uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
+		uint32_t* quadIndices = new uint32_t[Renderer2DData::MaxIndices];
 		uint32_t offset = 0;
-		for (uint32_t i = 0; i < s_Data.MaxIndices; i += 6)
+		for (uint32_t i = 0; i < Renderer2DData::MaxIndices; i += 6)
 		{
 			quadIndices[i + 0] = offset + 0;
 			quadIndices[i + 1] = offset + 1;
@@ -106,7 +109,7 @@ namespace Moon {
 			offset += 4;
 		}
 
-		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.MaxIndices);
+		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, Renderer2DData::MaxIndices);
 		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices;
 
@@ -143,7 +146,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		Flush();
+		FlushBatch();
 	}
 
 	void Renderer2D::StartBatch()
@@ -153,7 +156,7 @@ namespace Moon {
 		s_Data.TextureSlotIndex = 1;
 	}
 
-	void Renderer2D::Flush()
+	void Renderer2D::FlushBatch()
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -169,13 +172,35 @@ namespace Moon {
 			s_Data.TextureSlots[i]->Bind(i);
 
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.DrawCalls++;
+		#endif
 	}
+
+	#if ME_ENABLE_RENDERER2D_STATISTICS
+		void Renderer2D::ResetStats()
+		{
+			memset(&s_Data.Stats, 0, sizeof(Statistics));
+		}
+
+		Renderer2D::Statistics Renderer2D::GetStats()
+		{
+			return s_Data.Stats;
+		}
+	#endif
 
 	// ---- Primitives ----
 	
 	void Renderer2D::Ultra_DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		ME_PROFILE_FUNCTION();
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushBatch();
+			StartBatch();
+		}
 
 		int textureIndex = 0;
 
@@ -211,6 +236,10 @@ namespace Moon {
 		}
 
 		s_Data.QuadIndexCount += 6;
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.QuadCount++;
+		#endif
 	}
 
 	void Renderer2D::Super_DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
