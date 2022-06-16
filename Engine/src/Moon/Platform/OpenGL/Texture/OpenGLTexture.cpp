@@ -113,7 +113,6 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 }
