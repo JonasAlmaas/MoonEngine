@@ -54,6 +54,11 @@ namespace Moon {
 
 		// ---- Operator overrides ----
 
+		bool operator==(const Color& other)
+		{
+			return (Format == other.Format) && (r == other.r) && (g == other.g) && (b == other.b) && (a == other.a);
+		}
+
 		operator glm::vec3() const
 		{
 			return { r, g, b };
