@@ -26,6 +26,8 @@ void Sandbox2D::OnUpdate(Timestep ts)
 	RenderCommand::SetClearColor({ ColorFormat::RGBADecimal, 25 });
 	RenderCommand::Clear();
 
+	Renderer2D::ResetStats();
+
 	Renderer2D::BeginScene(m_CameraController.GetCamera());
 
 	Renderer2D::DrawQuad({ 10.0f, 10.0f, -0.1 }, 5.0f, m_Texture, 2.0f);
@@ -56,6 +58,13 @@ void Sandbox2D::OnImGuiRender()
 
 	ImGui::ColorEdit4("Color 1", m_Color1.GetValuePtr());
 	ImGui::ColorEdit4("Color 2", m_Color2.GetValuePtr());
+
+	auto stats = Renderer2D::GetStats();
+	ImGui::Text("Renderer2D Stats:");
+	ImGui::Text("	Draw Calls: %d", stats.DrawCalls);
+	ImGui::Text("	Quad Count: %d", stats.QuadCount);
+	ImGui::Text("	Vertices: %d", stats.GetTotalVertexCount());
+	ImGui::Text("	Indices: %d", stats.GetTotalIndexCount());
 
 	ImGui::End();
 }
