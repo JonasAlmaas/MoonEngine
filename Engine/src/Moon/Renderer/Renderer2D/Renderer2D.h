@@ -20,6 +20,11 @@ namespace Moon {
 		static void Flush();
 
 		// ---- Primitives ----
+		/*
+		 * @brief If you try to define a tile factor as a vec2 it might be misstaken for a Color.
+		 * To prevent this, define it as glm::vec2(x, y) instead of { x, y }.
+		 */
+		static void DrawQuad() {};
 
 		static void DrawQuad(const glm::vec2& position, float size, const Color& color);
 		static void DrawQuad(const glm::vec3& position, float size, const Color& color);
