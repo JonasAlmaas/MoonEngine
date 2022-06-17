@@ -2,27 +2,36 @@
 
 #include <Moon.h>
 
+#include "Sandbox2D/ParticleSystem/ParticleSystem.h"
+
 using namespace Moon;
 
 
-class Sandbox2D : public Layer
-{
-public:
-	Sandbox2D();
-	~Sandbox2D() = default;
+namespace Sandbox {
 
-	virtual void OnAttach() override;
-	virtual void OnDetach() override;
-	virtual void OnUpdate(Timestep ts) override;
-	virtual void OnImGuiRender() override;
-	virtual void OnEvent(Event& e) override;
+	class Sandbox2D : public Layer
+	{
+	public:
+		Sandbox2D();
+		~Sandbox2D() = default;
 
-private:
-	OrthographicCameraController m_CameraController;
+		virtual void OnAttach() override;
+		virtual void OnDetach() override;
+		virtual void OnUpdate(Timestep ts) override;
+		virtual void OnImGuiRender() override;
+		virtual void OnEvent(Event& e) override;
 
-	Ref<Texture2D> m_Texture;
+	private:
+		OrthographicCameraController m_CameraController;
 
-	Color m_Color1 = { 0.8f, 0.2f, 0.3f, 1.0f };
-	Color m_Color2 = { 0.3f, 0.2f, 0.8f, 1.0f };
+		Ref<Texture2D> m_Texture;
 
-};
+		Color m_Color1 = { 0.8f, 0.2f, 0.3f, 1.0f };
+		Color m_Color2 = { 0.3f, 0.2f, 0.8f, 1.0f };
+
+		ParticleSystem m_ParticleSystem;
+		ParticleProps m_Particle;
+
+	};
+
+}
