@@ -2,8 +2,6 @@
 
 #include <Moon.h>
 
-#include "Sandbox2D/ParticleSystem/ParticleSystem.h"
-
 using namespace Moon;
 
 
@@ -25,12 +23,11 @@ namespace Sandbox {
 		OrthographicCameraController m_CameraController;
 
 		Ref<Texture2D> m_Texture;
+		Ref<Texture2D> m_TextureSheet;
+		Ref<SubTexture2D> m_SubTexture;
 
 		Color m_Color1 = { 0.8f, 0.2f, 0.3f, 1.0f };
 		Color m_Color2 = { 0.3f, 0.2f, 0.8f, 1.0f };
-
-		ParticleSystem m_ParticleSystem;
-		ParticleProps m_Particle;
 
 	};
 
