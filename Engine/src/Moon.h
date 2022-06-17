@@ -19,10 +19,9 @@
 // ---- Log ----
 #include "Moon/Core/Log/Log.h"
 
-// ---- Renderer ----
+// ---- Core Renderer ----
 #include "Moon/Core/Renderer/Renderer.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
-#include "Moon/Renderer/Renderer2D/Renderer2D.h"
 
 #include "Moon/Core/Renderer/Shader/Shader.h"
 #include "Moon/Core/Renderer/Shader/ShaderLibrary/ShaderLibrary.h"
@@ -31,6 +30,10 @@
 #include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
 #include "Moon/Core/Renderer/VertexArray/VertexArray.h"
 #include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
+
+// ---- Renderer ----
+#include "Moon/Renderer/Renderer2D/Renderer2D.h"
+#include "Moon/Renderer/Texture/SubTexture2D.h"
 
 // ---- Camera ----
 #include "Moon/Camera/Orthographic/OrthographicCamera.h"
