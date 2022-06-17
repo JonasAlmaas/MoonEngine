@@ -104,6 +104,16 @@ namespace Moon {
 			}
 		}
 
+		Color Lerp(Color other, float percent) const
+		{
+			float _r = Math::Lerp(r, other.r, percent);
+			float _g = Math::Lerp(g, other.g, percent);
+			float _b = Math::Lerp(b, other.b, percent);
+			float _a = Math::Lerp(a, other.a, percent);
+
+			return Color(Format, _r, _g, _b, _a);
+		}
+
 		// ---- Setters ----
 
 		/**
