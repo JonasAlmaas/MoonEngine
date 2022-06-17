@@ -18,4 +18,5 @@
 #endif
 
 #include "Moon/Core/Log/Log.h"
+#include "Moon/Core/Util/Math.h"
 #include "Moon/Debug/Instrumentor.h"
