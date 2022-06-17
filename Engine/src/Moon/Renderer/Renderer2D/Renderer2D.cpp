@@ -264,6 +264,81 @@ namespace Moon {
 
 		Ultra_DrawQuad(transform, texture, tileFactor, tint);
 	}
+	
+	// -- Using SubTexture --
+
+	void Renderer2D::Ultra_DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		ME_PROFILE_FUNCTION();
+
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushBatch();
+			StartBatch();
+		}
+
+		int textureIndex = 0;
+
+		// Check that the texture isn't the white texture.
+		if (*s_Data.TextureSlots[0] != *subTexture->GetTexture())
+		{
+			// Get texture index, only if it has been added previusly.
+			for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
+			{
+				if (*s_Data.TextureSlots[i] == *subTexture->GetTexture())
+				{
+					textureIndex = i;
+					break;
+				}
+			}
+
+			// If the texture isn't in a texture slot, add it.
+			if (textureIndex == 0)
+			{
+				textureIndex = s_Data.TextureSlotIndex;
+				s_Data.TextureSlots[textureIndex] = subTexture->GetTexture();
+				s_Data.TextureSlotIndex++;
+			}
+		}
+
+		for (uint32_t i = 0; i < 4; i++)
+		{
+			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
+			s_Data.QuadVertexBufferPtr->Color = tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized();
+			s_Data.QuadVertexBufferPtr->UV = subTexture->GetUVCoords()[i];
+			s_Data.QuadVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
+			s_Data.QuadVertexBufferPtr++;
+		}
+
+		s_Data.QuadIndexCount += 6;
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.QuadCount++;
+		#endif
+	}
+
+	void Renderer2D::Super_DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		ME_PROFILE_FUNCTION();
+
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
+		glm::mat4 transform = translation * scale;
+
+		Ultra_DrawQuad(transform, subTexture, tint);
+	}
+
+	void Renderer2D::Super_DrawRotatedQuad(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		ME_PROFILE_FUNCTION();
+
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
+		glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), rotationRadians, { 0.0f, 0.0f, 1.0f });
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
+		glm::mat4 transform = translation * rotation * scale;
+
+		Ultra_DrawQuad(transform, subTexture, tint);
+	}
 
 	// -- Draw Quad --
 
@@ -571,6 +646,88 @@ namespace Moon {
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
 		Super_DrawRotatedQuad(position, glm::radians(rotationDegrees), size, texture, tileFactor, tint);
+	}
+
+	// -- Using SubTexture --
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<SubTexture2D>& subTexture)
+	{
+		Super_DrawQuad({ position, 0.0f }, { size , size }, subTexture, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<SubTexture2D>& subTexture)
+	{
+		Super_DrawQuad(position, { size , size }, subTexture, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		Super_DrawQuad({ position, 0.0f }, { size , size }, subTexture, tint);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		Super_DrawQuad(position, { size , size }, subTexture, tint);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
+	{
+		Super_DrawQuad({ position, 0.0f }, size, subTexture, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
+	{
+		Super_DrawQuad(position, size, subTexture, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		Super_DrawQuad({ position, 0.0f }, size, subTexture, tint);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		Super_DrawQuad(position, size, subTexture, tint);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture)
+	{
+		Super_DrawRotatedQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, subTexture, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture)
+	{
+		Super_DrawRotatedQuad(position, glm::radians(rotationDegrees), { size, size }, subTexture, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		Super_DrawRotatedQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, subTexture, tint);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		Super_DrawRotatedQuad(position, glm::radians(rotationDegrees), { size, size }, subTexture, tint);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
+	{
+		Super_DrawRotatedQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, subTexture, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
+	{
+		Super_DrawRotatedQuad(position, glm::radians(rotationDegrees), size, subTexture, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		Super_DrawRotatedQuad({ position, 0.0f }, glm::radians(rotationDegrees), size, subTexture, tint);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		Super_DrawRotatedQuad(position, glm::radians(rotationDegrees), size, subTexture, tint);
 	}
 
 }
