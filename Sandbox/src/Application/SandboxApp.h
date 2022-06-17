@@ -5,9 +5,13 @@
 using namespace Moon;
 
 
-class SandboxApp : public Application
-{
-public:
-	SandboxApp();
-	~SandboxApp() = default;
-};
+namespace Sandbox {
+
+	class SandboxApp : public Application
+	{
+	public:
+		SandboxApp();
+		~SandboxApp() = default;
+	};
+
+}
