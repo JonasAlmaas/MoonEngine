@@ -3,7 +3,6 @@
 #include <filesystem>
 
 #include "Moon/Core/Config.h"
-#include "Moon/Core/PlatformDetection.h"
 
 // ---- Debug ----
 #ifdef ME_DEBUG
@@ -14,7 +13,6 @@
 	#endif
 #else
 	#define ME_DEBUGBREAK()
-	#define ME_ENABLE_ASSERTS 0
 #endif
 
 // ---- General ----
