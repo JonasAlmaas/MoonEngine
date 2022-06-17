@@ -11,7 +11,8 @@ namespace Moon {
 
 	OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool moveWASD, bool moveMMB, bool zoom, bool rotation)
 		: m_AspectRatio(aspectRatio), m_MoveWASD(moveWASD), m_MoveMMB(moveMMB), m_Zoom(zoom), m_Rotation(rotation),
-			m_Camera(-m_AspectRatio * m_ZoomLevel, m_AspectRatio* m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel)
+			m_Bounds({ -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel }),
+			m_Camera(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top)
 	{
 	}
 
@@ -84,6 +85,11 @@ namespace Moon {
 		}
 	}
 
+	inline void OrthographicCameraController::UpdateBounds()
+	{
+		m_Bounds = { -m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+	}
+
 	// ---- Event Handling ---- 
 
 	void OrthographicCameraController::OnEvent(Event& e)
@@ -117,7 +123,8 @@ namespace Moon {
 		{
 			m_ZoomLevel -= e.GetYOffset() * 0.25f;
 			m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
-			m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+			UpdateBounds();
+			m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 		}
 		return false;
 	}
@@ -127,7 +134,8 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+		UpdateBounds();
+		m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 		return false;
 	}
 

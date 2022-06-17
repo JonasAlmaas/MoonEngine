@@ -8,6 +8,15 @@
 
 namespace Moon {
 
+	struct OrthographicCameraBounds
+	{
+		float Left, Right;
+		float Bottom, Top;
+
+		float GetWidth() { return Right - Left; }
+		float GetHeight() { return Top - Bottom; }
+	};
+
 	class OrthographicCameraController
 	{
 	public:
@@ -19,10 +28,13 @@ namespace Moon {
 		inline OrthographicCamera& GetCamera() { return m_Camera; }
 		inline const OrthographicCamera& GetCamera() const { return m_Camera; }
 
-		float GetZoomLevel() const { return m_ZoomLevel; }
-		void SetZoomLevel(float level) { m_ZoomLevel = level; }
+		inline float GetZoomLevel() const { return m_ZoomLevel; }
+		inline void SetZoomLevel(float level) { m_ZoomLevel = level; }
+		inline const OrthographicCameraBounds& GetBounds() const { return m_Bounds; }
 
 	private:
+		inline void UpdateBounds();
+
 		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e);
 		bool OnMouseScrolledEvent(MouseScrolledEvent& e);
 		bool OnWindowResizeEvent(WindowResizeEvent& e);
@@ -30,6 +42,7 @@ namespace Moon {
 	private:
 		float m_AspectRatio;
 		float m_ZoomLevel = 1.0f;
+		OrthographicCameraBounds m_Bounds;
 
 		bool m_MoveWASD;
 		bool m_MoveMMB;
