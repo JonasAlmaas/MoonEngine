@@ -46,6 +46,7 @@ namespace Moon {
 
 		void OnUpdate(Timestep ts);
 		void OnImGuiRender();
+		void OnEvent(Event& e);
 
 		std::vector<Ref<Layer>>::iterator begin() { return m_Layers.begin(); }
 		std::vector<Ref<Layer>>::iterator end() { return m_Layers.end(); }

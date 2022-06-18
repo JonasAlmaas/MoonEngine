@@ -89,14 +89,7 @@ namespace Moon {
 		dispatcher.Dispatch<WindowResizeEvent>(ME_BIND_EVENT_FN(Application::OnWindowResizeEvent));
 		dispatcher.Dispatch<WindowMinimizeEvent>(ME_BIND_EVENT_FN(Application::OnWindowMinimizeEvent));
 
-		// Send events to layers
-		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
-		{
-			if (e.Handled)
-				break;
-
-			(*--it)->OnEvent(e);
-		}
+		m_LayerStack.OnEvent(e);
 	}
 
 	bool Application::OnWindowClosedEvent(WindowCloseEvent& e)

@@ -68,4 +68,18 @@ namespace Moon {
 			layer->OnImGuiRender();
 	}
 
+	void LayerStack::OnEvent(Event& e)
+	{
+		ME_PROFILE_FUNCTION();
+
+		// Send events to layers
+		for (auto it = m_Layers.end(); it != m_Layers.begin();)
+		{
+			if (e.Handled)
+				break;
+
+			(*--it)->OnEvent(e);
+		}
+	}
+
 }
