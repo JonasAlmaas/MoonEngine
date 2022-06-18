@@ -6,6 +6,8 @@
 
 namespace Moon {
 
+	static const uint32_t s_MaxFrameBufferSize = 16384;
+
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		: m_Specification(spec)
 	{
@@ -79,8 +81,12 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		ME_CORE_ASSERT(width, "Frambuffers can not be created with a width of 0!");
-		ME_CORE_ASSERT(height, "Frambuffers can not be created with a height of 0!");
+		// Check if the buffer is an invalid size
+		if (width == 0 || height == 0 || width > s_MaxFrameBufferSize || height > s_MaxFrameBufferSize)
+		{
+			ME_CORE_WARN("Attempted to resize frame buffer to {0}, {1}", width, height);
+			return;
+		}
 
 		m_Specification.Width = width;
 		m_Specification.Width = height;
