@@ -103,7 +103,7 @@ namespace Moon {
 		style.WindowBorderSize = 1.0f;
 		style.WindowMinSize = ImVec2(10.0f, 10.0f);
 		style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
-		style.WindowMenuButtonPosition = ImGuiDir_None;
+		style.WindowMenuButtonPosition = ImGuiDir_Left;
 		style.ChildRounding = 0.0f;
 		style.ChildBorderSize = 1.0f;
 		style.PopupRounding = 4.0f;
@@ -120,7 +120,7 @@ namespace Moon {
 		style.ScrollbarSize = 18.0f;
 		style.ScrollbarRounding = 100.0f;
 		style.GrabMinSize = 14.0f;
-		style.GrabRounding = 4.0f;
+		style.GrabRounding = 3.0f;
 		style.LogSliderDeadzone = 4.0f;
 		style.TabRounding = 4.0f;
 		style.TabBorderSize = 0.0f;
