@@ -103,9 +103,6 @@ namespace Moon {
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		// TODO: This is only ment for 4k monitors, should be a setting you can set in the editor.
-		io.FontGlobalScale = 1.5f;
-
 		style.Alpha = 1.0f;
 		style.DisabledAlpha = 1.0f;
 		style.WindowPadding = ImVec2(10.0f, 10.0f);
