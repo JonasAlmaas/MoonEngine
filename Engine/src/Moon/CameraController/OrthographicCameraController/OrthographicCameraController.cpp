@@ -47,8 +47,8 @@ namespace Moon {
 		{
 			if (Input::IsKeyPressed(Key::W))
 			{
-				m_CameraPosition.x += m_CameraTranslationSpeed * m_ZoomLevel * ts * sin(glm::radians(m_CameraRotation));
-				m_CameraPosition.y -= m_CameraTranslationSpeed * m_ZoomLevel * ts * cos(glm::radians(m_CameraRotation));
+				m_CameraPosition.x -= m_CameraTranslationSpeed * m_ZoomLevel * ts * sin(glm::radians(m_CameraRotation));
+				m_CameraPosition.y += m_CameraTranslationSpeed * m_ZoomLevel * ts * cos(glm::radians(m_CameraRotation));
 			}
 
 			if (Input::IsKeyPressed(Key::A))
@@ -59,8 +59,8 @@ namespace Moon {
 
 			if (Input::IsKeyPressed(Key::S))
 			{
-				m_CameraPosition.x -= m_CameraTranslationSpeed * m_ZoomLevel * ts * sin(glm::radians(m_CameraRotation));
-				m_CameraPosition.y += m_CameraTranslationSpeed * m_ZoomLevel * ts * cos(glm::radians(m_CameraRotation));
+				m_CameraPosition.x += m_CameraTranslationSpeed * m_ZoomLevel * ts * sin(glm::radians(m_CameraRotation));
+				m_CameraPosition.y -= m_CameraTranslationSpeed * m_ZoomLevel * ts * cos(glm::radians(m_CameraRotation));
 			}
 
 			if (Input::IsKeyPressed(Key::D))
