@@ -14,15 +14,10 @@ namespace Asteroid
 		ME_PROFILE_FUNCTION();
 
 		// Generate checkerboard texture
+		uint32_t* textureData = new uint32_t[4] { 0xffffffff, 0xffcccccc, 0xffcccccc, 0xffffffff };
 		m_Texture_Checkerboard = Texture2D::Create(2, 2);
-		uint32_t* textureData = new uint32_t[4];
-		textureData[0] = 0xffffffff;
-		textureData[1] = 0xffcccccc;
-		textureData[2] = 0xffcccccc;
-		textureData[3] = 0xffffffff;
 		m_Texture_Checkerboard->SetData(textureData, sizeof(uint32_t) * 4);
 		delete[] textureData;
-
 	}
 
 	void EditorLayer::OnDetach()
@@ -108,7 +103,7 @@ namespace Asteroid
 				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-				//ImGui::Image((void*)m_Texture_Checkerboard->GetRendererID(), { 256, 256 }, { 0, 0 }, { 5, 5 });
+				ImGui::Image((void*)m_Texture_Checkerboard->GetRendererID(), { 256, 256 }, { 0, 0 }, { 5, 5 });
 
 				ImGui::End();
 			}
