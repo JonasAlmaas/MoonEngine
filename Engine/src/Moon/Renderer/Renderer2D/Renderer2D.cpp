@@ -652,22 +652,26 @@ namespace Moon {
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<SubTexture2D>& subTexture)
 	{
-		Super_DrawQuad({ position, 0.0f }, { size , size }, subTexture, s_Data.WhiteColor);
+		glm::vec2 spriteSize = subTexture->GetSpriteSize();
+		Super_DrawQuad({ position, 0.0f }, { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data.WhiteColor);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<SubTexture2D>& subTexture)
 	{
-		Super_DrawQuad(position, { size , size }, subTexture, s_Data.WhiteColor);
+		glm::vec2 spriteSize = subTexture->GetSpriteSize();
+		Super_DrawQuad(position, { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data.WhiteColor);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
 	{
-		Super_DrawQuad({ position, 0.0f }, { size , size }, subTexture, tint);
+		glm::vec2 spriteSize = subTexture->GetSpriteSize();
+		Super_DrawQuad({ position, 0.0f }, { size * spriteSize.x , size * spriteSize.y }, subTexture, tint);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
 	{
-		Super_DrawQuad(position, { size , size }, subTexture, tint);
+		glm::vec2 spriteSize = subTexture->GetSpriteSize();
+		Super_DrawQuad(position, { size * spriteSize.x , size * spriteSize.y }, subTexture, tint);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
@@ -692,22 +696,26 @@ namespace Moon {
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture)
 	{
-		Super_DrawRotatedQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, subTexture, s_Data.WhiteColor);
+		glm::vec2 spriteSize = subTexture->GetSpriteSize();
+		Super_DrawRotatedQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data.WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture)
 	{
-		Super_DrawRotatedQuad(position, glm::radians(rotationDegrees), { size, size }, subTexture, s_Data.WhiteColor);
+		glm::vec2 spriteSize = subTexture->GetSpriteSize();
+		Super_DrawRotatedQuad(position, glm::radians(rotationDegrees), { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data.WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
 	{
-		Super_DrawRotatedQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, subTexture, tint);
+		glm::vec2 spriteSize = subTexture->GetSpriteSize();
+		Super_DrawRotatedQuad({ position, 0.0f }, glm::radians(rotationDegrees), { size * spriteSize.x , size * spriteSize.y }, subTexture, tint);
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
 	{
-		Super_DrawRotatedQuad(position, glm::radians(rotationDegrees), { size, size }, subTexture, tint);
+		glm::vec2 spriteSize = subTexture->GetSpriteSize();
+		Super_DrawRotatedQuad(position, glm::radians(rotationDegrees), { size * spriteSize.x , size * spriteSize.y }, subTexture, tint);
 	}
 
 	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
