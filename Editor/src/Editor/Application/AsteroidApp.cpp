@@ -1,6 +1,6 @@
-#include "Application/AsteroidApp.h"
+#include "Editor/Application/AsteroidApp.h"
 
-#include "EditorLayer/EditorLayer.h"
+#include "Editor/Layer/Editor/EditorLayer.h"
 
 
 namespace Asteroid {
