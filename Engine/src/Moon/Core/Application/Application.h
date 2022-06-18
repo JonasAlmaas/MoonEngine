@@ -54,6 +54,8 @@ namespace Moon {
 		 */
 		void OnEvent(Event& e);
 
+		inline Ref<ImGuiLayer> GetImGuiLayer() { return m_ImGuiLayer; }
+
 		/**
 		 * @return Delta time in the Timestep format.
 		 */
