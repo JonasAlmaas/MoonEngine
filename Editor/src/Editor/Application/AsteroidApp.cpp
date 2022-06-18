@@ -6,6 +6,7 @@
 namespace Asteroid {
 
 	AsteroidApp::AsteroidApp()
+		: Application("Asteroid")
 	{
 		PushLayer(CreateRef<EditorLayer>());
 	}
