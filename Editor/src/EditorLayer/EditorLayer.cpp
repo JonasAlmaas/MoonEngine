@@ -5,7 +5,7 @@ namespace Asteroid
 {
 
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer")
+		: Layer("EditorLayer"), m_CameraController((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight(), true, true, true)
 	{
 	}
 
@@ -13,11 +13,20 @@ namespace Asteroid
 	{
 		ME_PROFILE_FUNCTION();
 
+		m_CameraController.SetZoomLevel(50);
+
+		FramebufferSpecification spec;
+		spec.Width = 1280;
+		spec.Height = 720;
+		m_Framebuffer = Framebuffer::Create(spec);
+
 		// Generate checkerboard texture
-		uint32_t* textureData = new uint32_t[4] { 0xffffffff, 0xffcccccc, 0xffcccccc, 0xffffffff };
-		m_Texture_Checkerboard = Texture2D::Create(2, 2);
-		m_Texture_Checkerboard->SetData(textureData, sizeof(uint32_t) * 4);
-		delete[] textureData;
+		{
+			uint32_t* textureData = new uint32_t[2 * 2] { 0xffcccccc, 0xffffffff, 0xffffffff, 0xffcccccc };
+			m_Texture_Checkerboard = Texture2D::Create(2, 2);
+			m_Texture_Checkerboard->SetData(textureData, sizeof(uint32_t) * 2 * 2);
+			delete[] textureData;
+		}
 	}
 
 	void EditorLayer::OnDetach()
@@ -29,7 +38,24 @@ namespace Asteroid
 	{
 		ME_PROFILE_FUNCTION();
 
+		m_CameraController.OnUpdate(ts);
+
 		Renderer2D::ResetStats();
+
+		{
+			ME_PROFILE_SCOPE("Render Prep");
+			m_Framebuffer->Bind();
+			RenderCommand::SetClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
+			RenderCommand::Clear();
+		}
+
+		Renderer2D::BeginScene(m_CameraController.GetCamera());
+
+		Renderer2D::DrawQuad({ 0, 0 }, 5,{ ColorFormat::RGBADecimal, 0, 0, 255, 255 });
+
+		Renderer2D::EndScene();
+
+		m_Framebuffer->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -108,6 +134,12 @@ namespace Asteroid
 				ImGui::End();
 			}
 
+			ImGui::Begin("Viewport");
+			{
+				ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), { 1280, 720 });
+				ImGui::End();
+			}
+
 			ImGui::End();
 		}
 	}
@@ -117,6 +149,8 @@ namespace Asteroid
 	void EditorLayer::OnEvent(Event& e)
 	{
 		ME_PROFILE_FUNCTION();
+
+		m_CameraController.OnEvent(e);
 	}
 
 }

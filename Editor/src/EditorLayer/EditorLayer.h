@@ -20,7 +20,11 @@ namespace Asteroid {
 		virtual void OnEvent(Event& e) override;
 
 	private:
-		// 2x2 images generated on attach
+		OrthographicCameraController m_CameraController;
+
+		Ref<Framebuffer> m_Framebuffer;
+
+		// 2x2 generated texture
 		Ref<Texture2D> m_Texture_Checkerboard;
 
 		//m_EditorCamera;
