@@ -143,8 +143,7 @@ namespace Asteroid {
 				Application::Get().GetImGuiLayer()->SetBlockEvents(!(m_ViewportFocused && m_ViewportHovered));
 
 				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-
-				if ((m_ViewportSize.x != viewportPanelSize.x) || (m_ViewportSize.y != viewportPanelSize.y))
+				if (((m_ViewportSize.x != viewportPanelSize.x) || (m_ViewportSize.y != viewportPanelSize.y)) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
 				{
 					m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
 					m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
