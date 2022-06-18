@@ -9,6 +9,11 @@ namespace Moon {
 	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		: m_Specification(spec)
 	{
+		ME_PROFILE_FUNCTION();
+
+		ME_CORE_ASSERT(m_Specification.Width, "Frambuffers can not be created with a width of 0!");
+		ME_CORE_ASSERT(m_Specification.Width, "Frambuffers can not be created with a height of 0!");
+
 		Invalidate();
 	}
 
@@ -17,11 +22,20 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		glDeleteFramebuffers(1, &m_RendererID);
+		glDeleteTextures(1, &m_ColorAttachmentRendererID);
+		glDeleteTextures(1, &m_DepthAttachmentRendererID);
 	}
 
 	void OpenGLFramebuffer::Invalidate()
 	{
 		ME_PROFILE_FUNCTION();
+
+		if (m_RendererID)
+		{
+			glDeleteFramebuffers(1, &m_RendererID);
+			glDeleteTextures(1, &m_ColorAttachmentRendererID);
+			glDeleteTextures(1, &m_DepthAttachmentRendererID);
+		}
 
 		glCreateFramebuffers(1, &m_RendererID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
@@ -53,11 +67,25 @@ namespace Moon {
 	void OpenGLFramebuffer::Bind() const
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
+		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
 	}
 
 	void OpenGLFramebuffer::Unbind() const
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
+	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
+	{
+		ME_PROFILE_FUNCTION();
+
+		ME_CORE_ASSERT(width, "Frambuffers can not be created with a width of 0!");
+		ME_CORE_ASSERT(height, "Frambuffers can not be created with a height of 0!");
+
+		m_Specification.Width = width;
+		m_Specification.Width = height;
+
+		Invalidate();
 	}
 
 }

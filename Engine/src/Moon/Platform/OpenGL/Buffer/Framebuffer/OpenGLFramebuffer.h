@@ -19,13 +19,15 @@ namespace Moon {
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
+		virtual void Resize(uint32_t width, uint32_t height) override;
+
 		virtual RendererID GetColorAttachmentRendererID() const override { return m_ColorAttachmentRendererID; };
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; };
 
 	private:
-		RendererID m_RendererID;
-		RendererID m_ColorAttachmentRendererID;
-		RendererID m_DepthAttachmentRendererID;
+		RendererID m_RendererID = 0;
+		RendererID m_ColorAttachmentRendererID = 0;
+		RendererID m_DepthAttachmentRendererID = 0;
 		FramebufferSpecification m_Specification;
 
 	};
