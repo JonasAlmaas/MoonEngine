@@ -4,9 +4,6 @@
 #include "Moon/Core/Renderer/Renderer.h"
 #include "Moon/Core/Util/Util.h"
 
-// TODO: TEMP!
-#include "Moon/Core/Util/Random/Random.h"
-
 
 namespace Moon {
 
