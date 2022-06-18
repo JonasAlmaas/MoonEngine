@@ -1,8 +1,8 @@
 #include "mepch.h"
-#include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
 
 #include "Moon/Core/Renderer/Renderer.h"
-#include "Moon/Platform/OpenGL/VertexBuffer/OpenGLVertexBuffer.h"
+#include "Moon/Platform/OpenGL/Buffer/VertexBuffer/OpenGLVertexBuffer.h"
 
 
 namespace Moon {

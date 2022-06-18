@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/IndexBuffer/IndexBuffer.h"
 
 
 namespace Moon {

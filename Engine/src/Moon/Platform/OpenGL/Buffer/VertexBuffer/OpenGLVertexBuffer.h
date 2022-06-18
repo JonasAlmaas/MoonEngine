@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
 
 
 namespace Moon {

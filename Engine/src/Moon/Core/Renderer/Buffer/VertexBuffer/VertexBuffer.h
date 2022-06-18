@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Moon/Core/Base.h"
-#include "Moon/Core/Renderer/VertexBuffer/VertexBufferLayout.h"
+#include "Moon/Core/Renderer/Buffer/VertexBuffer/Layout/VertexBufferLayout.h"
 
 
 namespace Moon {

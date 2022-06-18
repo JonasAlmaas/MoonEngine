@@ -1,12 +1,12 @@
 #include "mepch.h"
 #include "Moon/Renderer/Renderer2D/Renderer2D.h"
 
-#include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/IndexBuffer/IndexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
-#include "Moon/Core/Renderer/VertexArray/VertexArray.h"
-#include "Moon/Core/Renderer/VertexBuffer/VertexBuffer.h"
 #include "Moon/Core/Renderer/Shader/Shader.h"
 #include "Moon/Core/Renderer/Texture/Texture.h"
+#include "Moon/Core/Renderer/VertexArray/VertexArray.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 

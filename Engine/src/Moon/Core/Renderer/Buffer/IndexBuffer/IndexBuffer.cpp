@@ -1,8 +1,8 @@
 #include "mepch.h"
-#include "Moon/Core/Renderer/IndexBuffer/IndexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/IndexBuffer/IndexBuffer.h"
 
 #include "Moon/Core/Renderer/Renderer.h"
-#include "Moon/Platform/OpenGL/IndexBuffer/OpenGLIndexBuffer.h"
+#include "Moon/Platform/OpenGL/Buffer/IndexBuffer/OpenGLIndexBuffer.h"
 
 
 namespace Moon {
