@@ -13,7 +13,7 @@ namespace Moon {
 	class Application
 	{
 	public:
-		Application();
+		Application(const std::string& name = "Moon Application");
 		virtual ~Application();
 
 		// To be defined in client
