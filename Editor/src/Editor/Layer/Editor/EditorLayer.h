@@ -24,8 +24,8 @@ namespace Asteroid {
 
 		Ref<Framebuffer> m_Framebuffer;
 
-		// 2x2 generated texture
 		Ref<Texture2D> m_Texture_Checkerboard;
+		Ref<Texture2D> m_Texture_ColorGrid;
 
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 

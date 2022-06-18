@@ -12,8 +12,6 @@ namespace Asteroid {
 	{
 		ME_PROFILE_FUNCTION();
 
-		m_CameraController.SetZoomLevel(50);
-
 		FramebufferSpecification spec;
 		spec.Width = 1280;
 		spec.Height = 720;
@@ -21,9 +19,35 @@ namespace Asteroid {
 
 		// Generate checkerboard texture
 		{
-			uint32_t* textureData = new uint32_t[2 * 2] { 0xffcccccc, 0xffffffff, 0xffffffff, 0xffcccccc };
+			uint32_t* textureData = new uint32_t[2 * 2]{ 0xffcccccc, 0xffffffff, 0xffffffff, 0xffcccccc };
 			m_Texture_Checkerboard = Texture2D::Create(2, 2);
 			m_Texture_Checkerboard->SetData(textureData, sizeof(uint32_t) * 2 * 2);
+			delete[] textureData;
+		}
+
+		// Generate color grid
+		{
+			uint32_t width = 128;
+			uint32_t height = 128;
+			uint32_t* textureData = new uint32_t[width * height];
+			for (uint8_t x = 0; x < width; x++)
+			{
+				for (uint8_t y = 0; y < height; y++)
+				{
+					uint8_t r = (uint8_t)((1.0f - (float)(x + 1) / (float)width) * 255.0f);
+
+					uint8_t g = 0;
+					float g1 = (float)(x - y) / (float)(width + height - 2) * 255.0f;
+					if (g1 > 0.0f)
+						g = (uint8_t)g1;
+
+					uint8_t b = (uint8_t)(((float)(y + 1) / (float)height) * 255.0f);
+
+					textureData[x + y * width] = r + (g << 8) + (b << 16) | 0xff000000;
+				}
+			}
+			m_Texture_ColorGrid = Texture2D::Create(width, height);
+			m_Texture_ColorGrid->SetData(textureData, sizeof(uint32_t) * width * height);
 			delete[] textureData;
 		}
 	}
@@ -44,14 +68,14 @@ namespace Asteroid {
 		{
 			ME_PROFILE_SCOPE("Render Prep");
 			m_Framebuffer->Bind();
-			RenderCommand::SetClearColor({ 1.0f, 0.0f, 1.0f, 1.0f });
+			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 			RenderCommand::Clear();
 		}
 
 		Renderer2D::BeginScene(m_CameraController.GetCamera());
-
-		Renderer2D::DrawQuad({ 0, 0 }, 5,{ ColorFormat::RGBADecimal, 0, 0, 255, 255 });
-
+		{
+			Renderer2D::DrawQuad({ 0, 0 }, 5, m_Texture_Checkerboard, 16);
+		}
 		Renderer2D::EndScene();
 
 		m_Framebuffer->Unbind();
@@ -79,8 +103,7 @@ namespace Asteroid {
 			windowFlags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
 			windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 		}
-		else
-		{
+		else {
 			dockspaceFlags &= ~ImGuiDockNodeFlags_PassthruCentralNode;
 		}
 		
@@ -130,7 +153,8 @@ namespace Asteroid {
 				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
 				ImGui::Image((void*)m_Texture_Checkerboard->GetRendererID(), { 256, 256 }, { 0, 0 }, { 5, 5 });
-
+				ImGui::Image((void*)m_Texture_ColorGrid->GetRendererID(), { 256, 256 });
+				
 				ImGui::End();
 			}
 
