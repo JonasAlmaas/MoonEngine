@@ -8,7 +8,7 @@ namespace Moon {
 
 	Application* Application::Create()
 	{
-		return new AsteroidApp();
+		return new Asteroid::AsteroidApp();
 	}
 
 }

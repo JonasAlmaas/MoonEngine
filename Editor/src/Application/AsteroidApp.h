@@ -5,10 +5,14 @@
 using namespace Moon;
 
 
-class AsteroidApp : public Application
-{
-public:
-	AsteroidApp();
-	~AsteroidApp() = default;
+namespace Asteroid {
 
-};
+	class AsteroidApp : public Application
+	{
+	public:
+		AsteroidApp();
+		~AsteroidApp() = default;
+
+	};
+
+}

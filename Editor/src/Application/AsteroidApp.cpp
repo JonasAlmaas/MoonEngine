@@ -1,7 +1,13 @@
 #include "Application/AsteroidApp.h"
 
+#include "EditorLayer/EditorLayer.h"
 
-AsteroidApp::AsteroidApp()
-{
+
+namespace Asteroid {
+
+	AsteroidApp::AsteroidApp()
+	{
+		PushLayer(CreateRef<EditorLayer>());
+	}
 
 }
