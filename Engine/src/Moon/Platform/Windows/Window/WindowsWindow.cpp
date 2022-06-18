@@ -51,7 +51,7 @@ namespace Moon {
 		}
 
 		{
-			ME_PROFILE_SCOPE("glfwCreateWindow")
+			ME_PROFILE_SCOPE("glfwCreateWindow");
 			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
 		}
