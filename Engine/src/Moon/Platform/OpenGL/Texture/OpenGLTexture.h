@@ -17,7 +17,7 @@ namespace Moon {
 
 		virtual uint32_t GetWidth() const override { return m_Width; }
 		virtual uint32_t GetHeight() const override { return m_Height; }
-		virtual uint32_t GetRendererID() const override { return m_RendererID; }
+		virtual RendererID GetRendererID() const override { return m_RendererID; }
 
 		virtual void SetData(void* data, uint32_t size) override;
 
@@ -30,7 +30,7 @@ namespace Moon {
 		}
 
 	private:
-		uint32_t m_RendererID;
+		RendererID m_RendererID;
 		std::string m_Path;
 		uint32_t m_Width, m_Height;
 		GLenum m_InternalFormat, m_DataFormat;

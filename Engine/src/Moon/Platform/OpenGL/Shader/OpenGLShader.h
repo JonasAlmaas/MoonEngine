@@ -52,7 +52,7 @@ namespace Moon {
 		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
 	private:
-		uint32_t m_RendererID;
+		RendererID m_RendererID;
 		std::string m_Name;
 
 	};

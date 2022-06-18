@@ -21,7 +21,7 @@ namespace Moon {
 		virtual void SetLayout(const VertexBufferLayout& layout) override { m_Layout = layout; };
 
 	private:
-		uint32_t m_RendererID;
+		RendererID m_RendererID;
 		VertexBufferLayout m_Layout;
 
 	};
