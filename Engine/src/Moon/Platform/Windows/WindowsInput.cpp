@@ -1,5 +1,8 @@
 #include "mepch.h"
-#include "Moon/Platform/Windows/Input/WindowsInput.h"
+
+#ifdef ME_PLATFORM_WINDOWS
+
+#include "Moon/Core/Input/Input.h"
 
 #include "Moon/Core/Base.h"
 #include "Moon/Core/Application/Application.h"
@@ -9,9 +12,7 @@
 
 namespace Moon {
 
-	Ref<Input> Input::s_Instance = CreateRef<WindowsInput>();
-
-	bool WindowsInput::IsKeyPressedImpl(int keycode)
+	bool Input::IsKeyPressed(int keycode)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -20,7 +21,7 @@ namespace Moon {
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool WindowsInput::IsMouseButtonPressedImpl(int button)
+	bool Input::IsMouseButtonPressed(int button)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -29,7 +30,7 @@ namespace Moon {
 		return state == GLFW_PRESS;
 	}
 
-	std::pair<float, float> WindowsInput::GetMousePositionImpl()
+	std::pair<float, float> Input::GetMousePosition()
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -39,16 +40,18 @@ namespace Moon {
 		return { (float)x, (float)y};
 	}
 
-	float WindowsInput::GetMouseXImpl()
+	float Input::GetMouseX()
 	{
-		auto[x, y] = GetMousePositionImpl();
+		auto[x, y] = GetMousePosition();
 		return x;
 	}
 
-	float WindowsInput::GetMouseYImpl()
+	float Input::GetMouseY()
 	{
-		auto[x, y] = GetMousePositionImpl();
+		auto[x, y] = GetMousePosition();
 		return y;
 	}
 
 }
+
+#endif
