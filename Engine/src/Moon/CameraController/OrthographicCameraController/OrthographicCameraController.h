@@ -29,11 +29,17 @@ namespace Moon {
 		inline const OrthographicCamera& GetCamera() const { return m_Camera; }
 
 		inline float GetZoomLevel() const { return m_ZoomLevel; }
-		inline void SetZoomLevel(float level) { m_ZoomLevel = level; }
+
+		void SetZoomLevel(float level)
+		{
+			m_ZoomLevel = level;
+			CalculateView();
+		}
+
 		inline const OrthographicCameraBounds& GetBounds() const { return m_Bounds; }
 
 	private:
-		inline void UpdateBounds();
+		inline void CalculateView();
 
 		bool OnMouseButtonPressedEvent(MouseButtonPressedEvent& e);
 		bool OnMouseScrolledEvent(MouseScrolledEvent& e);
