@@ -104,6 +104,14 @@ namespace Moon {
 		dispatcher.Dispatch<WindowResizeEvent>(ME_BIND_EVENT_FN(OrthographicCameraController::OnWindowResizeEvent));
 	}
 
+	void OrthographicCameraController::OnResize(uint32_t width, uint32_t height)
+	{
+		ME_PROFILE_FUNCTION();
+		
+		m_AspectRatio = (float)width / (float)height;
+		CalculateView();
+	}
+
 	bool OrthographicCameraController::OnMouseButtonPressedEvent(MouseButtonPressedEvent& e)
 	{
 		ME_PROFILE_FUNCTION();
@@ -133,8 +141,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
-		CalculateView();
+		OnResize(e.GetWidth(), e.GetHeight());
 		return false;
 	}
 
