@@ -14,7 +14,7 @@ namespace Sandbox {
 
 		m_Texture = Texture2D::Create("assets/textures/Checkerboard.png");
 		m_TextureSheet = Texture2D::Create("assets/textures/atlas-blocks.png");
-		m_SubTexture = SubTexture2D::Create(m_TextureSheet, 16.0f, 16.0f);
+		m_SubTexture = SubTexture2D::Create(m_TextureSheet, 16, 3);
 	}
 
 	void Sandbox2D::OnDetach()
@@ -56,7 +56,7 @@ namespace Sandbox {
 
 		Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1 }, 45.0f, 10.0f, m_Texture, 10.0f);
 
-		Renderer2D::DrawQuad({ -1.1f, -1.1f, 0.1 }, 1.0f, m_SubTexture);
+		Renderer2D::DrawQuad({ -1.0f, -1.0f, 0.1 }, 1.0f, m_SubTexture);
 
 		Renderer2D::EndScene();
 	}
