@@ -2,7 +2,7 @@ include "Dependencies.lua"
 
 workspace "MoonEngine"
     architecture "x86_64"
-    startproject "Sandbox"
+    startproject "Editor"
 
     configurations 
 	{
