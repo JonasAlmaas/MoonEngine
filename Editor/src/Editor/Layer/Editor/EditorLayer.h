@@ -27,7 +27,7 @@ namespace Asteroid {
 		// 2x2 generated texture
 		Ref<Texture2D> m_Texture_Checkerboard;
 
-		//m_EditorCamera;
+		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
 
 	};
 

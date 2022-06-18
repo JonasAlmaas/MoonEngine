@@ -1,8 +1,7 @@
 #include "Editor/Layer/Editor/EditorLayer.h"
 
 
-namespace Asteroid
-{
+namespace Asteroid {
 
 	EditorLayer::EditorLayer()
 		: Layer("EditorLayer"), m_CameraController((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight(), true, true, true)
@@ -102,7 +101,8 @@ namespace Asteroid
 			ImGuiIO& io = ImGui::GetIO();
 			ImGuiStyle& style = ImGui::GetStyle();
 
-			style.WindowMinSize.x = 250.0f;
+			style.WindowMinSize.x = 200.0f;
+			style.WindowMinSize.y = 200.0f;
 
 			// Submit the DockSpace
 			ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
@@ -134,11 +134,23 @@ namespace Asteroid
 				ImGui::End();
 			}
 
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
 			ImGui::Begin("Viewport");
 			{
-				ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), { 1280, 720 });
+				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+
+				if ((m_ViewportSize.x != viewportPanelSize.x) || (m_ViewportSize.y != viewportPanelSize.y))
+				{
+					m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
+					m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
+					m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
+				}
+
+				ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), viewportPanelSize, { 0, 1 }, { 1, 0 });
+
 				ImGui::End();
 			}
+			ImGui::PopStyleVar();
 
 			ImGui::End();
 		}
