@@ -25,6 +25,14 @@ namespace Moon {
 		void Run();
 
 		/**
+		 * @brief Closes Application.
+		 */
+		void Close()
+		{
+			m_Running = false;
+		}
+
+		/**
 		 * Adds a layer to the layer stack.
 		 * 
 		 * @param A child class of Layer. Initialized with the keyword new.
