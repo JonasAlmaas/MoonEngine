@@ -43,6 +43,7 @@
 #include "Moon/Scene/Scene.h"
 #include "Moon/Scene/Component/Components.h"
 #include "Moon/Scene/Entity/Entity.h"
+#include "Moon/Scene/Entity/Scriptable/ScriptableEntity.h"
 
 // ---- Misc ----
 #include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
