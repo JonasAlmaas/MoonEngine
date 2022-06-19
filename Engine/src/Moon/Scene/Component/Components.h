@@ -1,4 +1,4 @@
 #pragma once
 
-#include "Moon/Scene/Component/SpriteRenderer/SpriteRendererComponent.h"
-#include "Moon/Scene/Component/Transform/TransformComponent.h"
+#include "Moon/Scene/Component/SpriteRendererComponent.h"
+#include "Moon/Scene/Component/TransformComponent.h"
