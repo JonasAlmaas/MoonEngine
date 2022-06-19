@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Moon/Scene/Entity/Entity.h"
+
 
 namespace Moon {
 
@@ -11,10 +13,7 @@ namespace Moon {
 
 		void OnUpdate(Timestep ts);
 
-		EntityID CreateEntity();
-
-		// TEMP!
-		entt::registry& Reg() { return m_Registry; }
+		Entity CreateEntity(const std::string& name = std::string());
 
 	private:
 		entt::registry m_Registry;

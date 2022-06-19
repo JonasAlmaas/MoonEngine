@@ -14,9 +14,16 @@ namespace Moon {
 	{
 	}
 
-	EntityID Scene::CreateEntity()
+	Entity Scene::CreateEntity(const std::string& name)
 	{
-		return m_Registry.create();
+		Entity entity = Entity(&m_Registry);
+
+		entity.AddComponent<TransformComponent>();
+
+		auto& tagComp = entity.AddComponent<TagComponent>(name);
+		tagComp.Tag = name.empty() ? "Unnamed Entity" : name;
+
+		return entity;
 	}
 
 	void Scene::OnUpdate(Timestep ts)
