@@ -10,7 +10,7 @@ namespace Moon {
 	public:
 		static bool IsKeyPressed(int keycode);
 		static bool IsMouseButtonPressed(int button);
-		static std::pair<float, float> GetMousePosition();
+		static glm::vec2 GetMousePosition();
 		static float GetMouseX();
 		static float GetMouseY();
 

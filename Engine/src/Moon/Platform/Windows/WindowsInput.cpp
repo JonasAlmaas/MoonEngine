@@ -30,7 +30,7 @@ namespace Moon {
 		return state == GLFW_PRESS;
 	}
 
-	std::pair<float, float> Input::GetMousePosition()
+	glm::vec2 Input::GetMousePosition()
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -42,14 +42,12 @@ namespace Moon {
 
 	float Input::GetMouseX()
 	{
-		auto[x, y] = GetMousePosition();
-		return x;
+		return GetMousePosition().x;
 	}
 
 	float Input::GetMouseY()
 	{
-		auto[x, y] = GetMousePosition();
-		return y;
+		return GetMousePosition().y;
 	}
 
 }

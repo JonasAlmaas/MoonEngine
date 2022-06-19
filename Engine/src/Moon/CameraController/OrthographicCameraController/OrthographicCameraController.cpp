@@ -24,12 +24,12 @@ namespace Moon {
 		{
 			if (Input::IsMouseButtonPressed(Mouse::Button2))
 			{
-				auto [x, y] = Input::GetMousePosition();
+				glm::vec2 mousePos = Input::GetMousePosition();
 
 				float pixelToUnitFactor = m_ZoomLevel * 2.0f / (float)Application::Get().GetWindow().GetHeight();
 
-				float distanceX = (m_LastMousePosition.x - x) * pixelToUnitFactor;
-				float distanceY = (m_LastMousePosition.y - y) * pixelToUnitFactor;
+				float distanceX = (m_LastMousePosition.x - mousePos.x) * pixelToUnitFactor;
+				float distanceY = (m_LastMousePosition.y - mousePos.y) * pixelToUnitFactor;
 
 				m_CameraPosition.x += distanceX * cos(glm::radians(m_CameraRotation));
 				m_CameraPosition.y += distanceX * sin(glm::radians(m_CameraRotation));
@@ -37,7 +37,7 @@ namespace Moon {
 				m_CameraPosition.x += distanceY * sin(glm::radians(m_CameraRotation));
 				m_CameraPosition.y -= distanceY * cos(glm::radians(m_CameraRotation));
 				
-				m_LastMousePosition = { x, y };
+				m_LastMousePosition = { mousePos.x, mousePos.y };
 
 				m_Camera.SetPosition(m_CameraPosition);
 			}
@@ -118,8 +118,7 @@ namespace Moon {
 
 		if (e.GetMouseButton() == Mouse::Button2)
 		{
-			auto [x, y] = Input::GetMousePosition();
-			m_LastMousePosition = { x, y };
+			m_LastMousePosition = Input::GetMousePosition();
 		}
 		return false;
 	}
