@@ -218,19 +218,24 @@ namespace Moon {
 
 	#define ME_PROFILE_BEGIN_SESSION(name, filepath) ::Moon::Instrumentor::Get().BeginSession(name, filepath)
 	#define ME_PROFILE_END_SESSION() ::Moon::Instrumentor::Get().EndSession()
-	#define ME_PROFILE_SCOPE(name) constexpr auto fixedName = ::Moon::InstrumentorUtils::CleanupOutputString(name, "__cdecl "); ::Moon::InstrumentationTimer timer##__LINE__(fixedName.Data)
+	#define ME_PROFILE_SCOPE_LINE2(name, line) constexpr auto fixedName##line = ::Moon::InstrumentorUtils::CleanupOutputString(name, "__cdecl "); ::Moon::InstrumentationTimer timer##line(fixedName##line.Data)
+	#define ME_PROFILE_SCOPE_LINE(name, line) ME_PROFILE_SCOPE_LINE2(name, line)
+	#define ME_PROFILE_SCOPE(name) ME_PROFILE_SCOPE_LINE(name, __LINE__)
 	#define ME_PROFILE_FUNCTION() ME_PROFILE_SCOPE(ME_FUNC_SIG)
+
+	#if ME_ENABLE_PROFILING_RENDERER
+		#define ME_PROFILE_RENDERER_SCOPE(name) ME_PROFILE_SCOPE_LINE(name, __LINE__)
+		#define ME_PROFILE_RENDERER_FUNCTION() ME_PROFILE_SCOPE(ME_FUNC_SIG)
+	#else
+		#define ME_PROFILE_RENDERER_SCOPE(name)
+		#define ME_PROFILE_RENDERER_FUNCTION()
+	#endif
 #else
 	#define ME_PROFILE_BEGIN_SESSION(name, filepath)
 	#define ME_PROFILE_END_SESSION()
 	#define ME_PROFILE_SCOPE(name)
 	#define ME_PROFILE_FUNCTION()
-#endif
 
-#if ME_ENABLE_PROFILING_RENDERER
-	#define ME_PROFILE_RENDERER_SCOPE(name) constexpr auto fixedName = ::Moon::InstrumentorUtils::CleanupOutputString(name, "__cdecl "); ::Moon::InstrumentationTimer timer##__LINE__(fixedName.Data)
-	#define ME_PROFILE_RENDERER_FUNCTION() ME_PROFILE_SCOPE(ME_FUNC_SIG)
-#else
 	#define ME_PROFILE_RENDERER_SCOPE(name)
 	#define ME_PROFILE_RENDERER_FUNCTION()
 #endif
