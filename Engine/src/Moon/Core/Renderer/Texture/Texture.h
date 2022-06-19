@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Base.h"
-
 
 namespace Moon {
 

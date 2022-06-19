@@ -1,8 +1,6 @@
 #include "mepch.h"
 #include "Moon/Platform/OpenGL/GraphicsContext/OpenGLContext.h"
 
-#include "Moon/Core/Base.h"
-
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 

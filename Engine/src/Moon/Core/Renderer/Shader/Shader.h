@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Base.h"
-
 #include <glm/glm.hpp>
 
 

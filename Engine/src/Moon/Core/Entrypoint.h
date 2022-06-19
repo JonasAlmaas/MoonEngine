@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Base.h"
 #include "Moon/Core/Application/Application.h"
 
 

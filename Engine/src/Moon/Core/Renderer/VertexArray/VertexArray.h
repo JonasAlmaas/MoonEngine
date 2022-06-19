@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Base.h"
 #include "Moon/Core/Renderer/Buffer/IndexBuffer/IndexBuffer.h"
 #include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
 

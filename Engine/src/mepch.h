@@ -16,6 +16,7 @@
 
 #include <entt.hpp>
 
+#include "Moon/Core/Base.h"
 #include "Moon/Core/Log/Log.h"
 #include "Moon/Core/Type/Type.h"
 #include "Moon/Core/Util/Math.h"
