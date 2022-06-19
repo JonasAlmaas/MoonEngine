@@ -23,8 +23,11 @@ namespace Moon {
 		float r, g, b, a;
 		ColorFormat Format;
 
+		constexpr Color(const Color& other)
+			: r(other.r), g(other.g), b(other.b), a(other.a), Format(other.Format) {}
+
 		constexpr Color()
-			: r(0.0f), g(0.0f), b(0.0f), a(1.0f), Format(ColorFormat::RGBANormalized) {}
+			: r(1.0f), g(1.0f), b(1.0f), a(1.0f), Format(ColorFormat::RGBANormalized) {}
 
 		constexpr Color(float _v)
 			: r(_v), g(_v), b(_v), a(1.0f), Format(ColorFormat::RGBANormalized) {}
@@ -50,26 +53,18 @@ namespace Moon {
 		constexpr Color(ColorFormat _format, float _r, float _g, float _b, float _a)
 			: r(_r), g(_g), b(_b), a(_a), Format(_format) {}
 
-		// Copy constructor
-		constexpr Color(const Color& other)
-			: r(other.r), g(other.g), b(other.b), a(other.a), Format(other.Format) {}
-
 		// ---- Operator overrides ----
 
-		bool operator==(const Color& other)
+		bool operator == (const Color& other)
 		{
 			return (Format == other.Format) && (r == other.r) && (g == other.g) && (b == other.b) && (a == other.a);
 		}
 
-		operator glm::vec3() const
-		{
-			return { r, g, b };
-		}
+		operator glm::vec3 () { return { r, g, b }; }
+		operator const glm::vec3 () const { return { r, g, b }; }
 
-		operator glm::vec4() const
-		{
-			return { r, g, b, a };
-		}
+		operator glm::vec4 () { return { r, g, b, a }; }
+		operator const glm::vec4 () const { return { r, g, b, a }; }
 
 		operator ImVec4() const
 		{
