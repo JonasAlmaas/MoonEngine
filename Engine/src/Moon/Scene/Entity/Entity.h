@@ -8,6 +8,7 @@ namespace Moon {
 	public:
 		Entity() = default;
 		Entity(entt::registry* registry);
+		Entity(entt::registry* registry, entt::entity entityHandle);
 		Entity(const Entity& other) = default;
 		
 		template<typename T, typename... Args>
