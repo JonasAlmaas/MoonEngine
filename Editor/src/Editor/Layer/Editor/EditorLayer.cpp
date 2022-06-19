@@ -178,7 +178,7 @@ namespace Asteroid {
 				auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
 				ImGui::Text("%s", tag.c_str());
 
-				ImGui::ColorEdit4("Square Color", m_SquareEntity.GetComponent<SpriteRendererComponent>().Tint);
+				ImGui::ColorEdit4("Square Color", m_SquareEntity.GetComponent<SpriteRendererComponent>().Color);
 
 				ImGui::End();
 			}

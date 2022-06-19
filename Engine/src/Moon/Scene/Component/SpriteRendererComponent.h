@@ -9,15 +9,15 @@ namespace Moon {
 
 	struct SpriteRendererComponent
 	{
-		Color Tint{ 1.0f, 1.0f, 1.0f, 1.0f };
+		Moon::Color Color{ 1.0f, 1.0f, 1.0f, 1.0f };
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
-		SpriteRendererComponent(const Color& tint)
-			: Tint(tint) {}
+		SpriteRendererComponent(const Moon::Color& Color)
+			: Color(Color) {}
 
-		operator Color& () { return Tint; }
-		operator const Color& () const { return Tint; }
+		operator Moon::Color& () { return Color; }
+		operator const Moon::Color& () const { return Color; }
 	};
 
 }
