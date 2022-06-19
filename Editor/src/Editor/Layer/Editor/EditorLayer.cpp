@@ -15,10 +15,9 @@ namespace Asteroid {
 		// Set up scene
 		m_ActiveScene = CreateRef<Scene>();
 
-		m_SquareEntity = m_ActiveScene->CreateEntity();
-		m_ActiveScene->Reg().emplace<TransformComponent>(m_SquareEntity);
-		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(m_SquareEntity, Color(0.0, 1.0f, 0.0));
-
+		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
+		m_SquareEntity.AddComponent<SpriteRendererComponent>(Color(0.0, 1.0f, 0.0));
+	
 		// Set up framebuffer
 		FramebufferSpecification spec;
 		spec.Width = 1280;
@@ -171,11 +170,15 @@ namespace Asteroid {
 				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
 
-				ImGui::Image((void*)m_Texture_Checkerboard->GetRendererID(), { 256, 256 }, { 0, 0 }, { 5, 5 });
-				ImGui::Image((void*)m_Texture_ColorGrid->GetRendererID(), { 256, 256 });
-				
-				auto& color = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).Tint;
-				ImGui::ColorEdit4("Square Color", color.GetValuePtr());
+				ImGui::End();
+			}
+
+			ImGui::Begin("Scene Hierarchy");
+			{
+				auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
+				ImGui::Text("%s", tag.c_str());
+
+				ImGui::ColorEdit4("Square Color", m_SquareEntity.GetComponent<SpriteRendererComponent>().Tint);
 
 				ImGui::End();
 			}

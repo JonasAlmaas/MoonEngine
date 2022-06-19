@@ -24,7 +24,7 @@ namespace Asteroid {
 
 		Ref<Scene> m_ActiveScene;
 
-		EntityID m_SquareEntity;
+		Entity m_SquareEntity;
 
 		Ref<Framebuffer> m_Framebuffer;
 		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
