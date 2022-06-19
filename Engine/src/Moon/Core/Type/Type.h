@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Moon/Core/Type/EntityID.h"
+#include "Moon/Core/Type/Timestep.h"
+#include "Moon/Core/Type/Color.h"
+
 
 namespace Moon {
 

@@ -3,23 +3,17 @@
 
 namespace Moon {
 
-	class Timestep
+	struct Timestep
 	{
-	public:
+		float Time;	// Time in seconds
+
 		Timestep(float time = 0.0f)
-			: m_Time(time)
-		{
-		}
+			: Time(time) {}
 
-		operator float() const { return m_Time; }
+		operator float() const { return Time; }
 
-		float GetSeconds() const { return m_Time; }
-		float GetMilliseconds() const { return m_Time * 1000.0f; }
-
-	private:
-		// Time in seconds
-		float m_Time;
-
+		float GetSeconds() const { return Time; }
+		float GetMilliseconds() const { return Time * 1000.0f; }
 	};
 
 }

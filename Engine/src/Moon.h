@@ -39,8 +39,7 @@
 #include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
 
 // ---- Type ----
-#include "Moon/Core/Type/Color.h"
-#include "Moon/Core/Type/Timestep.h"
+#include "Moon/Core/Type/Type.h"
 
 // ---- Util ----
 #include "Moon/Core/Util/Util.h"

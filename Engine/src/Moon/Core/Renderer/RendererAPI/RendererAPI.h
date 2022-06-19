@@ -2,7 +2,6 @@
 
 #include "Moon/Core/Base.h"
 #include "Moon/Core/Renderer/VertexArray/VertexArray.h"
-#include "Moon/Core/Type/Color.h"
 
 
 namespace Moon {

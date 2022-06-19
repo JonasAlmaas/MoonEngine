@@ -3,7 +3,6 @@
 
 #include "Moon/ImGui/Customization/ImGuiColorPalette.h"
 #include "Moon/Core/Application/Application.h"
-#include "Moon/Core/Type/Color.h"
 
 // Emedded font
 #include "Font/Roboto-Regular.embed"
