@@ -1,7 +1,7 @@
 #include "mepch.h"
 #include "Moon/ImGui/ImGuiLayer.h"
 
-#include "Moon/Customization/UIColor.h"
+#include "Moon/ImGui/Customization/ImGuiColorPalette.h"
 #include "Moon/Core/Application/Application.h"
 #include "Moon/Core/Type/Color.h"
 
@@ -149,78 +149,78 @@ namespace Moon {
 		style.CurveTessellationTol = 1.25f;
 		style.CircleTessellationMaxError = 0.5f;
 
-		style.Colors[ImGuiCol_Text]						= UIColor::Text;
-		style.Colors[ImGuiCol_TextDisabled]				= UIColor::TextDisabled;
+		style.Colors[ImGuiCol_Text]						= ImGuiColorPalette::Text;
+		style.Colors[ImGuiCol_TextDisabled]				= ImGuiColorPalette::TextDisabled;
 
-		style.Colors[ImGuiCol_WindowBg]					= UIColor::WindowBg;				// Background of normal windows
-		style.Colors[ImGuiCol_ChildBg]					= UIColor::ChildBg;					// Background of child windows
-		style.Colors[ImGuiCol_PopupBg]					= UIColor::PopupBg;					// Background of popups, menus, tooltips windows
+		style.Colors[ImGuiCol_WindowBg]					= ImGuiColorPalette::WindowBg;					// Background of normal windows
+		style.Colors[ImGuiCol_ChildBg]					= ImGuiColorPalette::ChildBg;					// Background of child windows
+		style.Colors[ImGuiCol_PopupBg]					= ImGuiColorPalette::PopupBg;					// Background of popups, menus, tooltips windows
 		
-		style.Colors[ImGuiCol_Border]					= UIColor::Border;
-		style.Colors[ImGuiCol_BorderShadow]				= UIColor::BorderShadow;
+		style.Colors[ImGuiCol_Border]					= ImGuiColorPalette::Border;
+		style.Colors[ImGuiCol_BorderShadow]				= ImGuiColorPalette::BorderShadow;
 		
-		style.Colors[ImGuiCol_FrameBg]					= UIColor::ElementBg;				// Background of checkbox, radio button, plot, slider, text input
-		style.Colors[ImGuiCol_FrameBgHovered]			= UIColor::ElementHovered;
-		style.Colors[ImGuiCol_FrameBgActive]			= UIColor::ElementActive;
+		style.Colors[ImGuiCol_FrameBg]					= ImGuiColorPalette::ElementBg;					// Background of checkbox, radio button, plot, slider, text input
+		style.Colors[ImGuiCol_FrameBgHovered]			= ImGuiColorPalette::ElementHovered;
+		style.Colors[ImGuiCol_FrameBgActive]			= ImGuiColorPalette::ElementActive;
 		
-		style.Colors[ImGuiCol_TitleBg]					= UIColor::TitleBg;
-		style.Colors[ImGuiCol_TitleBgActive]			= UIColor::TitleBgActive;
-		style.Colors[ImGuiCol_TitleBgCollapsed]			= UIColor::TitleBgCollapsed;
-		style.Colors[ImGuiCol_MenuBarBg]				= UIColor::MenuBarBg;
+		style.Colors[ImGuiCol_TitleBg]					= ImGuiColorPalette::TitleBg;
+		style.Colors[ImGuiCol_TitleBgActive]			= ImGuiColorPalette::TitleBgActive;
+		style.Colors[ImGuiCol_TitleBgCollapsed]			= ImGuiColorPalette::TitleBgCollapsed;
+		style.Colors[ImGuiCol_MenuBarBg]				= ImGuiColorPalette::MenuBarBg;
 
-		style.Colors[ImGuiCol_ScrollbarBg]				= UIColor::ScrollbarBg;
-		style.Colors[ImGuiCol_ScrollbarGrab]			= UIColor::ScrollbarGrab;
-		style.Colors[ImGuiCol_ScrollbarGrabHovered]		= UIColor::ScrollbarGrabHovered;
-		style.Colors[ImGuiCol_ScrollbarGrabActive]		= UIColor::ScrollbarGrabActive;
+		style.Colors[ImGuiCol_ScrollbarBg]				= ImGuiColorPalette::ScrollbarBg;
+		style.Colors[ImGuiCol_ScrollbarGrab]			= ImGuiColorPalette::ScrollbarGrab;
+		style.Colors[ImGuiCol_ScrollbarGrabHovered]		= ImGuiColorPalette::ScrollbarGrabHovered;
+		style.Colors[ImGuiCol_ScrollbarGrabActive]		= ImGuiColorPalette::ScrollbarGrabActive;
 
-		style.Colors[ImGuiCol_CheckMark]				= UIColor::Primary;
-		style.Colors[ImGuiCol_SliderGrab]				= UIColor::Primary;
-		style.Colors[ImGuiCol_SliderGrabActive]			= UIColor::PrimaryHover;
+		style.Colors[ImGuiCol_CheckMark]				= ImGuiColorPalette::Primary;
+		style.Colors[ImGuiCol_SliderGrab]				= ImGuiColorPalette::Primary;
+		style.Colors[ImGuiCol_SliderGrabActive]			= ImGuiColorPalette::PrimaryHover;
 
-		style.Colors[ImGuiCol_Button]					= UIColor::Button;
-		style.Colors[ImGuiCol_ButtonHovered]			= UIColor::ButtonHovered;
-		style.Colors[ImGuiCol_ButtonActive]				= UIColor::ButtonActive;
+		style.Colors[ImGuiCol_Button]					= ImGuiColorPalette::Button;
+		style.Colors[ImGuiCol_ButtonHovered]			= ImGuiColorPalette::ButtonHovered;
+		style.Colors[ImGuiCol_ButtonActive]				= ImGuiColorPalette::ButtonActive;
 
-		style.Colors[ImGuiCol_Header]					= UIColor::Header;					// Header* colors are used for CollapsingHeader, TreeNode, Selectable, MenuItem
-		style.Colors[ImGuiCol_HeaderHovered]			= UIColor::HeaderHovered;
-		style.Colors[ImGuiCol_HeaderActive]				= UIColor::HeaderActive;
+		style.Colors[ImGuiCol_Header]					= ImGuiColorPalette::Header;					// Header* colors are used for CollapsingHeader, TreeNode, Selectable, MenuItem
+		style.Colors[ImGuiCol_HeaderHovered]			= ImGuiColorPalette::HeaderHovered;
+		style.Colors[ImGuiCol_HeaderActive]				= ImGuiColorPalette::HeaderActive;
 
-		style.Colors[ImGuiCol_Separator]				= UIColor::Separator;
-		style.Colors[ImGuiCol_SeparatorHovered]			= UIColor::SeparatorHovered;
-		style.Colors[ImGuiCol_SeparatorActive]			= UIColor::SeparatorActive;
+		style.Colors[ImGuiCol_Separator]				= ImGuiColorPalette::Separator;
+		style.Colors[ImGuiCol_SeparatorHovered]			= ImGuiColorPalette::SeparatorHovered;
+		style.Colors[ImGuiCol_SeparatorActive]			= ImGuiColorPalette::SeparatorActive;
 
-		style.Colors[ImGuiCol_ResizeGrip]				= UIColor::ResizeGrip;
-		style.Colors[ImGuiCol_ResizeGripHovered]		= UIColor::ResizeGripHovered;
-		style.Colors[ImGuiCol_ResizeGripActive]			= UIColor::ResizeGripActive;
+		style.Colors[ImGuiCol_ResizeGrip]				= ImGuiColorPalette::ResizeGrip;
+		style.Colors[ImGuiCol_ResizeGripHovered]		= ImGuiColorPalette::ResizeGripHovered;
+		style.Colors[ImGuiCol_ResizeGripActive]			= ImGuiColorPalette::ResizeGripActive;
 
-		style.Colors[ImGuiCol_Tab]						= UIColor::Tab;
-		style.Colors[ImGuiCol_TabHovered]				= UIColor::TabHovered;
-		style.Colors[ImGuiCol_TabActive]				= UIColor::TabActive;
-		style.Colors[ImGuiCol_TabUnfocused]				= UIColor::TabUnfocused;
-		style.Colors[ImGuiCol_TabUnfocusedActive]		= UIColor::TabUnfocusedActive;
+		style.Colors[ImGuiCol_Tab]						= ImGuiColorPalette::Tab;
+		style.Colors[ImGuiCol_TabHovered]				= ImGuiColorPalette::TabHovered;
+		style.Colors[ImGuiCol_TabActive]				= ImGuiColorPalette::TabActive;
+		style.Colors[ImGuiCol_TabUnfocused]				= ImGuiColorPalette::TabUnfocused;
+		style.Colors[ImGuiCol_TabUnfocusedActive]		= ImGuiColorPalette::TabUnfocusedActive;
 
-		style.Colors[ImGuiCol_DockingPreview]			= UIColor::DockingPreview;			// Preview overlay color when about to docking something
-		style.Colors[ImGuiCol_DockingEmptyBg]			= UIColor::DockingEmptyBg;			// Background color for empty node (e.g. CentralNode with no window docked into it)
+		style.Colors[ImGuiCol_DockingPreview]			= ImGuiColorPalette::DockingPreview;			// Preview overlay color when about to docking something
+		style.Colors[ImGuiCol_DockingEmptyBg]			= ImGuiColorPalette::DockingEmptyBg;			// Background color for empty node (e.g. CentralNode with no window docked into it)
 
-		style.Colors[ImGuiCol_PlotLines]				= UIColor::PlotLines;
-		style.Colors[ImGuiCol_PlotLinesHovered]			= UIColor::PlotLinesHovered;
-		style.Colors[ImGuiCol_PlotHistogram]			= UIColor::PlotHistogram;
-		style.Colors[ImGuiCol_PlotHistogramHovered]		= UIColor::PlotHistogramHovered;
+		style.Colors[ImGuiCol_PlotLines]				= ImGuiColorPalette::PlotLines;
+		style.Colors[ImGuiCol_PlotLinesHovered]			= ImGuiColorPalette::PlotLinesHovered;
+		style.Colors[ImGuiCol_PlotHistogram]			= ImGuiColorPalette::PlotHistogram;
+		style.Colors[ImGuiCol_PlotHistogramHovered]		= ImGuiColorPalette::PlotHistogramHovered;
 
-		style.Colors[ImGuiCol_TableHeaderBg]			= UIColor::TableHeaderBg;			// Table header background
-		style.Colors[ImGuiCol_TableBorderStrong]		= UIColor::TableBorderStrong;		// Table outer and header borders (prefer using Alpha=1.0 here)
-		style.Colors[ImGuiCol_TableBorderLight]			= UIColor::TableBorderLight;			// Table inner borders (prefer using Alpha=1.0 here)
-		style.Colors[ImGuiCol_TableRowBg]				= UIColor::TableRowBg;				// Table row background (even rows)
-		style.Colors[ImGuiCol_TableRowBgAlt]			= UIColor::TableRowBgAlt;			// Table row background (odd rows)
+		style.Colors[ImGuiCol_TableHeaderBg]			= ImGuiColorPalette::TableHeaderBg;				// Table header background
+		style.Colors[ImGuiCol_TableBorderStrong]		= ImGuiColorPalette::TableBorderStrong;			// Table outer and header borders (prefer using Alpha=1.0 here)
+		style.Colors[ImGuiCol_TableBorderLight]			= ImGuiColorPalette::TableBorderLight;			// Table inner borders (prefer using Alpha=1.0 here)
+		style.Colors[ImGuiCol_TableRowBg]				= ImGuiColorPalette::TableRowBg;				// Table row background (even rows)
+		style.Colors[ImGuiCol_TableRowBgAlt]			= ImGuiColorPalette::TableRowBgAlt;				// Table row background (odd rows)
 		
-		style.Colors[ImGuiCol_TextSelectedBg]			= UIColor::TextSelectedBg;
+		style.Colors[ImGuiCol_TextSelectedBg]			= ImGuiColorPalette::TextSelectedBg;
 		
-		style.Colors[ImGuiCol_DragDropTarget]			= UIColor::DragDropTarget;
-		style.Colors[ImGuiCol_NavHighlight]				= UIColor::NavHighlight;			// Gamepad/keyboard: current highlighted item
+		style.Colors[ImGuiCol_DragDropTarget]			= ImGuiColorPalette::DragDropTarget;
+		style.Colors[ImGuiCol_NavHighlight]				= ImGuiColorPalette::NavHighlight;				// Gamepad/keyboard: current highlighted item
 
-		style.Colors[ImGuiCol_NavWindowingHighlight]	= UIColor::NavWindowingHighlight;	// Highlight window when using CTRL+TAB
-		style.Colors[ImGuiCol_NavWindowingDimBg]		= UIColor::NavWindowingDimBg;		// Darken/colorize entire screen behind the CTRL+TAB window list, when active
-		style.Colors[ImGuiCol_ModalWindowDimBg]			= UIColor::ModalWindowDimBg;		// Darken/colorize entire screen behind a modal window, when one is active
+		style.Colors[ImGuiCol_NavWindowingHighlight]	= ImGuiColorPalette::NavWindowingHighlight;		// Highlight window when using CTRL+TAB
+		style.Colors[ImGuiCol_NavWindowingDimBg]		= ImGuiColorPalette::NavWindowingDimBg;			// Darken/colorize entire screen behind the CTRL+TAB window list, when active
+		style.Colors[ImGuiCol_ModalWindowDimBg]			= ImGuiColorPalette::ModalWindowDimBg;			// Darken/colorize entire screen behind a modal window, when one is active
 
 		// Load default font
 		ImFontConfig fontConfig;

@@ -8,7 +8,7 @@ namespace Moon {
 	/**
 	 * @brief A pure static class that stores colors used for UI.
 	 */
-	class UIColor
+	class ImGuiColorPalette
 	{
 	public:
 		static constexpr Color Primary = { ColorFormat::RGBADecimal, 46, 104, 148 };

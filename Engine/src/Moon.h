@@ -5,9 +5,6 @@
 // ---- Application ----
 #include "Moon/Core/Application/Application.h"
 
-// ---- Customization ----
-#include "Moon/Customization/UIColor.h"
-
 // ---- Input ----
 #include "Moon/Core/Input/Input.h"
 #include "Moon/Core/Input/Code/KeyCode.h"
