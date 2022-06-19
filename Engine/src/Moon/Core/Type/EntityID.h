@@ -9,6 +9,8 @@ namespace Moon {
 	{
 		uint32_t ID;
 
+		EntityID() = default;
+
 		EntityID(uint32_t id)
 			: ID(id) {}
 
