@@ -20,6 +20,7 @@ project "Editor"
         "../Engine/src",
         "../Engine/vendor/spdlog/include",
 
+        "%{IncludeDir.entt}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.ImGui}",
     }

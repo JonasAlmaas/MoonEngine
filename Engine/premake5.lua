@@ -30,6 +30,7 @@ project "Engine"
         "src",
         "resource",
 
+        "%{IncludeDir.entt}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.glm}",
