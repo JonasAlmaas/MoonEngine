@@ -46,3 +46,7 @@
 #include "Moon/Core/Util/Math.h"
 #include "Moon/Core/Util/Platform/FileDialog/FileDialog.h"
 #include "Moon/Core/Util/Random/Random.h"
+
+// -- Scene --
+#include "Moon/Scene/Scene.h"
+#include "Moon/Scene/Component/Components.h"
