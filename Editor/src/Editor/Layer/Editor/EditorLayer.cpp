@@ -12,6 +12,14 @@ namespace Asteroid {
 	{
 		ME_PROFILE_FUNCTION();
 
+		// Set up scene
+		m_ActiveScene = CreateRef<Scene>();
+
+		m_SquareEntity = m_ActiveScene->CreateEntity();
+		m_ActiveScene->Reg().emplace<TransformComponent>(m_SquareEntity);
+		m_ActiveScene->Reg().emplace<SpriteRendererComponent>(m_SquareEntity, Color(0.0, 1.0f, 0.0));
+
+		// Set up framebuffer
 		FramebufferSpecification spec;
 		spec.Width = 1280;
 		spec.Height = 720;
@@ -19,6 +27,8 @@ namespace Asteroid {
 
 		// Generate checkerboard texture
 		{
+			ME_PROFILE_SCOPE("GenerateTexture-Checkerboard");
+
 			uint32_t* textureData = new uint32_t[2 * 2]{ 0xffcccccc, 0xffffffff, 0xffffffff, 0xffcccccc };
 			m_Texture_Checkerboard = Texture2D::Create(2, 2);
 			m_Texture_Checkerboard->SetData(textureData, sizeof(uint32_t) * 2 * 2);
@@ -27,6 +37,8 @@ namespace Asteroid {
 
 		// Generate color grid texture
 		{
+			ME_PROFILE_SCOPE("GenerateTexture-ColorGrid");
+
 			uint32_t width = 16;
 			uint32_t height = 16;
 			uint32_t* textureData = new uint32_t[width * height];
@@ -70,18 +82,18 @@ namespace Asteroid {
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 
-		Renderer2D::ResetStats();
-
 		{
-			ME_PROFILE_SCOPE("Render Prep");
+			ME_PROFILE_SCOPE("RenderPrep");
+
 			m_Framebuffer->Bind();
+			Renderer2D::ResetStats();
 			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 			RenderCommand::Clear();
 		}
 
 		Renderer2D::BeginScene(m_CameraController.GetCamera());
 		{
-			Renderer2D::DrawQuad({ 0, 0 }, 5, m_Texture_Checkerboard, 16);
+			m_ActiveScene->OnUpdate(ts);
 		}
 		Renderer2D::EndScene();
 
@@ -162,6 +174,9 @@ namespace Asteroid {
 				ImGui::Image((void*)m_Texture_Checkerboard->GetRendererID(), { 256, 256 }, { 0, 0 }, { 5, 5 });
 				ImGui::Image((void*)m_Texture_ColorGrid->GetRendererID(), { 256, 256 });
 				
+				auto& color = m_ActiveScene->Reg().get<SpriteRendererComponent>(m_SquareEntity).Tint;
+				ImGui::ColorEdit4("Square Color", color.GetValuePtr());
+
 				ImGui::End();
 			}
 
