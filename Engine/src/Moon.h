@@ -50,3 +50,4 @@
 // -- Scene --
 #include "Moon/Scene/Scene.h"
 #include "Moon/Scene/Component/Components.h"
+#include "Moon/Scene/Entity/Entity.h"
