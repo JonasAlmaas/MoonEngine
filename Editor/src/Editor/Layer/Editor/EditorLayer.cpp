@@ -7,7 +7,7 @@
 namespace Asteroid {
 
 	EditorLayer::EditorLayer()
-		: Layer("EditorLayer"), m_CameraController((float)Application::Get().GetWindow().GetWidth() / (float)Application::Get().GetWindow().GetHeight(), true, true, true)
+		: Layer("EditorLayer")
 	{
 	}
 
@@ -79,14 +79,10 @@ namespace Asteroid {
 	{
 		ME_PROFILE_FUNCTION();
 
-		m_CameraController.OnUpdate(ts);
-
 		// Resize framebuffer
 		if (auto spec = m_Framebuffer->GetSpecification(); m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && (spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
-
 			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 		}
 
@@ -207,8 +203,6 @@ namespace Asteroid {
 	void EditorLayer::OnEvent(Event& e)
 	{
 		ME_PROFILE_FUNCTION();
-
-		m_CameraController.OnEvent(e);
 	}
 
 }
