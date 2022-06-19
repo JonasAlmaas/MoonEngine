@@ -6,13 +6,14 @@
 
 #include "Moon/Core/Base.h"
 #include "Moon/Core/Application/Application.h"
+#include "Moon/Core/Input/Code/KeyCode.h"
 
 #include <GLFW/glfw3.h>
 
 
 namespace Moon {
 
-	bool Input::IsKeyPressed(int keycode)
+	bool Input::IsKeyPressed(KeyCode keycode)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -21,7 +22,7 @@ namespace Moon {
 		return state == GLFW_PRESS || state == GLFW_REPEAT;
 	}
 
-	bool Input::IsMouseButtonPressed(int button)
+	bool Input::IsMouseButtonPressed(KeyCode button)
 	{
 		ME_PROFILE_FUNCTION();
 
