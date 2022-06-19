@@ -1,20 +1,20 @@
 #pragma once
 
-#include "Moon/Core/Renderer/Camera/Camera.h"
+#include "Moon/Scene/Camera/SceneCamera.h"
 
 
 namespace Moon {
 
 	struct CameraComponent
 	{
-		Moon::Camera Camera;
+		SceneCamera Camera;
+
+		bool FixedAspectRatio = false;
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-		CameraComponent(const glm::mat4& projection)
-			: Camera(projection) {}
 
-		operator const Moon::Camera& () { return Camera; }
+		operator const SceneCamera& () { return Camera; }
 	};
 
 }
