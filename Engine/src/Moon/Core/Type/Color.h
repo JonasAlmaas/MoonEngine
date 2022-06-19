@@ -75,6 +75,9 @@ namespace Moon {
 			return { r, g, b, a };
 		}
 
+		// The same thing as Color::GetValuePtr
+		operator float* () { return &r; }
+
 		/**
 		 * @return A new instance of Color.
 		 */
