@@ -21,3 +21,4 @@
 #include "Moon/Core/Util/Math.h"
 #include "Moon/Debug/Instrumentor.h"
 
+#include "Moon/Scene/Component/Components.h"
