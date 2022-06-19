@@ -1,5 +1,7 @@
 #include "Editor/Layer/Editor/EditorLayer.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 
 namespace Asteroid {
 
@@ -14,6 +16,10 @@ namespace Asteroid {
 
 		// Set up scene
 		m_ActiveScene = CreateRef<Scene>();
+
+		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
+		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+		m_ActiveScene->SetActiveCamera(m_CameraEntity);
 
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(Color(0.0, 1.0f, 0.0));
@@ -81,20 +87,14 @@ namespace Asteroid {
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
 		}
 
-		{
-			ME_PROFILE_SCOPE("RenderPrep");
+		auto& transform = m_CameraEntity.GetComponent<TransformComponent>().Transform;
+		float x = Random::Float();
+		float y = Random::Float();
+		transform = glm::translate(glm::mat4(1.0f), { x, y, 0.0 });
 
-			m_Framebuffer->Bind();
-			Renderer2D::ResetStats();
-			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
-			RenderCommand::Clear();
-		}
+		m_Framebuffer->Bind();
 
-		Renderer2D::BeginScene(m_CameraController.GetCamera());
-		{
-			m_ActiveScene->OnUpdate(ts);
-		}
-		Renderer2D::EndScene();
+		m_ActiveScene->OnUpdate(ts);
 
 		m_Framebuffer->Unbind();
 	}
