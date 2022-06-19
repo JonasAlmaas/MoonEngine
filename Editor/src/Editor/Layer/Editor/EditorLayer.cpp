@@ -63,6 +63,13 @@ namespace Asteroid {
 
 		m_CameraController.OnUpdate(ts);
 
+		// Resize framebuffer
+		if (auto spec = m_Framebuffer->GetSpecification(); m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && (spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
+		{
+			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
+		}
+
 		Renderer2D::ResetStats();
 
 		{
@@ -167,12 +174,7 @@ namespace Asteroid {
 				Application::Get().GetImGuiLayer()->SetBlockEvents(!(m_ViewportFocused && m_ViewportHovered));
 
 				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-				if (((m_ViewportSize.x != viewportPanelSize.x) || (m_ViewportSize.y != viewportPanelSize.y)) && viewportPanelSize.x > 0 && viewportPanelSize.y > 0)
-				{
-					m_Framebuffer->Resize((uint32_t)viewportPanelSize.x, (uint32_t)viewportPanelSize.y);
-					m_CameraController.OnResize(viewportPanelSize.x, viewportPanelSize.y);
-					m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-				}
+				m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
 
 				ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), viewportPanelSize, { 0, 1 }, { 1, 0 });
 
