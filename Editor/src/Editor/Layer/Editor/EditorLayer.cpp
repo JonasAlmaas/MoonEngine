@@ -25,10 +25,10 @@ namespace Asteroid {
 			delete[] textureData;
 		}
 
-		// Generate color grid
+		// Generate color grid texture
 		{
-			uint32_t width = 128;
-			uint32_t height = 128;
+			uint32_t width = 16;
+			uint32_t height = 16;
 			uint32_t* textureData = new uint32_t[width * height];
 			for (uint8_t x = 0; x < width; x++)
 			{
