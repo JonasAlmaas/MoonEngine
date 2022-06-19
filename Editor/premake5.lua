@@ -6,6 +6,9 @@ project "Editor"
 
     targetdir ("../bin/" .. outputdir .. "/%{prj.name}")
     objdir ("../bin-int/" .. outputdir .. "/%{prj.name}")
+    
+    pchheader "aopch.h"
+    pchsource "src/aopch.cpp"
 
     files
     {

@@ -1,4 +1,4 @@
-#include <Moon.h>
+#include "aopch.h"
 #include <Moon/Core/Entrypoint.h>
 
 #include "Editor/Application/AsteroidApp.h"
