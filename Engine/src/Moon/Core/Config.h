@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Moon/Core/PlatformDetection.h"
-
 
 #ifdef ME_DEBUG
 	#define ME_ENABLE_ASSERTS 1
