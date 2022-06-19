@@ -51,6 +51,21 @@ namespace Moon {
 		Renderer2D::EndScene();
 	}
 
+	void Scene::OnViewportResize(uint32_t width, uint32_t height)
+	{
+		m_ViewportWidth = width;
+		m_ViewportHeight = height;
+
+		// Resize non fixed aspect ratio cameras
+		auto view = m_Registry.view<CameraComponent>();
+		for (auto entity : view)
+		{
+			auto& cameraComponent = view.get<CameraComponent>(entity);
+			if (!cameraComponent.FixedAspectRatio)
+				cameraComponent.Camera.SetViewportSize(width, height);
+		}
+	}
+
 	void Scene::SetActiveCamera(Entity& camera)
 	{
 		m_ActiveCamera = &camera;
