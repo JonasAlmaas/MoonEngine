@@ -10,7 +10,7 @@ namespace Moon {
 	{
 	public:
 		OpenGLVertexArray();
-		~OpenGLVertexArray();
+		virtual ~OpenGLVertexArray();
 
 		virtual void Bind() const override;
 		virtual void UnBind() const override;
@@ -23,6 +23,7 @@ namespace Moon {
 
 	private:
 		RendererID m_RendererID;
+		uint32_t m_VertexBufferIndex = 0;
 		std::vector<Ref<VertexBuffer>> m_VertexBuffers;
 		Ref<IndexBuffer> m_IndexBuffer;
 
