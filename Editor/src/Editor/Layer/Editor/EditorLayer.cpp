@@ -18,7 +18,7 @@ namespace Asteroid {
 		m_ActiveScene = CreateRef<Scene>();
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
-		m_CameraEntity.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+		m_CameraEntity.AddComponent<CameraComponent>();
 		m_ActiveScene->SetActiveCamera(m_CameraEntity);
 
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
@@ -85,12 +85,9 @@ namespace Asteroid {
 		{
 			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
 			m_CameraController.OnResize(m_ViewportSize.x, m_ViewportSize.y);
-		}
 
-		auto& transform = m_CameraEntity.GetComponent<TransformComponent>().Transform;
-		float x = Random::Float();
-		float y = Random::Float();
-		transform = glm::translate(glm::mat4(1.0f), { x, y, 0.0 });
+			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
+		}
 
 		m_Framebuffer->Bind();
 
