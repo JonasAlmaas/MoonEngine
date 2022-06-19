@@ -45,7 +45,7 @@ namespace Moon {
 		{
 			auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-			Renderer2D::DrawQuad(transform, sprite);
+			Renderer2D::DrawSprite(transform, sprite);
 		}
 
 		Renderer2D::EndScene();

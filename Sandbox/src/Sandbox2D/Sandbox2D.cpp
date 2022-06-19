@@ -37,7 +37,7 @@ namespace Sandbox {
 
 		Renderer2D::BeginScene(m_CameraController.GetCamera());
 
-		Renderer2D::DrawQuad({ 10.0f, 10.0f, -0.1 }, 5.0f, m_Texture, 2.0f);
+		Renderer2D::DrawSprite({ 10.0f, 10.0f, -0.1 }, 5.0f, m_Texture, 2.0f);
 
 		float offset = 1.1f;
 		for (int x = 0; x < 20; x++)
@@ -46,17 +46,17 @@ namespace Sandbox {
 			{
 				if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0))
 				{
-					Renderer2D::DrawQuad({ x * offset, y * offset }, 1.0f, m_Texture, m_Color1);
+					Renderer2D::DrawSprite({ x * offset, y * offset }, 1.0f, m_Texture, m_Color1);
 				}
 				else {
-					Renderer2D::DrawQuad({ x * offset, y * offset }, 1.0f, m_Texture, m_Color2);
+					Renderer2D::DrawSprite({ x * offset, y * offset }, 1.0f, m_Texture, m_Color2);
 				}
 			}
 		}
 
-		Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1 }, 45.0f, 10.0f, m_Texture, 10.0f);
+		Renderer2D::DrawRotatedSprite({ 0.0f, 0.0f, -0.1 }, 45.0f, 10.0f, m_Texture, 10.0f);
 
-		Renderer2D::DrawQuad({ -1.0f, -1.0f, 0.1 }, 1.0f, m_SubTexture);
+		Renderer2D::DrawSprite({ -1.0f, -1.0f, 0.1 }, 1.0f, m_SubTexture);
 
 		Renderer2D::EndScene();
 	}

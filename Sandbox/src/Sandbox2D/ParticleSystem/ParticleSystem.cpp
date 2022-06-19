@@ -40,7 +40,7 @@ namespace Sandbox {
 			float lifePercent = particle.LifeRemaining / particle.LifeTime;
 			float size = Math::Lerp(particle.SizeBegin, particle.SizeEnd, lifePercent);
 			Color color = particle.ColorBegin.Lerp(particle.ColorEnd, lifePercent);
-			Renderer2D::DrawRotatedQuad({ particle.Position.x, particle.Position.y, 0.2f }, particle.Rotation, size, color);
+			Renderer2D::DrawRotatedSprite({ particle.Position.x, particle.Position.y, 0.2f }, particle.Rotation, size, color);
 		}
 
 		Renderer2D::EndScene();
