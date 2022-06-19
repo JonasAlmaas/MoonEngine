@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Moon/Core/Renderer/Camera/Camera.h"
 #include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 #include "Moon/Core/Renderer/Texture/Texture.h"
 #include "Moon/Renderer/Texture/SubTexture2D.h"
@@ -23,7 +24,8 @@ namespace Moon {
 		static void Init();
 		static void Shutdown();
 
-		static void BeginScene(const OrthographicCamera& camera);
+		static void BeginScene(const Camera& camera, const glm::mat4& transform);
+		static void BeginScene(const OrthographicCamera& camera); // TODO: Remove this!
 		static void EndScene();
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
