@@ -342,6 +342,41 @@ namespace Moon {
 
 	// -- Draw Quad --
 
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Color& color)
+	{
+		Ultra_DrawQuad(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture)
+	{
+		Ultra_DrawQuad(transform, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tileFactor)
+	{
+		Ultra_DrawQuad(transform, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
+	{
+		Ultra_DrawQuad(transform, texture, tileFactor, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const Color& tint)
+	{
+		Ultra_DrawQuad(transform, texture, s_Data.DefaultTileFactor, tint);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
+	{
+		Ultra_DrawQuad(transform, texture, { tileFactor, tileFactor }, tint);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
+	{
+		Ultra_DrawQuad(transform, texture, tileFactor, tint);
+	}
+
 	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Color& color)
 	{
 		Super_DrawQuad({ position, 0.0f }, { size, size }, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
@@ -649,6 +684,16 @@ namespace Moon {
 	}
 
 	// -- Using SubTexture --
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture)
+	{
+		Ultra_DrawQuad(transform, subTexture, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	{
+		Ultra_DrawQuad(transform, subTexture, tint);
+	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, float size, const Ref<SubTexture2D>& subTexture)
 	{

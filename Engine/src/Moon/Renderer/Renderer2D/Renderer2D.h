@@ -55,6 +55,14 @@ namespace Moon {
 		 */
 		static void DrawQuad() {};
 
+		static void DrawQuad(const glm::mat4& transform, const Color& color);
+		static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture);
+		static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tileFactor);
+		static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor);
+		static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const Color& tint);
+		static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, float tileFactor, const Color& tint);
+		static void DrawQuad(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint);
+
 		static void DrawQuad(const glm::vec2& position, float size, const Color& color);
 		static void DrawQuad(const glm::vec3& position, float size, const Color& color);
 
@@ -140,6 +148,9 @@ namespace Moon {
 		static void DrawRotatedQuad(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint);
 
 		// -- Using SubTexture --
+		static void DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture);
+		static void DrawQuad(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& tint);
+
 		static void DrawQuad(const glm::vec2& position, float size, const Ref<SubTexture2D>& subTexture);
 		static void DrawQuad(const glm::vec3& position, float size, const Ref<SubTexture2D>& subTexture);
 
