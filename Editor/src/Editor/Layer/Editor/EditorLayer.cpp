@@ -68,6 +68,42 @@ namespace Asteroid {
 			m_Texture_ColorGrid->SetData(textureData, sizeof(uint32_t) * width * height);
 			delete[] textureData;
 		}
+
+		// ---- Native script test ----
+		class CameraController : public ScriptableEntity
+		{
+		public:
+			void OnCreate()
+			{
+			}
+
+			void OnDestroy()
+			{
+			}
+
+			void OnUpdate(Timestep ts)
+			{
+				auto& transform = GetComponent<TransformComponent>().Transform;
+				
+				if (Input::IsKeyPressed(Key::W))
+					transform[3][1] += speed * ts;
+
+				if (Input::IsKeyPressed(Key::S))
+					transform[3][1] -= speed * ts;
+
+				if (Input::IsKeyPressed(Key::A))
+					transform[3][0] -= speed * ts;
+
+				if (Input::IsKeyPressed(Key::D))
+					transform[3][0] += speed * ts;
+			}
+
+		private:
+			float speed = 5.0f;
+
+		};
+
+		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 	}
 
 	void EditorLayer::OnDetach()
