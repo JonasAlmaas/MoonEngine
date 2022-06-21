@@ -9,8 +9,6 @@ namespace Moon {
 	{
 		ScriptableEntity* Instance = nullptr;
 
-		//void 
-
 		ScriptableEntity*(*InstantiateScript)();
 		void (*DestroyScript)(NativeScriptComponent*);
 
