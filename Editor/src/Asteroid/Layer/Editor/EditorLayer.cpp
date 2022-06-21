@@ -15,6 +15,7 @@ namespace Asteroid {
 
 		// Set up scene
 		m_ActiveScene = CreateRef<Scene>();
+		m_SceneHierarchyPanel.SetRegistry(m_ActiveScene->GetRegistry());
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
 		m_CameraEntity.AddComponent<CameraComponent>();
@@ -99,6 +100,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnAttach ----
 
+		m_SceneHierarchyPanel.OnAttach();
 		m_ViewportPanel.OnAttach();
 
 		// -------------------------
@@ -110,6 +112,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnDetach ----
 
+		m_SceneHierarchyPanel.OnDetach();
 		m_ViewportPanel.OnDetach();
 
 		// -------------------------
@@ -121,6 +124,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnUpdate ----
 		
+		m_SceneHierarchyPanel.OnUpdate(ts);
 		m_ViewportPanel.OnUpdate(ts);
 
 		// -------------------------
@@ -203,6 +207,7 @@ namespace Asteroid {
 
 			// ---- Panels::OnImGuiRender ----
 			
+			m_SceneHierarchyPanel.OnImGuiRender();
 			m_ViewportPanel.OnImGuiRender();
 
 			// -------------------------------
@@ -215,16 +220,6 @@ namespace Asteroid {
 				ImGui::Text("Quads: %d", stats.QuadCount);
 				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-
-				ImGui::End();
-			}
-
-			ImGui::Begin("Scene Hierarchy");
-			{
-				auto& tag = m_SquareEntity.GetComponent<TagComponent>().Tag;
-				ImGui::Text("%s", tag.c_str());
-
-				ImGui::ColorEdit4("Square Color", m_SquareEntity.GetComponent<SpriteRendererComponent>().Color);
 
 				ImGui::End();
 			}

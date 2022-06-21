@@ -2,6 +2,7 @@
 
 using namespace Moon;
 
+#include "Asteroid/Panel/SceneHierarchy/SceneHierarchyPanel.h"
 #include "Asteroid/Panel/Viewport/ViewportPanel.h"
 
 
@@ -20,10 +21,12 @@ namespace Asteroid {
 		virtual void OnEvent(Event& e) override;
 
 	private:
+		Ref<Scene> m_ActiveScene;
+
 		// -- Panels --
+		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ViewportPanel m_ViewportPanel;
 
-		Ref<Scene> m_ActiveScene;
 
 		Entity m_CameraEntity;
 		Entity m_SquareEntity;
