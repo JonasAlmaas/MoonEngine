@@ -14,4 +14,9 @@ namespace Moon {
 	{
 	}
 
+	Entity::Entity(entt::registry* registry, uint32_t entityHandle)
+		: m_Registry(registry), m_EntityHandle((entt::entity)entityHandle)
+	{
+	}
+
 }
