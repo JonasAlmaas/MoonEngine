@@ -3,6 +3,7 @@
 
 #include "Moon/Renderer/Renderer2D/Renderer2D.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
+#include "Moon/Scene/Component/NativeScriptComponent.h"
 
 
 namespace Moon {
@@ -27,25 +28,23 @@ namespace Moon {
 		return entity;
 	}
 
-#include "Moon/Scene/Component/NativeScriptComponent.h"
-
 	void Scene::OnUpdate(Timestep ts)
 	{
 		// ---- Scripts ----
 		{
 			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
 			{
+				// Move to scene begin play. But I don't have that yet.
 				if (!nsc.Instance)
 				{
-					nsc.InstantiateFn();
+					nsc.Instance = nsc.InstantiateScript();
 					nsc.Instance->m_Entity = Entity(&m_Registry, entity);
-
-					if (nsc.OnCreateFn)
-						nsc.OnCreateFn(nsc.Instance);
+					nsc.Instance->OnCreate();
 				}
 
-				if (nsc.OnUpdateFn)
-					nsc.OnUpdateFn(nsc.Instance, ts);
+				nsc.Instance->OnUpdate(ts);
+
+				// Call OnDestroy on scene stop.
 			});
 		}
 
