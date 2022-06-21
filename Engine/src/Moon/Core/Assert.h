@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Log/Log.h"
-
 
 #if ME_ENABLE_ASSERTS
 	// Alteratively we could use the same "default" message for both "WITH_MSG" and "NO_MSG" and

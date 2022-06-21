@@ -1,13 +1,12 @@
 #include "mepch.h"
 #include "Moon/ImGui/ImGuiLayer.h"
 
-#include "Moon/ImGui/Customization/ImGuiColorPalette.h"
 #include "Moon/Core/Application/Application.h"
+#include "Moon/ImGui/Customization/ImGuiColorPalette.h"
 
 // Emedded font
 #include "Font/Roboto-Regular.embed"
 
-#include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 

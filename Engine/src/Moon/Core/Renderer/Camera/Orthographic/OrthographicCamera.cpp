@@ -1,8 +1,6 @@
 #include "mepch.h"
 #include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 
 namespace Moon {
 

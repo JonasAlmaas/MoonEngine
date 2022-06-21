@@ -5,6 +5,9 @@
 // ---- Application ----
 #include "Moon/Core/Application/Application.h"
 
+// ---- Event ----
+#include "Moon/Core/Event/Event.h"
+
 // ---- Input ----
 #include "Moon/Core/Input/Input.h"
 #include "Moon/Core/Input/Code/KeyCode.h"
@@ -41,11 +44,11 @@
 
 // ---- Scene ----
 #include "Moon/Scene/Scene.h"
-#include "Moon/Scene/Component/Components.h"
+#include "Moon/Scene/Component/SceneComponents.h"
 #include "Moon/Scene/Entity/Entity.h"
 #include "Moon/Scene/Entity/Scriptable/ScriptableEntity.h"
 
 // ---- Misc ----
 #include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
-#include "Moon/Core/Type/Type.h"
+#include "Moon/Core/Type/Types.h"
 #include "Moon/Core/Log/Log.h"

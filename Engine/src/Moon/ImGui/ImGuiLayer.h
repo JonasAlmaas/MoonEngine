@@ -2,10 +2,6 @@
 
 #include "Moon/Core/Layer/Layer.h"
 
-#include "Moon/Core/Event/ApplicationEvent.h"
-#include "Moon/Core/Event/KeyEvent.h"
-#include "Moon/Core/Event/MouseEvent.h"
-
 
 namespace Moon {
 
@@ -13,6 +9,7 @@ namespace Moon {
 	{
 	public:
 		ImGuiLayer();
+		virtual ~ImGuiLayer() = default;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

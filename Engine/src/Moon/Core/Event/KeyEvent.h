@@ -1,6 +1,5 @@
 #pragma once
 
-#include "mepch.h"
 #include "Moon/Core/Event/Event.h"
 #include "Moon/Core/Input/Code/KeyCode.h"
 

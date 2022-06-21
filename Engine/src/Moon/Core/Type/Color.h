@@ -1,10 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Util/Math.h"
-
-#include <glm/glm.hpp>
-#include <imgui.h>
-
 
 namespace Moon {
 

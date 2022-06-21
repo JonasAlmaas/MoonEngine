@@ -1,9 +1,5 @@
 #pragma once
 
-#include "Moon/Core/Type/Color.h"
-
-#include <glm/glm.hpp>
-
 
 namespace Moon {
 

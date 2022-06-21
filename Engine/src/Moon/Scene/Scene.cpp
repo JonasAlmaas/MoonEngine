@@ -1,9 +1,9 @@
 #include "mepch.h"
 #include "Moon/Scene/Scene.h"
 
-#include "Moon/Renderer/Renderer2D/Renderer2D.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
-#include "Moon/Scene/Component/NativeScriptComponent.h"
+#include "Moon/Renderer/Renderer2D/Renderer2D.h"
+#include "Moon/Scene/Component/SceneComponents.h"
 
 
 namespace Moon {

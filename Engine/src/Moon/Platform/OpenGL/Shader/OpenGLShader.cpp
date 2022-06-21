@@ -1,10 +1,6 @@
 #include "mepch.h"
 #include "Moon/Platform/OpenGL/Shader/OpenGLShader.h"
 
-#include <fstream>
-
-#include <glm/gtc/type_ptr.hpp>
-
 
 namespace Moon {
 

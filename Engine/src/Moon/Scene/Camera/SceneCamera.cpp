@@ -1,8 +1,6 @@
 #include "mepch.h"
 #include "Moon/Scene/Camera/SceneCamera.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 
 namespace Moon {
 	

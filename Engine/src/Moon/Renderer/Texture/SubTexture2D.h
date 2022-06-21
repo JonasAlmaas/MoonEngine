@@ -2,8 +2,6 @@
 
 #include "Moon/Core/Renderer/Texture/Texture.h"
 
-#include <glm/glm.hpp>
-
 
 namespace Moon {
 

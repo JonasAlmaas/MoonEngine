@@ -2,6 +2,7 @@
 
 #include "Moon/Core/Config.h"
 
+
 // ---- Debug ----
 #ifdef ME_DEBUG
 	#if defined(ME_PLATFORM_WINDOWS)
@@ -20,6 +21,3 @@
 #define ME_STRINGIFY_MACRO(x) #x
 
 #define ME_BIND_EVENT_FN(fn) [this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
-
-#include "Moon/Core/Assert.h"
-#include "Moon/Core/Type/Type.h"
