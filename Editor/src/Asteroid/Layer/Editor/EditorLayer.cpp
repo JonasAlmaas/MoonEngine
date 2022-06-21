@@ -128,7 +128,10 @@ namespace Asteroid {
 		// -------------------------
 
 		glm::vec2 viewportSize = m_EditorViewportPanel.GetSize();
-		m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+		if (FramebufferSpecification spec = m_EditorViewportPanel.GetFramebuffer()->GetSpecification(); viewportSize.x > 0.0f && viewportSize.y > 0.0f && (spec.Width != viewportSize.x || spec.Height != viewportSize.y))
+		{
+			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+		}
 
 		// ---- Render ----
 		m_EditorViewportPanel.GetFramebuffer()->Bind();
