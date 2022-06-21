@@ -7,6 +7,10 @@
 
 // ---- Event ----
 #include "Moon/Core/Event/Event.h"
+#include "Moon/Core/Event/ApplicationEvent.h"
+#include "Moon/Core/Event/KeyEvent.h"
+#include "Moon/Core/Event/MouseEvent.h"
+#include "Moon/Core/Event/WindowEvent.h"
 
 // ---- Input ----
 #include "Moon/Core/Input/Input.h"
@@ -16,31 +20,37 @@
 // ---- Layer ----
 #include "Moon/Core/Layer/Layer.h"
 
-// ---- Core Renderer ----
+// ---- Renderer ----
+
 #include "Moon/Core/Renderer/Renderer.h"
+#include "Moon/Renderer/Renderer2D/Renderer2D.h"
+
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
 
 #include "Moon/Core/Renderer/Buffer/Framebuffer/Framebuffer.h"
 #include "Moon/Core/Renderer/Buffer/IndexBuffer/IndexBuffer.h"
 #include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/VertexBuffer/Layout/VertexBufferLayout.h"
 
+#include "Moon/Core/Renderer/Camera/Camera.h"
 #include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 
 #include "Moon/Core/Renderer/Shader/Shader.h"
 #include "Moon/Core/Renderer/Shader/ShaderLibrary/ShaderLibrary.h"
 
 #include "Moon/Core/Renderer/Texture/Texture.h"
-#include "Moon/Core/Renderer/VertexArray/VertexArray.h"
-
-// ---- Renderer ----
-#include "Moon/Renderer/Renderer2D/Renderer2D.h"
 #include "Moon/Renderer/Texture/SubTexture2D.h"
+
+#include "Moon/Core/Renderer/VertexArray/VertexArray.h"
 
 // ---- Util ----
 #include "Moon/Core/Util/Util.h"
 #include "Moon/Core/Util/Math.h"
 #include "Moon/Core/Util/Platform/FileDialog/FileDialog.h"
 #include "Moon/Core/Util/Random/Random.h"
+
+// ---- Window ----
+#include "Moon/Core/Window/Window.h"
 
 // ---- Scene ----
 #include "Moon/Scene/Scene.h"
@@ -49,6 +59,6 @@
 #include "Moon/Scene/Entity/Scriptable/ScriptableEntity.h"
 
 // ---- Misc ----
-#include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
 #include "Moon/Core/Type/Types.h"
 #include "Moon/Core/Log/Log.h"
+#include "Moon/CameraController/OrthographicCameraController/OrthographicCameraController.h"
