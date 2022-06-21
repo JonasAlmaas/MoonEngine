@@ -19,6 +19,8 @@ namespace Moon {
 
 		Entity CreateEntity(const std::string& name = std::string());
 
+		entt::registry& GetRegistry() { return m_Registry; }
+
 	private:
 		entt::registry m_Registry;
 		Entity* m_ActiveCamera = nullptr;
