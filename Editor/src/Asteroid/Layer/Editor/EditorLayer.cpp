@@ -24,12 +24,6 @@ namespace Asteroid {
 
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(Color(0.0, 1.0f, 0.0));
-	
-		// Set up framebuffer
-		FramebufferSpecification spec;
-		spec.Width = 1280;
-		spec.Height = 720;
-		m_Framebuffer = Framebuffer::Create(spec);
 
 		// Generate checkerboard texture
 		{
@@ -104,29 +98,44 @@ namespace Asteroid {
 		};
 
 		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+
+		// ---- Panel::OnAttach ----
+
+		m_EditorViewportPanel.OnAttach();
+
+		// -------------------------
 	}
 
 	void EditorLayer::OnDetach()
 	{
 		ME_PROFILE_FUNCTION();
+
+		// ---- Panel::OnDetach ----
+
+		m_EditorViewportPanel.OnDetach();
+
+		// -------------------------
 	}
 
 	void EditorLayer::OnUpdate(Timestep ts)
 	{
 		ME_PROFILE_FUNCTION();
 
-		// Resize framebuffer
-		if (auto spec = m_Framebuffer->GetSpecification(); m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && (spec.Width != m_ViewportSize.x || spec.Height != m_ViewportSize.y))
-		{
-			m_Framebuffer->Resize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-			m_ActiveScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-		}
+		// ---- Panel::OnUpdate ----
+		
+		m_EditorViewportPanel.OnUpdate(ts);
 
-		m_Framebuffer->Bind();
+		// -------------------------
+
+		glm::vec2 viewportSize = m_EditorViewportPanel.GetSize();
+		m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+
+		// ---- Render ----
+		m_EditorViewportPanel.GetFramebuffer()->Bind();
 
 		m_ActiveScene->OnUpdate(ts);
 
-		m_Framebuffer->Unbind();
+		m_EditorViewportPanel.GetFramebuffer()->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -191,6 +200,11 @@ namespace Asteroid {
 				ImGui::EndMenuBar();
 			}
 
+			// ---- Panels::OnImGuiRender ----
+			
+			m_EditorViewportPanel.OnImGuiRender();
+
+			// -------------------------------
 
 			ImGui::Begin("Statistics");
 			{
@@ -213,23 +227,6 @@ namespace Asteroid {
 
 				ImGui::End();
 			}
-
-			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
-			ImGui::Begin("Viewport");
-			{
-				m_ViewportFocused = ImGui::IsWindowFocused();
-				m_ViewportHovered = ImGui::IsWindowHovered();
-
-				Application::Get().GetImGuiLayer()->SetBlockEvents(!(m_ViewportFocused && m_ViewportHovered));
-
-				ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-				m_ViewportSize = { viewportPanelSize.x, viewportPanelSize.y };
-
-				ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), viewportPanelSize, { 0, 1 }, { 1, 0 });
-
-				ImGui::End();
-			}
-			ImGui::PopStyleVar();
 
 			ImGui::End();
 		}

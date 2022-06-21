@@ -2,6 +2,8 @@
 
 using namespace Moon;
 
+#include "Asteroid/Panel/Editor/Viewport/EditorViewportPanel.h"
+
 
 namespace Asteroid {
 
@@ -18,19 +20,16 @@ namespace Asteroid {
 		virtual void OnEvent(Event& e) override;
 
 	private:
+		// -- Panels --
+		EditorViewportPanel m_EditorViewportPanel;
+
 		Ref<Scene> m_ActiveScene;
 
 		Entity m_CameraEntity;
 		Entity m_SquareEntity;
 
-		Ref<Framebuffer> m_Framebuffer;
-		glm::vec2 m_ViewportSize = { 0.0f, 0.0f };
-
 		Ref<Texture2D> m_Texture_Checkerboard;
 		Ref<Texture2D> m_Texture_ColorGrid;
-
-		bool m_ViewportFocused = false;
-		bool m_ViewportHovered = false;
 
 	};
 
