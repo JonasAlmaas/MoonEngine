@@ -2,6 +2,7 @@
 
 using namespace Moon;
 
+#include "Asteroid/Panel/Properties/PropertiesPanel.h"
 #include "Asteroid/Panel/SceneHierarchy/SceneHierarchyPanel.h"
 #include "Asteroid/Panel/Viewport/ViewportPanel.h"
 
@@ -24,6 +25,7 @@ namespace Asteroid {
 		Ref<Scene> m_ActiveScene;
 
 		// -- Panels --
+		PropertiesPanel m_PropertiesPanel;
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ViewportPanel m_ViewportPanel;
 

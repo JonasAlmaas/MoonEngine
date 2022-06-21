@@ -100,6 +100,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnAttach ----
 
+		m_PropertiesPanel.OnAttach();
 		m_SceneHierarchyPanel.OnAttach();
 		m_ViewportPanel.OnAttach();
 
@@ -112,6 +113,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnDetach ----
 
+		m_PropertiesPanel.OnDetach();
 		m_SceneHierarchyPanel.OnDetach();
 		m_ViewportPanel.OnDetach();
 
@@ -124,6 +126,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnUpdate ----
 		
+		m_PropertiesPanel.OnUpdate(ts);
 		m_SceneHierarchyPanel.OnUpdate(ts);
 		m_ViewportPanel.OnUpdate(ts);
 
@@ -207,6 +210,7 @@ namespace Asteroid {
 
 			// ---- Panels::OnImGuiRender ----
 			
+			m_PropertiesPanel.OnImGuiRender();
 			m_SceneHierarchyPanel.OnImGuiRender();
 			m_ViewportPanel.OnImGuiRender();
 
