@@ -9,7 +9,7 @@ namespace Asteroid {
 	{
 	public:
 		AsteroidApp();
-		~AsteroidApp() = default;
+		virtual ~AsteroidApp() = default;
 
 	};
 
