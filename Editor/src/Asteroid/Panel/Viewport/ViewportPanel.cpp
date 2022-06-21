@@ -1,10 +1,10 @@
 #include "aopch.h"
-#include "Asteroid/Panel/Editor/Viewport/EditorViewportPanel.h"
+#include "Asteroid/Panel/Viewport/ViewportPanel.h"
 
 
 namespace Asteroid {
 
-	void EditorViewportPanel::OnAttach()
+	void ViewportPanel::OnAttach()
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -14,13 +14,13 @@ namespace Asteroid {
 		m_Framebuffer = Framebuffer::Create(spec);
 	}
 
-	void EditorViewportPanel::OnDetach()
+	void ViewportPanel::OnDetach()
 	{
 		ME_PROFILE_FUNCTION();
 
 	}
 
-	void EditorViewportPanel::OnUpdate(Timestep ts)
+	void ViewportPanel::OnUpdate(Timestep ts)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -31,7 +31,7 @@ namespace Asteroid {
 		}
 	}
 
-	void EditorViewportPanel::OnImGuiRender()
+	void ViewportPanel::OnImGuiRender()
 	{
 		ME_PROFILE_FUNCTION();
 

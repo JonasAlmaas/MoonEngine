@@ -7,11 +7,11 @@ using namespace Moon;
 
 namespace Asteroid {
 
-	class EditorViewportPanel : public Panel
+	class ViewportPanel : public Panel
 	{
 	public:
-		EditorViewportPanel() = default;
-		virtual ~EditorViewportPanel() = default;
+		ViewportPanel() = default;
+		virtual ~ViewportPanel() = default;
 
 		virtual void OnAttach() override;
 		virtual void OnDetach() override;

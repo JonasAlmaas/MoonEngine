@@ -2,7 +2,7 @@
 
 using namespace Moon;
 
-#include "Asteroid/Panel/Editor/Viewport/EditorViewportPanel.h"
+#include "Asteroid/Panel/Viewport/ViewportPanel.h"
 
 
 namespace Asteroid {
@@ -21,7 +21,7 @@ namespace Asteroid {
 
 	private:
 		// -- Panels --
-		EditorViewportPanel m_EditorViewportPanel;
+		ViewportPanel m_ViewportPanel;
 
 		Ref<Scene> m_ActiveScene;
 

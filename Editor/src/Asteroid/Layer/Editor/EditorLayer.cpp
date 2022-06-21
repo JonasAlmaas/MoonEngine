@@ -1,8 +1,6 @@
 #include "aopch.h"
 #include "Asteroid/Layer/Editor/EditorLayer.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 
 namespace Asteroid {
 
@@ -101,7 +99,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnAttach ----
 
-		m_EditorViewportPanel.OnAttach();
+		m_ViewportPanel.OnAttach();
 
 		// -------------------------
 	}
@@ -112,7 +110,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnDetach ----
 
-		m_EditorViewportPanel.OnDetach();
+		m_ViewportPanel.OnDetach();
 
 		// -------------------------
 	}
@@ -123,22 +121,22 @@ namespace Asteroid {
 
 		// ---- Panel::OnUpdate ----
 		
-		m_EditorViewportPanel.OnUpdate(ts);
+		m_ViewportPanel.OnUpdate(ts);
 
 		// -------------------------
 
-		glm::vec2 viewportSize = m_EditorViewportPanel.GetSize();
-		if (FramebufferSpecification spec = m_EditorViewportPanel.GetFramebuffer()->GetSpecification(); viewportSize.x > 0.0f && viewportSize.y > 0.0f && (spec.Width != viewportSize.x || spec.Height != viewportSize.y))
+		glm::vec2 viewportSize = m_ViewportPanel.GetSize();
+		if (FramebufferSpecification spec = m_ViewportPanel.GetFramebuffer()->GetSpecification(); viewportSize.x > 0.0f && viewportSize.y > 0.0f && (spec.Width != viewportSize.x || spec.Height != viewportSize.y))
 		{
 			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 		}
 
 		// ---- Render ----
-		m_EditorViewportPanel.GetFramebuffer()->Bind();
+		m_ViewportPanel.GetFramebuffer()->Bind();
 
 		m_ActiveScene->OnUpdate(ts);
 
-		m_EditorViewportPanel.GetFramebuffer()->Unbind();
+		m_ViewportPanel.GetFramebuffer()->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
@@ -205,7 +203,7 @@ namespace Asteroid {
 
 			// ---- Panels::OnImGuiRender ----
 			
-			m_EditorViewportPanel.OnImGuiRender();
+			m_ViewportPanel.OnImGuiRender();
 
 			// -------------------------------
 
