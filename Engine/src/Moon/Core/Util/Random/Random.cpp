@@ -5,7 +5,7 @@
 namespace Moon {
 
 	std::mt19937 Random::s_RandomEngine;
-	std::uniform_int_distribution<std::mt19937::result_type> Random::s_FloatDistribution;
+	std::uniform_int_distribution<std::mt19937::result_type> Random::s_Distribution;
 	std::bernoulli_distribution Random::s_BoolDistribution;
 
 	void Random::Init()
@@ -13,15 +13,19 @@ namespace Moon {
 		s_RandomEngine.seed(std::random_device()());
 	}
 
-	int Random::Int(int min, int max)
+	uint32_t Random::UInt()
 	{
-		std::uniform_int_distribution<uint32_t> distrib(min, max);
-		return distrib(s_RandomEngine);
+		return s_Distribution(s_RandomEngine);
+	}
+
+	uint32_t Random::UInt(uint32_t min, uint32_t max)
+	{
+		return min + (s_Distribution(s_RandomEngine) % (max - min + 1));
 	}
 
 	float Random::Float()
 	{
-		return (float)s_FloatDistribution(s_RandomEngine) / (float)std::numeric_limits<std::mt19937::result_type>::max();
+		return (float)s_Distribution(s_RandomEngine) / (float)std::numeric_limits<uint32_t>::max();
 	}
 
 	bool Random::Bool()
