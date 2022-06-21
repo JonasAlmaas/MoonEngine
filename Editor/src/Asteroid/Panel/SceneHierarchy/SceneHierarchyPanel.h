@@ -11,6 +11,7 @@ namespace Asteroid {
 	{
 	public:
 		SceneHierarchyPanel() = default;
+		SceneHierarchyPanel(entt::registry& registry);
 		virtual ~SceneHierarchyPanel() = default;
 
 		virtual void OnAttach() override;

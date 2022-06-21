@@ -4,6 +4,11 @@
 
 namespace Asteroid {
 
+    SceneHierarchyPanel::SceneHierarchyPanel(entt::registry& registry)
+        : m_Registry(&registry)
+    {
+    }
+
     void SceneHierarchyPanel::OnAttach()
     {
     }
