@@ -22,11 +22,11 @@ namespace Asteroid {
 		void SetRegistry(entt::registry& registry);
 
 	private:
-		void RenderEntity(auto entity);
+		void RenderEntity(entt::entity ntityHandle);
 
 	private:
 		entt::registry* m_Registry = nullptr;
-
+		Entity m_SelectionContext;
 	};
 
 }
