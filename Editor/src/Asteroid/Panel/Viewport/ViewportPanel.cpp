@@ -46,7 +46,7 @@ namespace Asteroid {
 		ImVec2 panelSize = ImGui::GetContentRegionAvail();
 		m_Size = { panelSize.x, panelSize.y };
 
-		ImGui::Image((void*)m_Framebuffer->GetColorAttachmentRendererID(), panelSize, { 0, 1 }, { 1, 0 });
+		ImGui::Image((void*)(uint64_t)m_Framebuffer->GetColorAttachmentRendererID(), panelSize, { 0, 1 }, { 1, 0 });
 
 		ImGui::End();
 		ImGui::PopStyleVar();
