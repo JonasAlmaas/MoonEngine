@@ -71,15 +71,15 @@ namespace Asteroid {
 		class CameraController : public ScriptableEntity
 		{
 		public:
-			void OnCreate()
+			virtual void OnCreate() override
 			{
 			}
 
-			void OnDestroy()
+			virtual void OnDestroy() override
 			{
 			}
 
-			void OnUpdate(Timestep ts)
+			virtual void OnUpdate(Timestep ts) override
 			{
 				auto& transform = GetComponent<TransformComponent>();
 				
