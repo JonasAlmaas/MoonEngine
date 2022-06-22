@@ -47,7 +47,7 @@ namespace Moon {
 
 	private:
 		entt::registry* m_Registry = nullptr;
-		entt::entity m_EntityHandle;
+		entt::entity m_EntityHandle = entt::null;
 
 	};
 
