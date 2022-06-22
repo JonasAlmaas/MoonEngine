@@ -81,19 +81,19 @@ namespace Asteroid {
 
 			void OnUpdate(Timestep ts)
 			{
-				auto& transform = GetComponent<TransformComponent>().Transform;
+				auto& transform = GetComponent<TransformComponent>();
 				
 				if (Input::IsKeyPressed(Key::W))
-					transform[3][1] += speed * ts;
+					transform.Translation[1] += speed * ts;
 
 				if (Input::IsKeyPressed(Key::S))
-					transform[3][1] -= speed * ts;
+					transform.Translation[1] -= speed * ts;
 
 				if (Input::IsKeyPressed(Key::A))
-					transform[3][0] -= speed * ts;
+					transform.Translation[0] -= speed * ts;
 
 				if (Input::IsKeyPressed(Key::D))
-					transform[3][0] += speed * ts;
+					transform.Translation[0] += speed * ts;
 			}
 
 		private:
@@ -229,6 +229,8 @@ namespace Asteroid {
 				ImGui::Text("Quads: %d", stats.QuadCount);
 				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+				ImGui::Separator();
+				ImGui::Text("Fps: %d", (int)(1.0f / Application::Get().GetTimestep()));
 
 				ImGui::End();
 			}
