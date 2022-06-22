@@ -15,8 +15,6 @@ namespace Moon {
 			: Translation(translation) {}
 
 		glm::mat4 GetTransform() const { return glm::translate(glm::mat4(1.0f), Translation) * glm::toMat4(glm::quat(Rotation)) * glm::scale(glm::mat4(1.0f), Scale); }
-
-		operator const glm::mat4& () const { return GetTransform(); }
 	};
 
 }

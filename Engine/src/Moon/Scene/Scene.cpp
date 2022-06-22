@@ -58,15 +58,15 @@ namespace Moon {
 			RenderCommand::Clear();
 
 			auto& camera = m_ActiveCamera->GetComponent<CameraComponent>();
-			auto& cameraTransform = m_ActiveCamera->GetComponent<TransformComponent>();
-			Renderer2D::BeginScene(camera, cameraTransform);
+			auto& cameraTransComp = m_ActiveCamera->GetComponent<TransformComponent>();
+			Renderer2D::BeginScene(camera, cameraTransComp.GetTransform());
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
 			{
-				auto [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				auto [transformComp, spriteComp] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-				Renderer2D::DrawSprite(transform, sprite);
+				Renderer2D::DrawSprite(transformComp.GetTransform(), spriteComp.Color);
 			}
 
 			Renderer2D::EndScene();
