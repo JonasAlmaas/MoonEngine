@@ -106,6 +106,8 @@ namespace Moon {
 		ImGuiIO& io = ImGui::GetIO();
 		ImGuiStyle& style = ImGui::GetStyle();
 
+		io.ConfigWindowsMoveFromTitleBarOnly = true;
+
 		style.Alpha = 1.0f;
 		style.DisabledAlpha = 1.0f;
 		style.WindowPadding = ImVec2(10.0f, 10.0f);
