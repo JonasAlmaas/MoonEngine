@@ -31,7 +31,7 @@ namespace Asteroid {
 		return s_Data.SelectionContext;
 	}
 
-	void EditorState::SetSelectionContext(const Entity& entity)
+	void EditorState::SetSelectionContext(Entity entity)
 	{
 		s_Data.SelectionContext = entity;
 	}

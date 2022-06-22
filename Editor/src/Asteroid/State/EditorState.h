@@ -13,7 +13,7 @@ namespace Asteroid {
 		static Ref<Framebuffer> GetFramebuffer();
 
 		static Entity GetSelectionContext();
-		static void SetSelectionContext(const Entity& entity);
+		static void SetSelectionContext(Entity entity = {});
 
 		static entt::registry* GetRegistry();
 		static void SetRegistry(entt::registry& reg);
