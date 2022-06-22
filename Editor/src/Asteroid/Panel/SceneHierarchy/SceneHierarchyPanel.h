@@ -11,7 +11,6 @@ namespace Asteroid {
 	{
 	public:
 		SceneHierarchyPanel() = default;
-		SceneHierarchyPanel(entt::registry& registry);
 		virtual ~SceneHierarchyPanel() = default;
 
 		virtual void OnAttach() override;
@@ -19,14 +18,9 @@ namespace Asteroid {
 		virtual void OnUpdate(Timestep ts) override;
 		virtual void OnImGuiRender() override;
 
-		void SetRegistry(entt::registry& registry);
-
 	private:
-		void RenderEntity(entt::entity ntityHandle);
+		void RenderEntity(entt::entity entityHandle);
 
-	private:
-		entt::registry* m_Registry = nullptr;
-		Entity m_SelectionContext;
 	};
 
 }

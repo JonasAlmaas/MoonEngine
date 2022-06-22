@@ -29,7 +29,6 @@ namespace Asteroid {
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ViewportPanel m_ViewportPanel;
 
-
 		Entity m_CameraEntity;
 		Entity m_SquareEntity;
 

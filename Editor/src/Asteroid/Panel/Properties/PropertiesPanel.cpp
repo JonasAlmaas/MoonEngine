@@ -1,6 +1,8 @@
 #include "aopch.h"
 #include "Asteroid/Panel/Properties/PropertiesPanel.h"
 
+#include "Asteroid/State/EditorState.h"
+
 
 namespace Asteroid {
 	

@@ -1,6 +1,8 @@
 #include "aopch.h"
 #include "Asteroid/Layer/Editor/EditorLayer.h"
 
+#include "Asteroid/State/EditorState.h"
+
 
 namespace Asteroid {
 
@@ -13,9 +15,12 @@ namespace Asteroid {
 	{
 		ME_PROFILE_FUNCTION();
 
+		EditorState::Init();
+
 		// Set up scene
 		m_ActiveScene = CreateRef<Scene>();
-		m_SceneHierarchyPanel.SetRegistry(m_ActiveScene->GetRegistry());
+
+		EditorState::SetRegistry(m_ActiveScene->GetRegistry());
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
 		m_CameraEntity.AddComponent<CameraComponent>();
@@ -133,17 +138,17 @@ namespace Asteroid {
 		// -------------------------
 
 		glm::vec2 viewportSize = m_ViewportPanel.GetSize();
-		if (FramebufferSpecification spec = m_ViewportPanel.GetFramebuffer()->GetSpecification(); viewportSize.x > 0.0f && viewportSize.y > 0.0f && (spec.Width != viewportSize.x || spec.Height != viewportSize.y))
+		if (FramebufferSpecification spec = EditorState::GetFramebuffer()->GetSpecification(); viewportSize.x > 0.0f && viewportSize.y > 0.0f && (spec.Width != viewportSize.x || spec.Height != viewportSize.y))
 		{
 			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 		}
 
 		// ---- Render ----
-		m_ViewportPanel.GetFramebuffer()->Bind();
+		EditorState::GetFramebuffer()->Bind();
 
 		m_ActiveScene->OnUpdate(ts);
 
-		m_ViewportPanel.GetFramebuffer()->Unbind();
+		EditorState::GetFramebuffer()->Unbind();
 	}
 
 	void EditorLayer::OnImGuiRender()
