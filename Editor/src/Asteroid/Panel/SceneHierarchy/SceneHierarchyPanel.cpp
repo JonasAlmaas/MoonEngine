@@ -22,18 +22,23 @@ namespace Asteroid {
     {
         ImGui::Begin("Scene Hierarchy");
 
-        EditorState::GetRegistry()->each(ME_BIND_EVENT_FN(SceneHierarchyPanel::RenderEntity));
+        EditorState::GetRegistry()->each([&](auto entityID)
+        {   
+            Entity entity{ EditorState::GetRegistry(), entityID };
+            DrawEntityNode(entity);
+        });
+
+        // Deselect by clicking the background
+        if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+        {
+            EditorState::SetSelectionContext();
+        }
 
         ImGui::End();
-
-        static bool show = true;
-        ImGui::ShowDemoWindow(&show);
     }
 
-    void SceneHierarchyPanel::RenderEntity(entt::entity entityHandle)
+    void SceneHierarchyPanel::DrawEntityNode(Entity entity)
     {
-        Entity entity{ EditorState::GetRegistry(), entityHandle };
-
         auto& tag = entity.GetComponent<TagComponent>().Tag;
 
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;

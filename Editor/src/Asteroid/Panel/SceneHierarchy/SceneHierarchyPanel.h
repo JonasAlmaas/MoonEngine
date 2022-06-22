@@ -19,7 +19,7 @@ namespace Asteroid {
 		virtual void OnImGuiRender() override;
 
 	private:
-		void RenderEntity(entt::entity entityHandle);
+		void DrawEntityNode(Entity entity);
 
 	};
 
