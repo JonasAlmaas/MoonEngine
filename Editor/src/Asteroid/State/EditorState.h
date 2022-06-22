@@ -15,8 +15,8 @@ namespace Asteroid {
 		static Entity GetSelectionContext();
 		static void SetSelectionContext(Entity entity = {});
 
-		static entt::registry* GetRegistry();
-		static void SetRegistry(entt::registry& reg);
+		static entt::registry* GetSceneRegistry();
+		static void SetSceneRegistry(entt::registry& reg);
 
 	};
 

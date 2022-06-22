@@ -20,7 +20,7 @@ namespace Asteroid {
 		// Set up scene
 		m_ActiveScene = CreateRef<Scene>();
 
-		EditorState::SetRegistry(m_ActiveScene->GetRegistry());
+		EditorState::SetSceneRegistry(m_ActiveScene->GetRegistry());
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
 		m_CameraEntity.AddComponent<CameraComponent>();

@@ -8,7 +8,7 @@ namespace Asteroid {
 	{
 		Ref<Framebuffer> Framebuffer;
 		Entity SelectionContext;
-		entt::registry* Registry;
+		entt::registry* SceneRegistry;
 	};
 
 	static EditorStateData s_Data;
@@ -36,14 +36,14 @@ namespace Asteroid {
 		s_Data.SelectionContext = entity;
 	}
 
-	entt::registry* EditorState::GetRegistry()
+	entt::registry* EditorState::GetSceneRegistry()
 	{
-		return s_Data.Registry;
+		return s_Data.SceneRegistry;
 	}
 
-	void EditorState::SetRegistry(entt::registry& reg)
+	void EditorState::SetSceneRegistry(entt::registry& reg)
 	{
-		s_Data.Registry = &reg;
+		s_Data.SceneRegistry = &reg;
 	}
 
 }

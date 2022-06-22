@@ -22,9 +22,9 @@ namespace Asteroid {
     {
         ImGui::Begin("Scene Hierarchy");
 
-        EditorState::GetRegistry()->each([&](auto entityID)
+        EditorState::GetSceneRegistry()->each([&](auto entityID)
         {   
-            Entity entity{ EditorState::GetRegistry(), entityID };
+            Entity entity{ EditorState::GetSceneRegistry(), entityID };
             DrawEntityNode(entity);
         });
 
