@@ -42,6 +42,21 @@ namespace Moon {
 			s_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}
 
+		inline static const unsigned char* GetGPUVendor()
+		{
+			return s_RendererAPI->GetGPUVendor();
+		}
+
+		inline static const unsigned char* GetGPUName()
+		{
+			return s_RendererAPI->GetGPUName();
+		}
+
+		inline static const unsigned char* GetGPUFirmwareVersion()
+		{
+			return s_RendererAPI->GetGPUFirmwareVersion();
+		}
+
 	private:
 		static Scope<RendererAPI> s_RendererAPI;
 

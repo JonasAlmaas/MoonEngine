@@ -11,7 +11,7 @@ namespace Moon {
 		WindowsUtilAPI();
 		virtual ~WindowsUtilAPI();
 
-		float GetTime();
+		virtual float GetTime() override;
 
 	};
 

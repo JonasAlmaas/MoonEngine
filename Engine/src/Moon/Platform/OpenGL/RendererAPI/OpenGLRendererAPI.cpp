@@ -69,4 +69,19 @@ namespace Moon {
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
+	const const unsigned char* OpenGLRendererAPI::GetGPUVendor()
+	{
+		return glGetString(GL_VENDOR);
+	}
+
+	const unsigned char* OpenGLRendererAPI::GetGPUName()
+	{
+		return glGetString(GL_RENDERER);
+	}
+
+	const unsigned char* OpenGLRendererAPI::GetGPUFirmwareVersion()
+	{
+		return glGetString(GL_VERSION);
+	}
+
 }
