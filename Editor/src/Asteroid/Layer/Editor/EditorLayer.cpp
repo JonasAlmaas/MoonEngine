@@ -109,6 +109,7 @@ namespace Asteroid {
 		// ---- Panel::OnAttach ----
 
 		m_PropertiesPanel.OnAttach();
+		m_RendererPanel.OnAttach();
 		m_SceneHierarchyPanel.OnAttach();
 		m_ViewportPanel.OnAttach();
 
@@ -122,6 +123,7 @@ namespace Asteroid {
 		// ---- Panel::OnDetach ----
 
 		m_PropertiesPanel.OnDetach();
+		m_RendererPanel.OnDetach();
 		m_SceneHierarchyPanel.OnDetach();
 		m_ViewportPanel.OnDetach();
 
@@ -135,6 +137,7 @@ namespace Asteroid {
 		// ---- Panel::OnUpdate ----
 		
 		m_PropertiesPanel.OnUpdate(ts);
+		m_RendererPanel.OnUpdate(ts);
 		m_SceneHierarchyPanel.OnUpdate(ts);
 		m_ViewportPanel.OnUpdate(ts);
 
@@ -219,6 +222,7 @@ namespace Asteroid {
 			// ---- Panels::OnImGuiRender ----
 			
 			m_PropertiesPanel.OnImGuiRender();
+			m_RendererPanel.OnImGuiRender();
 			m_SceneHierarchyPanel.OnImGuiRender();
 			m_ViewportPanel.OnImGuiRender();
 
@@ -232,8 +236,6 @@ namespace Asteroid {
 				ImGui::Text("Quads: %d", stats.QuadCount);
 				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
 				ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-				ImGui::Separator();
-				ImGui::Text("Fps: %d", (int)(1.0f / Application::Get().GetTimestep()));
 
 				ImGui::End();
 			}
