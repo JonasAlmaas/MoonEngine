@@ -16,18 +16,6 @@ namespace Moon {
 	{
 	}
 
-	Entity Scene::CreateEntity(const std::string& name)
-	{
-		Entity entity = Entity(&m_Registry);
-
-		entity.AddComponent<TransformComponent>();
-
-		auto& tagComp = entity.AddComponent<TagComponent>(name);
-		tagComp.Tag = name.empty() ? "Unnamed Entity" : name;
-
-		return entity;
-	}
-
 	void Scene::OnUpdate(Timestep ts)
 	{
 		// ---- Scripts ----
@@ -58,8 +46,15 @@ namespace Moon {
 			RenderCommand::Clear();
 
 			auto& camera = m_ActiveCamera->GetComponent<CameraComponent>();
-			auto& cameraTransComp = m_ActiveCamera->GetComponent<TransformComponent>();
-			Renderer2D::BeginScene(camera, cameraTransComp.GetTransform());
+
+			if (m_ActiveCamera->HasComponent<TransformComponent>())
+			{
+				auto& cameraTransComp = m_ActiveCamera->GetComponent<TransformComponent>();
+				Renderer2D::BeginScene(camera, cameraTransComp.GetTransform());
+			}
+			else {
+				Renderer2D::BeginScene(camera, glm::mat4(1.0f));
+			}
 
 			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 			for (auto entity : group)
@@ -91,6 +86,18 @@ namespace Moon {
 	void Scene::SetActiveCamera(Entity& camera)
 	{
 		m_ActiveCamera = &camera;
+	}
+
+	Entity Scene::CreateEntity(const std::string& name)
+	{
+		Entity entity = Entity(&m_Registry);
+
+		entity.AddComponent<TransformComponent>();
+
+		auto& tagComp = entity.AddComponent<TagComponent>(name);
+		tagComp.Tag = name.empty() ? "Unnamed Entity" : name;
+
+		return entity;
 	}
 
 }
