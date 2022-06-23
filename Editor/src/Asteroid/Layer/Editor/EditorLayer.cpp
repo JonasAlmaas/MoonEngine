@@ -24,7 +24,7 @@ namespace Asteroid {
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
 		m_CameraEntity.AddComponent<CameraComponent>();
-		m_ActiveScene->SetActiveCamera(m_CameraEntity);
+		m_ActiveScene->SetActiveCamera(m_CameraEntity);		
 
 		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
 		m_SquareEntity.AddComponent<SpriteRendererComponent>(Color(0.0, 1.0f, 0.0));
@@ -81,19 +81,22 @@ namespace Asteroid {
 
 			virtual void OnUpdate(Timestep ts) override
 			{
-				auto& transform = GetComponent<TransformComponent>();
+				if (HasComponent<TransformComponent>())
+				{
+					auto& transform = GetComponent<TransformComponent>();
 				
-				if (Input::IsKeyPressed(Key::W))
-					transform.Translation[1] += speed * ts;
+					if (Input::IsKeyPressed(Key::W))
+						transform.Translation[1] += speed * ts;
 
-				if (Input::IsKeyPressed(Key::S))
-					transform.Translation[1] -= speed * ts;
+					if (Input::IsKeyPressed(Key::S))
+						transform.Translation[1] -= speed * ts;
 
-				if (Input::IsKeyPressed(Key::A))
-					transform.Translation[0] -= speed * ts;
+					if (Input::IsKeyPressed(Key::A))
+						transform.Translation[0] -= speed * ts;
 
-				if (Input::IsKeyPressed(Key::D))
-					transform.Translation[0] += speed * ts;
+					if (Input::IsKeyPressed(Key::D))
+						transform.Translation[0] += speed * ts;
+				}
 			}
 
 		private:
