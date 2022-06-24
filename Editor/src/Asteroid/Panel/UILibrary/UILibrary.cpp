@@ -149,6 +149,54 @@ namespace Asteroid {
 		return changed;
 	}
 
+	bool UILibrary::DrawColor3Control(const std::string& label, float* value, bool isLast, float firstColumnWidth)
+	{
+		ImGui::PushID(label.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, firstColumnWidth);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		if (isLast)
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 9 });
+		else
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 4 });
+
+		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+		bool changed = ImGui::ColorEdit3("##Color", value);
+
+		ImGui::PopStyleVar();
+		ImGui::Columns(1);
+		ImGui::PopID();
+
+		return changed;
+	}
+
+	bool UILibrary::DrawColor4Control(const std::string& label, float* value, bool isLast, float firstColumnWidth)
+	{
+		ImGui::PushID(label.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, firstColumnWidth);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		if (isLast)
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 9 });
+		else
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 4 });
+
+		ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+		bool changed = ImGui::ColorEdit4("##Color", value);
+
+		ImGui::PopStyleVar();
+		ImGui::Columns(1);
+		ImGui::PopID();
+
+		return changed;
+	}
+
 	bool UILibrary::Checkbox(const std::string& label, bool* value, bool isLast, float firstColumnWidth)
 	{
 		ImGui::PushID(label.c_str());
@@ -166,9 +214,7 @@ namespace Asteroid {
 		bool changed = ImGui::Checkbox("##Checkbox", value);
 
 		ImGui::PopStyleVar();
-
 		ImGui::Columns(1);
-
 		ImGui::PopID();
 
 		return changed;

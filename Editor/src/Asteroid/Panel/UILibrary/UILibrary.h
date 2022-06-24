@@ -11,6 +11,9 @@ namespace Asteroid {
 		static bool DrawFloatControl(const std::string& label, float& value, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 175.0f);
 		static bool DrawFloat3Control(const std::string& label, glm::vec3& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 175.0f);
 
+		static bool DrawColor3Control(const std::string& label, float* value, bool isLast = false, float firstColumnWidth = 175.0f);
+		static bool DrawColor4Control(const std::string& label, float* value, bool isLast = false, float firstColumnWidth = 175.0f);
+
 		static bool Checkbox(const std::string& label, bool* value, bool isLast = false, float firstColumnWidth = 175.0f);
 
 		template<typename UIFunction>
