@@ -123,7 +123,7 @@ namespace Moon {
 		style.FramePadding = ImVec2(10.0f, 3.0f);
 		style.FrameRounding = 4.0f;
 		style.FrameBorderSize = 0.0f;
-		style.ItemSpacing = ImVec2(10.0f, 5.0f);
+		style.ItemSpacing = ImVec2(10.0f, 8.0f);
 		style.ItemInnerSpacing = ImVec2(5.0f, 5.0f);
 		style.CellPadding = ImVec2(4.0f, 2.0f);
 		style.TouchExtraPadding = ImVec2(0.0f, 0.0f);
