@@ -18,7 +18,7 @@ namespace Asteroid {
 
 	void RendererPanel::OnUpdate(Timestep ts)
 	{
-
+		m_FrameTime = ts;
 	}
 
 	void RendererPanel::OnImGuiRender()
@@ -28,10 +28,9 @@ namespace Asteroid {
 		ImGui::Text("Vendor: %s", m_GPUVendor);
 		ImGui::Text("Renderer: %s", m_GPUName);
 		ImGui::Text("Version: %s", m_GPUFirmwareVersion);
-
-		float frametime = Application::Get().GetTimestep();
-		ImGui::Text("Frame Time: %.2fms", frametime * 1000.0f);
-		ImGui::Text("Fps: %d", (int)(1.0f / frametime));
+		ImGui::Separator();
+		ImGui::Text("Frame Time: %.2fms", m_FrameTime * 1000.0f);
+		ImGui::Text("Fps: %d", (int)(1.0f / m_FrameTime));
 
 		ImGui::End();
 	}

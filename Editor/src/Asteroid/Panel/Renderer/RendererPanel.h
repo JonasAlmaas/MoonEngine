@@ -23,6 +23,8 @@ namespace Asteroid {
 		const unsigned char* m_GPUName;
 		const unsigned char* m_GPUFirmwareVersion;
 
+		float m_FrameTime;
+
 	};
 
 }
