@@ -134,6 +134,13 @@ namespace Asteroid {
 	{
 		ME_PROFILE_FUNCTION();
 
+		// -- Resize --
+		glm::vec2 viewportSize = m_ViewportPanel.GetSize();
+		if (FramebufferSpecification spec = EditorState::GetFramebuffer()->GetSpecification(); viewportSize.x > 0.0f && viewportSize.y > 0.0f && (spec.Width != viewportSize.x || spec.Height != viewportSize.y))
+		{
+			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+		}
+
 		// ---- Panel::OnUpdate ----
 		
 		m_PropertiesPanel.OnUpdate(ts);
@@ -143,11 +150,6 @@ namespace Asteroid {
 
 		// -------------------------
 
-		glm::vec2 viewportSize = m_ViewportPanel.GetSize();
-		if (FramebufferSpecification spec = EditorState::GetFramebuffer()->GetSpecification(); viewportSize.x > 0.0f && viewportSize.y > 0.0f && (spec.Width != viewportSize.x || spec.Height != viewportSize.y))
-		{
-			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
-		}
 
 		// ---- Render ----
 		EditorState::GetFramebuffer()->Bind();
