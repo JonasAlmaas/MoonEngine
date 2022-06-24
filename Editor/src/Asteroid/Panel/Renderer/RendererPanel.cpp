@@ -1,6 +1,8 @@
 #include "aopch.h"
 #include "Asteroid/Panel/Renderer/RendererPanel.h"
 
+#include "Asteroid/Panel/UILibrary/UILibrary.h"
+
 
 namespace Asteroid {
 
@@ -9,6 +11,8 @@ namespace Asteroid {
 		m_GPUVendor = RenderCommand::GetGPUVendor();
 		m_GPUName = RenderCommand::GetGPUName();
 		m_GPUFirmwareVersion = RenderCommand::GetGPUFirmwareVersion();
+
+		m_IsVSync = Application::Get().GetWindow().IsVSync();
 	}
 
 	void RendererPanel::OnDetach()
@@ -31,6 +35,9 @@ namespace Asteroid {
 		ImGui::Separator();
 		ImGui::Text("Frame Time: %.2fms", m_FrameTime * 1000.0f);
 		ImGui::Text("Fps: %d", (int)(1.0f / m_FrameTime));
+
+		if (UILibrary::Checkbox("VSync", &m_IsVSync))
+			Application::Get().GetWindow().SetVSync(m_IsVSync);
 
 		ImGui::End();
 	}
