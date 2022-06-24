@@ -8,8 +8,8 @@ namespace Asteroid {
 	class UILibrary
 	{
 	public:
-		static bool DrawFloatControl(const std::string& label, float& value, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 125.0f);
-		static void DrawFloat3Control(const std::string& label, glm::vec3& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 125.0f);
+		static bool DrawFloatControl(const std::string& label, float& value, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 175.0f);
+		static bool DrawFloat3Control(const std::string& label, glm::vec3& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 175.0f);
 
 		template<typename UIFunction>
 		static void DrawCombo(const std::string& label, const char* options[], uint32_t optionsCount, uint32_t activeIndex, auto& component, UIFunction uiFunction, bool isLast = false, float firstColumnWidth = 125.0f)

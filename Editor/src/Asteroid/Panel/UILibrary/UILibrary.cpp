@@ -49,8 +49,10 @@ namespace Asteroid {
 		return hasChanged;
 	}
 
-	void UILibrary::DrawFloat3Control(const std::string& label, glm::vec3& values, float speed, float resetValue, bool isLast, float firstColumnWidth)
+	bool UILibrary::DrawFloat3Control(const std::string& label, glm::vec3& values, float speed, float resetValue, bool isLast, float firstColumnWidth)
 	{
+		bool changed = false;
+
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
 
@@ -88,7 +90,8 @@ namespace Asteroid {
 
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(sliderWidth);
-			ImGui::DragFloat("##X", &values.x, speed, 0.0f, 0.0f, "%.2f");
+			if (ImGui::DragFloat("##X", &values.x, speed, 0.0f, 0.0f, "%.2f"))
+				changed = true;
 		}
 
 		// -- Y --
@@ -110,7 +113,8 @@ namespace Asteroid {
 
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(sliderWidth);
-			ImGui::DragFloat("##Y", &values.y, speed, 0.0f, 0.0f, "%.2f");
+			if (ImGui::DragFloat("##Y", &values.y, speed, 0.0f, 0.0f, "%.2f"))
+				changed = true;
 		}
 
 		// -- Z --
@@ -132,7 +136,8 @@ namespace Asteroid {
 
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(sliderWidth);
-			ImGui::DragFloat("##Z", &values.z, speed, 0.0f, 0.0f, "%.2f");
+			if (ImGui::DragFloat("##Z", &values.z, speed, 0.0f, 0.0f, "%.2f"))
+				changed = true;
 		}
 
 		ImGui::PopStyleVar();
@@ -140,6 +145,9 @@ namespace Asteroid {
 		ImGui::Columns(1);
 
 		ImGui::PopID();
+
+		return changed;
+	}
 	}
 
 }
