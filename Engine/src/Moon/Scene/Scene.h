@@ -18,6 +18,7 @@ namespace Moon {
 		void SetActiveCamera(Entity& camera);
 
 		Entity CreateEntity(const std::string& name = std::string());
+		void DestroyEntity(Entity entity);
 
 		entt::registry& GetRegistry() { return m_Registry; }
 
