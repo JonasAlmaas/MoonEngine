@@ -128,7 +128,7 @@ namespace Asteroid {
 							camera.SetPerspectiveNearClip(perspecNearClip);
 
 						float perspecFarClip = camera.GetPerspectiveFarClip();
-						if (UILibrary::DrawFloatControl("Far Clip", perspecFarClip, 1.0f, 10000.0f, true))
+						if (UILibrary::DrawFloatControl("Far Clip", perspecFarClip, 1.0f, 10000.0f))
 							camera.SetPerspectiveFarClip(perspecFarClip);
 
 						break;
@@ -144,7 +144,7 @@ namespace Asteroid {
 							camera.SetOrthographicNearClip(orthoNearClip);
 
 						float orthoFarClip = camera.GetOrthographicFarClip();
-						if (UILibrary::DrawFloatControl("Far Clip", orthoFarClip, 0.01f, 1.0f, true))
+						if (UILibrary::DrawFloatControl("Far Clip", orthoFarClip, 0.01f, 1.0f))
 							camera.SetOrthographicFarClip(orthoFarClip);
 
 						break;
@@ -155,6 +155,8 @@ namespace Asteroid {
 						break;
 					}
 				}
+
+				UILibrary::Checkbox("Fixed Aspect Ratio", &component.FixedAspectRatio, true);
 
 			});
 
