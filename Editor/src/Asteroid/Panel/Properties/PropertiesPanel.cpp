@@ -6,7 +6,7 @@
 
 namespace Asteroid {
 
-	static void DrawVec3Control(const std::string& label, glm::vec3& values, float resetValue = 0.0f, float columnWidth = 100.0f)
+	static bool DrawFloatControl(const std::string& label, float &value, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 125.0f)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -14,17 +14,62 @@ namespace Asteroid {
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, columnWidth);
+		ImGui::SetColumnWidth(0, firstColumnWidth);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 2 });
-		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0);
+		if (isLast)
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 9 });
+		else
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 4 });
+
+		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+		ImVec2 buttonSize = { lineHeight, lineHeight };
+
+		float sliderWidth = ImGui::GetContentRegionAvail().x - buttonSize.x - 4;
+			
+		ImGui::SetNextItemWidth(sliderWidth);
+		bool hasChanged = ImGui::DragFloat("##X", &value, speed, 0.0f, 0.0f, "%.2f");
+
+		ImGui::PushFont(boldFont);
+		ImGui::SameLine();
+		if (ImGui::Button("<", buttonSize))
+		{
+			value = resetValue;
+			hasChanged = true;
+		}
+		ImGui::PopFont();
+
+		ImGui::PopStyleVar();
+
+		ImGui::Columns(1);
+
+		ImGui::PopID();
+
+		return hasChanged;
+	}
+
+	static void DrawFloat3Control(const std::string& label, glm::vec3& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 125.0f)
+	{
+		ImGuiIO& io = ImGui::GetIO();
+		auto boldFont = io.Fonts->Fonts[0];
+
+		ImGui::PushID(label.c_str());
+
+		ImGui::Columns(2);
+		ImGui::SetColumnWidth(0, firstColumnWidth);
+		ImGui::Text(label.c_str());
+		ImGui::NextColumn();
+
+		if (isLast)
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 9 });
+		else
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 4 });
 
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
 
-		float sliderWidth = ImGui::GetContentRegionAvail().x / 3.0f - buttonSize.x;
+		float sliderWidth = ImGui::GetContentRegionAvail().x / 3.0f - buttonSize.x - 6;
 
 		// -- X --
 		{
@@ -41,7 +86,7 @@ namespace Asteroid {
 
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(sliderWidth);
-			ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##X", &values.x, speed, 0.0f, 0.0f, "%.2f");
 		}
 
 		// -- Y --
@@ -58,7 +103,7 @@ namespace Asteroid {
 
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(sliderWidth);
-			ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##Y", &values.y, speed, 0.0f, 0.0f, "%.2f");
 		}
 
 		// -- Z --
@@ -75,10 +120,10 @@ namespace Asteroid {
 
 			ImGui::SameLine();
 			ImGui::SetNextItemWidth(sliderWidth);
-			ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
+			ImGui::DragFloat("##Z", &values.z, speed, 0.0f, 0.0f, "%.2f");
 		}
 
-		ImGui::PopStyleVar(2);
+		ImGui::PopStyleVar();
 
 		ImGui::Columns(1);
 
@@ -86,7 +131,7 @@ namespace Asteroid {
 	}
 
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const std::string& name, Entity entity, UIFunction uiFunction)
+	static void DrawComponent(const std::string& name, Entity entity, bool allowRemove, UIFunction uiFunction)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 		if (entity.HasComponent<T>())
@@ -102,19 +147,22 @@ namespace Asteroid {
 			bool open = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), treeNodeFlags, name.c_str());
 			ImGui::PopStyleVar();
 
-			ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
-			if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
-			{
-				ImGui::OpenPopup("ComponentSettings");
-			}
-
 			bool removeComponent = false;
-			if (ImGui::BeginPopup("ComponentSettings"))
+			if (allowRemove)
 			{
-				if (ImGui::MenuItem("Remove component"))
-					removeComponent = true;
+				ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
+				if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
+				{
+					ImGui::OpenPopup("ComponentSettings");
+				}
 
-				ImGui::EndPopup();
+				if (ImGui::BeginPopup("ComponentSettings"))
+				{
+					if (ImGui::MenuItem("Remove component"))
+						removeComponent = true;
+
+					ImGui::EndPopup();
+				}
 			}
 
 			if (open)
@@ -168,20 +216,101 @@ namespace Asteroid {
 			}
 
 			// -- Transform Component --
-			DrawComponent<TransformComponent>("Transform", selectionContext, [](auto& component)
+			DrawComponent<TransformComponent>("Transform", selectionContext, true, [](TransformComponent& component)
 			{
-				DrawVec3Control("Translation", component.Translation);
+				DrawFloat3Control("Translation", component.Translation, 0.01f);
+				
 				glm::vec3 rotation = glm::degrees(component.Rotation);
-				DrawVec3Control("Rotation", rotation);
+				DrawFloat3Control("Rotation", rotation, 0.01f);
 				component.Rotation = glm::radians(rotation);
-				DrawVec3Control("Scale", component.Scale, 1.0f);
+
+				DrawFloat3Control("Scale", component.Scale, 0.01f, 1.0f, true);
 			});
 
 			// -- Camera Component --
-			if (selectionContext.HasComponent<CameraComponent>())
+			DrawComponent<CameraComponent>("Camera", selectionContext, false, [](CameraComponent& component)
 			{
+				auto& camera = component.Camera;
 
-			}
+				ImGui::PushID("Projection");
+
+				ImGui::Columns(2);
+				ImGui::SetColumnWidth(0, 125.0f);
+				ImGui::Text("Projection");
+				ImGui::NextColumn();
+
+				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 4 });
+
+				const char* projectionTypeStrings[] = { "Perspective", "Orthographic" };
+				const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.GetProjectionType()];
+
+				ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+				if (ImGui::BeginCombo("##Projection", currentProjectionTypeString))
+				{
+					for (int i = 0; i < 2; i++)
+					{
+						bool isSelected = currentProjectionTypeString == projectionTypeStrings[i];
+						if (ImGui::Selectable(projectionTypeStrings[i], isSelected))
+						{
+							currentProjectionTypeString = projectionTypeStrings[i];
+							camera.SetProjectionType((SceneCamera::ProjectionType)i);
+						}
+
+						if (isSelected)
+							ImGui::SetItemDefaultFocus();
+					}
+
+					ImGui::EndCombo();
+				}
+
+				ImGui::PopStyleVar();
+
+				ImGui::Columns(1);
+
+				ImGui::PopID();
+
+				switch (camera.GetProjectionType())
+				{
+					case SceneCamera::ProjectionType::Perspective:
+					{
+						float perspecVerticalFOV = camera.GetPerspectiveVerticalFOV();
+						if (DrawFloatControl("Vertical FOV", perspecVerticalFOV, 0.5f, 45.0f))
+							camera.SetPerspectiveVerticalFOV(perspecVerticalFOV);
+
+						float perspecNearClip = camera.GetPerspectiveNearClip();
+						if (DrawFloatControl("Near Clip", perspecNearClip, 0.1f, 0.01f))
+							camera.SetPerspectiveNearClip(perspecNearClip);
+
+						float perspecFarClip = camera.GetPerspectiveFarClip();
+						if (DrawFloatControl("Far Clip", perspecFarClip, 1.0f, 10000.0f, true))
+							camera.SetPerspectiveFarClip(perspecFarClip);
+
+						break;
+					}
+					case SceneCamera::ProjectionType::Orthographic:
+					{
+						float orthoSize = camera.GetOrthographicSize();
+						if (DrawFloatControl("Size", orthoSize, 0.1f, 10.0f))
+							camera.SetOrthographicSize(orthoSize);
+
+						float orthoNearClip = camera.GetOrthographicNearClip();
+						if (DrawFloatControl("Near Clip", orthoNearClip, 0.01f, -1.0f))
+							camera.SetOrthographicNearClip(orthoNearClip);
+
+						float orthoFarClip = camera.GetOrthographicFarClip();
+						if (DrawFloatControl("Far Clip", orthoFarClip, 0.01f, 1.0f, true))
+							camera.SetOrthographicFarClip(orthoFarClip);
+
+						break;
+					}
+					default:
+					{
+						ME_CORE_ASSERT(false, "Unknown ProjectionType");
+						break;
+					}
+				}
+
+			});
 
 			// -- Sprite Renderer Component --
 			if (selectionContext.HasComponent<SpriteRendererComponent>())
