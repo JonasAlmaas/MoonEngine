@@ -11,7 +11,7 @@ namespace Moon {
 	public:
 		inline MouseCode GetMouseButton() const { return m_Button; }
 
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse | EventCategoryMouseButton)
 
 	protected:
 		MouseButtonEvent(const MouseCode button)
@@ -66,7 +66,7 @@ namespace Moon {
 		}
 
 		EVENT_CLASS_TYPE(MouseMoved)
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
 
 	private:
 		float m_MouseX, m_MouseY;
@@ -88,7 +88,7 @@ namespace Moon {
 		}
 
 		EVENT_CLASS_TYPE(MouseScrolled)
-		EVENT_CLASS_CATEGORY(EventCategoryMouse | EventCategoryInput)
+		EVENT_CLASS_CATEGORY(EventCategoryInput | EventCategoryMouse)
 
 	private:
 		float m_XOffset, m_YOffset;
