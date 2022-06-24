@@ -9,17 +9,6 @@ namespace Moon {
 		RecalculateProjection();
 	}
 
-	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
-	{
-		m_ProjectionType = ProjectionType::Orthographic;
-
-		m_OrthographicSize = size;
-		m_OrthographicNear = nearClip;
-		m_OrthographicFar = farClip;
-
-		RecalculateProjection();
-	}
-
 	void SceneCamera::SetPerspective(float verticalFov, float nearClip, float farClip)
 	{
 		m_ProjectionType = ProjectionType::Perspective;
@@ -27,6 +16,17 @@ namespace Moon {
 		m_PerspectiveFOV = verticalFov;
 		m_PerspectiveNear = nearClip;
 		m_PerspectiveFar = farClip;
+
+		RecalculateProjection();
+	}
+
+	void SceneCamera::SetOrthographic(float size, float nearClip, float farClip)
+	{
+		m_ProjectionType = ProjectionType::Orthographic;
+
+		m_OrthographicSize = size;
+		m_OrthographicNear = nearClip;
+		m_OrthographicFar = farClip;
 
 		RecalculateProjection();
 	}
