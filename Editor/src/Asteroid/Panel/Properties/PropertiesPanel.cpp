@@ -161,10 +161,10 @@ namespace Asteroid {
 			});
 
 			// -- Sprite Renderer Component --
-			if (selectionContext.HasComponent<SpriteRendererComponent>())
+			DrawComponent<SpriteRendererComponent>("Sprite Renderer", selectionContext, false, [](SpriteRendererComponent& component)
 			{
-
-			}
+				UILibrary::DrawColor4Control("Color", component.Color);
+			});
 		}
 
 		ImGui::End();
