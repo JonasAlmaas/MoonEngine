@@ -18,12 +18,13 @@ namespace Asteroid {
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
-		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 2 });
 		ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0);
 
 		float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
 		ImVec2 buttonSize = { lineHeight + 3.0f, lineHeight };
+
+		float sliderWidth = ImGui::GetContentRegionAvail().x / 3.0f - buttonSize.x;
 
 		// -- X --
 		{
@@ -39,8 +40,8 @@ namespace Asteroid {
 			ImGui::PopStyleColor(3);
 
 			ImGui::SameLine();
+			ImGui::SetNextItemWidth(sliderWidth);
 			ImGui::DragFloat("##X", &values.x, 0.1f, 0.0f, 0.0f, "%.2f");
-			ImGui::PopItemWidth();
 		}
 
 		// -- Y --
@@ -56,8 +57,8 @@ namespace Asteroid {
 			ImGui::PopStyleColor(3);
 
 			ImGui::SameLine();
+			ImGui::SetNextItemWidth(sliderWidth);
 			ImGui::DragFloat("##Y", &values.y, 0.1f, 0.0f, 0.0f, "%.2f");
-			ImGui::PopItemWidth();
 		}
 
 		// -- Z --
@@ -73,8 +74,8 @@ namespace Asteroid {
 			ImGui::PopStyleColor(3);
 
 			ImGui::SameLine();
+			ImGui::SetNextItemWidth(sliderWidth);
 			ImGui::DragFloat("##Z", &values.z, 0.1f, 0.0f, 0.0f, "%.2f");
-			ImGui::PopItemWidth();
 		}
 
 		ImGui::PopStyleVar(2);
