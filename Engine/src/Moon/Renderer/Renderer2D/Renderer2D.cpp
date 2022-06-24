@@ -130,24 +130,14 @@ namespace Moon {
 		delete[] s_Data.QuadVertexBufferBase;
 	}
 
-	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	void Renderer2D::BeginScene(const glm::mat4& cameraProj, const glm::mat4& transform)
 	{
 		ME_PROFILE_FUNCTION();
 
-		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(transform);
+		glm::mat4 viewProj = cameraProj * glm::inverse(transform);
 
 		s_Data.Shader->Bind();
 		s_Data.Shader->SetMat4("u_ViewProjection", viewProj);
-
-		StartBatch();
-	}
-
-	void Renderer2D::BeginScene(const OrthographicCamera& camera)
-	{
-		ME_PROFILE_FUNCTION();
-
-		s_Data.Shader->Bind();
-		s_Data.Shader->SetMat4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
 		StartBatch();
 	}
