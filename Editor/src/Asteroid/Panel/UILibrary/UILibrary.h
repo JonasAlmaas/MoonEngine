@@ -14,12 +14,12 @@ namespace Asteroid {
 		static bool Checkbox(const std::string& label, bool* value, bool isLast = false, float firstColumnWidth = 175.0f);
 
 		template<typename UIFunction>
-		static void DrawCombo(const std::string& label, const char* options[], uint32_t optionsCount, uint32_t activeIndex, auto& component, UIFunction uiFunction, bool isLast = false, float firstColumnWidth = 125.0f)
+		static void DrawCombo(const std::string& label, const char* options[], uint32_t optionsCount, uint32_t activeIndex, auto& component, UIFunction uiFunction, bool isLast = false, float firstColumnWidth = 175.0f)
 		{
 			ImGui::PushID(label.c_str());
 
 			ImGui::Columns(2);
-			ImGui::SetColumnWidth(0, 125.0f);
+			ImGui::SetColumnWidth(0, firstColumnWidth);
 			ImGui::Text("Projection");
 			ImGui::NextColumn();
 
