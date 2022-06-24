@@ -38,12 +38,15 @@ namespace Moon {
 
 		// ---- Renderer2D ----
 		{
-			if (m_ActiveCamera == nullptr)
-				return;
-
 			Renderer2D::ResetStats();
 			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 			RenderCommand::Clear();
+
+			if (m_ActiveCamera == nullptr)
+				return;
+
+			if (!m_ActiveCamera->HasComponent<CameraComponent>())
+				return;
 
 			auto& camera = m_ActiveCamera->GetComponent<CameraComponent>().Camera;
 

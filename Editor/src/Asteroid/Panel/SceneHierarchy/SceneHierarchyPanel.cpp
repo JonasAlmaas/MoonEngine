@@ -30,11 +30,30 @@ namespace Asteroid {
 
         // Deselect by clicking the background
         if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-        {
             EditorState::SetSelectionContext();
-        }
 
-        ImGui::End();
+		// Right click blank space
+		if (ImGui::BeginPopupContextWindow(0, 1, false))
+		{
+			if (ImGui::MenuItem("Create Empty Entity"))
+			{
+				EditorState::GetActiveScene()->CreateEntity("Empty Entity");
+			}
+
+			ImGui::EndPopup();
+		}
+
+		// Right click an entity
+		//if (ImGui::BeginPopupContextWindow(0, 1, true))
+		//{
+		//	if (ImGui::MenuItem("Remove Entity"))
+		//	{
+		//		//EditorState::GetActiveScene()->DestroyEntity();
+		//	}
+		//	ImGui::EndPopup();
+		//}
+
+		ImGui::End();
     }
 
     void SceneHierarchyPanel::DrawEntityNode(Entity entity)
@@ -51,12 +70,34 @@ namespace Asteroid {
         bool open = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
         if (ImGui::IsItemClicked())
-            EditorState::SetSelectionContext(entity);
+			EditorState::SetSelectionContext(entity);
+
+		bool entityDeleted = false;
+		if (ImGui::BeginPopupContextItem())
+		{
+			if (ImGui::MenuItem("Delete Entity"))
+				entityDeleted = true;
+
+			ImGui::EndPopup();
+		}
 
         if (open)
-        {
             ImGui::TreePop();
-        }
+
+		if (entityDeleted)
+		{
+			if (EditorState::GetSelectionContext() == entity)
+				EditorState::SetSelectionContext({});
+
+			Entity* camera = &EditorState::GetActiveScene()->GetActiveCamera();
+			if (camera != nullptr)
+			{
+				if (*camera == entity)
+					EditorState::GetActiveScene()->RemoveActiveCamera();
+			}
+
+			EditorState::GetActiveScene()->DestroyEntity(entity);
+		}
     }
 
 }

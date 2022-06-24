@@ -8,7 +8,7 @@
 namespace Asteroid {
 
 	template<typename T, typename UIFunction>
-	static void DrawComponent(const std::string& name, Entity entity, bool allowRemove, UIFunction uiFunction)
+	static void DrawComponent(const std::string& name, Entity entity, UIFunction uiFunction)
 	{
 		const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
 		if (entity.HasComponent<T>())
@@ -25,21 +25,18 @@ namespace Asteroid {
 			ImGui::PopStyleVar();
 
 			bool removeComponent = false;
-			if (allowRemove)
+			ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
+			if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
 			{
-				ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
-				if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
-				{
-					ImGui::OpenPopup("ComponentSettings");
-				}
+				ImGui::OpenPopup("ComponentSettings");
+			}
 
-				if (ImGui::BeginPopup("ComponentSettings"))
-				{
-					if (ImGui::MenuItem("Remove component"))
-						removeComponent = true;
+			if (ImGui::BeginPopup("ComponentSettings"))
+			{
+				if (ImGui::MenuItem("Remove component"))
+					removeComponent = true;
 
-					ImGui::EndPopup();
-				}
+				ImGui::EndPopup();
 			}
 
 			if (open)
@@ -93,7 +90,7 @@ namespace Asteroid {
 			}
 
 			// -- Transform Component --
-			DrawComponent<TransformComponent>("Transform", selectionContext, true, [](TransformComponent& component)
+			DrawComponent<TransformComponent>("Transform", selectionContext, [](TransformComponent& component)
 			{
 				UILibrary::DrawFloat3Control("Translation", component.Translation, 0.01f);
 				
@@ -105,7 +102,7 @@ namespace Asteroid {
 			});
 
 			// -- Camera Component --
-			DrawComponent<CameraComponent>("Camera", selectionContext, false, [](CameraComponent& component)
+			DrawComponent<CameraComponent>("Camera", selectionContext, [](CameraComponent& component)
 			{
 				auto& camera = component.Camera;
 
@@ -161,7 +158,7 @@ namespace Asteroid {
 			});
 
 			// -- Sprite Renderer Component --
-			DrawComponent<SpriteRendererComponent>("Sprite Renderer", selectionContext, false, [](SpriteRendererComponent& component)
+			DrawComponent<SpriteRendererComponent>("Sprite Renderer", selectionContext, [](SpriteRendererComponent& component)
 			{
 				UILibrary::DrawColor4Control("Color", component.Color);
 			});

@@ -7,8 +7,8 @@ namespace Asteroid {
 	struct EditorStateData
 	{
 		Ref<Framebuffer> Framebuffer;
+		Ref<Scene> ActiveScene;
 		Entity SelectionContext;
-		entt::registry* SceneRegistry;
 	};
 
 	static EditorStateData s_Data;
@@ -26,6 +26,16 @@ namespace Asteroid {
 		return s_Data.Framebuffer;
 	}
 
+	void EditorState::SetActiveScene(Ref<Scene>& scene)
+	{
+		s_Data.ActiveScene = scene;
+	}
+
+	Ref<Scene> EditorState::GetActiveScene()
+	{
+		return s_Data.ActiveScene;
+	}
+
 	Entity EditorState::GetSelectionContext()
 	{
 		return s_Data.SelectionContext;
@@ -38,12 +48,7 @@ namespace Asteroid {
 
 	entt::registry* EditorState::GetSceneRegistry()
 	{
-		return s_Data.SceneRegistry;
-	}
-
-	void EditorState::SetSceneRegistry(entt::registry& reg)
-	{
-		s_Data.SceneRegistry = &reg;
+		return &s_Data.ActiveScene->GetRegistry();
 	}
 
 }
