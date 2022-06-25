@@ -81,19 +81,22 @@ namespace Asteroid {
 
 			virtual void OnUpdate(Timestep ts) override
 			{
-				auto& transform = GetComponent<TransformComponent>();
+				if (HasComponent<TransformComponent>())
+				{
+					auto& transform = GetComponent<TransformComponent>();
 
-				if (Input::IsKeyPressed(Key::W))
-					transform.Translation[1] += speed * ts;
+					if (Input::IsKeyPressed(Key::W))
+						transform.Translation[1] += speed * ts;
 
-				if (Input::IsKeyPressed(Key::S))
-					transform.Translation[1] -= speed * ts;
+					if (Input::IsKeyPressed(Key::S))
+						transform.Translation[1] -= speed * ts;
 
-				if (Input::IsKeyPressed(Key::A))
-					transform.Translation[0] -= speed * ts;
+					if (Input::IsKeyPressed(Key::A))
+						transform.Translation[0] -= speed * ts;
 
-				if (Input::IsKeyPressed(Key::D))
-					transform.Translation[0] += speed * ts;
+					if (Input::IsKeyPressed(Key::D))
+						transform.Translation[0] += speed * ts;
+				}
 			}
 
 		private:
