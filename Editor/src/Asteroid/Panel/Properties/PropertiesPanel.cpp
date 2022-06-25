@@ -41,7 +41,7 @@ namespace Asteroid {
 
 			if (open)
 			{
-				uiFunction(component);
+				uiFunction(entity, component);
 				ImGui::TreePop();
 			}
 
@@ -124,7 +124,7 @@ namespace Asteroid {
 			}
 
 			// -- Transform Component --
-			DrawComponent<TransformComponent>("Transform", selectionContext, [](TransformComponent& component)
+			DrawComponent<TransformComponent>("Transform", selectionContext, [](Entity& entity, TransformComponent& component)
 			{
 				UILibrary::DrawFloat3Control("Translation", component.Translation, 0.01f);
 				
@@ -136,7 +136,7 @@ namespace Asteroid {
 			});
 
 			// -- Camera Component --
-			DrawComponent<CameraComponent>("Camera", selectionContext, [](CameraComponent& component)
+			DrawComponent<CameraComponent>("Camera", selectionContext, [](Entity& entity, CameraComponent& component)
 			{
 				auto& camera = component.Camera;
 
@@ -185,14 +185,24 @@ namespace Asteroid {
 						ME_CORE_ASSERT(false, "Unknown ProjectionType");
 						break;
 					}
+
 				}
 
-				UILibrary::Checkbox("Fixed Aspect Ratio", &component.FixedAspectRatio, true);
+				UILibrary::Checkbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
 
+				bool isActiveCamera = EditorState::GetActiveScene()->GetActiveCamera() == entity;
+				if (UILibrary::Checkbox("Active Camera", &isActiveCamera, true))
+				{
+					if (isActiveCamera)
+						EditorState::GetActiveScene()->SetActiveCamera(entity);
+					else {
+						EditorState::GetActiveScene()->SetActiveCamera({});
+					}
+				}
 			});
 
 			// -- Sprite Renderer Component --
-			DrawComponent<SpriteRendererComponent>("Sprite Renderer", selectionContext, [](SpriteRendererComponent& component)
+			DrawComponent<SpriteRendererComponent>("Sprite Renderer", selectionContext, [](Entity& entity, SpriteRendererComponent& component)
 			{
 				UILibrary::DrawColor4Control("Color", component.Color);
 			});
