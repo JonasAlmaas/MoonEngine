@@ -19,7 +19,6 @@ namespace Asteroid {
 
 		// Set up scene
 		m_ActiveScene = CreateRef<Scene>();
-
 		EditorState::SetActiveScene(m_ActiveScene);
 
 		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
