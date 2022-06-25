@@ -79,12 +79,9 @@ namespace Asteroid {
 			if (EditorState::GetSelectionContext() == entity)
 				EditorState::SetSelectionContext({});
 
-			Entity* camera = &EditorState::GetActiveScene()->GetActiveCamera();
-			if (camera != nullptr)
-			{
-				if (*camera == entity)
-					EditorState::GetActiveScene()->RemoveActiveCamera();
-			}
+			Entity camera = EditorState::GetActiveScene()->GetActiveCamera();
+			if (camera && camera == entity)
+				EditorState::GetActiveScene()->SetActiveCamera({});
 
 			EditorState::GetActiveScene()->DestroyEntity(entity);
 		}

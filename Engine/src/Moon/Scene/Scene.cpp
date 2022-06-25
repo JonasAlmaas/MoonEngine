@@ -42,17 +42,17 @@ namespace Moon {
 			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 			RenderCommand::Clear();
 
-			if (m_ActiveCamera == nullptr)
+			if (!m_ActiveCamera)
 				return;
 
-			if (!m_ActiveCamera->HasComponent<CameraComponent>())
+			if (!m_ActiveCamera.HasComponent<CameraComponent>())
 				return;
 
-			auto& camera = m_ActiveCamera->GetComponent<CameraComponent>().Camera;
+			auto& camera = m_ActiveCamera.GetComponent<CameraComponent>().Camera;
 
-			if (m_ActiveCamera->HasComponent<TransformComponent>())
+			if (m_ActiveCamera.HasComponent<TransformComponent>())
 			{
-				auto& cameraTransComp = m_ActiveCamera->GetComponent<TransformComponent>();
+				auto& cameraTransComp = m_ActiveCamera.GetComponent<TransformComponent>();
 				Renderer2D::BeginScene(camera.GetProjection(), cameraTransComp.GetTransform());
 			}
 			else {
@@ -86,9 +86,16 @@ namespace Moon {
 		}
 	}
 
-	void Scene::SetActiveCamera(Entity& camera)
+	void Scene::SetActiveCamera(Entity camera)
 	{
-		m_ActiveCamera = &camera;
+		m_ActiveCamera = camera;
+
+		if (m_ActiveCamera)
+		{
+			// TODO: If you have a fixed aspect ratio this might be an issue. It kinda just updates the aspect ratio when setting it as active.
+			if (m_ViewportWidth != 0 && m_ViewportHeight != 0)
+				camera.GetComponent<CameraComponent>().Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+		}
 	}
 
 	Entity Scene::CreateEntity(const std::string& name)
