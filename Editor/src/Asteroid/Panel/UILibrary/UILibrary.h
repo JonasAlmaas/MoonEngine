@@ -26,7 +26,7 @@ namespace Asteroid {
 			ImGui::Text("Projection");
 			ImGui::NextColumn();
 
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 4 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 7 });
 
 			ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
 			if (ImGui::BeginCombo("##Combo", options[activeIndex]))

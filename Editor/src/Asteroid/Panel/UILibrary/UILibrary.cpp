@@ -17,7 +17,7 @@ namespace Asteroid {
 		ImGui::NextColumn();
 
 		if (isLast)
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 9 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 6 });
 		else
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 4 });
 
@@ -64,7 +64,7 @@ namespace Asteroid {
 		ImGui::NextColumn();
 
 		if (isLast)
-			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 9 });
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 6 });
 		else
 			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 4, 4 });
 
