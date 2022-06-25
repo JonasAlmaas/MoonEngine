@@ -70,9 +70,12 @@ namespace Asteroid {
 
 		if (selectionContext)
 		{
-			// -- Tag Component --
+			// -- Tag Component -- and add component
 			if (selectionContext.HasComponent<TagComponent>())
 			{
+				ImVec2 contentRegionAvailable = ImGui::GetContentRegionAvail();
+				float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+
 				auto& tag = selectionContext.GetComponent<TagComponent>().Tag;
 
 				char buffer[256];
@@ -81,12 +84,43 @@ namespace Asteroid {
 
 				ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
 
-				ImGui::PushItemWidth(-1);
+				ImGui::PushItemWidth(contentRegionAvailable.x - lineHeight);
 				if (ImGui::InputText("##", buffer, sizeof(buffer), flags))
 				{
 					tag = std::string(buffer);
 				}
 				ImGui::PopItemWidth();
+
+				ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 0.0f));
+				if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
+				{
+					ImGui::OpenPopup("AddComponent");
+				}
+				ImGui::PopStyleVar();
+
+				if (ImGui::BeginPopup("AddComponent"))
+				{
+					if (!selectionContext.HasComponent<TransformComponent>())
+					{
+						if (ImGui::MenuItem("Add Transform Component"))
+							selectionContext.AddComponent<TransformComponent>();
+					}
+
+					if (!selectionContext.HasComponent<CameraComponent>())
+					{
+						if (ImGui::MenuItem("Add Camera Component"))
+							selectionContext.AddComponent<CameraComponent>();
+					}
+
+					if (!selectionContext.HasComponent<SpriteRendererComponent>())
+					{
+						if (ImGui::MenuItem("Add Sprite Renderer Component"))
+							selectionContext.AddComponent<SpriteRendererComponent>();
+					}
+
+					ImGui::EndPopup();
+				}
 			}
 
 			// -- Transform Component --
