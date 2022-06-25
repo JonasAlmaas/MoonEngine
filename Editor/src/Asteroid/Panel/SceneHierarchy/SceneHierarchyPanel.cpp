@@ -43,16 +43,6 @@ namespace Asteroid {
 			ImGui::EndPopup();
 		}
 
-		// Right click an entity
-		//if (ImGui::BeginPopupContextWindow(0, 1, true))
-		//{
-		//	if (ImGui::MenuItem("Remove Entity"))
-		//	{
-		//		//EditorState::GetActiveScene()->DestroyEntity();
-		//	}
-		//	ImGui::EndPopup();
-		//}
-
 		ImGui::End();
     }
 
