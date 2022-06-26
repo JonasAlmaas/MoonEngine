@@ -22,15 +22,15 @@ namespace Asteroid {
     {
         ImGui::Begin("Scene Hierarchy");
 
-        EditorState::GetSceneRegistry()->each([&](auto entityID)
+        EditorState::GetActiveScene()->GetRegistry().each([&](auto entityID)
         {   
-            Entity entity{ EditorState::GetSceneRegistry(), entityID };
+            Entity entity{ &EditorState::GetActiveScene()->GetRegistry(), entityID };
             DrawEntityNode(entity);
         });
 
         // Deselect by clicking the background
         if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
-            EditorState::SetSelectionContext();
+            EditorState::GetActiveScene()->SetSelectionContext();
 
 		// Right click blank space
 		if (ImGui::BeginPopupContextWindow(0, 1, false))
@@ -50,8 +50,10 @@ namespace Asteroid {
     {
         auto& tag = entity.GetComponent<TagComponent>().Tag;
 
+		Entity selectionContext = EditorState::GetActiveScene()->GetSelectionContext();
+
         ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-        if (entity == EditorState::GetSelectionContext())
+        if (entity == EditorState::GetActiveScene()->GetSelectionContext())
             flags |= ImGuiTreeNodeFlags_Selected;
 
         // If the entity doesnt have any more children, add this flag
@@ -59,8 +61,8 @@ namespace Asteroid {
 
         bool open = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)entity, flags, tag.c_str());
 
-        if (ImGui::IsItemClicked())
-			EditorState::SetSelectionContext(entity);
+		if (ImGui::IsItemClicked())
+			EditorState::GetActiveScene()->SetSelectionContext(entity);
 
 		bool entityDeleted = false;
 		if (ImGui::BeginPopupContextItem())
@@ -76,12 +78,12 @@ namespace Asteroid {
 
 		if (entityDeleted)
 		{
-			if (EditorState::GetSelectionContext() == entity)
-				EditorState::SetSelectionContext({});
+			if (selectionContext == entity)
+				EditorState::GetActiveScene()->SetSelectionContext();
 
 			Entity camera = EditorState::GetActiveScene()->GetActiveCamera();
 			if (camera && camera == entity)
-				EditorState::GetActiveScene()->SetActiveCamera({});
+				EditorState::GetActiveScene()->SetActiveCamera();
 
 			EditorState::GetActiveScene()->DestroyEntity(entity);
 		}

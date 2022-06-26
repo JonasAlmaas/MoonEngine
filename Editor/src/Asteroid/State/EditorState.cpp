@@ -8,7 +8,6 @@ namespace Asteroid {
 	{
 		Ref<Framebuffer> Framebuffer;
 		Ref<Scene> ActiveScene;
-		Entity SelectionContext;
 	};
 
 	static EditorStateData s_Data;
@@ -19,11 +18,23 @@ namespace Asteroid {
 		spec.Width = 1280;
 		spec.Height = 720;
 		s_Data.Framebuffer = Framebuffer::Create(spec);
+
+		NewActiveScene();
 	}
 
 	Ref<Framebuffer> EditorState::GetFramebuffer()
 	{
 		return s_Data.Framebuffer;
+	}
+
+	Ref<Scene> EditorState::NewActiveScene()
+	{
+		s_Data.ActiveScene = CreateRef<Scene>();
+
+		auto& spec = s_Data.Framebuffer->GetSpecification();
+		s_Data.ActiveScene->OnViewportResize(spec.Width, spec.Height);
+
+		return s_Data.ActiveScene;
 	}
 
 	void EditorState::SetActiveScene(Ref<Scene>& scene)
@@ -34,21 +45,6 @@ namespace Asteroid {
 	Ref<Scene> EditorState::GetActiveScene()
 	{
 		return s_Data.ActiveScene;
-	}
-
-	Entity EditorState::GetSelectionContext()
-	{
-		return s_Data.SelectionContext;
-	}
-
-	void EditorState::SetSelectionContext(Entity entity)
-	{
-		s_Data.SelectionContext = entity;
-	}
-
-	entt::registry* EditorState::GetSceneRegistry()
-	{
-		return &s_Data.ActiveScene->GetRegistry();
 	}
 
 }

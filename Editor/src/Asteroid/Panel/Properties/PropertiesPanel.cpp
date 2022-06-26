@@ -66,7 +66,7 @@ namespace Asteroid {
 	{
 		ImGui::Begin("Properties");
 
-		Entity selectionContext = EditorState::GetSelectionContext();
+		Entity selectionContext = EditorState::GetActiveScene()->GetSelectionContext();
 
 		if (selectionContext)
 		{
