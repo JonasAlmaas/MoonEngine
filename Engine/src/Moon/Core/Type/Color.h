@@ -89,13 +89,13 @@ namespace Moon {
 		{
 			switch (Format)
 			{
-			case ColorFormat::RGBADecimal:
-			{
-				r = r * DecimalToNormalizedFactor;
-				g = g * DecimalToNormalizedFactor;
-				b = b * DecimalToNormalizedFactor;
-				a = a * DecimalToNormalizedFactor;
-			}
+				case ColorFormat::RGBADecimal:
+				{
+					r = r * DecimalToNormalizedFactor;
+					g = g * DecimalToNormalizedFactor;
+					b = b * DecimalToNormalizedFactor;
+					a = a * DecimalToNormalizedFactor;
+				}
 			}
 		}
 
