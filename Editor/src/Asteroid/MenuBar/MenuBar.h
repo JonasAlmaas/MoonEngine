@@ -12,6 +12,16 @@ namespace Asteroid {
 		~MenuBar() = default;
 
 		void OnImGuiRender();
+		void OnEvent(Event& e);
+
+	private:
+		bool OnKeyPressed(KeyPressedEvent& e);
+
+		void NewScene();
+		void SaveSceneAs();
+		void SaveScene();
+		void OpenScene();
+
 	};
 
 }

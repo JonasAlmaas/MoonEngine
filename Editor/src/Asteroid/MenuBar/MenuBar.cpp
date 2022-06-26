@@ -14,17 +14,17 @@ namespace Asteroid {
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-				if (ImGui::MenuItem("Serialize"))
-				{
-					SceneSerializer serializer(EditorState::GetActiveScene());
-					serializer.Serialize("Content/Scenes/LVL_Test.masset");
-				}
+				if (ImGui::MenuItem("New", "Ctrl+N"))
+					NewScene();
 
-				if (ImGui::MenuItem("Deserialize"))
-				{
-					SceneSerializer serializer(EditorState::GetActiveScene());
-					serializer.Deserialize("Content/Scenes/LVL_Test.masset");
-				}
+				if (ImGui::MenuItem("Open...", "Ctrl+O"))
+					OpenScene();
+
+				if (ImGui::MenuItem("Save", "Ctrl+S"))
+					SaveScene();
+
+				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
+					SaveSceneAs();
 
 				ImGui::Separator();
 
@@ -35,6 +35,89 @@ namespace Asteroid {
 			}
 
 			ImGui::EndMenuBar();
+		}
+	}
+
+	// -- Event Handling --
+
+	void MenuBar::OnEvent(Event& e)
+	{
+		ME_TRACE("{0}", e);
+		EventDispatcher dispatcher(e);
+
+		dispatcher.Dispatch<KeyPressedEvent>(ME_BIND_EVENT_FN(MenuBar::OnKeyPressed));
+
+	}
+
+	bool MenuBar::OnKeyPressed(KeyPressedEvent& e)
+	{
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool ctrlPressed = (Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl));
+		bool shiftPressed = (Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift));
+
+		switch (e.GetKeyCode())
+		{
+			case Key::N:
+			{
+				if (ctrlPressed)
+					NewScene();
+				break;
+			}
+			case Key::O:
+			{
+				if (ctrlPressed)
+					OpenScene();
+				break;
+			}
+			case Key::S:
+			{
+				if (ctrlPressed)
+				{
+					if (shiftPressed) { SaveSceneAs(); }
+					else { SaveScene(); }
+				}
+				break;
+			}
+			default:
+				break;
+		}
+
+		return false;
+	}
+
+	// -- Shortcuts --
+
+	void MenuBar::NewScene()
+	{
+		EditorState::NewActiveScene();
+	}
+
+	void MenuBar::SaveSceneAs()
+	{
+		std::string filepath = FileDialog::SaveFile("Moon Scene (*.mmap)\0*.mmap\0");
+
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(EditorState::GetActiveScene());
+			serializer.Serialize(filepath);
+		}
+	}
+
+	void MenuBar::SaveScene()
+	{
+	}
+
+	void MenuBar::OpenScene()
+	{
+		std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
+
+		if (!filepath.empty())
+		{
+			Ref<Scene> activeScene = EditorState::NewActiveScene();
+			SceneSerializer serializer(activeScene);
+			serializer.Deserialize(filepath);
 		}
 	}
 

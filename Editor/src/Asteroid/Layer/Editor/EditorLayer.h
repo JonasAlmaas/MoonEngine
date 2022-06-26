@@ -24,8 +24,6 @@ namespace Asteroid {
 		virtual void OnEvent(Event& e) override;
 
 	private:
-		Ref<Scene> m_ActiveScene;
-
 		MenuBar m_MenuBar;
 
 		// -- Panels --

@@ -18,10 +18,6 @@ namespace Asteroid {
 
 		EditorState::Init();
 
-		// Set up scene
-		m_ActiveScene = CreateRef<Scene>();
-		EditorState::SetActiveScene(m_ActiveScene);
-
 		// Generate checkerboard texture
 		{
 			ME_PROFILE_SCOPE("GenerateTexture-Checkerboard");
@@ -92,7 +88,7 @@ namespace Asteroid {
 		glm::vec2 viewportSize = m_ViewportPanel.GetSize();
 		if (FramebufferSpecification spec = EditorState::GetFramebuffer()->GetSpecification(); viewportSize.x > 0.0f && viewportSize.y > 0.0f && (spec.Width != viewportSize.x || spec.Height != viewportSize.y))
 		{
-			m_ActiveScene->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
+			EditorState::GetActiveScene()->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
 		}
 
 		// ---- Panel::OnUpdate ----
@@ -104,11 +100,10 @@ namespace Asteroid {
 
 		// -------------------------
 
-
 		// ---- Render ----
 		EditorState::GetFramebuffer()->Bind();
 
-		m_ActiveScene->OnUpdate(ts);
+		EditorState::GetActiveScene()->OnUpdate(ts);
 
 		EditorState::GetFramebuffer()->Unbind();
 	}
@@ -196,6 +191,8 @@ namespace Asteroid {
 	void EditorLayer::OnEvent(Event& e)
 	{
 		ME_PROFILE_FUNCTION();
+
+		m_MenuBar.OnEvent(e);
 	}
 
 }
