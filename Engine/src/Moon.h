@@ -46,7 +46,7 @@
 // ---- Util ----
 #include "Moon/Core/Util/Util.h"
 #include "Moon/Core/Util/Math.h"
-#include "Moon/Core/Util/Platform/FileDialog/FileDialog.h"
+#include "Moon/Core/Util/FileDialog.h"
 #include "Moon/Core/Util/Random/Random.h"
 
 // ---- Window ----

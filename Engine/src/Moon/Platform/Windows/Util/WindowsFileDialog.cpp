@@ -1,5 +1,8 @@
 #include "mepch.h"
-#include "Moon/Platform/Windows/Util/FileDialog/WindowsFileDialogAPI.h"
+
+#ifdef ME_PLATFORM_WINDOWS
+
+#include "Moon/Core/Util/FileDialog.h"
 
 #include "Moon/Core/Application/Application.h"
 
@@ -11,15 +14,7 @@
 
 namespace Moon {
 
-	WindowsFileDialogAPI::WindowsFileDialogAPI()
-	{
-	}
-
-	WindowsFileDialogAPI::~WindowsFileDialogAPI()
-	{
-	}
-
-	std::string WindowsFileDialogAPI::OpenFile(const char* filter)
+	std::string FileDialog::OpenFile(const char* filter)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -44,7 +39,7 @@ namespace Moon {
 		return std::string();
 	}
 
-	std::string WindowsFileDialogAPI::SaveFile(const char* filter)
+	std::string FileDialog::SaveFile(const char* filter)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -73,3 +68,5 @@ namespace Moon {
 	}
 
 }
+
+#endif
