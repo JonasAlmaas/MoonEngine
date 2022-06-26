@@ -3,6 +3,8 @@
 
 #include "Asteroid/State/EditorState.h"
 
+#include <Moon/Scene/Serializer/SceneSerializer.h>
+
 
 namespace Asteroid {
 
@@ -20,13 +22,6 @@ namespace Asteroid {
 		// Set up scene
 		m_ActiveScene = CreateRef<Scene>();
 		EditorState::SetActiveScene(m_ActiveScene);
-
-		m_CameraEntity = m_ActiveScene->CreateEntity("Camera");
-		m_CameraEntity.AddComponent<CameraComponent>();
-		m_ActiveScene->SetActiveCamera(m_CameraEntity);		
-
-		m_SquareEntity = m_ActiveScene->CreateEntity("Square");
-		m_SquareEntity.AddComponent<SpriteRendererComponent>(Color(0.0, 1.0f, 0.0));
 
 		// Generate checkerboard texture
 		{
@@ -65,45 +60,6 @@ namespace Asteroid {
 			m_Texture_ColorGrid->SetData(textureData, sizeof(uint32_t) * width * height);
 			delete[] textureData;
 		}
-
-		// ---- Native script test ----
-		class CameraController : public ScriptableEntity
-		{
-		public:
-			virtual void OnCreate() override
-			{
-			}
-
-			virtual void OnDestroy() override
-			{
-			}
-
-			virtual void OnUpdate(Timestep ts) override
-			{
-				if (HasComponent<TransformComponent>())
-				{
-					auto& transform = GetComponent<TransformComponent>();
-
-					if (Input::IsKeyPressed(Key::W))
-						transform.Translation[1] += speed * ts;
-
-					if (Input::IsKeyPressed(Key::S))
-						transform.Translation[1] -= speed * ts;
-
-					if (Input::IsKeyPressed(Key::A))
-						transform.Translation[0] -= speed * ts;
-
-					if (Input::IsKeyPressed(Key::D))
-						transform.Translation[0] += speed * ts;
-				}
-			}
-
-		private:
-			float speed = 5.0f;
-
-		};
-
-		m_CameraEntity.AddComponent<NativeScriptComponent>().Bind<CameraController>();
 
 		// ---- Panel::OnAttach ----
 
@@ -208,10 +164,25 @@ namespace Asteroid {
 			ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
 			ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), dockspaceFlags);
 
+			// ---- Menu Bar ----
 			if (ImGui::BeginMenuBar())
 			{
 				if (ImGui::BeginMenu("File"))
 				{
+					if (ImGui::MenuItem("Serialize"))
+					{
+						SceneSerializer serializer(m_ActiveScene);
+						serializer.Serialize("Content/Scenes/LVL_Test.masset");
+					}
+
+					if (ImGui::MenuItem("Deserialize"))
+					{
+						SceneSerializer serializer(m_ActiveScene);
+						serializer.Deserialize("Content/Scenes/LVL_Test.masset");
+					}
+
+					ImGui::Separator();
+
 					if (ImGui::MenuItem("Exit", "Alt+F4"))
 						Application::Get().Close();
 
