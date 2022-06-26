@@ -28,6 +28,7 @@ group "Dependencies"
     include "Engine/vendor/Glad"
     include "Engine/vendor/GLFW"
     include "Engine/vendor/ImGui"
+	include "Engine/vendor/yaml"
 group ""
 
 group "Tools"

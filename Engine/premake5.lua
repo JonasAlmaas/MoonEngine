@@ -6,7 +6,7 @@ project "Engine"
 
     targetdir ("../bin/" .. outputdir .. "/%{prj.name}")
     objdir ("../bin-int/" .. outputdir .. "/%{prj.name}")
-    
+
     pchheader "mepch.h"
     pchsource "src/mepch.cpp"
 
@@ -37,6 +37,7 @@ project "Engine"
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.stb_image}",
+        "%{IncludeDir.yaml}",
     }
 
     links
@@ -44,6 +45,7 @@ project "Engine"
 		"Glad",
 		"GLFW",
 		"ImGui",
+		"yaml-cpp",
 		"opengl32.lib",
 	}
 
@@ -59,12 +61,12 @@ project "Engine"
 		defines "ME_DEBUG"
 		runtime "Debug"
 		symbols "on"
-        
+
     filter "configurations:Release"
 		defines "ME_RELEASE"
 		runtime "Release"
 		optimize "on"
-        
+
     filter "configurations:Dist"
 		defines "ME_DIST"
 		runtime "Release"

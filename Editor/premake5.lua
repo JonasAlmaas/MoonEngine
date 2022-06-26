@@ -6,7 +6,7 @@ project "Editor"
 
     targetdir ("../bin/" .. outputdir .. "/%{prj.name}")
     objdir ("../bin-int/" .. outputdir .. "/%{prj.name}")
-    
+
     pchheader "aopch.h"
     pchsource "src/aopch.cpp"
 
@@ -15,7 +15,7 @@ project "Editor"
         "src/**.h",
         "src/**.cpp",
     }
-    
+
     includedirs
     {
         "src",
@@ -35,7 +35,7 @@ project "Editor"
 
 	filter "system:windows"
 		systemversion "latest"
-        
+
         defines
         {
             "ME_PLATFORM_WINDOWS"
@@ -45,7 +45,7 @@ project "Editor"
 		defines "ME_DEBUG"
 		runtime "Debug"
 		symbols "on"
-	
+
 	filter "configurations:Release"
 		defines "ME_RELEASE"
 		runtime "Release"
