@@ -5,7 +5,8 @@
 #include "Moon/ImGui/Customization/ImGuiColorPalette.h"
 
 // Emedded font
-#include "Font/Roboto-Regular.embed"
+#include "Font/Roboto/Roboto-Bold.embed"
+#include "Font/Roboto/Roboto-Regular.embed"
 
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -225,6 +226,9 @@ namespace Moon {
 		// Load default font
 		ImFontConfig fontConfig;
 		fontConfig.FontDataOwnedByAtlas = false;
+
+		io.Fonts->AddFontFromMemoryTTF((void*)g_RobotoBold, g_RobotoBoldLen, 20.0f, &fontConfig);
+
 		ImFont* robotoFont = io.Fonts->AddFontFromMemoryTTF((void*)g_RobotoRegular, sizeof(g_RobotoRegular), 20.0f, &fontConfig);
 		io.FontDefault = robotoFont;
 	}
