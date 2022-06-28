@@ -15,3 +15,6 @@ bin-int/
 
 # Imgui ini files
 **/imgui.ini
+
+# Moon assset files
+**/**.mmap
