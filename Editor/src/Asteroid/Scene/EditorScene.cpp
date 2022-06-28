@@ -13,7 +13,7 @@ namespace Asteroid {
 		{
 			auto [transformComp, spriteComp] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-			Renderer2D::DrawSprite(transformComp.GetTransform(), spriteComp.Color);
+			Renderer2D::DrawSpriteComponent(transformComp.GetTransform(), spriteComp, (int)entity);
 		}
 
 		Renderer2D::EndScene();
