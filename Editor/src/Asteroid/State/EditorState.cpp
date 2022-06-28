@@ -8,6 +8,7 @@ namespace Asteroid {
 	{
 		Ref<Framebuffer> Framebuffer;
 		Ref<EditorScene> ActiveScene;
+		Ref<EditorCamera> EditorCamera;
 	};
 
 	static EditorStateData s_Data;
@@ -18,6 +19,8 @@ namespace Asteroid {
 		spec.Width = 1280;
 		spec.Height = 720;
 		s_Data.Framebuffer = Framebuffer::Create(spec);
+
+		s_Data.EditorCamera = CreateRef<EditorCamera>();
 
 		NewActiveScene();
 	}
@@ -45,6 +48,11 @@ namespace Asteroid {
 	Ref<EditorScene> EditorState::GetActiveScene()
 	{
 		return s_Data.ActiveScene;
+	}
+
+	Ref<EditorCamera> EditorState::GetEditorCamera()
+	{
+		return s_Data.EditorCamera;
 	}
 
 }

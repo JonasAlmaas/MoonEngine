@@ -18,6 +18,8 @@ namespace Asteroid {
 		static void SetActiveScene(Ref<EditorScene>& scene);
 		static Ref<EditorScene> GetActiveScene();
 
+		static Ref<EditorCamera> GetEditorCamera();
+
 	};
 
 }
