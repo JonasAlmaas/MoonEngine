@@ -194,6 +194,7 @@ namespace Asteroid {
 		ME_PROFILE_FUNCTION();
 
 		m_MenuBar.OnEvent(e);
+		m_ViewportPanel.OnEvent(e);
 	}
 
 }
