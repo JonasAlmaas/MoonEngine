@@ -21,23 +21,26 @@ namespace Asteroid {
 
 		inline glm::vec2 GetSize() const { return m_Size; }
 
-		inline glm::vec2 GetViewportMinBound() const { return m_ViewportMinBound; }
-		inline glm::vec2 GetViewportMaxBound() const { return m_ViewportMaxBound; }
+		inline glm::vec2 GetMinBound() const { return m_MinBound; }
+		inline glm::vec2 GetMaxBound() const { return m_MaxBound; }
 
 		virtual inline bool GetFocused() const { return m_Focused; }
 		virtual inline bool GetHovered() const { return m_Hovered; }
 
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
+		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 
 	private:
 		glm::vec2 m_Size = { 0.0f, 0.0f };
 
+		glm::vec2 m_MinBound;
+		glm::vec2 m_MaxBound;
+
 		bool m_Focused = false;
 		bool m_Hovered = false;
 
-		glm::vec2 m_ViewportMinBound;
-		glm::vec2 m_ViewportMaxBound;
+		Entity m_HoveredEntity;
 
 		int m_GizmoType = -1;
 

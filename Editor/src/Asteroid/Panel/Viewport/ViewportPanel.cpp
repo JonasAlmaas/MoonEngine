@@ -31,6 +31,29 @@ namespace Asteroid {
 			EditorState::GetActiveScene()->OnViewportResize((uint32_t)m_Size.x, (uint32_t)m_Size.y);
 			EditorState::GetEditorCamera()->SetViewportSize((float)m_Size.x, (float)m_Size.y);
 		}
+
+		// Entity picking
+		EditorState::GetFramebuffer()->Bind();
+
+		auto [mx, my] = ImGui::GetMousePos();
+
+		mx -= m_MinBound.x;
+		my -= m_MinBound.y;
+
+		glm::vec2 viewportSize = m_MaxBound - m_MinBound;
+		// Flip y
+		my = viewportSize.y - my;
+
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			int pixelData = EditorState::GetFramebuffer()->ReadPixel(1, mouseX, mouseY);
+			m_HoveredEntity = (pixelData != -1) ? Entity(&EditorState::GetActiveScene()->GetRegistry(), (uint32_t)pixelData) : Entity();
+		}
+
+		EditorState::GetFramebuffer()->Unbind();
 	}
 
 	void ViewportPanel::OnImGuiRender()
@@ -44,8 +67,8 @@ namespace Asteroid {
 		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
 		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
 		auto viewportOffset = ImGui::GetWindowPos();
-		m_ViewportMinBound = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
-		m_ViewportMaxBound = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
+		m_MinBound = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_MaxBound = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
 		m_Focused = ImGui::IsWindowFocused();
 		m_Hovered = ImGui::IsWindowHovered();
@@ -70,7 +93,7 @@ namespace Asteroid {
 				ImGuizmo::SetOrthographic(false);
 				ImGuizmo::SetDrawlist();
 
-				ImGuizmo::SetRect(m_ViewportMinBound.x, m_ViewportMinBound.y, m_ViewportMaxBound.x - m_ViewportMinBound.x, m_ViewportMaxBound.y - m_ViewportMinBound.y);
+				ImGuizmo::SetRect(m_MinBound.x, m_MinBound.y, m_MaxBound.x - m_MinBound.x, m_MaxBound.y - m_MinBound.y);
 
 				// Camera
 				//auto cameraEntity = scene->GetActiveCamera();
@@ -141,6 +164,7 @@ namespace Asteroid {
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<KeyPressedEvent>(ME_BIND_EVENT_FN(ViewportPanel::OnKeyPressed));
+		dispatcher.Dispatch<MouseButtonPressedEvent>(ME_BIND_EVENT_FN(ViewportPanel::OnMouseButtonPressed));
 	}
 
 	bool ViewportPanel::OnKeyPressed(KeyPressedEvent& e)
@@ -176,6 +200,17 @@ namespace Asteroid {
 			}
 			default:
 				break;
+		}
+
+		return false;
+	}
+
+	bool ViewportPanel::OnMouseButtonPressed(MouseButtonPressedEvent& e)
+	{
+		if (e.GetMouseButton() == Mouse::ButtonLeft)
+		{
+			if (m_Hovered && !ImGuizmo::IsOver() && !Input::IsKeyPressed(Key::LeftAlt))
+				EditorState::GetActiveScene()->SetSelectionContext(m_HoveredEntity);
 		}
 
 		return false;
