@@ -77,6 +77,19 @@ namespace Moon {
 			}
 			return false;
 		}
+
+		static GLenum MoonFBTextureFormatToGL(FramebufferTextureFormat format)
+		{
+			switch (format)
+			{
+				case FramebufferTextureFormat::RGBA8:		return GL_RGBA8;
+				case FramebufferTextureFormat::RED_INTEGER:	return GL_RED_INTEGER;
+			}
+
+			ME_CORE_ASSERT(false, "Unknown framebuffer texture format!");
+			return 0;
+		}
+
 	}
 
 	static const uint32_t s_MaxFrameBufferSize = 16384;
@@ -220,6 +233,15 @@ namespace Moon {
 		int pixelData;
 		glReadPixels(x, y, 1, 1, GL_RED_INTEGER, GL_INT, &pixelData);
 		return pixelData;
+	}
+
+	void OpenGLFramebuffer::ClearAttachment(uint32_t attachmentIndex, int value)
+	{
+		ME_CORE_ASSERT(attachmentIndex < m_ColorAttachments.size(), "Index out if bounds!");
+
+		auto& spec = m_ColorAttachmentSpecifications[attachmentIndex];
+		glClearTexImage(m_ColorAttachments[attachmentIndex], 0, Utils::MoonFBTextureFormatToGL(spec.TextureFormat), GL_INT, &value);
+
 	}
 
 }

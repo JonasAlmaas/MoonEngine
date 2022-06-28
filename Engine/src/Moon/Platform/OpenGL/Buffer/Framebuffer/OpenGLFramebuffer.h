@@ -23,6 +23,8 @@ namespace Moon {
 
 		virtual int ReadPixel(uint32_t attachmentIndex, int x, int y) override;
 
+		virtual void ClearAttachment(uint32_t attachmentIndex, int value) override;
+
 		virtual RendererID GetColorAttachmentRendererID(uint32_t index = 0) const override
 		{
 			ME_CORE_ASSERT(index < m_ColorAttachments.size(), "");
