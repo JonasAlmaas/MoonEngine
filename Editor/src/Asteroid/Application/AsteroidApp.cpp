@@ -1,7 +1,7 @@
 #include "aopch.h"
 #include "Asteroid/Application/AsteroidApp.h"
 
-#include "Asteroid/Layer/Editor/EditorLayer.h"
+#include "Asteroid/Layer/EditorLayer.h"
 
 
 namespace Asteroid {

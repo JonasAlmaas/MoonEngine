@@ -1,5 +1,5 @@
 #include "aopch.h"
-#include "Asteroid/Layer/Editor/EditorLayer.h"
+#include "Asteroid/Layer/EditorLayer.h"
 
 #include "Asteroid/State/EditorState.h"
 
@@ -85,13 +85,6 @@ namespace Asteroid {
 	{
 		ME_PROFILE_FUNCTION();
 
-		// -- Resize --
-		glm::vec2 viewportSize = m_ViewportPanel.GetSize();
-		if (FramebufferSpecification spec = EditorState::GetFramebuffer()->GetSpecification(); viewportSize.x > 0.0f && viewportSize.y > 0.0f && (spec.Width != viewportSize.x || spec.Height != viewportSize.y))
-		{
-			EditorState::GetActiveScene()->OnViewportResize((uint32_t)viewportSize.x, (uint32_t)viewportSize.y);
-		}
-
 		// ---- Panel::OnUpdate ----
 		
 		m_PropertiesPanel.OnUpdate(ts);
@@ -99,12 +92,15 @@ namespace Asteroid {
 		m_SceneHierarchyPanel.OnUpdate(ts);
 		m_ViewportPanel.OnUpdate(ts);
 
-		// -------------------------
+		// ---- Misc Update ----
+
+		if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
+			EditorState::GetEditorCamera()->OnUpdate(ts);
 
 		// ---- Render ----
 		EditorState::GetFramebuffer()->Bind();
 
-		EditorState::GetActiveScene()->OnUpdate(ts);
+		EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera());
 
 		EditorState::GetFramebuffer()->Unbind();
 	}
@@ -195,6 +191,8 @@ namespace Asteroid {
 
 		m_MenuBar.OnEvent(e);
 		m_ViewportPanel.OnEvent(e);
+
+		EditorState::GetEditorCamera()->OnEvent(e);
 	}
 
 }
