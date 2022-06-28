@@ -28,6 +28,7 @@ void main()
 #version 450
 
 layout(location = 0) out vec4 o_Color;
+layout(location = 1) out int o_EntityID;
 
 in vec4 v_Color;
 in vec2 v_UV;
@@ -76,4 +77,6 @@ void main()
 	}
 
 	o_Color = color;
+
+	o_EntityID = 50;
 }
