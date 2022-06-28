@@ -4,7 +4,6 @@
 #include "Asteroid/State/EditorState.h"
 
 
-
 namespace Asteroid {
 
 	EditorLayer::EditorLayer()

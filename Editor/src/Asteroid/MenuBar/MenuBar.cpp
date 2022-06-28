@@ -42,11 +42,9 @@ namespace Asteroid {
 
 	void MenuBar::OnEvent(Event& e)
 	{
-		ME_TRACE("{0}", e);
 		EventDispatcher dispatcher(e);
 
 		dispatcher.Dispatch<KeyPressedEvent>(ME_BIND_EVENT_FN(MenuBar::OnKeyPressed));
-
 	}
 
 	bool MenuBar::OnKeyPressed(KeyPressedEvent& e)
