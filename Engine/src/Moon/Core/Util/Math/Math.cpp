@@ -52,7 +52,8 @@ namespace Moon {
 			rotation.x = atan2(Row[1][2], Row[2][2]);
 			rotation.z = atan2(Row[0][1], Row[0][0]);
 		}
-		else {
+		else
+		{
 			rotation.x = atan2(-Row[2][0], Row[1][1]);
 			rotation.z = 0;
 		}

@@ -195,9 +195,8 @@ namespace Asteroid {
 				{
 					if (isActiveCamera)
 						EditorState::GetActiveScene()->SetActiveCamera(entity);
-					else {
+					else
 						EditorState::GetActiveScene()->SetActiveCamera({});
-					}
 				}
 			});
 

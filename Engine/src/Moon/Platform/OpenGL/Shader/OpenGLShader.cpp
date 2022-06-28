@@ -63,7 +63,8 @@ namespace Moon {
 			in.seekg(0, std::ios::beg);
 			in.read(&result[0], result.size());
 		}
-		else {
+		else
+		{
 			ME_CORE_ERROR("Could not open file '{0}'", filepath);
 		}
 

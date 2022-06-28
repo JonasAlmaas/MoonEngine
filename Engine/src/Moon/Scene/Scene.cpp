@@ -47,7 +47,8 @@ namespace Moon {
 				auto& cameraTransComp = m_ActiveCamera.GetComponent<TransformComponent>();
 				Renderer2D::BeginScene(camera.GetProjection(), cameraTransComp.GetTransform());
 			}
-			else {
+			else
+			{
 				Renderer2D::BeginScene(camera.GetProjection(), glm::mat4(1.0f));
 			}
 

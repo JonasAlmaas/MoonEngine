@@ -73,8 +73,10 @@ namespace Asteroid {
 			{
 				if (ctrlPressed)
 				{
-					if (shiftPressed) { SaveSceneAs(); }
-					else { SaveScene(); }
+					if (shiftPressed)
+						SaveSceneAs();
+					else
+						SaveScene();
 				}
 				break;
 			}
