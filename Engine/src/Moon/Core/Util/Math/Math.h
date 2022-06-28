@@ -20,7 +20,7 @@ namespace Moon {
 			return sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 		}
 
-		static bool DecomposeTransform(const glm::mat4& transform, glm::vec3& outTranslation, glm::vec3& outRotation, glm::vec3& outScale);
+		static bool DecomposeTransform(const glm::mat4& transform, glm::vec3& translation, glm::vec3& rotation, glm::vec3& scale);
 
 	};
 
