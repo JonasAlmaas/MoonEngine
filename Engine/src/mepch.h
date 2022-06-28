@@ -24,6 +24,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 #include <imgui.h>
@@ -34,7 +35,7 @@
 #include "Moon/Core/Assert.h"
 
 #include "Moon/Debug/Instrumentor.h"
-#include "Moon/Core/Util/Math.h"
+#include "Moon/Core/Util/Math/Math.h"
 #include "Moon/Core/Type/Types.h"
 #include "Moon/Core/Util/Random/Random.h"
 
