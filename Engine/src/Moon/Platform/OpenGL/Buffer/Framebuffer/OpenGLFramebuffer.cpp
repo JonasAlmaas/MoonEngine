@@ -14,7 +14,7 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		ME_CORE_ASSERT(m_Specification.Width, "Frambuffers can not be created with a width of 0!");
-		ME_CORE_ASSERT(m_Specification.Width, "Frambuffers can not be created with a height of 0!");
+		ME_CORE_ASSERT(m_Specification.Height, "Frambuffers can not be created with a height of 0!");
 
 		Invalidate();
 	}
