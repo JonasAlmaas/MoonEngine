@@ -24,7 +24,9 @@ namespace Moon {
 		static void Init();
 		static void Shutdown();
 
+		static void BeginScene(const glm::mat4& viewProjectionMatrix);
 		static void BeginScene(const glm::mat4& cameraProj, const glm::mat4& transform);
+
 		static void EndScene();
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS

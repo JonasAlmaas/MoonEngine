@@ -130,16 +130,22 @@ namespace Moon {
 		delete[] s_Data.QuadVertexBufferBase;
 	}
 
+	void Renderer2D::BeginScene(const glm::mat4& viewProjectionMatrix)
+	{
+		ME_PROFILE_FUNCTION();
+
+		s_Data.Shader->Bind();
+		s_Data.Shader->SetMat4("u_ViewProjection", viewProjectionMatrix);
+
+		StartBatch();
+	}
+
 	void Renderer2D::BeginScene(const glm::mat4& cameraProj, const glm::mat4& transform)
 	{
 		ME_PROFILE_FUNCTION();
 
-		glm::mat4 viewProj = cameraProj * glm::inverse(transform);
-
-		s_Data.Shader->Bind();
-		s_Data.Shader->SetMat4("u_ViewProjection", viewProj);
-
-		StartBatch();
+		glm::mat4 viewProjectionMatrix = cameraProj * glm::inverse(transform);
+		BeginScene(viewProjectionMatrix);
 	}
 
 	void Renderer2D::EndScene()
