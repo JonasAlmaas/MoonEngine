@@ -15,6 +15,9 @@ project "Engine"
         "src/**.h",
         "src/**.cpp",
 
+        "vendor/ImGuizmo/ImGuizmo.h",
+        "vendor/ImGuizmo/ImGuizmo.cpp",
+
         "vendor/stb_image/**.h",
         "vendor/stb_image/**.cpp",
     }
@@ -35,6 +38,7 @@ project "Engine"
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.glm}",
         "%{IncludeDir.ImGui}",
+        "%{IncludeDir.ImGuizmo}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.yaml}",
@@ -48,6 +52,9 @@ project "Engine"
 		"yaml-cpp",
 		"opengl32.lib",
 	}
+
+	filter "files:vendor/ImGuizmo/**.cpp"
+	flags { "NoPCH" }
 
     filter "system:windows"
         systemversion "latest"
