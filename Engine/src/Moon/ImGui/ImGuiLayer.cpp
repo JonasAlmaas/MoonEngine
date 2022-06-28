@@ -8,6 +8,8 @@
 #include "Font/Roboto/Roboto-Bold.embed"
 #include "Font/Roboto/Roboto-Regular.embed"
 
+#include <ImGuizmo.h>
+
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 
@@ -77,6 +79,8 @@ namespace Moon {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiLayer::End()
