@@ -3,6 +3,7 @@
 
 #include "Asteroid/State/EditorState.h"
 
+#include <Moon/Scene/Serializer/SceneSerializer.h>
 #include <ImGuizmo.h>
 
 
@@ -23,10 +24,12 @@ namespace Asteroid {
 	{
 		ME_PROFILE_FUNCTION();
 
-		// Resize framebuffer
+		// -- Resize --
 		if (FramebufferSpecification spec = EditorState::GetFramebuffer()->GetSpecification(); m_Size.x > 0.0f && m_Size.y > 0.0f && (spec.Width != m_Size.x || spec.Height != m_Size.y))
 		{
 			EditorState::GetFramebuffer()->Resize((uint32_t)m_Size.x, (uint32_t)m_Size.y);
+			EditorState::GetActiveScene()->OnViewportResize((uint32_t)m_Size.x, (uint32_t)m_Size.y);
+			EditorState::GetEditorCamera()->SetViewportSize((float)m_Size.x, (float)m_Size.y);
 		}
 	}
 
@@ -47,26 +50,34 @@ namespace Asteroid {
 
 		ImGui::Image((void*)(uint64_t)EditorState::GetFramebuffer()->GetColorAttachmentRendererID(), panelSize, { 0, 1 }, { 1, 0 });
 
+		Ref<EditorScene> scene = EditorState::GetActiveScene();
 
-		// ---- Gizmos ----
-
-		Entity selectedEntity = EditorState::GetActiveScene()->GetSelectionContext();
-		if (selectedEntity && m_GizmoType != -1)
+		// Check if there are any entities in the scene
+		if (scene->GetRegistry().size() > 0)
 		{
-			ImGuizmo::SetOrthographic(false);
-			ImGuizmo::SetDrawlist();
+			// ---- Gizmos ----
 
-			float windowWidth = (float)ImGui::GetWindowWidth();
-			float windowHeight = (float)ImGui::GetWindowHeight();
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
-
-			// Camera
-			auto cameraEntity = EditorState::GetActiveScene()->GetActiveCamera();
-			if (cameraEntity)
+			Entity selectedEntity = scene->GetSelectionContext();
+			if (selectedEntity && m_GizmoType != -1)
 			{
-				const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-				const glm::mat4& cameraProjection = camera.GetProjection();
-				glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+				ImGuizmo::SetOrthographic(false);
+				ImGuizmo::SetDrawlist();
+
+				float windowWidth = (float)ImGui::GetWindowWidth();
+				float windowHeight = (float)ImGui::GetWindowHeight();
+				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+
+				// Camera
+				//auto cameraEntity = scene->GetActiveCamera();
+				//if (cameraEntity)
+				//{
+				//	const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+				//	const glm::mat4& cameraProjection = camera.GetProjection();
+				//	glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+
+				auto camera = EditorState::GetEditorCamera();
+				const glm::mat4& cameraProjection = camera->GetProjection();
+				glm::mat4 cameraView = camera->GetViewMatrix();
 
 				// Entity Transform
 				auto& tc = selectedEntity.GetComponent<TransformComponent>();
@@ -94,6 +105,21 @@ namespace Asteroid {
 					tc.Rotation += deltaRotation;
 
 					tc.Scale = scale;
+				}
+			}
+		}
+		else
+		{
+			// Allow the user to click the background to open a file
+			if (Input::IsMouseButtonPressed(Mouse::Button0) && m_Hovered)
+			{
+				std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
+
+				if (!filepath.empty())
+				{
+					Ref<Scene> activeScene = EditorState::NewActiveScene();
+					SceneSerializer serializer(activeScene);
+					serializer.Deserialize(filepath);
 				}
 			}
 		}
