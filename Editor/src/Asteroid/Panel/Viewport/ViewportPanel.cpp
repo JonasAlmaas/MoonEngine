@@ -156,10 +156,30 @@ namespace Asteroid {
 
 		switch (e.GetKeyCode())
 		{
-			case Key::Q: { m_GizmoType = -1; break; }
-			case Key::W: { m_GizmoType = ImGuizmo::OPERATION::TRANSLATE; break; }
-			case Key::E: { m_GizmoType = ImGuizmo::OPERATION::ROTATE; break; }
-			case Key::R: { m_GizmoType = ImGuizmo::OPERATION::SCALE; break; }
+			case Key::Q:
+			{
+				if (!ImGuizmo::IsUsing())
+					m_GizmoType = -1;
+				break;
+			}
+			case Key::W:
+			{
+				if (!ImGuizmo::IsUsing())
+					m_GizmoType = ImGuizmo::OPERATION::TRANSLATE;
+				break;
+			}
+			case Key::E:
+			{
+				if (!ImGuizmo::IsUsing())
+					m_GizmoType = ImGuizmo::OPERATION::ROTATE;
+				break;
+			}
+			case Key::R:
+			{
+				if (!ImGuizmo::IsUsing())
+					m_GizmoType = ImGuizmo::OPERATION::SCALE;
+				break;
+			}
 			default:
 				break;
 		}
