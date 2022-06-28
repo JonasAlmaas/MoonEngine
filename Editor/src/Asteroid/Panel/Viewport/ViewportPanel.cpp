@@ -40,6 +40,8 @@ namespace Asteroid {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
 		ImGui::Begin("Viewport");
 
+		auto viewportOffset = ImGui::GetCursorPos(); // Includes tab bar
+
 		m_Focused = ImGui::IsWindowFocused();
 		m_Hovered = ImGui::IsWindowHovered();
 
@@ -50,8 +52,17 @@ namespace Asteroid {
 
 		ImGui::Image((void*)(uint64_t)EditorState::GetFramebuffer()->GetColorAttachmentRendererID(), panelSize, { 0, 1 }, { 1, 0 });
 
-		Ref<EditorScene> scene = EditorState::GetActiveScene();
+		// Get information about the current imgui window, used for selecting from the image
+		auto windowSize = ImGui::GetWindowSize();
+		ImVec2 minBound = ImGui::GetWindowPos();
+		minBound.x += viewportOffset.x;
+		minBound.y += viewportOffset.y;
 
+		ImVec2 maxBound = { minBound.x + m_Size.x, minBound.y + m_Size.y };
+		m_ViewportMinBound = { minBound.x, minBound.y };
+		m_ViewportMaxBound = { maxBound.x, maxBound.y };
+
+		Ref<EditorScene> scene = EditorState::GetActiveScene();
 		// Check if there are any entities in the scene
 		if (scene->GetRegistry().size() > 0)
 		{
@@ -111,6 +122,7 @@ namespace Asteroid {
 		else
 		{
 			// Allow the user to click the background to open a file
+			// Only if there isn't anything in the current scene
 			if (Input::IsMouseButtonPressed(Mouse::Button0) && m_Hovered)
 			{
 				std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
