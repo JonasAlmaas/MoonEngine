@@ -21,14 +21,22 @@ namespace Moon {
 
 		virtual void Resize(uint32_t width, uint32_t height) override;
 
-		virtual RendererID GetColorAttachmentRendererID() const override { return m_ColorAttachmentRendererID; };
+		virtual RendererID GetColorAttachmentRendererID(uint32_t index = 0) const override
+		{
+			ME_CORE_ASSERT(index < m_ColorAttachments.size(), "");
+			return m_ColorAttachments[index];
+		};
 		virtual const FramebufferSpecification& GetSpecification() const override { return m_Specification; };
 
 	private:
 		RendererID m_RendererID = 0;
-		RendererID m_ColorAttachmentRendererID = 0;
-		RendererID m_DepthAttachmentRendererID = 0;
 		FramebufferSpecification m_Specification;
+
+		std::vector<FramebufferTextureSpecification> m_ColorAttachmentSpecifications;
+		FramebufferTextureSpecification m_DepthAttachmentSpecification;
+
+		std::vector<RendererID> m_ColorAttachments;
+		RendererID m_DepthAttachment;
 
 	};
 

@@ -16,8 +16,7 @@ namespace Asteroid {
 	void EditorState::Init()
 	{
 		FramebufferSpecification spec;
-		spec.Width = 1280;
-		spec.Height = 720;
+		spec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		s_Data.Framebuffer = Framebuffer::Create(spec);
 
 		s_Data.EditorCamera = CreateRef<EditorCamera>();
