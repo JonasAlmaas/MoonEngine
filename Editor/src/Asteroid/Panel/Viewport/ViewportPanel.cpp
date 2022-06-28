@@ -40,7 +40,12 @@ namespace Asteroid {
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, { 0, 0 });
 		ImGui::Begin("Viewport");
 
-		auto viewportOffset = ImGui::GetCursorPos(); // Includes tab bar
+		// Get information about the current imgui window, used for selecting from the image
+		auto viewportMinRegion = ImGui::GetWindowContentRegionMin();
+		auto viewportMaxRegion = ImGui::GetWindowContentRegionMax();
+		auto viewportOffset = ImGui::GetWindowPos();
+		m_ViewportMinBound = { viewportMinRegion.x + viewportOffset.x, viewportMinRegion.y + viewportOffset.y };
+		m_ViewportMaxBound = { viewportMaxRegion.x + viewportOffset.x, viewportMaxRegion.y + viewportOffset.y };
 
 		m_Focused = ImGui::IsWindowFocused();
 		m_Hovered = ImGui::IsWindowHovered();
@@ -52,17 +57,8 @@ namespace Asteroid {
 
 		ImGui::Image((void*)(uint64_t)EditorState::GetFramebuffer()->GetColorAttachmentRendererID(), panelSize, { 0, 1 }, { 1, 0 });
 
-		// Get information about the current imgui window, used for selecting from the image
-		auto windowSize = ImGui::GetWindowSize();
-		ImVec2 minBound = ImGui::GetWindowPos();
-		minBound.x += viewportOffset.x;
-		minBound.y += viewportOffset.y;
-
-		ImVec2 maxBound = { minBound.x + m_Size.x, minBound.y + m_Size.y };
-		m_ViewportMinBound = { minBound.x, minBound.y };
-		m_ViewportMaxBound = { maxBound.x, maxBound.y };
-
 		Ref<EditorScene> scene = EditorState::GetActiveScene();
+
 		// Check if there are any entities in the scene
 		if (scene->GetRegistry().size() > 0)
 		{
@@ -74,9 +70,7 @@ namespace Asteroid {
 				ImGuizmo::SetOrthographic(false);
 				ImGuizmo::SetDrawlist();
 
-				float windowWidth = (float)ImGui::GetWindowWidth();
-				float windowHeight = (float)ImGui::GetWindowHeight();
-				ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, windowWidth, windowHeight);
+				ImGuizmo::SetRect(m_ViewportMinBound.x, m_ViewportMinBound.y, m_ViewportMaxBound.x - m_ViewportMinBound.x, m_ViewportMaxBound.y - m_ViewportMinBound.y);
 
 				// Camera
 				//auto cameraEntity = scene->GetActiveCamera();
