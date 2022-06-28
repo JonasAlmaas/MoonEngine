@@ -7,7 +7,7 @@ namespace Asteroid {
 	struct EditorStateData
 	{
 		Ref<Framebuffer> Framebuffer;
-		Ref<Scene> ActiveScene;
+		Ref<EditorScene> ActiveScene;
 	};
 
 	static EditorStateData s_Data;
@@ -27,9 +27,9 @@ namespace Asteroid {
 		return s_Data.Framebuffer;
 	}
 
-	Ref<Scene> EditorState::NewActiveScene()
+	Ref<EditorScene> EditorState::NewActiveScene()
 	{
-		s_Data.ActiveScene = CreateRef<Scene>();
+		s_Data.ActiveScene = CreateRef<EditorScene>();
 
 		auto& spec = s_Data.Framebuffer->GetSpecification();
 		s_Data.ActiveScene->OnViewportResize(spec.Width, spec.Height);
@@ -37,12 +37,12 @@ namespace Asteroid {
 		return s_Data.ActiveScene;
 	}
 
-	void EditorState::SetActiveScene(Ref<Scene>& scene)
+	void EditorState::SetActiveScene(Ref<EditorScene>& scene)
 	{
 		s_Data.ActiveScene = scene;
 	}
 
-	Ref<Scene> EditorState::GetActiveScene()
+	Ref<EditorScene> EditorState::GetActiveScene()
 	{
 		return s_Data.ActiveScene;
 	}

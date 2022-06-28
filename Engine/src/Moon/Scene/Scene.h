@@ -8,8 +8,8 @@ namespace Moon {
 	class Scene
 	{
 	public:
-		Scene();
-		~Scene();
+		Scene() = default;
+		virtual ~Scene() = default;
 
 		void OnUpdate(Timestep ts);
 
@@ -21,15 +21,11 @@ namespace Moon {
 		Entity CreateEntity(const std::string& name = std::string());
 		void DestroyEntity(Entity entity);
 
-		Entity GetSelectionContext() { return m_SelectionContext; }
-		void SetSelectionContext(Entity entity = {}) { m_SelectionContext = entity; }
-
 		entt::registry& GetRegistry() { return m_Registry; }
 
 	private:
 		entt::registry m_Registry;
 		Entity m_ActiveCamera{};
-		Entity m_SelectionContext{};
 
 		uint32_t m_ViewportWidth = 0;
 		uint32_t m_ViewportHeight = 0;

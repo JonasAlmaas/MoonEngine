@@ -7,14 +7,6 @@
 
 
 namespace Moon {
-	
-	Scene::Scene()
-	{
-	}
-
-	Scene::~Scene()
-	{
-	}
 
 	void Scene::OnUpdate(Timestep ts)
 	{
