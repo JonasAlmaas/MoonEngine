@@ -17,6 +17,7 @@ namespace Asteroid {
 		virtual void OnDetach() override;
 		virtual void OnUpdate(Timestep ts) override;
 		virtual void OnImGuiRender() override;
+		virtual void OnEvent(Event& e) override;
 
 		inline glm::vec2 GetSize() const { return m_Size; }
 
@@ -24,10 +25,15 @@ namespace Asteroid {
 		virtual inline bool GetHovered() const { return m_Hovered; }
 
 	private:
+		bool OnKeyPressed(KeyPressedEvent& e);
+
+	private:
 		glm::vec2 m_Size = { 0.0f, 0.0f };
 
 		bool m_Focused = false;
 		bool m_Hovered = false;
+
+		int m_GizmoType = -1;
 
 	};
 
