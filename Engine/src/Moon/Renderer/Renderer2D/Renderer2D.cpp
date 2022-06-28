@@ -17,6 +17,9 @@ namespace Moon {
 		glm::vec4 Color;
 		glm::vec2 UV;
 		float TextureIndex;
+
+		// Editor Only
+		int EntityID;
 	};
 
 	struct Renderer2DData
@@ -85,6 +88,7 @@ namespace Moon {
 			{ ShaderDataType::Float4, "Color" },
 			{ ShaderDataType::Float2, "UV" },
 			{ ShaderDataType::Float, "TextureIndex" },
+			{ ShaderDataType::Int, "EntityID" },
 		};
 		s_Data.QuadVertexBuffer->SetLayout(layout);
 
@@ -198,7 +202,7 @@ namespace Moon {
 
 	// ---- Primitives ----
 	
-	void Renderer2D::Ultra_DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
+	void Renderer2D::Ultra_DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint, int entityID)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -238,6 +242,7 @@ namespace Moon {
 			s_Data.QuadVertexBufferPtr->Color = tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized();
 			s_Data.QuadVertexBufferPtr->UV = tileFactor * s_Data.QuadUVCoords[i];
 			s_Data.QuadVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
+			s_Data.QuadVertexBufferPtr->EntityID = entityID;
 			s_Data.QuadVertexBufferPtr++;
 		}
 
@@ -346,7 +351,12 @@ namespace Moon {
 		Ultra_DrawSprite(transform, subTexture, tint);
 	}
 
-	// -- Draw Quad --
+	void Renderer2D::DrawSpriteComponent(const glm::mat4& transform, SpriteRendererComponent& spriteComponent, int entityID)
+	{
+		Ultra_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, spriteComponent.Color, entityID);
+	}
+
+	// -- Draw Spite --
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Color& color)
 	{
@@ -535,7 +545,7 @@ namespace Moon {
 		Super_DrawSprite(position, size, texture, tileFactor, tint);
 	}
 
-	// -- Draw Rotated Quad --
+	// -- Draw Rotated Sprte --
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Color& color)
 	{

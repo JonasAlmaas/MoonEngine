@@ -4,6 +4,7 @@
 #include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 #include "Moon/Core/Renderer/Texture/Texture.h"
 #include "Moon/Renderer/Texture/SubTexture2D.h"
+#include "Moon/Scene/Component/SpriteRendererComponent.h"
 
 
 namespace Moon {
@@ -43,7 +44,7 @@ namespace Moon {
 
 		// ---- Primitives ----
 
-		static void Ultra_DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint);
+		static void Ultra_DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint, int entityID = -1);
 		static void Super_DrawSprite(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint);
 		static void Super_DrawRotatedSprite(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint);
 
@@ -52,6 +53,8 @@ namespace Moon {
 		static void Super_DrawRotatedSprite(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint);
 
 	public:
+		static void DrawSpriteComponent(const glm::mat4& transform, SpriteRendererComponent& spriteComponent, int entityID);
+
 		/*
 		 * @brief If you try to define a tile factor as a vec2 it might be misstaken for a Color.
 		 * To prevent this, define it as glm::vec2(x, y) instead of { x, y }.
