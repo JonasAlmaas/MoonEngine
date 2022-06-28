@@ -97,8 +97,17 @@ namespace Asteroid {
 		if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
 			EditorState::GetEditorCamera()->OnUpdate(ts);
 
+
 		// ---- Render ----
+
 		EditorState::GetFramebuffer()->Bind();
+
+		Renderer2D::ResetStats();
+		RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
+		RenderCommand::Clear();
+
+		// Clear entity ID attachment to -1
+		EditorState::GetFramebuffer()->ClearAttachment(1, -1);
 
 		EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera());
 
