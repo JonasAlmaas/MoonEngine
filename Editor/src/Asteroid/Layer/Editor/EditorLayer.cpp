@@ -17,6 +17,7 @@ namespace Asteroid {
 
 		EditorState::Init();
 
+		/*
 		// Generate checkerboard texture
 		{
 			ME_PROFILE_SCOPE("GenerateTexture-Checkerboard");
@@ -54,6 +55,7 @@ namespace Asteroid {
 			m_Texture_ColorGrid->SetData(textureData, sizeof(uint32_t) * width * height);
 			delete[] textureData;
 		}
+		*/
 
 		// ---- Panel::OnAttach ----
 

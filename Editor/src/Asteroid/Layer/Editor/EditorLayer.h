@@ -35,8 +35,8 @@ namespace Asteroid {
 		Entity m_CameraEntity;
 		Entity m_SquareEntity;
 
-		Ref<Texture2D> m_Texture_Checkerboard;
-		Ref<Texture2D> m_Texture_ColorGrid;
+		//Ref<Texture2D> m_Texture_Checkerboard;
+		//Ref<Texture2D> m_Texture_ColorGrid;
 
 	};
 
