@@ -102,6 +102,28 @@ namespace Asteroid {
 
 		EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera());
 
+		// Entity ID picking
+		auto[mx, my] = ImGui::GetMousePos();
+
+		glm::vec2 minBounds = m_ViewportPanel.GetViewportMinBound();
+		glm::vec2 maxBounds = m_ViewportPanel.GetViewportMaxBound();
+
+		mx -= minBounds.x;
+		my -= minBounds.y;
+
+		glm::vec2 viewportSize = maxBounds - minBounds;
+
+		my = viewportSize.y - my;
+
+		int mouseX = (int)mx;
+		int mouseY = (int)my;
+
+		if (mouseX >= 0 && mouseY >= 0 && mouseX < (int)viewportSize.x && mouseY < (int)viewportSize.y)
+		{
+			int pixelData = EditorState::GetFramebuffer()->ReadPixel(1, mouseX, mouseY);
+			ME_CORE_WARN("Pixel data = {0}", pixelData);
+		}
+
 		EditorState::GetFramebuffer()->Unbind();
 	}
 
