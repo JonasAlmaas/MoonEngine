@@ -8,7 +8,7 @@
 
 namespace Moon {
 
-	void Scene::OnUpdate(Timestep ts)
+	void Scene::OnUpdateRuntime(Timestep ts)
 	{
 		// ---- Scripts ----
 		{

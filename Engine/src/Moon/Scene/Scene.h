@@ -11,7 +11,7 @@ namespace Moon {
 		Scene() = default;
 		virtual ~Scene() = default;
 
-		void OnUpdate(Timestep ts);
+		void OnUpdateRuntime(Timestep ts);
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 
@@ -23,8 +23,10 @@ namespace Moon {
 
 		entt::registry& GetRegistry() { return m_Registry; }
 
-	private:
+	protected:
 		entt::registry m_Registry;
+
+	private:
 		Entity m_ActiveCamera{};
 
 		uint32_t m_ViewportWidth = 0;
