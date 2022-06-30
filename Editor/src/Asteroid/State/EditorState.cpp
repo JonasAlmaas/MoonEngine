@@ -1,6 +1,8 @@
 #include "aopch.h"
 #include "Asteroid/State/EditorState.h"
 
+#include <Moon/Scene/Serializer/SceneSerializer.h>
+
 
 namespace Asteroid {
 
@@ -26,6 +28,15 @@ namespace Asteroid {
 		s_Data.EditorCamera = CreateRef<EditorCamera>();
 
 		NewActiveScene();
+
+		// Load scene if a path was specified as a command line argument
+		auto commandLineArgs = Application::Get().GetCommandLineArgs();
+		if (commandLineArgs.Count > 1)
+		{
+			auto sceneFilePath = commandLineArgs[1];
+			SceneSerializer serializer(s_Data.ActiveScene);
+			serializer.Deserialize(sceneFilePath);
+		}
 	}
 
 	Ref<Framebuffer> EditorState::GetFramebuffer()
