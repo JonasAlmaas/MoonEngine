@@ -33,6 +33,8 @@ namespace Moon {
 
 	void SceneCamera::SetViewportSize(uint32_t width, uint32_t height)
 	{
+		ME_CORE_ASSERT(width > 0 && height > 0, "Viewport size should not be set to 0 or lower!");
+
 		m_AspectRatio = (float)width / (float)height;
 		RecalculateProjection();
 	}
