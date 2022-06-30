@@ -18,3 +18,8 @@ bin-int/
 
 # Moon assset files
 **/**.mmap
+
+# VulkanSDK
+Engine/vendor/VulkanSDK/**
+!Engine/vendor/VulkanSDK/**.exe
+
