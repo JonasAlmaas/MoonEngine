@@ -23,3 +23,6 @@ bin-int/
 Engine/vendor/VulkanSDK/**
 !Engine/vendor/VulkanSDK/**.exe
 
+# Cache
+Editor/Content/cache
+**/__pycache__
