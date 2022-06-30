@@ -21,7 +21,6 @@ bin-int/
 
 # VulkanSDK
 Engine/vendor/VulkanSDK/**
-!Engine/vendor/VulkanSDK/**.exe
 
 # Cache
 Editor/Content/cache
