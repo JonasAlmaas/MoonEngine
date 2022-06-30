@@ -2,7 +2,7 @@
 #include "Moon/Core/Renderer/Buffer/UniformBuffer/UniformBuffer.h"
 
 #include "Moon/Core/Renderer/Renderer.h"
-#include "Moon/Platform/OpenGL/Buffer/UniformBuffer/OpenGLUniformBuffer"
+#include "Moon/Platform/OpenGL/Buffer/UniformBuffer/OpenGLUniformBuffer.h"
 
 
 namespace Moon {
