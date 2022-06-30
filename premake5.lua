@@ -36,4 +36,3 @@ group "Tools"
 group ""
 
 include "Engine"
-include "Sandbox"
