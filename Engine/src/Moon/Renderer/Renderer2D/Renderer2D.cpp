@@ -2,6 +2,7 @@
 #include "Moon/Renderer/Renderer2D/Renderer2D.h"
 
 #include "Moon/Core/Renderer/Buffer/IndexBuffer/IndexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/UniformBuffer/UniformBuffer.h"
 #include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
 #include "Moon/Core/Renderer/Shader/Shader.h"
@@ -51,6 +52,14 @@ namespace Moon {
 		#if ME_ENABLE_RENDERER2D_STATISTICS
 			Renderer2D::Statistics Stats;
 		#endif
+
+		// Uniform buffer data to be sent to the gpu
+		struct CameraData
+		{
+			glm::mat4 ViewProjection;
+		};
+		CameraData CameraBuffer;
+		Ref<UniformBuffer> CameraUniformBuffer;
 	};
 
 	static Renderer2DData s_Data;
@@ -125,6 +134,8 @@ namespace Moon {
 		s_Data.QuadUVCoords[1] = { 1.0f, 0.0f };
 		s_Data.QuadUVCoords[2] = { 1.0f, 1.0f };
 		s_Data.QuadUVCoords[3] = { 0.0f, 1.0f };
+
+		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 	}
 
 	void Renderer2D::Shutdown()
@@ -138,8 +149,8 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		s_Data.Shader->Bind();
-		s_Data.Shader->SetMat4("u_ViewProjection", viewProjectionMatrix);
+		s_Data.CameraBuffer.ViewProjection = viewProjectionMatrix;
+		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartBatch();
 	}
@@ -181,6 +192,7 @@ namespace Moon {
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 			s_Data.TextureSlots[i]->Bind(i);
 
+		s_Data.Shader->Bind();
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
