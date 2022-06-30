@@ -142,13 +142,18 @@ namespace Asteroid {
 			// Only if there isn't anything in the current scene
 			if (Input::IsMouseButtonPressed(Mouse::Button0) && m_Hovered)
 			{
-				std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
-
-				if (!filepath.empty())
+				// Make sure the click is not on the tabbar
+				ImVec2 mousePos = ImGui::GetMousePos();
+				if (mousePos.x > m_MinBound.x && mousePos.y > m_MinBound.y && mousePos.x < m_MaxBound.x && mousePos.y < m_MaxBound.y)
 				{
-					Ref<Scene> activeScene = EditorState::NewActiveScene();
-					SceneSerializer serializer(activeScene);
-					serializer.Deserialize(filepath);
+					std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
+
+					if (!filepath.empty())
+					{
+						Ref<Scene> activeScene = EditorState::NewActiveScene();
+						SceneSerializer serializer(activeScene);
+						serializer.Deserialize(filepath);
+					}
 				}
 			}
 		}
