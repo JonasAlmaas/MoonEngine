@@ -86,17 +86,24 @@ namespace Asteroid {
 		ME_PROFILE_FUNCTION();
 
 		// ---- Panel::OnUpdate ----
-		
-		m_PropertiesPanel.OnUpdate(ts);
-		m_RendererPanel.OnUpdate(ts);
-		m_SceneHierarchyPanel.OnUpdate(ts);
-		m_ViewportPanel.OnUpdate(ts);
 
-		// ---- Misc Update ----
+		auto panelsState = EditorState::GetPanelsState();
 
-		if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
-			EditorState::GetEditorCamera()->OnUpdate(ts);
+		if (panelsState->Properties)
+			m_PropertiesPanel.OnUpdate(ts);
 
+		if (panelsState->Renderer)
+			m_RendererPanel.OnUpdate(ts);
+
+		if (panelsState->SceneHierarchy)
+			m_SceneHierarchyPanel.OnUpdate(ts);
+
+		if (panelsState->Viewport)
+		{
+			m_ViewportPanel.OnUpdate(ts);
+			if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
+				EditorState::GetEditorCamera()->OnUpdate(ts);
+		}
 
 		// ---- Render ----
 
@@ -169,11 +176,20 @@ namespace Asteroid {
 			m_MenuBar.OnImGuiRender();
 
 			// ---- Panels::OnImGuiRender ----
+
+			auto panelsState = EditorState::GetPanelsState();
+
+			if (panelsState->Properties)
+				m_PropertiesPanel.OnImGuiRender();
 			
-			m_PropertiesPanel.OnImGuiRender();
-			m_RendererPanel.OnImGuiRender();
-			m_SceneHierarchyPanel.OnImGuiRender();
-			m_ViewportPanel.OnImGuiRender();
+			if (panelsState->Renderer)
+				m_RendererPanel.OnImGuiRender();
+
+			if (panelsState->SceneHierarchy)
+				m_SceneHierarchyPanel.OnImGuiRender();
+
+			if (panelsState->Viewport)
+				m_ViewportPanel.OnImGuiRender();
 
 			// -------------------------------
 
@@ -200,7 +216,11 @@ namespace Asteroid {
 		ME_PROFILE_FUNCTION();
 
 		m_MenuBar.OnEvent(e);
-		m_ViewportPanel.OnEvent(e);
+
+		auto panelsState = EditorState::GetPanelsState();
+
+		if (panelsState->Viewport)
+			m_ViewportPanel.OnEvent(e);
 
 		EditorState::GetEditorCamera()->OnEvent(e);
 	}

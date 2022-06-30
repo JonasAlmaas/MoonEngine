@@ -34,6 +34,25 @@ namespace Asteroid {
 				ImGui::EndMenu();
 			}
 
+			if (ImGui::BeginMenu("Tools"))
+			{
+				auto panelsState = EditorState::GetPanelsState();
+
+				if (ImGui::MenuItem("Properties", NULL, panelsState->Properties))
+					panelsState->Properties = !panelsState->Properties;
+
+				if (ImGui::MenuItem("Renderer", NULL, panelsState->Renderer))
+					panelsState->Renderer = !panelsState->Renderer;
+
+				if (ImGui::MenuItem("SceneHierarchy", NULL, panelsState->SceneHierarchy))
+					panelsState->SceneHierarchy = !panelsState->SceneHierarchy;
+
+				if (ImGui::MenuItem("Viewport", NULL, panelsState->Viewport))
+					panelsState->Viewport = !panelsState->Viewport;
+
+				ImGui::EndMenu();
+			}
+
 			ImGui::EndMenuBar();
 		}
 	}

@@ -10,6 +10,14 @@ namespace Asteroid {
 	class EditorState
 	{
 	public:
+		struct PanelsState
+		{
+			bool Properties = true;
+			bool Renderer = true;
+			bool SceneHierarchy = true;
+			bool Viewport = true;
+		};
+
 		static void Init();
 
 		static Ref<Framebuffer> GetFramebuffer();
@@ -19,6 +27,8 @@ namespace Asteroid {
 		static Ref<EditorScene> GetActiveScene();
 
 		static Ref<EditorCamera> GetEditorCamera();
+
+		static Ref<PanelsState> GetPanelsState();
 
 	};
 
