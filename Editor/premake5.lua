@@ -2,7 +2,7 @@ project "Editor"
     kind "ConsoleApp"
 	language "C++"
     cppdialect "C++20"
-    staticruntime "on"
+    staticruntime "off"
 
     targetdir ("../bin/" .. outputdir .. "/%{prj.name}")
     objdir ("../bin-int/" .. outputdir .. "/%{prj.name}")
@@ -46,6 +46,11 @@ project "Editor"
 		defines "ME_DEBUG"
 		runtime "Debug"
 		symbols "on"
+
+		postbuildcommands
+		{
+			"{COPYDIR} \"%{LibraryDir.VulkanSDK_DebugDLL}\" \"%{cfg.targetdir}\""
+		}
 
 	filter "configurations:Release"
 		defines "ME_RELEASE"

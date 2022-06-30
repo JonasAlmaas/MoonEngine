@@ -2,7 +2,7 @@ project "Engine"
     kind "StaticLib"
     language "C++"
     cppdialect "C++20"
-    staticruntime "on"
+    staticruntime "off"
 
     targetdir ("../bin/" .. outputdir .. "/%{prj.name}")
     objdir ("../bin-int/" .. outputdir .. "/%{prj.name}")
@@ -41,6 +41,7 @@ project "Engine"
         "%{IncludeDir.ImGuizmo}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.stb_image}",
+        "%{IncludeDir.VulkanSDK}",
         "%{IncludeDir.yaml}",
     }
 
@@ -69,12 +70,33 @@ project "Engine"
 		runtime "Debug"
 		symbols "on"
 
+		links
+		{
+			"%{Library.ShaderC_Debug}",
+			"%{Library.SPIRV_Cross_Debug}",
+			"%{Library.SPIRV_Cross_GLSL_Debug}",
+		}
+
     filter "configurations:Release"
 		defines "ME_RELEASE"
 		runtime "Release"
 		optimize "on"
 
+		links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}",
+		}
+
     filter "configurations:Dist"
 		defines "ME_DIST"
 		runtime "Release"
 		optimize "on"
+
+		links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}",
+		}
