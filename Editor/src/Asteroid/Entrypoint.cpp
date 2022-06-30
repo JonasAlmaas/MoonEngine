@@ -6,9 +6,9 @@
 
 namespace Moon {
 
-	Application* Application::Create()
+	Application* Application::Create(ApplicationCommandLineArgs args)
 	{
-		return new Asteroid::AsteroidApp();
+		return new Asteroid::AsteroidApp(args);
 	}
 
 }

@@ -6,15 +6,27 @@
 
 
 namespace Moon {
+
+	struct ApplicationCommandLineArgs
+	{
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator[](int index) const
+		{
+			ME_CORE_ASSERT(index < Count, "Index out of range!");
+			return Args[index];
+		}
+	};
 	
 	class Application
 	{
 	public:
-		Application(const std::string& name = "Moon Application");
+		Application(const std::string& name = "Moon Application", ApplicationCommandLineArgs args = ApplicationCommandLineArgs());
 		virtual ~Application();
 
 		// To be defined in client
-		static Application* Create();
+		static Application* Create(ApplicationCommandLineArgs args);
 		
 		/**
 		 * @brief Starts the main application loop.
@@ -62,12 +74,16 @@ namespace Moon {
 
 		inline static Application& Get() { return *s_Instance; }
 
+		ApplicationCommandLineArgs GetCommandLineArgs() const { return m_CommandLineArgs; }
+
 	private:
 		bool OnWindowClosedEvent(WindowCloseEvent& e);
 		bool OnWindowMinimizeEvent(WindowMinimizeEvent& e);
 		bool OnWindowResizeEvent(WindowResizeEvent& e);
 
 	private:
+		ApplicationCommandLineArgs m_CommandLineArgs;
+
 		bool m_Running = true;
 		bool m_Minimized = false;
 

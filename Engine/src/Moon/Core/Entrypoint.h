@@ -11,7 +11,7 @@
 		Moon::Log::Init();
 
 		ME_PROFILE_BEGIN_SESSION("Startup", "Profile-Startup.json");
-		auto app = Moon::Application::Create();
+		auto app = Moon::Application::Create({ argc, argv });
 		ME_PROFILE_END_SESSION();
 
 		ME_PROFILE_BEGIN_SESSION("Runtime", "Profile-Runtime.json");
