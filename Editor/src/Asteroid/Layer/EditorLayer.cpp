@@ -59,6 +59,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnAttach ----
 
+		m_ContentBrowserPanel.OnAttach();
 		m_PropertiesPanel.OnAttach();
 		m_RendererPanel.OnAttach();
 		m_SceneHierarchyPanel.OnAttach();
@@ -73,6 +74,7 @@ namespace Asteroid {
 
 		// ---- Panel::OnDetach ----
 
+		m_ContentBrowserPanel.OnDetach();
 		m_PropertiesPanel.OnDetach();
 		m_RendererPanel.OnDetach();
 		m_SceneHierarchyPanel.OnDetach();
@@ -87,18 +89,21 @@ namespace Asteroid {
 
 		// ---- Panel::OnUpdate ----
 
-		auto panelsState = EditorState::GetPanelsState();
+		auto panelState = EditorState::GetPanelState();
 
-		if (panelsState->Properties)
+		if (panelState->ContentBrowser)
+			m_ContentBrowserPanel.OnUpdate(ts);
+
+		if (panelState->Properties)
 			m_PropertiesPanel.OnUpdate(ts);
 
-		if (panelsState->Renderer)
+		if (panelState->Renderer)
 			m_RendererPanel.OnUpdate(ts);
 
-		if (panelsState->SceneHierarchy)
+		if (panelState->SceneHierarchy)
 			m_SceneHierarchyPanel.OnUpdate(ts);
 
-		if (panelsState->Viewport)
+		if (panelState->Viewport)
 		{
 			m_ViewportPanel.OnUpdate(ts);
 			if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
@@ -177,18 +182,21 @@ namespace Asteroid {
 
 			// ---- Panels::OnImGuiRender ----
 
-			auto panelsState = EditorState::GetPanelsState();
+			auto panelState = EditorState::GetPanelState();
 
-			if (panelsState->Properties)
+			if (panelState->ContentBrowser)
+				m_ContentBrowserPanel.OnImGuiRender();
+
+			if (panelState->Properties)
 				m_PropertiesPanel.OnImGuiRender();
 			
-			if (panelsState->Renderer)
+			if (panelState->Renderer)
 				m_RendererPanel.OnImGuiRender();
 
-			if (panelsState->SceneHierarchy)
+			if (panelState->SceneHierarchy)
 				m_SceneHierarchyPanel.OnImGuiRender();
 
-			if (panelsState->Viewport)
+			if (panelState->Viewport)
 				m_ViewportPanel.OnImGuiRender();
 
 			// -------------------------------
@@ -217,9 +225,12 @@ namespace Asteroid {
 
 		m_MenuBar.OnEvent(e);
 
-		auto panelsState = EditorState::GetPanelsState();
+		auto panelState = EditorState::GetPanelState();
 
-		if (panelsState->Viewport)
+		if (panelState->ContentBrowser)
+			m_ContentBrowserPanel.OnEvent(e);
+
+		if (panelState->Viewport)
 			m_ViewportPanel.OnEvent(e);
 
 		EditorState::GetEditorCamera()->OnEvent(e);

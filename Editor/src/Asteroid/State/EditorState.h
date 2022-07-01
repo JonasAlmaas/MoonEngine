@@ -10,8 +10,9 @@ namespace Asteroid {
 	class EditorState
 	{
 	public:
-		struct PanelsState
+		struct PanelState
 		{
+			bool ContentBrowser = true;
 			bool Properties = true;
 			bool Renderer = true;
 			bool SceneHierarchy = true;
@@ -28,7 +29,7 @@ namespace Asteroid {
 
 		static Ref<EditorCamera> GetEditorCamera();
 
-		static Ref<PanelsState> GetPanelsState();
+		static Ref<PanelState> GetPanelState();
 
 	};
 

@@ -36,19 +36,19 @@ namespace Asteroid {
 
 			if (ImGui::BeginMenu("Tools"))
 			{
-				auto panelsState = EditorState::GetPanelsState();
+				auto panelState = EditorState::GetPanelState();
 
-				if (ImGui::MenuItem("Properties", NULL, panelsState->Properties))
-					panelsState->Properties = !panelsState->Properties;
+				if (ImGui::MenuItem("Properties", NULL, panelState->Properties))
+					panelState->Properties = !panelState->Properties;
 
-				if (ImGui::MenuItem("Renderer", NULL, panelsState->Renderer))
-					panelsState->Renderer = !panelsState->Renderer;
+				if (ImGui::MenuItem("Renderer", NULL, panelState->Renderer))
+					panelState->Renderer = !panelState->Renderer;
 
-				if (ImGui::MenuItem("SceneHierarchy", NULL, panelsState->SceneHierarchy))
-					panelsState->SceneHierarchy = !panelsState->SceneHierarchy;
+				if (ImGui::MenuItem("SceneHierarchy", NULL, panelState->SceneHierarchy))
+					panelState->SceneHierarchy = !panelState->SceneHierarchy;
 
-				if (ImGui::MenuItem("Viewport", NULL, panelsState->Viewport))
-					panelsState->Viewport = !panelsState->Viewport;
+				if (ImGui::MenuItem("Viewport", NULL, panelState->Viewport))
+					panelState->Viewport = !panelState->Viewport;
 
 				ImGui::EndMenu();
 			}
