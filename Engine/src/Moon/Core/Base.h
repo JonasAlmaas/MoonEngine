@@ -1,9 +1,5 @@
 #pragma once
 
-// This ignores all warnings raised inside External headers
-#pragma warning(push, 0)
-
-
 #include "Moon/Core/Config.h"
 
 

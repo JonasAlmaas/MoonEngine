@@ -42,50 +42,58 @@ namespace Moon {
 			data = data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 		}
 
-		ME_CORE_ASSERT(data, "Failed to load image!");
-		ME_CORE_ASSERT(width != 0 && height != 0, "Texture2D can not be smaller than 1x1!");
-
-		m_Width = width;
-		m_Height = height;
-
-		GLenum internalFormat = 0, dataFormat = 0;
-		switch (channels)
+		if (data)
 		{
-			case 3:
+			m_IsLoaded = true;
+
+			ME_CORE_ASSERT(width != 0 && height != 0, "Texture2D can not be smaller than 1x1!");
+
+			m_Width = width;
+			m_Height = height;
+
+			GLenum internalFormat = 0, dataFormat = 0;
+			switch (channels)
 			{
-				internalFormat = GL_RGB8;
-				dataFormat = GL_RGB;
-				break;
+				case 3:
+				{
+					internalFormat = GL_RGB8;
+					dataFormat = GL_RGB;
+					break;
+				}
+				case 4:
+				{
+					internalFormat = GL_RGBA8;
+					dataFormat = GL_RGBA;
+					break;
+				}
+				default:
+				{
+					ME_CORE_ASSERT(false, "Format not supported!");
+					break;
+				}
 			}
-			case 4:
-			{
-				internalFormat = GL_RGBA8;
-				dataFormat = GL_RGBA;
-				break;
-			}
-			default:
-			{
-				ME_CORE_ASSERT(false, "Format not supported!");
-				break;
-			}
+
+			m_InternalFormat = internalFormat;
+			m_DataFormat = dataFormat;
+
+			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+			glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
+
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			//glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
+
+			stbi_image_free(data);
 		}
-
-		m_InternalFormat = internalFormat;
-		m_DataFormat = dataFormat;
-
-		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
-		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
-
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		//glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
-
-		stbi_image_free(data);
+		else
+		{
+			ME_CORE_ASSERT(data, "Failed to load image!");
+		}
 	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
@@ -109,12 +117,6 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		glBindTextureUnit(slot, m_RendererID);
-	}
-
-	void OpenGLTexture2D::Unbind() const
-	{
-		ME_PROFILE_FUNCTION();
-
 	}
 
 }
