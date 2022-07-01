@@ -33,6 +33,7 @@ namespace Asteroid {
 		PropertiesPanel m_PropertiesPanel;
 		RendererPanel m_RendererPanel;
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		ToolbarPanel m_ToolbarPanel;
 		ViewportPanel m_ViewportPanel;
 	};
 

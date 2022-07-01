@@ -43,7 +43,7 @@ namespace Asteroid {
 			serializer.Deserialize(sceneFilePath);
 		}
 
-		GenerateTexturs();
+		GenerateTextures();
 	}
 
 	Ref<Framebuffer> EditorState::GetFramebuffer()
@@ -124,7 +124,7 @@ namespace Asteroid {
 
 	// ---- Private ----
 
-	void EditorState::GenerateTexturs()
+	void EditorState::GenerateTextures()
 	{
 		// Generate checkerboard texture
 		{

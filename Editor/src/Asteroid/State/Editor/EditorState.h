@@ -48,7 +48,7 @@ namespace Asteroid {
 		static Ref<PanelState> GetPanelState();
 
 	private:
-		static void GenerateTexturs();
+		static void GenerateTextures();
 
 	};
 

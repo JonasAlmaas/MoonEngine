@@ -10,7 +10,7 @@ namespace Moon {
 	{
 	public:
 		LayerStack();
-		~LayerStack() = default;
+		~LayerStack();
 
 		/*
 		 * Adds a layer to the layer stack.

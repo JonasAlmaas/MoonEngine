@@ -2,6 +2,7 @@
 #include "Asteroid/Layer/EditorLayer.h"
 
 #include "Asteroid/State/Editor/EditorState.h"
+#include "Asteroid/State/Scene/SceneState.h"
 
 
 namespace Asteroid {
@@ -23,6 +24,7 @@ namespace Asteroid {
 		m_PropertiesPanel.OnAttach();
 		m_RendererPanel.OnAttach();
 		m_SceneHierarchyPanel.OnAttach();
+		m_ToolbarPanel.OnAttach();
 		m_ViewportPanel.OnAttach();
 
 		// -------------------------
@@ -38,6 +40,7 @@ namespace Asteroid {
 		m_PropertiesPanel.OnDetach();
 		m_RendererPanel.OnDetach();
 		m_SceneHierarchyPanel.OnDetach();
+		m_ToolbarPanel.OnDetach();
 		m_ViewportPanel.OnDetach();
 
 		// -------------------------
@@ -63,12 +66,11 @@ namespace Asteroid {
 		if (panelState->SceneHierarchy)
 			m_SceneHierarchyPanel.OnUpdate(ts);
 
+		if (panelState->Toolbar)
+			m_ToolbarPanel.OnUpdate(ts);
+
 		if (panelState->Viewport)
-		{
 			m_ViewportPanel.OnUpdate(ts);
-			if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
-				EditorState::GetEditorCamera()->OnUpdate(ts);
-		}
 
 		// ---- Render ----
 
@@ -81,7 +83,23 @@ namespace Asteroid {
 		// Clear entity ID attachment to -1
 		EditorState::GetFramebuffer()->ClearAttachment(1, -1);
 
-		EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera());
+		SceneState::State sceneState = SceneState::Get();
+		switch (sceneState)
+		{
+			case SceneState::State::Edit:
+			{
+				if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
+					EditorState::GetEditorCamera()->OnUpdate(ts);
+
+				EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera());
+				break;
+			}
+			case SceneState::State::Play:
+			{
+				EditorState::GetActiveScene()->OnUpdateRuntime(ts);
+				break;
+			}
+		}
 
 		EditorState::GetFramebuffer()->Unbind();
 	}
@@ -130,8 +148,8 @@ namespace Asteroid {
 			ImGuiIO& io = ImGui::GetIO();
 			ImGuiStyle& style = ImGui::GetStyle();
 
-			style.WindowMinSize.x = 200.0f;
-			style.WindowMinSize.y = 200.0f;
+			style.WindowMinSize.x = 20.0f;
+			style.WindowMinSize.y = 20.0f;
 
 			// Submit the DockSpace
 			ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
@@ -155,6 +173,9 @@ namespace Asteroid {
 
 			if (panelState->SceneHierarchy)
 				m_SceneHierarchyPanel.OnImGuiRender();
+
+			if (panelState->Toolbar)
+				m_ToolbarPanel.OnImGuiRender();
 
 			if (panelState->Viewport)
 				m_ViewportPanel.OnImGuiRender();

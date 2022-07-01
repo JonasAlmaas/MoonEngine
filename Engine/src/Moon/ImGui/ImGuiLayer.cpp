@@ -8,10 +8,10 @@
 #include "Font/Roboto/Roboto-Bold.embed"
 #include "Font/Roboto/Roboto-Regular.embed"
 
-#include <ImGuizmo.h>
-
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
+
+#include <ImGuizmo.h>
 
 // TEMPORARY
 #include <GLFW/glfw3.h>
@@ -120,7 +120,7 @@ namespace Moon {
 		style.WindowBorderSize = 1.0f;
 		style.WindowMinSize = ImVec2(10.0f, 10.0f);
 		style.WindowTitleAlign = ImVec2(0.5f, 0.5f);
-		style.WindowMenuButtonPosition = ImGuiDir_None;
+		style.WindowMenuButtonPosition = ImGuiDir_Left;
 		style.ChildRounding = 0.0f;
 		style.ChildBorderSize = 1.0f;
 		style.PopupRounding = 0.0f;

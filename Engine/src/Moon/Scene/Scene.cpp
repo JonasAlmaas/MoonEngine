@@ -30,14 +30,7 @@ namespace Moon {
 
 		// ---- Renderer2D ----
 		{
-			Renderer2D::ResetStats();
-			RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
-			RenderCommand::Clear();
-
-			if (!m_ActiveCamera)
-				return;
-
-			if (!m_ActiveCamera.HasComponent<CameraComponent>())
+			if (!m_ActiveCamera || !m_ActiveCamera.HasComponent<CameraComponent>())
 				return;
 
 			auto& camera = m_ActiveCamera.GetComponent<CameraComponent>().Camera;
@@ -56,8 +49,7 @@ namespace Moon {
 			for (auto entity : group)
 			{
 				auto [transformComp, spriteComp] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-
-				Renderer2D::DrawSprite(transformComp.GetTransform(), spriteComp.Color);
+				Renderer2D::DrawSpriteComponent(transformComp.GetTransform(), spriteComp, (int)entity);
 			}
 
 			Renderer2D::EndScene();
