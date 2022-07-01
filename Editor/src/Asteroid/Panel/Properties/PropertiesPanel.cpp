@@ -84,20 +84,20 @@ namespace Asteroid {
 
 				ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
 
-				ImGui::PushItemWidth(contentRegionAvailable.x - lineHeight);
+				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5.0f, 0.0f });
+
+				ImGui::PushItemWidth(contentRegionAvailable.x - lineHeight - 3);
 				if (ImGui::InputText("##", buffer, sizeof(buffer), flags))
-				{
 					tag = std::string(buffer);
-				}
 				ImGui::PopItemWidth();
 
 				ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
+
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 0.0f));
 				if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
-				{
 					ImGui::OpenPopup("AddComponent");
-				}
-				ImGui::PopStyleVar();
+
+				ImGui::PopStyleVar(2);
 
 				if (ImGui::BeginPopup("AddComponent"))
 				{
@@ -185,7 +185,6 @@ namespace Asteroid {
 						ME_CORE_ASSERT(false, "Unknown ProjectionType");
 						break;
 					}
-
 				}
 
 				UILibrary::Checkbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
