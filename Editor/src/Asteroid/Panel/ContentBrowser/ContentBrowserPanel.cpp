@@ -74,6 +74,17 @@ namespace Asteroid {
 					ImGui::EndDragDropSource();
 				}
 			}
+			// For now texture can only be pngs
+			// TODO: Texture should be a custom file format, "masset" maybe?
+			else if (relativePath.extension().string() == ".png")
+			{
+				if (ImGui::BeginDragDropSource())
+				{
+					const wchar_t* payload = relativePath.c_str();
+					ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM_TEXTURE", payload, (wcslen(payload) + 1) * sizeof(wchar_t));
+					ImGui::EndDragDropSource();
+				}
+			}
 
 			if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left))
 			{
