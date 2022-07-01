@@ -1,7 +1,7 @@
 #include "aopch.h"
 #include "Asteroid/MenuBar/MenuBar.h"
 
-#include "Asteroid/State/EditorState.h"
+#include "Asteroid/State/Editor/EditorState.h"
 
 #include <Moon/Scene/Serializer/SceneSerializer.h>
 
@@ -37,6 +37,9 @@ namespace Asteroid {
 			if (ImGui::BeginMenu("Tools"))
 			{
 				auto panelState = EditorState::GetPanelState();
+
+				if (ImGui::MenuItem("ContentBrowser", NULL, panelState->ContentBrowser))
+					panelState->ContentBrowser = !panelState->ContentBrowser;
 
 				if (ImGui::MenuItem("Properties", NULL, panelState->Properties))
 					panelState->Properties = !panelState->Properties;

@@ -1,5 +1,5 @@
 #include "aopch.h"
-#include "Asteroid/State/EditorState.h"
+#include "Asteroid/State/Editor/EditorState.h"
 
 #include <Moon/Scene/Serializer/SceneSerializer.h>
 
@@ -50,6 +50,8 @@ namespace Asteroid {
 	{
 		return s_Data.Framebuffer;
 	}
+
+	// ---- Scene ----
 
 	Ref<EditorScene> EditorState::NewActiveScene()
 	{

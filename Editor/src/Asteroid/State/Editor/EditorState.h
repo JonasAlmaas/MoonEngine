@@ -16,6 +16,7 @@ namespace Asteroid {
 			bool Properties = true;
 			bool Renderer = true;
 			bool SceneHierarchy = true;
+			bool Toolbar = true;
 			bool Viewport = true;
 		};
 
@@ -25,10 +26,12 @@ namespace Asteroid {
 			Ref<Texture2D> ColorGrid;
 		};
 
+	public:
 		static void Init();
 
 		static Ref<Framebuffer> GetFramebuffer();
 
+		// ---- Scene ----
 		static Ref<EditorScene> NewActiveScene();
 		static void SetActiveScene(Ref<EditorScene>& scene);
 		static Ref<EditorScene> GetActiveScene();
