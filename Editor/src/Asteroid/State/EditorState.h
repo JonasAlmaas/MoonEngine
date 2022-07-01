@@ -19,6 +19,12 @@ namespace Asteroid {
 			bool Viewport = true;
 		};
 
+		struct TextureLibrary
+		{
+			Ref<Texture2D> Checkerboard;
+			Ref<Texture2D> ColorGrid;
+		};
+
 		static void Init();
 
 		static Ref<Framebuffer> GetFramebuffer();
@@ -32,9 +38,14 @@ namespace Asteroid {
 		static void OpenScene();
 		static void OpenScene(const std::filesystem::path& path);
 
+		static const TextureLibrary& GetTextureLibrary();
+
 		static Ref<EditorCamera> GetEditorCamera();
 
 		static Ref<PanelState> GetPanelState();
+
+	private:
+		static void GenerateTexturs();
 
 	};
 
