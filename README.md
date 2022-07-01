@@ -2,6 +2,6 @@
 Source code for the Moon Engine
 
 ### Submodules
-**First time pull** `submodule update --init`
+**First time pull** `git submodule update --init`
 
-**Update** `submodule update --remote`
+**Update** `git submodule update --remote`
