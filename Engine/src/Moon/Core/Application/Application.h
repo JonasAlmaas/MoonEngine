@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Moon/Core/Event/WindowEvent.h"
 #include "Moon/Core/Layer/LayerStack.h"
 #include "Moon/Core/Window/Window.h"
 #include "Moon/ImGui/ImGuiLayer.h"

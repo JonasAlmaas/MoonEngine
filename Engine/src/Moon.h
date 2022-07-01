@@ -2,6 +2,8 @@
 
 // For use by Moon engine applications only
 
+#include "Moon/Core/Base.h"
+
 // ---- Application ----
 #include "Moon/Core/Application/Application.h"
 
@@ -21,7 +23,6 @@
 #include "Moon/Core/Layer/Layer.h"
 
 // ---- Renderer ----
-
 #include "Moon/Core/Renderer/Renderer.h"
 #include "Moon/Renderer/Renderer2D/Renderer2D.h"
 
@@ -48,6 +49,7 @@
 #include "Moon/Core/Util/Math/Math.h"
 #include "Moon/Core/Util/FileDialog.h"
 #include "Moon/Core/Util/Random/Random.h"
+#include "Moon/Debug/Instrumentor.h"
 
 // ---- Window ----
 #include "Moon/Core/Window/Window.h"
