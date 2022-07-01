@@ -24,9 +24,9 @@ namespace Moon {
 		static constexpr Color Border = { ColorFormat::RGBADecimal, 56 };
 		static constexpr Color BorderShadow = { ColorFormat::RGBADecimal, 0, 0 };
 
-		static constexpr Color ElementBg = { ColorFormat::RGBADecimal, 20 };
-		static constexpr Color ElementHovered = { ColorFormat::RGBADecimal, 26 };
-		static constexpr Color ElementActive = { ColorFormat::RGBADecimal, 26 };
+		static constexpr Color ElementBg = { ColorFormat::RGBADecimal, 60 };
+		static constexpr Color ElementHovered = { ColorFormat::RGBADecimal, 75 };
+		static constexpr Color ElementActive = { ColorFormat::RGBADecimal, 60 };
 
 		static constexpr Color TitleBg = { ColorFormat::RGBADecimal, 26 };
 		static constexpr Color TitleBgActive = { ColorFormat::RGBADecimal, 26 };
@@ -38,8 +38,8 @@ namespace Moon {
 		static constexpr Color ScrollbarGrabHovered = { ColorFormat::RGBADecimal, 149 };
 		static constexpr Color ScrollbarGrabActive = { ColorFormat::RGBADecimal, 149 };
 
-		static constexpr Color Button = { ColorFormat::RGBADecimal, 65 };
-		static constexpr Color ButtonHovered = { ColorFormat::RGBADecimal, 110 };
+		static constexpr Color Button = { ColorFormat::RGBADecimal, 60 };
+		static constexpr Color ButtonHovered = { ColorFormat::RGBADecimal, 75 };
 		static constexpr Color ButtonActive = { ColorFormat::RGBADecimal, 60 };
 
 		static constexpr Color Header = { ColorFormat::RGBADecimal, 65 };

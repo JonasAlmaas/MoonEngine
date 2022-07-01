@@ -1,7 +1,7 @@
 #include "aopch.h"
 #include "Asteroid/Panel/SceneHierarchy/SceneHierarchyPanel.h"
 
-#include "Asteroid/State/EditorState.h"
+#include "Asteroid/State/Editor/EditorState.h"
 
 
 namespace Asteroid {

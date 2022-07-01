@@ -2,10 +2,12 @@
 #include "Asteroid/Panel/Properties/PropertiesPanel.h"
 
 #include "Asteroid/Panel/UILibrary/UILibrary.h"
-#include "Asteroid/State/EditorState.h"
+#include "Asteroid/State/Editor/EditorState.h"
 
 
 namespace Asteroid {
+
+	extern const std::filesystem::path g_ContentPath;
 
 	template<typename T, typename UIFunction>
 	static void DrawComponent(const std::string& name, Entity entity, UIFunction uiFunction)
@@ -84,20 +86,20 @@ namespace Asteroid {
 
 				ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
 
-				ImGui::PushItemWidth(contentRegionAvailable.x - lineHeight);
+				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5.0f, 4.0f });
+
+				ImGui::PushItemWidth(contentRegionAvailable.x - lineHeight - 3);
 				if (ImGui::InputText("##", buffer, sizeof(buffer), flags))
-				{
 					tag = std::string(buffer);
-				}
 				ImGui::PopItemWidth();
 
 				ImGui::SameLine(contentRegionAvailable.x - lineHeight * 0.5f);
+
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0.0f, 0.0f));
 				if (ImGui::Button("+", ImVec2{ lineHeight, lineHeight }))
-				{
 					ImGui::OpenPopup("AddComponent");
-				}
-				ImGui::PopStyleVar();
+
+				ImGui::PopStyleVar(2);
 
 				if (ImGui::BeginPopup("AddComponent"))
 				{
@@ -185,7 +187,6 @@ namespace Asteroid {
 						ME_CORE_ASSERT(false, "Unknown ProjectionType");
 						break;
 					}
-
 				}
 
 				UILibrary::Checkbox("Fixed Aspect Ratio", &component.FixedAspectRatio);
@@ -204,6 +205,62 @@ namespace Asteroid {
 			DrawComponent<SpriteRendererComponent>("Sprite Renderer", selectionContext, [](Entity& entity, SpriteRendererComponent& component)
 			{
 				UILibrary::DrawColor4Control("Color", component.Color);
+
+				glm::vec2 tileFactor = component.TileFactor;
+				if (UILibrary::DrawFloat2Control("Tile Factor", "U", "V", tileFactor, 0.1f, 1.0f, true))
+					component.TileFactor = tileFactor;
+
+				{
+					ImGuiIO& io = ImGui::GetIO();
+
+					ImGui::PushID("Texture");
+
+					ImGui::Columns(2);
+					ImGui::SetColumnWidth(0, 150.0f);
+					ImGui::Text("Texture");
+					ImGui::NextColumn();
+
+					ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5, 6 });
+					//ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5, 2 });
+
+					float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+
+					ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x);
+
+					void* previewTexturePtr = nullptr;
+					float previewTileFactor = 1.0f;
+					if (component.Texture)
+					{
+						previewTexturePtr = (void*)(uint64_t)component.Texture->GetRendererID();
+					}
+					else
+					{
+						previewTexturePtr = (void*)(uint64_t)EditorState::GetTextureLibrary().Checkerboard->GetRendererID();
+						previewTileFactor = 5.0f;
+					}
+
+					ImGui::Image(previewTexturePtr, { 128.0f, 128.0f }, { 0, previewTileFactor }, { previewTileFactor, 0 });
+
+					if (ImGui::BeginDragDropTarget())
+					{
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM_TEXTURE"))
+						{
+							const wchar_t* path = (const wchar_t*)payload->Data;
+							std::filesystem::path texturePath = std::filesystem::path(g_ContentPath) / path;
+							// TODO: Makes textures take in an "std::filesystem::path"
+							// Maybe just as an alternative
+							component.Texture = Texture2D::Create(texturePath.string());
+						}
+
+						ImGui::EndDragDropTarget();
+					}
+
+					ImGui::PopStyleVar();
+
+					ImGui::Columns(1);
+
+					ImGui::PopID();
+				}
 			});
 		}
 

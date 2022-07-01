@@ -365,7 +365,10 @@ namespace Moon {
 
 	void Renderer2D::DrawSpriteComponent(const glm::mat4& transform, SpriteRendererComponent& spriteComponent, int entityID)
 	{
-		Ultra_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, spriteComponent.Color, entityID);
+		if (spriteComponent.Texture)
+			Ultra_DrawSprite(transform, spriteComponent.Texture, spriteComponent.TileFactor, spriteComponent.Color, entityID);
+		else
+			Ultra_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, spriteComponent.Color, entityID);
 	}
 
 	// -- Draw Spite --

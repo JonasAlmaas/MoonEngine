@@ -1,5 +1,9 @@
 #pragma once
 
+#include "Moon/Core/Util/Math/Math.h"
+
+#include <imgui.h>
+
 
 namespace Moon {
 
@@ -11,6 +15,7 @@ namespace Moon {
 		None = 0,
 		RGBADecimal,		/**< range: 0 to 255 */
 		RGBANormalized,		/**< range: 0 to 1 */
+		RGBAFloat,			/**< HDR */
 	};
 
 	struct Color

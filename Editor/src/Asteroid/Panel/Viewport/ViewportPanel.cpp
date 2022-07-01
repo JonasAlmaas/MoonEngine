@@ -1,13 +1,15 @@
 #include "aopch.h"
 #include "Asteroid/Panel/Viewport/ViewportPanel.h"
 
-#include "Asteroid/State/EditorState.h"
+#include "Asteroid/State/Editor/EditorState.h"
 
 #include <Moon/Scene/Serializer/SceneSerializer.h>
 #include <ImGuizmo.h>
 
 
 namespace Asteroid {
+
+	extern const std::filesystem::path g_ContentPath;
 
 	void ViewportPanel::OnAttach()
 	{
@@ -80,6 +82,17 @@ namespace Asteroid {
 
 		ImGui::Image((void*)(uint64_t)EditorState::GetFramebuffer()->GetColorAttachmentRendererID(), panelSize, { 0, 1 }, { 1, 0 });
 
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM_MAP"))
+			{
+				const wchar_t* path = (const wchar_t*)payload->Data;
+				EditorState::OpenScene(std::filesystem::path(g_ContentPath) / path);
+			}
+
+			ImGui::EndDragDropTarget();
+		}
+
 		Ref<EditorScene> scene = EditorState::GetActiveScene();
 
 		// Check if there are any entities in the scene
@@ -145,16 +158,7 @@ namespace Asteroid {
 				// Make sure the click is not on the tabbar
 				ImVec2 mousePos = ImGui::GetMousePos();
 				if (mousePos.x > m_MinBound.x && mousePos.y > m_MinBound.y && mousePos.x < m_MaxBound.x && mousePos.y < m_MaxBound.y)
-				{
-					std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
-
-					if (!filepath.empty())
-					{
-						Ref<Scene> activeScene = EditorState::NewActiveScene();
-						SceneSerializer serializer(activeScene);
-						serializer.Deserialize(filepath);
-					}
-				}
+					EditorState::OpenScene();
 			}
 		}
 

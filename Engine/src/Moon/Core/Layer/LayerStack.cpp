@@ -8,6 +8,10 @@ namespace Moon {
 	{
 	}
 
+	LayerStack::~LayerStack()
+	{
+	}
+
 	void LayerStack::PushLayer(Ref<Layer> layer)
 	{
 		ME_PROFILE_FUNCTION();

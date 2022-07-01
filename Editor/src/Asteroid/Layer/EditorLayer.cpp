@@ -1,7 +1,8 @@
 #include "aopch.h"
 #include "Asteroid/Layer/EditorLayer.h"
 
-#include "Asteroid/State/EditorState.h"
+#include "Asteroid/State/Editor/EditorState.h"
+#include "Asteroid/State/Scene/SceneState.h"
 
 
 namespace Asteroid {
@@ -17,51 +18,13 @@ namespace Asteroid {
 
 		EditorState::Init();
 
-		/*
-		// Generate checkerboard texture
-		{
-			ME_PROFILE_SCOPE("GenerateTexture-Checkerboard");
-
-			uint32_t* textureData = new uint32_t[2 * 2]{ 0xffcccccc, 0xffffffff, 0xffffffff, 0xffcccccc };
-			m_Texture_Checkerboard = Texture2D::Create(2, 2);
-			m_Texture_Checkerboard->SetData(textureData, sizeof(uint32_t) * 2 * 2);
-			delete[] textureData;
-		}
-
-		// Generate color grid texture
-		{
-			ME_PROFILE_SCOPE("GenerateTexture-ColorGrid");
-
-			uint32_t width = 16;
-			uint32_t height = 16;
-			uint32_t* textureData = new uint32_t[width * height];
-			for (uint8_t x = 0; x < width; x++)
-			{
-				for (uint8_t y = 0; y < height; y++)
-				{
-					uint8_t r = (uint8_t)((1.0f - (float)(x + 1) / (float)width) * 255.0f);
-
-					uint8_t g = 0;
-					float g1 = (float)(x - y) / (float)(width + height - 2) * 255.0f;
-					if (g1 > 0.0f)
-						g = (uint8_t)g1;
-
-					uint8_t b = (uint8_t)(((float)(y + 1) / (float)height) * 255.0f);
-
-					textureData[x + y * width] = r + (g << 8) + (b << 16) | 0xff000000;
-				}
-			}
-			m_Texture_ColorGrid = Texture2D::Create(width, height);
-			m_Texture_ColorGrid->SetData(textureData, sizeof(uint32_t) * width * height);
-			delete[] textureData;
-		}
-		*/
-
 		// ---- Panel::OnAttach ----
 
+		m_ContentBrowserPanel.OnAttach();
 		m_PropertiesPanel.OnAttach();
 		m_RendererPanel.OnAttach();
 		m_SceneHierarchyPanel.OnAttach();
+		m_ToolbarPanel.OnAttach();
 		m_ViewportPanel.OnAttach();
 
 		// -------------------------
@@ -73,9 +36,11 @@ namespace Asteroid {
 
 		// ---- Panel::OnDetach ----
 
+		m_ContentBrowserPanel.OnDetach();
 		m_PropertiesPanel.OnDetach();
 		m_RendererPanel.OnDetach();
 		m_SceneHierarchyPanel.OnDetach();
+		m_ToolbarPanel.OnDetach();
 		m_ViewportPanel.OnDetach();
 
 		// -------------------------
@@ -87,23 +52,25 @@ namespace Asteroid {
 
 		// ---- Panel::OnUpdate ----
 
-		auto panelsState = EditorState::GetPanelsState();
+		auto panelState = EditorState::GetPanelState();
 
-		if (panelsState->Properties)
+		if (panelState->ContentBrowser)
+			m_ContentBrowserPanel.OnUpdate(ts);
+
+		if (panelState->Properties)
 			m_PropertiesPanel.OnUpdate(ts);
 
-		if (panelsState->Renderer)
+		if (panelState->Renderer)
 			m_RendererPanel.OnUpdate(ts);
 
-		if (panelsState->SceneHierarchy)
+		if (panelState->SceneHierarchy)
 			m_SceneHierarchyPanel.OnUpdate(ts);
 
-		if (panelsState->Viewport)
-		{
+		if (panelState->Toolbar)
+			m_ToolbarPanel.OnUpdate(ts);
+
+		if (panelState->Viewport)
 			m_ViewportPanel.OnUpdate(ts);
-			if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
-				EditorState::GetEditorCamera()->OnUpdate(ts);
-		}
 
 		// ---- Render ----
 
@@ -116,7 +83,23 @@ namespace Asteroid {
 		// Clear entity ID attachment to -1
 		EditorState::GetFramebuffer()->ClearAttachment(1, -1);
 
-		EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera());
+		SceneState::State sceneState = SceneState::Get();
+		switch (sceneState)
+		{
+			case SceneState::State::Edit:
+			{
+				if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
+					EditorState::GetEditorCamera()->OnUpdate(ts);
+
+				EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera());
+				break;
+			}
+			case SceneState::State::Play:
+			{
+				EditorState::GetActiveScene()->OnUpdateRuntime(ts);
+				break;
+			}
+		}
 
 		EditorState::GetFramebuffer()->Unbind();
 	}
@@ -165,8 +148,8 @@ namespace Asteroid {
 			ImGuiIO& io = ImGui::GetIO();
 			ImGuiStyle& style = ImGui::GetStyle();
 
-			style.WindowMinSize.x = 200.0f;
-			style.WindowMinSize.y = 200.0f;
+			style.WindowMinSize.x = 20.0f;
+			style.WindowMinSize.y = 20.0f;
 
 			// Submit the DockSpace
 			ImGuiID dockspaceId = ImGui::GetID("MyDockSpace");
@@ -177,18 +160,24 @@ namespace Asteroid {
 
 			// ---- Panels::OnImGuiRender ----
 
-			auto panelsState = EditorState::GetPanelsState();
+			auto panelState = EditorState::GetPanelState();
 
-			if (panelsState->Properties)
+			if (panelState->ContentBrowser)
+				m_ContentBrowserPanel.OnImGuiRender();
+
+			if (panelState->Properties)
 				m_PropertiesPanel.OnImGuiRender();
 			
-			if (panelsState->Renderer)
+			if (panelState->Renderer)
 				m_RendererPanel.OnImGuiRender();
 
-			if (panelsState->SceneHierarchy)
+			if (panelState->SceneHierarchy)
 				m_SceneHierarchyPanel.OnImGuiRender();
 
-			if (panelsState->Viewport)
+			if (panelState->Toolbar)
+				m_ToolbarPanel.OnImGuiRender();
+
+			if (panelState->Viewport)
 				m_ViewportPanel.OnImGuiRender();
 
 			// -------------------------------
@@ -217,9 +206,12 @@ namespace Asteroid {
 
 		m_MenuBar.OnEvent(e);
 
-		auto panelsState = EditorState::GetPanelsState();
+		auto panelState = EditorState::GetPanelState();
 
-		if (panelsState->Viewport)
+		if (panelState->ContentBrowser)
+			m_ContentBrowserPanel.OnEvent(e);
+
+		if (panelState->Viewport)
 			m_ViewportPanel.OnEvent(e);
 
 		EditorState::GetEditorCamera()->OnEvent(e);

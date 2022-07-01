@@ -1,7 +1,7 @@
 #include "aopch.h"
 #include "Asteroid/MenuBar/MenuBar.h"
 
-#include "Asteroid/State/EditorState.h"
+#include "Asteroid/State/Editor/EditorState.h"
 
 #include <Moon/Scene/Serializer/SceneSerializer.h>
 
@@ -15,16 +15,16 @@ namespace Asteroid {
 			if (ImGui::BeginMenu("File"))
 			{
 				if (ImGui::MenuItem("New", "Ctrl+N"))
-					NewScene();
+					EditorState::NewScene();
 
 				if (ImGui::MenuItem("Open...", "Ctrl+O"))
-					OpenScene();
+					EditorState::OpenScene();
 
 				if (ImGui::MenuItem("Save", "Ctrl+S"))
-					SaveScene();
+					EditorState::SaveScene();
 
 				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
-					SaveSceneAs();
+					EditorState::SaveSceneAs();
 
 				ImGui::Separator();
 
@@ -36,19 +36,22 @@ namespace Asteroid {
 
 			if (ImGui::BeginMenu("Tools"))
 			{
-				auto panelsState = EditorState::GetPanelsState();
+				auto panelState = EditorState::GetPanelState();
 
-				if (ImGui::MenuItem("Properties", NULL, panelsState->Properties))
-					panelsState->Properties = !panelsState->Properties;
+				if (ImGui::MenuItem("ContentBrowser", NULL, panelState->ContentBrowser))
+					panelState->ContentBrowser = !panelState->ContentBrowser;
 
-				if (ImGui::MenuItem("Renderer", NULL, panelsState->Renderer))
-					panelsState->Renderer = !panelsState->Renderer;
+				if (ImGui::MenuItem("Properties", NULL, panelState->Properties))
+					panelState->Properties = !panelState->Properties;
 
-				if (ImGui::MenuItem("SceneHierarchy", NULL, panelsState->SceneHierarchy))
-					panelsState->SceneHierarchy = !panelsState->SceneHierarchy;
+				if (ImGui::MenuItem("Renderer", NULL, panelState->Renderer))
+					panelState->Renderer = !panelState->Renderer;
 
-				if (ImGui::MenuItem("Viewport", NULL, panelsState->Viewport))
-					panelsState->Viewport = !panelsState->Viewport;
+				if (ImGui::MenuItem("SceneHierarchy", NULL, panelState->SceneHierarchy))
+					panelState->SceneHierarchy = !panelState->SceneHierarchy;
+
+				if (ImGui::MenuItem("Viewport", NULL, panelState->Viewport))
+					panelState->Viewport = !panelState->Viewport;
 
 				ImGui::EndMenu();
 			}
@@ -79,13 +82,13 @@ namespace Asteroid {
 			case Key::N:
 			{
 				if (ctrlPressed)
-					NewScene();
+					EditorState::NewScene();
 				break;
 			}
 			case Key::O:
 			{
 				if (ctrlPressed)
-					OpenScene();
+					EditorState::OpenScene();
 				break;
 			}
 			case Key::S:
@@ -93,9 +96,9 @@ namespace Asteroid {
 				if (ctrlPressed)
 				{
 					if (shiftPressed)
-						SaveSceneAs();
+						EditorState::SaveSceneAs();
 					else
-						SaveScene();
+						EditorState::SaveScene();
 				}
 				break;
 			}
@@ -104,40 +107,6 @@ namespace Asteroid {
 		}
 
 		return false;
-	}
-
-	// -- Shortcuts --
-
-	void MenuBar::NewScene()
-	{
-		EditorState::NewActiveScene();
-	}
-
-	void MenuBar::SaveSceneAs()
-	{
-		std::string filepath = FileDialog::SaveFile("Moon Scene (*.mmap)\0*.mmap\0");
-
-		if (!filepath.empty())
-		{
-			SceneSerializer serializer(EditorState::GetActiveScene());
-			serializer.Serialize(filepath);
-		}
-	}
-
-	void MenuBar::SaveScene()
-	{
-	}
-
-	void MenuBar::OpenScene()
-	{
-		std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
-
-		if (!filepath.empty())
-		{
-			Ref<Scene> activeScene = EditorState::NewActiveScene();
-			SceneSerializer serializer(activeScene);
-			serializer.Deserialize(filepath);
-		}
 	}
 
 }
