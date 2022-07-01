@@ -247,9 +247,11 @@ namespace Asteroid {
 						{
 							const wchar_t* path = (const wchar_t*)payload->Data;
 							std::filesystem::path texturePath = std::filesystem::path(g_ContentPath) / path;
-							// TODO: Makes textures take in an "std::filesystem::path"
-							// Maybe just as an alternative
-							component.Texture = Texture2D::Create(texturePath.string());
+							Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
+							if (texture->IsLoaded())
+								component.Texture = texture;
+							else
+								ME_WARN("Could not load texture {0}", texturePath.filename().string());
 						}
 
 						ImGui::EndDragDropTarget();

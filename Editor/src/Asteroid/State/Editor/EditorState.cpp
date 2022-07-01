@@ -102,6 +102,12 @@ namespace Asteroid {
 
 	void EditorState::OpenScene(const std::filesystem::path& path)
 	{
+		if (path.extension().string() != ".mmap")
+		{
+			ME_WARN("Could not load {0} - not a scene file", path.filename().string());
+			return;
+		}
+
 		Ref<Scene> activeScene = EditorState::NewActiveScene();
 		SceneSerializer serializer(activeScene);
 		serializer.Deserialize(path.string());
