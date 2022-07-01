@@ -26,6 +26,11 @@ namespace Asteroid {
 		static Ref<EditorScene> NewActiveScene();
 		static void SetActiveScene(Ref<EditorScene>& scene);
 		static Ref<EditorScene> GetActiveScene();
+		static void NewScene();
+		static void SaveSceneAs();
+		static void SaveScene();
+		static void OpenScene();
+		static void OpenScene(const std::filesystem::path& path);
 
 		static Ref<EditorCamera> GetEditorCamera();
 

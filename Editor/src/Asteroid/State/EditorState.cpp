@@ -67,6 +67,40 @@ namespace Asteroid {
 		return s_Data.ActiveScene;
 	}
 
+	void EditorState::NewScene()
+	{
+		NewActiveScene();
+	}
+
+	void EditorState::SaveSceneAs()
+	{
+		std::string filepath = FileDialog::SaveFile("Moon Scene (*.mmap)\0*.mmap\0");
+
+		if (!filepath.empty())
+		{
+			SceneSerializer serializer(EditorState::GetActiveScene());
+			serializer.Serialize(filepath);
+		}
+	}
+
+	void EditorState::SaveScene()
+	{
+	}
+
+	void EditorState::OpenScene()
+	{
+		std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
+		if (!filepath.empty())
+			OpenScene(filepath);
+	}
+
+	void EditorState::OpenScene(const std::filesystem::path& path)
+	{
+		Ref<Scene> activeScene = EditorState::NewActiveScene();
+		SceneSerializer serializer(activeScene);
+		serializer.Deserialize(path.string());
+	}
+
 	Ref<EditorCamera> EditorState::GetEditorCamera()
 	{
 		return s_Data.EditorCamera;

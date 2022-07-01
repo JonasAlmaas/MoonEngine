@@ -17,11 +17,6 @@ namespace Asteroid {
 	private:
 		bool OnKeyPressed(KeyPressedEvent& e);
 
-		void NewScene();
-		void SaveSceneAs();
-		void SaveScene();
-		void OpenScene();
-
 	};
 
 }
