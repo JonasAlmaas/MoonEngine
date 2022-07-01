@@ -86,7 +86,7 @@ namespace Asteroid {
 
 				ImGuiInputTextFlags flags = ImGuiInputTextFlags_EnterReturnsTrue;
 
-				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5.0f, 0.0f });
+				ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 5.0f, 4.0f });
 
 				ImGui::PushItemWidth(contentRegionAvailable.x - lineHeight - 3);
 				if (ImGui::InputText("##", buffer, sizeof(buffer), flags))
