@@ -33,13 +33,6 @@ namespace Asteroid {
 		RendererPanel m_RendererPanel;
 		SceneHierarchyPanel m_SceneHierarchyPanel;
 		ViewportPanel m_ViewportPanel;
-
-		Entity m_CameraEntity;
-		Entity m_SquareEntity;
-
-		//Ref<Texture2D> m_Texture_Checkerboard;
-		//Ref<Texture2D> m_Texture_ColorGrid;
-
 	};
 
 }

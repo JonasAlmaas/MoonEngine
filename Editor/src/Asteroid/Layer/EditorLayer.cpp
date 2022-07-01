@@ -17,46 +17,6 @@ namespace Asteroid {
 
 		EditorState::Init();
 
-		/*
-		// Generate checkerboard texture
-		{
-			ME_PROFILE_SCOPE("GenerateTexture-Checkerboard");
-
-			uint32_t* textureData = new uint32_t[2 * 2]{ 0xffcccccc, 0xffffffff, 0xffffffff, 0xffcccccc };
-			m_Texture_Checkerboard = Texture2D::Create(2, 2);
-			m_Texture_Checkerboard->SetData(textureData, sizeof(uint32_t) * 2 * 2);
-			delete[] textureData;
-		}
-
-		// Generate color grid texture
-		{
-			ME_PROFILE_SCOPE("GenerateTexture-ColorGrid");
-
-			uint32_t width = 16;
-			uint32_t height = 16;
-			uint32_t* textureData = new uint32_t[width * height];
-			for (uint8_t x = 0; x < width; x++)
-			{
-				for (uint8_t y = 0; y < height; y++)
-				{
-					uint8_t r = (uint8_t)((1.0f - (float)(x + 1) / (float)width) * 255.0f);
-
-					uint8_t g = 0;
-					float g1 = (float)(x - y) / (float)(width + height - 2) * 255.0f;
-					if (g1 > 0.0f)
-						g = (uint8_t)g1;
-
-					uint8_t b = (uint8_t)(((float)(y + 1) / (float)height) * 255.0f);
-
-					textureData[x + y * width] = r + (g << 8) + (b << 16) | 0xff000000;
-				}
-			}
-			m_Texture_ColorGrid = Texture2D::Create(width, height);
-			m_Texture_ColorGrid->SetData(textureData, sizeof(uint32_t) * width * height);
-			delete[] textureData;
-		}
-		*/
-
 		// ---- Panel::OnAttach ----
 
 		m_ContentBrowserPanel.OnAttach();
