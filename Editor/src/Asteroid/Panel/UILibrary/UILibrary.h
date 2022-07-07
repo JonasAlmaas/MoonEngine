@@ -8,7 +8,7 @@ namespace Asteroid {
 	class UILibrary
 	{
 	public:
-		static bool DrawFloatControl(const std::string& label, float& value, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 150.0f);
+		static bool DrawFloatControl(const std::string& label, float& value, float min = 0.0f, float max = 0.0f, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 150.0f);
 		static bool DrawFloat2Control(const std::string& label, const std::string& xLabel, const std::string& yLabel, glm::vec2& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 150.0f);
 		static bool DrawFloat3Control(const std::string& label, glm::vec3& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 150.0f);
 
