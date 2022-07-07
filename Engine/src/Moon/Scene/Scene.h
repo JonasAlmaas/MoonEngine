@@ -33,7 +33,7 @@ namespace Moon {
 	private:
 		Entity m_ActiveCamera{};
 
-		b2World* m_World = nullptr;
+		b2World* m_PhysicsWorld = nullptr;
 
 		uint32_t m_ViewportWidth = 0;
 		uint32_t m_ViewportHeight = 0;
