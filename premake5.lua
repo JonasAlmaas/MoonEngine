@@ -25,6 +25,7 @@ workspace "MoonEngine"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
+    include "Engine/vendor/Box2D"
     include "Engine/vendor/Glad"
     include "Engine/vendor/GLFW"
     include "Engine/vendor/ImGui"

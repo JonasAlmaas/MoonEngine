@@ -19,3 +19,6 @@
 [submodule "Engine/vendor/box2d"]
 	path = Engine/vendor/box2d
 	url = https://github.com/JonasAlmaas/box2d
+[submodule "Engine/vendor/Box2D"]
+	path = Engine/vendor/Box2D
+	url = https://github.com/JonasAlmaas/box2d

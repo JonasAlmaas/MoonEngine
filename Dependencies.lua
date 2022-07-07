@@ -3,6 +3,7 @@
 VULKAN_SDK = os.getenv("VULKAN_SDK")
 
 IncludeDir = {}
+IncludeDir["Box2D"] = "%{wks.location}/Engine/vendor/Box2D/include"
 IncludeDir["entt"] = "%{wks.location}/Engine/vendor/entt/include"
 IncludeDir["Glad"] = "%{wks.location}/Engine/vendor/Glad/include"
 IncludeDir["GLFW"] = "%{wks.location}/Engine/vendor/GLFW/include"
