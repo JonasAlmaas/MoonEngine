@@ -1,8 +1,7 @@
 #include "aopch.h"
 #include "Asteroid/Layer/EditorLayer.h"
 
-#include "Asteroid/State/Editor/EditorState.h"
-#include "Asteroid/State/Scene/SceneState.h"
+#include "Asteroid/State/EditorState.h"
 
 
 namespace Asteroid {
@@ -83,10 +82,10 @@ namespace Asteroid {
 		// Clear entity ID attachment to -1
 		EditorState::GetFramebuffer()->ClearAttachment(1, -1);
 
-		SceneState::State sceneState = SceneState::Get();
+		SceneState sceneState = EditorState::GetSceneState();
 		switch (sceneState)
 		{
-			case SceneState::State::Edit:
+			case SceneState::Edit:
 			{
 				if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
 					EditorState::GetEditorCamera()->OnUpdate(ts);
@@ -94,9 +93,9 @@ namespace Asteroid {
 				EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera());
 				break;
 			}
-			case SceneState::State::Play:
+			case SceneState::Play:
 			{
-				EditorState::GetActiveScene()->OnUpdateRuntime(ts);
+				EditorState::GetActiveScene()->OnRuntimeUpdate(ts);
 				break;
 			}
 		}

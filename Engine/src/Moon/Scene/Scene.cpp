@@ -8,7 +8,15 @@
 
 namespace Moon {
 
-	void Scene::OnUpdateRuntime(Timestep ts)
+	void Scene::OnRuntimeStart()
+	{
+	}
+
+	void Scene::OnRuntimeStop()
+	{
+	}
+
+	void Scene::OnRuntimeUpdate(Timestep ts)
 	{
 		// ---- Scripts ----
 		{
@@ -26,6 +34,11 @@ namespace Moon {
 
 				// Call OnDestroy on scene stop.
 			});
+		}
+
+		// ---- Physics ----
+		{
+
 		}
 
 		// ---- Renderer2D ----
@@ -71,18 +84,6 @@ namespace Moon {
 		}
 	}
 
-	void Scene::SetActiveCamera(Entity camera)
-	{
-		m_ActiveCamera = camera;
-
-		if (m_ActiveCamera)
-		{
-			// TODO: If you have a fixed aspect ratio this might be an issue. It kinda just updates the aspect ratio when setting it as active.
-			if (m_ViewportWidth != 0 && m_ViewportHeight != 0)
-				camera.GetComponent<CameraComponent>().Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
-		}
-	}
-
 	Entity Scene::CreateEntity(const std::string& name)
 	{
 		Entity entity = Entity(&m_Registry);
@@ -98,6 +99,18 @@ namespace Moon {
 	void Scene::DestroyEntity(Entity entity)
 	{
 		m_Registry.destroy(entity);
+	}
+
+	void Scene::SetActiveCamera(Entity camera)
+	{
+		m_ActiveCamera = camera;
+
+		if (m_ActiveCamera)
+		{
+			// TODO: If you have a fixed aspect ratio this might be an issue. It kinda just updates the aspect ratio when setting it as active.
+			if (m_ViewportWidth != 0 && m_ViewportHeight != 0)
+				camera.GetComponent<CameraComponent>().Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+		}
 	}
 
 }

@@ -2,7 +2,7 @@
 #include "Asteroid/Panel/Properties/PropertiesPanel.h"
 
 #include "Asteroid/Panel/UILibrary/UILibrary.h"
-#include "Asteroid/State/Editor/EditorState.h"
+#include "Asteroid/State/EditorState.h"
 
 
 namespace Asteroid {

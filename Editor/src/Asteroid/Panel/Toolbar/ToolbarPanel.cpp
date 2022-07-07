@@ -1,7 +1,7 @@
 #include "aopch.h"
 #include "Asteroid/Panel/Toolbar/ToolbarPanel.h"
 
-#include "Asteroid/State/Scene/SceneState.h"
+#include "Asteroid/State/EditorState.h"
 
 
 namespace Asteroid {
@@ -39,16 +39,16 @@ namespace Asteroid {
 
 		float size = ImGui::GetWindowHeight() - 4.0f;
 
-		SceneState::State sceneState = SceneState::Get();
+		SceneState sceneState = EditorState::GetSceneState();
 
-		Ref<Texture2D> icon = sceneState == SceneState::State::Edit ? m_IconPlay : m_IconStop;
+		Ref<Texture2D> icon = sceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 		{
 			switch (sceneState)
 			{
-				case SceneState::State::Edit:	SceneState::OnScenePlay(); break;
-				case SceneState::State::Play:	SceneState::OnSceneStop(); break;
+				case SceneState::Edit:	EditorState::OnScenePlay(); break;
+				case SceneState::Play:	EditorState::OnSceneStop(); break;
 			}
 		}
 
