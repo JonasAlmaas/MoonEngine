@@ -106,19 +106,46 @@ namespace Asteroid {
 					if (!selectionContext.HasComponent<TransformComponent>())
 					{
 						if (ImGui::MenuItem("Add Transform Component"))
+						{
 							selectionContext.AddComponent<TransformComponent>();
+							ImGui::CloseCurrentPopup();
+						}
 					}
 
 					if (!selectionContext.HasComponent<CameraComponent>())
 					{
 						if (ImGui::MenuItem("Add Camera Component"))
+						{
 							selectionContext.AddComponent<CameraComponent>();
+							ImGui::CloseCurrentPopup();
+						}
 					}
 
 					if (!selectionContext.HasComponent<SpriteRendererComponent>())
 					{
 						if (ImGui::MenuItem("Add Sprite Renderer Component"))
+						{
 							selectionContext.AddComponent<SpriteRendererComponent>();
+							ImGui::CloseCurrentPopup();
+						}
+					}
+
+					if (!selectionContext.HasComponent<Rigidbody2DComponent>())
+					{
+						if (ImGui::MenuItem("Add Rigid Body 2D Component"))
+						{
+							selectionContext.AddComponent<Rigidbody2DComponent>();
+							ImGui::CloseCurrentPopup();
+						}
+					}
+
+					if (!selectionContext.HasComponent<BoxCollider2DComponent>())
+					{
+						if (ImGui::MenuItem("Add Box Collider 2D Component"))
+						{
+							selectionContext.AddComponent<BoxCollider2DComponent>();
+							ImGui::CloseCurrentPopup();
+						}
 					}
 
 					ImGui::EndPopup();
@@ -153,15 +180,15 @@ namespace Asteroid {
 					case SceneCamera::ProjectionType::Perspective:
 					{
 						float perspecVerticalFOV = camera.GetPerspectiveVerticalFOV();
-						if (UILibrary::DrawFloatControl("Vertical FOV", perspecVerticalFOV, 0.5f, 45.0f))
+						if (UILibrary::DrawFloatControl("Vertical FOV", perspecVerticalFOV, 0.0f, 0.0f, 0.5f, 45.0f))
 							camera.SetPerspectiveVerticalFOV(perspecVerticalFOV);
 
 						float perspecNearClip = camera.GetPerspectiveNearClip();
-						if (UILibrary::DrawFloatControl("Near Clip", perspecNearClip, 0.1f, 0.01f))
+						if (UILibrary::DrawFloatControl("Near Clip", perspecNearClip, 0.0f, 0.0f, 0.1f, 0.01f))
 							camera.SetPerspectiveNearClip(perspecNearClip);
 
 						float perspecFarClip = camera.GetPerspectiveFarClip();
-						if (UILibrary::DrawFloatControl("Far Clip", perspecFarClip, 1.0f, 10000.0f))
+						if (UILibrary::DrawFloatControl("Far Clip", perspecFarClip, 0.0f, 0.0f, 1.0f, 10000.0f))
 							camera.SetPerspectiveFarClip(perspecFarClip);
 
 						break;
@@ -169,15 +196,15 @@ namespace Asteroid {
 					case SceneCamera::ProjectionType::Orthographic:
 					{
 						float orthoSize = camera.GetOrthographicSize();
-						if (UILibrary::DrawFloatControl("Size", orthoSize, 0.1f, 10.0f))
+						if (UILibrary::DrawFloatControl("Size", orthoSize, 0.0f, 0.0f, 0.1f, 10.0f))
 							camera.SetOrthographicSize(orthoSize);
 
 						float orthoNearClip = camera.GetOrthographicNearClip();
-						if (UILibrary::DrawFloatControl("Near Clip", orthoNearClip, 0.01f, -1.0f))
+						if (UILibrary::DrawFloatControl("Near Clip", orthoNearClip, 0.0f, 0.0f, 0.01f, -1.0f))
 							camera.SetOrthographicNearClip(orthoNearClip);
 
 						float orthoFarClip = camera.GetOrthographicFarClip();
-						if (UILibrary::DrawFloatControl("Far Clip", orthoFarClip, 0.01f, 1.0f))
+						if (UILibrary::DrawFloatControl("Far Clip", orthoFarClip, 0.0f, 0.0f, 0.01f, 1.0f))
 							camera.SetOrthographicFarClip(orthoFarClip);
 
 						break;
@@ -263,6 +290,29 @@ namespace Asteroid {
 
 					ImGui::PopID();
 				}
+			});
+
+			// -- Rigid Body 2D Component --
+			DrawComponent<Rigidbody2DComponent>("Rigid Body 2D", selectionContext, [](Entity& entity, Rigidbody2DComponent& component)
+			{
+				const char* bodyTypeStrings[] = { "Static", "Dynamic", "Kinematic"};
+				UILibrary::DrawCombo("Projection", bodyTypeStrings, 3, (int)component.Type, component, [](Rigidbody2DComponent& component, uint32_t i)
+				{
+					component.Type = (Rigidbody2DComponent::BodyType)i;
+				});
+
+				UILibrary::Checkbox("Fixed Rotation", &component.FixedRotation, true);
+			});
+
+			// -- Box Collider 2D Component --
+			DrawComponent<BoxCollider2DComponent>("Box Collider 2D", selectionContext, [](Entity& entity, BoxCollider2DComponent& component)
+			{
+				UILibrary::DrawFloat2Control("Size", "X", "Y", component.Size, 0.1f, 0.5f);
+				UILibrary::DrawFloat2Control("Offset", "X", "Y", component.Offset, 0.1f, 0.0f);
+				UILibrary::DrawFloatControl("Density", component.Density, 0.0f, 1.0f, 0.01f, 1.0f);
+				UILibrary::DrawFloatControl("Friction", component.Friction, 0.0f, 1.0f, 0.01f, 0.5f);
+				UILibrary::DrawFloatControl("Restitution", component.Restitution, 0.0f, 1.0f, 0.01f, 0.0f);
+				UILibrary::DrawFloatControl("Restitution Threshold", component.RestitutionThreshold, 0.0f, 0.0f, 0.01f, 0.5f, true);
 			});
 		}
 
