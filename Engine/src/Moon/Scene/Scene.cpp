@@ -4,6 +4,7 @@
 #include "Moon/Core/Renderer/RenderCommand/RenderCommand.h"
 #include "Moon/Renderer/Renderer2D/Renderer2D.h"
 #include "Moon/Scene/Component/SceneComponents.h"
+#include "Moon/Scene/Entity/Scriptable/ScriptableEntity.h"
 
 #include <box2d/b2_world.h>
 #include <box2d/b2_body.h>
@@ -162,8 +163,14 @@ namespace Moon {
 
 	Entity Scene::CreateEntity(const std::string& name)
 	{
+		return CreateEntityWithUUID(UUID(), name);
+	}
+
+	Entity Scene::CreateEntityWithUUID(UUID uuid, const std::string& name)
+	{
 		Entity entity = Entity(&m_Registry);
 
+		entity.AddComponent<IDComponent>(uuid);
 		entity.AddComponent<TransformComponent>();
 
 		auto& tagComp = entity.AddComponent<TagComponent>(name);

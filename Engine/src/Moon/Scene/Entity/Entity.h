@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Moon/Scene/Component/IDComponent.h"
+
 #include <entt.hpp>
 
 
@@ -40,6 +42,8 @@ namespace Moon {
 		{
 			return m_Registry->all_of<T>(m_EntityHandle);
 		}
+
+		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 
 		operator bool() const { return m_EntityHandle != entt::null; };
 		operator uint32_t() const { return (uint32_t)m_EntityHandle; }

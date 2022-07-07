@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Moon/Scene/Entity/Scriptable/ScriptableEntity.h"
-
 
 namespace Moon {
+
+	class ScriptableEntity;
 
 	struct NativeScriptComponent
 	{
