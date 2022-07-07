@@ -1,7 +1,7 @@
 #include "aopch.h"
 #include "Asteroid/MenuBar/MenuBar.h"
 
-#include "Asteroid/State/Editor/EditorState.h"
+#include "Asteroid/State/EditorState.h"
 
 #include <Moon/Scene/Serializer/SceneSerializer.h>
 

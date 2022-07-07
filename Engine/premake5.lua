@@ -33,6 +33,7 @@ project "Engine"
         "src",
         "resource",
 
+        "%{IncludeDir.Box2D}",
         "%{IncludeDir.entt}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.GLFW}",
@@ -47,6 +48,7 @@ project "Engine"
 
     links
 	{
+		"Box2D",
 		"Glad",
 		"GLFW",
 		"ImGui",

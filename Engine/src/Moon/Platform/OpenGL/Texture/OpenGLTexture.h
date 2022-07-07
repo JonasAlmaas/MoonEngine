@@ -25,6 +25,8 @@ namespace Moon {
 
 		virtual bool IsLoaded() const override { return m_IsLoaded; }
 
+		virtual const std::string& GetPath() const override { return m_Path; };
+
 		virtual bool operator==(const Texture& other) const override
 		{
 			return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;

@@ -4,7 +4,7 @@
 
 namespace Asteroid {
 
-	bool UILibrary::DrawFloatControl(const std::string& label, float& value, float speed, float resetValue, bool isLast, float firstColumnWidth)
+	bool UILibrary::DrawFloatControl(const std::string& label, float& value, float min, float max, float speed, float resetValue, bool isLast, float firstColumnWidth)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -27,7 +27,7 @@ namespace Asteroid {
 		float sliderWidth = ImGui::GetContentRegionAvail().x - buttonSize.x - 3.0f;
 
 		ImGui::SetNextItemWidth(sliderWidth);
-		bool hasChanged = ImGui::DragFloat("##X", &value, speed, 0.0f, 0.0f, "%.2f");
+		bool hasChanged = ImGui::DragFloat("##X", &value, speed, min, max, "%.2f");
 
 		ImGui::SameLine();
 		ImGui::PushFont(boldFont);

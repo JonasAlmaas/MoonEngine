@@ -30,6 +30,8 @@ namespace Moon {
 		// TODO: Makes textures take in an "std::filesystem::path"
 		// Maybe just as an alternative
 
+		virtual const std::string& GetPath() const = 0;
+
 	};
 
 }
