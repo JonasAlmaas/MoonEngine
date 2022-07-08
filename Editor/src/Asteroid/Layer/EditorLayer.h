@@ -26,6 +26,12 @@ namespace Asteroid {
 		virtual void OnEvent(Event& e) override;
 
 	private:
+		void DuplicateSelectionContext();
+
+	private:
+		bool OnKeyPressedEvent(KeyPressedEvent& e);
+
+	private:
 		MenuBar m_MenuBar;
 
 		// -- Panels --
