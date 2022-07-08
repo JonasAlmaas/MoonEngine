@@ -12,10 +12,9 @@ namespace Asteroid {
 
 		Ref<EditorScene> EditorSn;
 		Ref<EditorScene> RuntimeSn;
+		std::filesystem::path EditorScenePath;
 
 		Ref<EditorCamera> EditorCamera;
-
-		std::filesystem::path EditorScenePath;
 
 		Ref<PanelState> PanelState;
 		SceneState SceneState = SceneState::Edit;
@@ -130,6 +129,7 @@ namespace Asteroid {
 	void EditorState::NewScene()
 	{
 		NewActiveScene();
+		s_Data.EditorScenePath = std::filesystem::path();
 	}
 
 	void EditorState::SaveSceneAs()
