@@ -197,11 +197,24 @@ namespace Asteroid {
 		}
 	}
 
+	void EditorLayer::DuplicateSelectionContext()
+	{
+		if (EditorState::GetSceneState() != SceneState::Edit)
+			return;
+
+		Ref<EditorScene> activeScene = EditorState::GetActiveScene();
+		Entity selectionContext = activeScene->GetSelectionContext();
+		if (selectionContext)
+			activeScene->DuplicateEntity(selectionContext);
+	}
+
 	// ---- Event Handling ----
 
 	void EditorLayer::OnEvent(Event& e)
 	{
 		ME_PROFILE_FUNCTION();
+
+		// Distribute events
 
 		m_MenuBar.OnEvent(e);
 
@@ -214,6 +227,33 @@ namespace Asteroid {
 			m_ViewportPanel.OnEvent(e);
 
 		EditorState::GetEditorCamera()->OnEvent(e);
+
+		// Handle events localy
+
+		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(ME_BIND_EVENT_FN(EditorLayer::OnKeyPressedEvent));
+	}
+
+	bool EditorLayer::OnKeyPressedEvent(KeyPressedEvent& e)
+	{
+		if (e.GetRepeatCount() > 0)
+			return false;
+
+		bool ctrlPressed = (Input::IsKeyPressed(Key::LeftControl) || Input::IsKeyPressed(Key::RightControl));
+		bool shiftPressed = (Input::IsKeyPressed(Key::LeftShift) || Input::IsKeyPressed(Key::RightShift));
+
+		switch (e.GetKeyCode())
+		{
+		case Key::D:
+		{
+			if (ctrlPressed)
+				DuplicateSelectionContext();
+		}
+		default:
+			break;
+		}
+
+		return false;
 	}
 
 }

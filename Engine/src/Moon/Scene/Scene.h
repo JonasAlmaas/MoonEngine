@@ -21,6 +21,7 @@ namespace Moon {
 
 		Entity CreateEntity(const std::string& name = std::string());
 		Entity CreateEntityWithUUID(UUID uuid, const std::string& name = std::string());
+		void DuplicateEntity(Entity entity);
 		void DestroyEntity(Entity entity);
 
 		void SetActiveCamera(Entity camera = {});
@@ -31,13 +32,13 @@ namespace Moon {
 	protected:
 		entt::registry m_Registry;
 
-	private:
 		Entity m_ActiveCamera{};
-
-		b2World* m_PhysicsWorld = nullptr;
 
 		uint32_t m_ViewportWidth = 0;
 		uint32_t m_ViewportHeight = 0;
+
+	private:
+		b2World* m_PhysicsWorld = nullptr;
 	
 	};
 

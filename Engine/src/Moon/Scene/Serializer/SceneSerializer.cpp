@@ -284,12 +284,18 @@ namespace Moon {
 	{
 	}
 
-	void SceneSerializer::Serialize(const std::string& filepath)
+	void SceneSerializer::Serialize(const std::filesystem::path& filepath)
 	{
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
-		out << YAML::Key << "ActiveCamera" << YAML::Value << "124356"; // TODO: UUID OF THE ACTIVE CAMERA!
+
+		auto activeCamera = m_Scene->GetActiveCamera();
+		if (activeCamera)
+			out << YAML::Key << "ActiveCamera" << YAML::Value << activeCamera.GetUUID();
+		else
+			out << YAML::Key << "ActiveCamera" << YAML::Value << "0";
+
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_Scene->GetRegistry().each([&](auto entityID)
 		{
@@ -306,17 +312,17 @@ namespace Moon {
 		fout << out.c_str();
 	}
 
-	void SceneSerializer::SerializeRuntime(const std::string& filepath)
+	void SceneSerializer::SerializeRuntime(const std::filesystem::path& filepath)
 	{
 		ME_CORE_ASSERT(false, "SceneSerializer::SerializeRuntime : Not implemented!");
 	}
 
-	bool SceneSerializer::Deserialize(const std::string& filepath)
+	bool SceneSerializer::Deserialize(const std::filesystem::path& filepath)
 	{
 		YAML::Node data;
 		try
 		{
-			data = YAML::LoadFile(filepath);
+			data = YAML::LoadFile(filepath.string());
 		}
 		catch (YAML::ParserException e)
 		{
@@ -407,13 +413,17 @@ namespace Moon {
 					bc2d.Restitution = boxCollider2DComponent["Restitution"].as<float>();
 					bc2d.RestitutionThreshold = boxCollider2DComponent["RestitutionThreshold"].as<float>();
 				}
+
+				// If the current entity is the active camera, link it
+				if (uuid == data["ActiveCamera"].as<uint64_t>())
+					m_Scene->SetActiveCamera(deserializedEntity);
 			}
 		}
 
 		return true;
 	}
 
-	bool SceneSerializer::DeserializeRuntime(const std::string& filepath)
+	bool SceneSerializer::DeserializeRuntime(const std::filesystem::path& filepath)
 	{
 		ME_CORE_ASSERT(false, "SceneSerializer::DeserializeRuntime : Not implemented!");
 		return false;

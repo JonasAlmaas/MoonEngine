@@ -214,7 +214,7 @@ namespace Moon {
 
 	// ---- Primitives ----
 	
-	void Renderer2D::Ultra_DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint, int entityID)
+	void Renderer2D::Uber_DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint, int entityID)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -273,7 +273,7 @@ namespace Moon {
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
 		glm::mat4 transform = translation * scale;
 
-		Ultra_DrawSprite(transform, texture, tileFactor, tint);
+		Uber_DrawSprite(transform, texture, tileFactor, tint);
 	}
 
 	void Renderer2D::Super_DrawRotatedSprite(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
@@ -285,12 +285,12 @@ namespace Moon {
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
 		glm::mat4 transform = translation * rotation * scale;
 
-		Ultra_DrawSprite(transform, texture, tileFactor, tint);
+		Uber_DrawSprite(transform, texture, tileFactor, tint);
 	}
 	
 	// -- Using SubTexture --
 
-	void Renderer2D::Ultra_DrawSprite(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& tint)
+	void Renderer2D::Uber_DrawSprite(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& tint)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -348,7 +348,7 @@ namespace Moon {
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
 		glm::mat4 transform = translation * scale;
 
-		Ultra_DrawSprite(transform, subTexture, tint);
+		Uber_DrawSprite(transform, subTexture, tint);
 	}
 
 	void Renderer2D::Super_DrawRotatedSprite(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint)
@@ -360,52 +360,52 @@ namespace Moon {
 		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
 		glm::mat4 transform = translation * rotation * scale;
 
-		Ultra_DrawSprite(transform, subTexture, tint);
+		Uber_DrawSprite(transform, subTexture, tint);
 	}
 
 	void Renderer2D::DrawSpriteComponent(const glm::mat4& transform, SpriteRendererComponent& spriteComponent, int entityID)
 	{
 		if (spriteComponent.Texture)
-			Ultra_DrawSprite(transform, spriteComponent.Texture, spriteComponent.TileFactor, spriteComponent.Color, entityID);
+			Uber_DrawSprite(transform, spriteComponent.Texture, spriteComponent.TileFactor, spriteComponent.Color, entityID);
 		else
-			Ultra_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, spriteComponent.Color, entityID);
+			Uber_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, spriteComponent.Color, entityID);
 	}
 
 	// -- Draw Spite --
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Color& color)
 	{
-		Ultra_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Uber_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture)
 	{
-		Ultra_DrawSprite(transform, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Uber_DrawSprite(transform, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, float tileFactor)
 	{
-		Ultra_DrawSprite(transform, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Uber_DrawSprite(transform, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
-		Ultra_DrawSprite(transform, texture, tileFactor, s_Data.WhiteColor);
+		Uber_DrawSprite(transform, texture, tileFactor, s_Data.WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const Color& tint)
 	{
-		Ultra_DrawSprite(transform, texture, s_Data.DefaultTileFactor, tint);
+		Uber_DrawSprite(transform, texture, s_Data.DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
 	{
-		Ultra_DrawSprite(transform, texture, { tileFactor, tileFactor }, tint);
+		Uber_DrawSprite(transform, texture, { tileFactor, tileFactor }, tint);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint)
 	{
-		Ultra_DrawSprite(transform, texture, tileFactor, tint);
+		Uber_DrawSprite(transform, texture, tileFactor, tint);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Color& color)
@@ -718,12 +718,12 @@ namespace Moon {
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture)
 	{
-		Ultra_DrawSprite(transform, subTexture, s_Data.WhiteColor);
+		Uber_DrawSprite(transform, subTexture, s_Data.WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& tint)
 	{
-		Ultra_DrawSprite(transform, subTexture, tint);
+		Uber_DrawSprite(transform, subTexture, tint);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Ref<SubTexture2D>& subTexture)

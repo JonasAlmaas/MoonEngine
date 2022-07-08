@@ -10,6 +10,7 @@
 #include <box2d/b2_body.h>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_polygon_shape.h>
+#include "Scene.h"
 
 
 namespace Moon {
@@ -25,6 +26,13 @@ namespace Moon {
 
 		ME_CORE_ASSERT(false, "Unknown body type!");
 		return b2_staticBody;
+	}
+
+	template<typename Component>
+	static void CopyComponentIfExists(Entity dst, Entity src)
+	{
+		if (src.HasComponent<Component>())
+			dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
 	}
 
 	void Scene::OnRuntimeStart()
@@ -177,6 +185,19 @@ namespace Moon {
 		tagComp.Tag = name.empty() ? "Unnamed Entity" : name;
 
 		return entity;
+	}
+
+	void Scene::DuplicateEntity(Entity entity)
+	{
+		std::string name = entity.GetName();
+		Entity newEntity = CreateEntity(name);
+
+		CopyComponentIfExists<TransformComponent>(newEntity, entity);
+		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
+		CopyComponentIfExists<CameraComponent>(newEntity, entity);
+		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
+		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
+		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
 	}
 
 	void Scene::DestroyEntity(Entity entity)
