@@ -14,6 +14,12 @@ namespace Asteroid {
 	public:
 		virtual ~EditorScene() = default;
 
+		/**
+		 * Create a copy of the scene.
+		 * To be used in runtime.
+		 */
+		Ref<EditorScene> Copy();
+
 		void OnUpdateEditor(Timestep ts, const Ref<EditorCamera>& camera);
 
 		Entity GetSelectionContext() { return m_SelectionContext; }

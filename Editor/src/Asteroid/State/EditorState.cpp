@@ -9,8 +9,13 @@ namespace Asteroid {
 	struct EditorStateData
 	{
 		Ref<Framebuffer> Framebuffer;
-		Ref<EditorScene> ActiveScene;
+
+		Ref<EditorScene> EditorSn;
+		Ref<EditorScene> RuntimeSn;
+
 		Ref<EditorCamera> EditorCamera;
+
+		std::filesystem::path EditorScenePath;
 
 		Ref<PanelState> PanelState;
 		SceneState SceneState = SceneState::Edit;
@@ -80,9 +85,9 @@ namespace Asteroid {
 		auto commandLineArgs = Application::Get().GetCommandLineArgs();
 		if (commandLineArgs.Count > 1)
 		{
-			auto sceneFilePath = commandLineArgs[1];
-			SceneSerializer serializer(s_Data.ActiveScene);
-			serializer.Deserialize(sceneFilePath);
+			s_Data.EditorScenePath = std::filesystem::path(commandLineArgs[1]);
+			SceneSerializer serializer(s_Data.EditorSn);
+			serializer.Deserialize(s_Data.EditorScenePath);
 		}
 
 		GenerateTextures();
@@ -97,22 +102,29 @@ namespace Asteroid {
 
 	Ref<EditorScene> EditorState::NewActiveScene()
 	{
-		s_Data.ActiveScene = CreateRef<EditorScene>();
+		s_Data.EditorSn = CreateRef<EditorScene>();
 
 		auto& spec = s_Data.Framebuffer->GetSpecification();
-		s_Data.ActiveScene->OnViewportResize(spec.Width, spec.Height);
+		s_Data.EditorSn->OnViewportResize(spec.Width, spec.Height);
 
-		return s_Data.ActiveScene;
+		return s_Data.EditorSn;
 	}
 
 	void EditorState::SetActiveScene(Ref<EditorScene>& scene)
 	{
-		s_Data.ActiveScene = scene;
+		s_Data.EditorSn = scene;
 	}
 
 	Ref<EditorScene> EditorState::GetActiveScene()
 	{
-		return s_Data.ActiveScene;
+		switch (s_Data.SceneState)
+		{
+			case SceneState::Edit: return s_Data.EditorSn;
+			case SceneState::Play: return s_Data.RuntimeSn;
+		}
+
+		ME_CORE_ASSERT(false, "Unknown scene state!");
+		return s_Data.EditorSn;
 	}
 
 	void EditorState::NewScene()
@@ -126,6 +138,8 @@ namespace Asteroid {
 
 		if (!filepath.empty())
 		{
+			s_Data.EditorScenePath = std::filesystem::path(filepath);
+
 			SceneSerializer serializer(EditorState::GetActiveScene());
 			serializer.Serialize(filepath);
 		}
@@ -133,11 +147,19 @@ namespace Asteroid {
 
 	void EditorState::SaveScene()
 	{
+		if (!s_Data.EditorScenePath.empty())
+		{
+			SceneSerializer serializer(EditorState::GetActiveScene());
+			serializer.Serialize(s_Data.EditorScenePath);
+		}
+		else
+		{
+			SaveSceneAs();
+		}
 	}
 
 	void EditorState::OpenScene()
 	{
-
 		std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
 		if (!filepath.empty())
 			OpenScene(filepath);
@@ -162,13 +184,15 @@ namespace Asteroid {
 	void EditorState::OnScenePlay()
 	{
 		s_Data.SceneState = SceneState::Play;
-		s_Data.ActiveScene->OnRuntimeStart();
+		s_Data.RuntimeSn = s_Data.EditorSn->Copy();
+		s_Data.RuntimeSn->OnRuntimeStart();
 	}
 
 	void EditorState::OnSceneStop()
 	{
 		s_Data.SceneState = SceneState::Edit;
-		s_Data.ActiveScene->OnRuntimeStop();
+		s_Data.RuntimeSn->OnRuntimeStop();
+		s_Data.RuntimeSn = nullptr;
 	}
 
 	SceneState EditorState::GetSceneState()

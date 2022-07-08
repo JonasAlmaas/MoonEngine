@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Moon/Scene/Component/IDComponent.h"
+#include "Moon/Scene/Component/TagComponent.h"
 
 #include <entt.hpp>
 
@@ -21,6 +22,13 @@ namespace Moon {
 		{
 			ME_CORE_ASSERT(!HasComponent<T>(), "Entity already has this component!");
 			return m_Registry->emplace<T>(m_EntityHandle, std::forward<Args>(args)...);
+		}
+
+		template<typename T, typename... Args>
+		T& AddOrReplaceComponent(Args&&... args)
+		{
+			T& component = m_Registry->emplace_or_replace<T>(m_EntityHandle, std::forward<Args>(args)...);
+			return component;
 		}
 
 		template<typename T>
@@ -44,6 +52,7 @@ namespace Moon {
 		}
 
 		UUID GetUUID() { return GetComponent<IDComponent>().ID; }
+		const std::string& GetName() { return GetComponent<TagComponent>().Tag; }
 
 		operator bool() const { return m_EntityHandle != entt::null; };
 		operator uint32_t() const { return (uint32_t)m_EntityHandle; }
