@@ -162,7 +162,10 @@ namespace Asteroid {
 	{
 		std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
 		if (!filepath.empty())
+		{
+			s_Data.EditorScenePath = std::filesystem::path(filepath);
 			OpenScene(filepath);
+		}
 	}
 
 	void EditorState::OpenScene(const std::filesystem::path& path)
