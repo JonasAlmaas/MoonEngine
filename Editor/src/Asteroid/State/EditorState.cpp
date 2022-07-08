@@ -137,6 +137,7 @@ namespace Asteroid {
 
 	void EditorState::OpenScene()
 	{
+
 		std::string filepath = FileDialog::OpenFile("Moon Scene (*.mmap)\0*.mmap\0");
 		if (!filepath.empty())
 			OpenScene(filepath);
@@ -144,6 +145,9 @@ namespace Asteroid {
 
 	void EditorState::OpenScene(const std::filesystem::path& path)
 	{
+		if (s_Data.SceneState != SceneState::Edit)
+			OnSceneStop();
+
 		if (path.extension().string() != ".mmap")
 		{
 			ME_WARN("Could not load {0} - not a scene file", path.filename().string());
