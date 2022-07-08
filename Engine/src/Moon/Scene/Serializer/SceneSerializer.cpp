@@ -289,7 +289,13 @@ namespace Moon {
 		YAML::Emitter out;
 		out << YAML::BeginMap;
 		out << YAML::Key << "Scene" << YAML::Value << "Untitled";
-		out << YAML::Key << "ActiveCamera" << YAML::Value << "124356"; // TODO: UUID OF THE ACTIVE CAMERA!
+
+		auto activeCamera = m_Scene->GetActiveCamera();
+		if (activeCamera)
+			out << YAML::Key << "ActiveCamera" << YAML::Value << activeCamera.GetUUID();
+		else
+			out << YAML::Key << "ActiveCamera" << YAML::Value << "0";
+
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_Scene->GetRegistry().each([&](auto entityID)
 		{
@@ -328,6 +334,12 @@ namespace Moon {
 
 		std::string sceneName = data["Scene"].as<std::string>();
 		ME_CORE_TRACE("Deserializing scene '{0}'", sceneName);
+
+		uint64_t activeCameraUUID = data["ActiveCamera"].as<uint64_t>();
+		if (activeCameraUUID != 0)
+		{
+			// TODO: Link the scenes active camera using this uuid
+		}
 
 		auto entities = data["Entities"];
 		if (entities)
