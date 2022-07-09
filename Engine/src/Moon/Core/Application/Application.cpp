@@ -43,7 +43,7 @@ namespace Moon {
 			ME_PROFILE_SCOPE("RunLoop");
 
 			// Get delta time
-			float time = Util::GetTime();
+			float time = Time::Get();
 			m_Timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 

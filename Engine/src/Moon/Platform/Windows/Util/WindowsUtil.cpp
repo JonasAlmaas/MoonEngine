@@ -9,7 +9,7 @@
 
 namespace Moon {
 
-	float Util::GetTime()
+	float Time::Get()
 	{
 		ME_PROFILE_FUNCTION();
 
