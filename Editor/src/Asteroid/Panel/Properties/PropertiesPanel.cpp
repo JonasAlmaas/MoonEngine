@@ -206,7 +206,7 @@ namespace Asteroid {
 					ImGui::PushID("Texture");
 
 					ImGui::Columns(2);
-					ImGui::SetColumnWidth(0, 150.0f);
+					ImGui::SetColumnWidth(0, UILibrary::s_FirstColumnWidth);
 					ImGui::Text("Texture");
 					ImGui::NextColumn();
 
