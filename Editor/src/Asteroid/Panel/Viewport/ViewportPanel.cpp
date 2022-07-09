@@ -93,72 +93,89 @@ namespace Asteroid {
 			ImGui::EndDragDropTarget();
 		}
 
-		Ref<EditorScene> scene = EditorState::GetActiveScene();
-
-		// Check if there are any entities in the scene
-		if (scene->GetRegistry().size() > 0)
+		// Don't allow a lot of fucntionality if the user is moving
+		if (!Input::IsKeyPressed(Key::LeftAlt))
 		{
-			// ---- Gizmos ----
+			Ref<EditorScene> scene = EditorState::GetActiveScene();
 
-			Entity selectedEntity = scene->GetSelectionContext();
-			if (selectedEntity && m_GizmoType != -1)
+			// Check if there are any entities in the scene
+			if (scene->GetRegistry().size() > 0)
 			{
-				ImGuizmo::SetOrthographic(false);
-				ImGuizmo::SetDrawlist();
+				// ---- Gizmos ----
 
-				ImGuizmo::SetRect(m_MinBound.x, m_MinBound.y, m_MaxBound.x - m_MinBound.x, m_MaxBound.y - m_MinBound.y);
-
-				// Camera
-				//auto cameraEntity = scene->GetActiveCamera();
-				//if (cameraEntity)
-				//{
-				//	const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-				//	const glm::mat4& cameraProjection = camera.GetProjection();
-				//	glm::mat4 cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
-
-				auto camera = EditorState::GetEditorCamera();
-				const glm::mat4& cameraProjection = camera->GetProjection();
-				glm::mat4 cameraView = camera->GetViewMatrix();
-
-				// Entity Transform
-				auto& tc = selectedEntity.GetComponent<TransformComponent>();
-				glm::mat4 transform = tc.GetTransform();
-
-				// Snapping
-				bool snap = Input::IsKeyPressed(Key::LeftControl);
-				float snapValue = 0.5f;
-
-				if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
-					snapValue = 15.0f;
-
-				float snapValues[] = { snapValue, snapValue, snapValue };
-
-				ImGuizmo::Manipulate(glm::value_ptr(cameraView), glm::value_ptr(cameraProjection), (ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform), nullptr, snap ? snapValues : nullptr);
-
-				if (ImGuizmo::IsUsing())
+				Entity selectedEntity = scene->GetSelectionContext();
+				if (selectedEntity && m_GizmoType != -1)
 				{
-					glm::vec3 translation, rotation, scale;
-					Math::DecomposeTransform(transform, translation, rotation, scale);
+					ImGuizmo::SetOrthographic(false);
+					ImGuizmo::SetDrawlist();
 
-					tc.Translation = translation;
+					ImGuizmo::SetRect(m_MinBound.x, m_MinBound.y, m_MaxBound.x - m_MinBound.x, m_MaxBound.y - m_MinBound.y);
 
-					glm::vec3 deltaRotation = rotation - tc.Rotation;
-					tc.Rotation += deltaRotation;
+					// Get active camera
+					glm::mat4 cameraView;
+					const float* cameraProjection = nullptr;
 
-					tc.Scale = scale;
+					if (EditorState::GetSceneState() == SceneState::Edit)
+					{
+						auto camera = EditorState::GetEditorCamera();
+						cameraProjection = glm::value_ptr(camera->GetProjection());
+						cameraView = camera->GetViewMatrix();
+					}
+					else
+					{
+						auto cameraEntity = scene->GetActiveCamera();
+						if (cameraEntity)
+						{
+							const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
+							cameraProjection = glm::value_ptr(camera.GetProjection());
+							cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
+						}
+					}
+
+					// Make sure we have an active camera
+					if (cameraProjection)
+					{
+						// Entity Transform
+						auto& tc = selectedEntity.GetComponent<TransformComponent>();
+						glm::mat4 transform = tc.GetTransform();
+
+						// Snapping
+						bool snap = Input::IsKeyPressed(Key::LeftControl);
+						float snapValue = 0.5f;
+
+						if (m_GizmoType == ImGuizmo::OPERATION::ROTATE)
+							snapValue = 15.0f;
+
+						float snapValues[] = { snapValue, snapValue, snapValue };
+
+						ImGuizmo::Manipulate(glm::value_ptr(cameraView), cameraProjection, (ImGuizmo::OPERATION)m_GizmoType, ImGuizmo::MODE::LOCAL, glm::value_ptr(transform), nullptr, snap ? snapValues : nullptr);
+
+						if (ImGuizmo::IsUsing())
+						{
+							glm::vec3 translation, rotation, scale;
+							Math::DecomposeTransform(transform, translation, rotation, scale);
+
+							tc.Translation = translation;
+
+							glm::vec3 deltaRotation = rotation - tc.Rotation;
+							tc.Rotation += deltaRotation;
+
+							tc.Scale = scale;
+						}
+					}
 				}
 			}
-		}
-		else
-		{
-			// Allow the user to click the background to open a file
-			// Only if there isn't anything in the current scene
-			if (Input::IsMouseButtonPressed(Mouse::Button0) && m_Hovered)
+			else
 			{
-				// Make sure the click is not on the tabbar
-				ImVec2 mousePos = ImGui::GetMousePos();
-				if (mousePos.x > m_MinBound.x && mousePos.y > m_MinBound.y && mousePos.x < m_MaxBound.x && mousePos.y < m_MaxBound.y)
-					EditorState::OpenScene();
+				// Allow the user to click the background to open a file
+				// Only if there isn't anything in the current scene
+				if (Input::IsMouseButtonPressed(Mouse::Button0) && m_Hovered)
+				{
+					// Make sure the click is not on the tabbar
+					ImVec2 mousePos = ImGui::GetMousePos();
+					if (mousePos.x > m_MinBound.x && mousePos.y > m_MinBound.y && mousePos.x < m_MaxBound.x && mousePos.y < m_MaxBound.y)
+						EditorState::OpenScene();
+				}
 			}
 		}
 
