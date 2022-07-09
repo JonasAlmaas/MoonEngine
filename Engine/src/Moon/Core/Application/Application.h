@@ -19,11 +19,18 @@ namespace Moon {
 			return Args[index];
 		}
 	};
+
+	struct ApplicationSpecification
+	{
+		std::string Name = "Moon Application";
+		std::string WorkingDirectory;
+		ApplicationCommandLineArgs CommandLineArgs;
+	};
 	
 	class Application
 	{
 	public:
-		Application(const std::string& name = "Moon Application", ApplicationCommandLineArgs args = ApplicationCommandLineArgs());
+		Application(const ApplicationSpecification& specs);
 		virtual ~Application();
 
 		// To be defined in client
@@ -75,7 +82,7 @@ namespace Moon {
 
 		inline static Application& Get() { return *s_Instance; }
 
-		ApplicationCommandLineArgs GetCommandLineArgs() const { return m_CommandLineArgs; }
+		const ApplicationSpecification& GetSpecification() const { return m_Specification; }
 
 	private:
 		bool OnWindowClosedEvent(WindowCloseEvent& e);
@@ -83,7 +90,7 @@ namespace Moon {
 		bool OnWindowResizeEvent(WindowResizeEvent& e);
 
 	private:
-		ApplicationCommandLineArgs m_CommandLineArgs;
+		ApplicationSpecification m_Specification;
 
 		bool m_Running = true;
 		bool m_Minimized = false;

@@ -9,15 +9,19 @@ namespace Moon {
 
 	Application* Application::s_Instance = nullptr;
 	
-	Application::Application(const std::string& name, ApplicationCommandLineArgs args)
-		: m_CommandLineArgs(args)
+	Application::Application(const ApplicationSpecification& specs)
+		: m_Specification(specs)
 	{
 		ME_PROFILE_FUNCTION();
 
 		ME_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		m_Window = Window::Create({ name });
+		// Set working directory here
+		if (!m_Specification.WorkingDirectory.empty())
+			std::filesystem::current_path(m_Specification.WorkingDirectory);
+
+		m_Window = Window::Create({ m_Specification.Name });
 		m_Window->SetEventCallback(ME_BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
