@@ -4,7 +4,7 @@
 #include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 #include "Moon/Core/Renderer/Texture/Texture.h"
 #include "Moon/Renderer/Texture/SubTexture2D.h"
-#include "Moon/Scene/Component/SpriteRendererComponent.h"
+#include "Moon/Scene/Component/Renderer/SpriteRendererComponent.h"
 
 
 namespace Moon {
