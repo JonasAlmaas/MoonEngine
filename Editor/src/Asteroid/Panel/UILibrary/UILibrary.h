@@ -8,7 +8,7 @@ namespace Asteroid {
 	class UILibrary
 	{
 	public:
-		static bool DrawFloatControl(const std::string& label, float& value, float min = 0.0f, float max = 0.0f, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 150.0f);
+		static bool DrawFloatControl(const std::string& label, float& value, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f, const char* format = "%.2f", bool isLast = false, float firstColumnWidth = 150.0f);
 		static bool DrawFloat2Control(const std::string& label, const std::string& xLabel, const std::string& yLabel, glm::vec2& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 150.0f);
 		static bool DrawFloat3Control(const std::string& label, glm::vec3& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 150.0f);
 
@@ -50,6 +50,19 @@ namespace Asteroid {
 			ImGui::Columns(1);
 
 			ImGui::PopID();
+		}
+
+		template<typename T>
+		static void MenuItemAddComponent(const std::string& lable, Entity selectionContext)
+		{
+			if (!selectionContext.HasComponent<T>())
+			{
+				if (ImGui::MenuItem(lable.c_str()))
+				{
+					selectionContext.AddComponent<T>();
+					ImGui::CloseCurrentPopup();
+				}
+			}
 		}
 
 	};

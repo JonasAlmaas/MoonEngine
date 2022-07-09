@@ -143,11 +143,24 @@ namespace Moon {
 				Renderer2D::BeginScene(camera.GetProjection(), glm::mat4(1.0f));
 			}
 
-			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-			for (auto entity : group)
+			// Draw sprite
 			{
-				auto [transformComp, spriteComp] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-				Renderer2D::DrawSpriteComponent(transformComp.GetTransform(), spriteComp, (int)entity);
+				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+				for (auto entity : group)
+				{
+					auto [transformComp, spriteComp] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+					Renderer2D::DrawSpriteRendererComponent(transformComp.GetTransform(), spriteComp, (int)entity);
+				}
+			}
+
+			// Draw circles
+			{
+				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+				for (auto entity : view)
+				{
+					auto [transformComp, circleComp] = view.get<TransformComponent, CircleRendererComponent>(entity);
+					Renderer2D::DrawCircleRendererComponent(transformComp.GetTransform(), circleComp, (int)entity);
+				}
 			}
 
 			Renderer2D::EndScene();
@@ -194,6 +207,7 @@ namespace Moon {
 
 		CopyComponentIfExists<TransformComponent>(newEntity, entity);
 		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
+		CopyComponentIfExists<CircleRendererComponent>(newEntity, entity);
 		CopyComponentIfExists<CameraComponent>(newEntity, entity);
 		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
 		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
