@@ -399,7 +399,7 @@ namespace Moon {
 
 	// -- Line --
 
-	void Renderer2D::DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color, int entityID)
+	void Renderer2D::Uber_DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color, int entityID)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -420,6 +420,11 @@ namespace Moon {
 		#endif
 	}
 
+	void Renderer2D::DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color)
+	{
+		Uber_DrawLine(p0, p1, color);
+	}
+
 	float Renderer2D::GetLineWidth()
 	{
 		return s_Data.LineWidth;
@@ -428,6 +433,137 @@ namespace Moon {
 	void Renderer2D::SetLineWidth(float width)
 	{
 		s_Data.LineWidth = width;
+	}
+
+	// -- Rectangle --
+
+	void Renderer2D::Uber_DrawRect(const glm::mat4& transform, const Color& color, int entityID)
+	{
+		glm::vec3 lineVertices[4];
+		for (size_t i = 0; i < 4; i++)
+			lineVertices[i] = transform * s_Data.SpriteVertexPositions[i];
+
+		DrawLine(lineVertices[0], lineVertices[1], color);
+		DrawLine(lineVertices[1], lineVertices[2], color);
+		DrawLine(lineVertices[2], lineVertices[3], color);
+		DrawLine(lineVertices[3], lineVertices[0], color);
+	}
+
+	void Renderer2D::Super_DrawRect(const glm::vec3& position, const glm::vec2 size, const Color& color)
+	{
+		ME_PROFILE_FUNCTION();
+
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
+		glm::mat4 transform = translation * scale;
+
+		Uber_DrawRect(transform, color);
+	}
+
+	void Renderer2D::Super_DrawRotatedRect(const glm::vec3& position, float rotationRadians, const glm::vec2 size, const Color& color)
+	{
+		ME_PROFILE_FUNCTION();
+
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
+		glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), rotationRadians, { 0.0f, 0.0f, 1.0f });
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
+		glm::mat4 transform = translation * rotation * scale;
+
+		Uber_DrawRect(transform, color);
+	}
+
+	// Draw Rectangle
+
+	void Renderer2D::DrawRect(const glm::mat4& transform)
+	{
+		Uber_DrawRect(transform, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRect(const glm::mat4& transform, const Color& color)
+	{
+		Uber_DrawRect(transform, color);
+	}
+
+	void Renderer2D::DrawRect(const glm::vec2& position, float size)
+	{
+		Super_DrawRect({ position, 0.0f }, { size, size }, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRect(const glm::vec3& position, float size)
+	{
+		Super_DrawRect(position, { size, size }, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRect(const glm::vec2& position, const glm::vec2& size)
+	{
+		Super_DrawRect({ position, 0.0f }, size, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size)
+	{
+		Super_DrawRect(position, size, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRect(const glm::vec2& position, float size, const Color& color)
+	{
+		Super_DrawRect({ position, 0.0f }, { size, size }, color);
+	}
+
+	void Renderer2D::DrawRect(const glm::vec3& position, float size, const Color& color)
+	{
+		Super_DrawRect(position, { size, size }, color);
+	}
+
+	void Renderer2D::DrawRect(const glm::vec2& position, const glm::vec2& size, const Color& color)
+	{
+		Super_DrawRect({ position, 0.0f }, size, color);
+	}
+
+	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size, const Color& color)
+	{
+		Super_DrawRect(position, size, color);
+	}
+
+	// Draw Rotated Rectangle
+
+	void Renderer2D::DrawRotatedRect(const glm::vec2& position, float rotationDegrees, float size)
+	{
+		Super_DrawRotatedRect({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRotatedRect(const glm::vec3& position, float rotationDegrees, float size)
+	{
+		Super_DrawRotatedRect(position, glm::radians(rotationDegrees), { size, size }, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRotatedRect(const glm::vec2& position, float rotationDegrees, const glm::vec2& size)
+	{
+		Super_DrawRotatedRect({ position, 0.0f }, glm::radians(rotationDegrees), size, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRotatedRect(const glm::vec3& position, float rotationDegrees, const glm::vec2& size)
+	{
+		Super_DrawRotatedRect(position, glm::radians(rotationDegrees), size, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawRotatedRect(const glm::vec2& position, float rotationDegrees, float size, const Color& color)
+	{
+		Super_DrawRotatedRect({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, color);
+	}
+
+	void Renderer2D::DrawRotatedRect(const glm::vec3& position, float rotationDegrees, float size, const Color& color)
+	{
+		Super_DrawRotatedRect(position, glm::radians(rotationDegrees), { size, size }, color);
+	}
+
+	void Renderer2D::DrawRotatedRect(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Color& color)
+	{
+		Super_DrawRotatedRect({ position, 0.0f }, glm::radians(rotationDegrees), size, color);
+	}
+
+	void Renderer2D::DrawRotatedRect(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Color& color)
+	{
+		Super_DrawRotatedRect(position, glm::radians(rotationDegrees), size, color);
 	}
 
 	// -- Sprite --

@@ -64,8 +64,18 @@ namespace Moon {
 
 		// ---- Primitives ----
 
+		// -- Circle --
 		static void Uber_DrawCircle(const glm::mat4& transform, float thickness = 1.0f, float fade = 0.005f, const Color& color = Color(), int entityID = -1);
 
+		// -- Line --
+		static void Uber_DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color, int entityID = -1);
+
+		// -- Rectangle --
+		static void Uber_DrawRect(const glm::mat4& transform, const Color& color, int entityID = -1);
+		static void Super_DrawRect(const glm::vec3& position, const glm::vec2 size, const Color& color);
+		static void Super_DrawRotatedRect(const glm::vec3& position, float rotationRadians, const glm::vec2 size, const Color& color);
+
+		// -- Sprite --
 		static void Uber_DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint, int entityID = -1);
 		static void Super_DrawSprite(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint);
 		static void Super_DrawRotatedSprite(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint);
@@ -75,23 +85,49 @@ namespace Moon {
 		static void Super_DrawRotatedSprite(const glm::vec3& position, float rotationRadians, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint);
 
 	public:
+		// -- Draw Renderer Components --
 		static void DrawCircleRendererComponent(const glm::mat4& transform, CircleRendererComponent& component, int entityID);
 		static void DrawSpriteRendererComponent(const glm::mat4& transform, SpriteRendererComponent& component, int entityID);
 
+		// -- Circle --
 		//static void DrawCircle(const glm::mat4& transform, float thickness = 1.0f, float fade = 0.005f, const Color& color = Color());
 		//static void DrawCircle(float radius = 0.5f, float thickness = 1.0f, float fade = 0.005f, const Color& color = Color());
 
-		static void DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color, int entityID = -1);
+		// -- Line --
+		static void DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color);
 
 		static float GetLineWidth();
 		static void SetLineWidth(float width);
 
-		/*
-		 * @brief If you try to define a tile factor as a vec2 it might be misstaken for a Color.
-		 * To prevent this, define it as glm::vec2(x, y) instead of { x, y }.
-		 */
-		static void DrawSprite() {};
+		// -- Rectangle --
+		static void DrawRect(const glm::mat4& transform);
+		static void DrawRect(const glm::mat4& transform, const Color& color);
 
+		static void DrawRect(const glm::vec2& position, float size);
+		static void DrawRect(const glm::vec3& position, float size);
+
+		static void DrawRect(const glm::vec2& position, const glm::vec2& size);
+		static void DrawRect(const glm::vec3& position, const glm::vec2& size);
+
+		static void DrawRect(const glm::vec2& position, float size, const Color& color);
+		static void DrawRect(const glm::vec3& position, float size, const Color& color);
+
+		static void DrawRect(const glm::vec2& position, const glm::vec2& size, const Color& color);
+		static void DrawRect(const glm::vec3& position, const glm::vec2& size, const Color& color);
+
+		static void DrawRotatedRect(const glm::vec2& position, float rotationDegrees, float size);
+		static void DrawRotatedRect(const glm::vec3& position, float rotationDegrees, float size);
+
+		static void DrawRotatedRect(const glm::vec2& position, float rotationDegrees, const glm::vec2& size);
+		static void DrawRotatedRect(const glm::vec3& position, float rotationDegrees, const glm::vec2& size);
+
+		static void DrawRotatedRect(const glm::vec2& position, float rotationDegrees, float size, const Color& color);
+		static void DrawRotatedRect(const glm::vec3& position, float rotationDegrees, float size, const Color& color);
+
+		static void DrawRotatedRect(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Color& color);
+		static void DrawRotatedRect(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Color& color);
+
+		// -- Sprite --
 		static void DrawSprite(const glm::mat4& transform, const Color& color);
 		static void DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture);
 		static void DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, float tileFactor);
