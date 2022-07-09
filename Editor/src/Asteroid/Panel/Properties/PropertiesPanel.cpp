@@ -109,6 +109,7 @@ namespace Asteroid {
 					UILibrary::MenuItemAddComponent<CircleRendererComponent>("Add Circle Renderer Component", selectionContext);
 					UILibrary::MenuItemAddComponent<Rigidbody2DComponent>("Add Rigid Body 2D Component", selectionContext);
 					UILibrary::MenuItemAddComponent<BoxCollider2DComponent>("Add Box Collider 2D Component", selectionContext);
+					UILibrary::MenuItemAddComponent<CircleCollider2DComponent>("Add Circle Collider 2D Component", selectionContext);
 
 					ImGui::EndPopup();
 				}
@@ -279,6 +280,17 @@ namespace Asteroid {
 			{
 				UILibrary::DrawFloat2Control("Size", "X", "Y", component.Size, 0.1f, 0.5f);
 				UILibrary::DrawFloat2Control("Offset", "X", "Y", component.Offset, 0.1f, 0.0f);
+				UILibrary::DrawFloatControl("Density", component.Density, 1.0f, 0.01f, 0.0f, 1.0f);
+				UILibrary::DrawFloatControl("Friction", component.Friction, 0.5f, 0.01f, 0.0f, 1.0f);
+				UILibrary::DrawFloatControl("Restitution", component.Restitution, 0.0f, 0.01f, 0.0f, 1.0f);
+				UILibrary::DrawFloatControl("Restitution Threshold", component.RestitutionThreshold, 0.5f, 0.01f, 0.0f, 0.0f, "%.2f", true);
+			});
+
+			// -- Circle Collider 2D Component --
+			DrawComponent<CircleCollider2DComponent>("Circle Collider 2D", selectionContext, [](Entity& entity, CircleCollider2DComponent& component)
+			{
+				UILibrary::DrawFloat2Control("Offset", "X", "Y", component.Offset, 0.1f, 0.0f);
+				UILibrary::DrawFloatControl("Radius", component.Radius, 0.5f, 0.01f);
 				UILibrary::DrawFloatControl("Density", component.Density, 1.0f, 0.01f, 0.0f, 1.0f);
 				UILibrary::DrawFloatControl("Friction", component.Friction, 0.5f, 0.01f, 0.0f, 1.0f);
 				UILibrary::DrawFloatControl("Restitution", component.Restitution, 0.0f, 0.01f, 0.0f, 1.0f);

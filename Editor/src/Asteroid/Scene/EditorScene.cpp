@@ -51,6 +51,7 @@ namespace Asteroid {
 		CopyComponent<NativeScriptComponent>(dstSceneRegistry, m_Registry, enttMap);
 		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, m_Registry, enttMap);
 		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, m_Registry, enttMap);
+		CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, m_Registry, enttMap);
 
 		return newScene;
 	}
