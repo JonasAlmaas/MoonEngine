@@ -21,13 +21,6 @@ namespace Asteroid {
 		}
 	}
 
-	template<typename Component>
-	static void CopyComponentIfExists(Entity dst, Entity src)
-	{
-		if (src.HasComponent<Component>())
-			dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
-	}
-
 	Ref<EditorScene> EditorScene::Copy()
 	{
 		Ref<EditorScene> newScene = CreateRef<EditorScene>();
@@ -53,6 +46,7 @@ namespace Asteroid {
 		// Copy components (except IDComponent and TagComponent)
 		CopyComponent<TransformComponent>(dstSceneRegistry, m_Registry, enttMap);
 		CopyComponent<SpriteRendererComponent>(dstSceneRegistry, m_Registry, enttMap);
+		CopyComponent<CircleRendererComponent>(dstSceneRegistry, m_Registry, enttMap);
 		CopyComponent<CameraComponent>(dstSceneRegistry, m_Registry, enttMap);
 		CopyComponent<NativeScriptComponent>(dstSceneRegistry, m_Registry, enttMap);
 		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, m_Registry, enttMap);
@@ -65,12 +59,25 @@ namespace Asteroid {
 	{
 		Renderer2D::BeginScene(camera->GetViewProjection());
 
-		auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-		for (auto entity : group)
+		// Draw sprites
 		{
-			auto [transformComp, spriteComp] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
+			{
+				auto [transformComp, spriteComp] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 
-			Renderer2D::DrawSpriteComponent(transformComp.GetTransform(), spriteComp, (int)entity);
+				Renderer2D::DrawSpriteRendererComponent(transformComp.GetTransform(), spriteComp, (int)entity);
+			}
+		}
+
+		// Draw circles
+		{
+			auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+			for (auto entity : view)
+			{
+				auto [transformComp, circleComp] = view.get<TransformComponent, CircleRendererComponent>(entity);
+				Renderer2D::DrawCircleRendererComponent(transformComp.GetTransform(), circleComp, (int)entity);
+			}
 		}
 
 		Renderer2D::EndScene();
