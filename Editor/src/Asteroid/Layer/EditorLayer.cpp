@@ -242,10 +242,12 @@ namespace Asteroid {
 			{
 				auto [tc, bc2d] = view.get<TransformComponent, BoxCollider2DComponent>(entity);
 
-				glm::mat4 translation = glm::translate(glm::mat4(1.0f), tc.Translation + glm::vec3(bc2d.Offset, 0.001f));
-				glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), tc.Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-				glm::mat4 scale = glm::scale(glm::mat4(1.0f), tc.Scale * glm::vec3(bc2d.Size * 2.0f, 1.0f));
-				glm::mat4 transform = translation * rotation * scale;
+				glm::vec3 translation = tc.Translation + glm::vec3(bc2d.Offset, 0.001f);
+				glm::vec3 scale = tc.Scale * glm::vec3(bc2d.Size * 2.0f, 1.0f);
+
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation)
+					* glm::rotate(glm::mat4(1.0f), tc.Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+					* glm::scale(glm::mat4(1.0f), scale);
 
 				Renderer2D::DrawRect(transform, { 0.0, 0.0f, 1.0, 1.0f });
 			}
@@ -260,6 +262,7 @@ namespace Asteroid {
 
 				glm::vec3 translation = tc.Translation + glm::vec3(cc2d.Offset, 0.001f);
 				glm::vec3 scale = tc.Scale * glm::vec3(cc2d.Radius * 2.0f);
+
 				glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation) * glm::scale(glm::mat4(1.0f), scale);
 
 				Renderer2D::DrawCircle(transform, 0.05f, 0.005f, {0.0f, 0.0f, 1.0f, 1.0f});
