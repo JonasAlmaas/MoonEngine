@@ -27,6 +27,12 @@ namespace Moon {
 		void SetActiveCamera(Entity camera = {});
 		Entity GetActiveCamera() { return m_ActiveCamera; }
 
+		template<typename... Components>
+		auto GetAllEntitiesWith()
+		{
+			return m_Registry.view<Components...>();
+		}
+
 		entt::registry& GetRegistry() { return m_Registry; }
 
 	protected:

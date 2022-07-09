@@ -23,6 +23,7 @@ namespace Asteroid {
 		m_PropertiesPanel.OnAttach();
 		m_RendererPanel.OnAttach();
 		m_SceneHierarchyPanel.OnAttach();
+		m_SettingsPanel.OnAttach();
 		m_ToolbarPanel.OnAttach();
 		m_ViewportPanel.OnAttach();
 
@@ -39,6 +40,7 @@ namespace Asteroid {
 		m_PropertiesPanel.OnDetach();
 		m_RendererPanel.OnDetach();
 		m_SceneHierarchyPanel.OnDetach();
+		m_SettingsPanel.OnDetach();
 		m_ToolbarPanel.OnDetach();
 		m_ViewportPanel.OnDetach();
 
@@ -64,6 +66,9 @@ namespace Asteroid {
 
 		if (panelState->SceneHierarchy)
 			m_SceneHierarchyPanel.OnUpdate(ts);
+
+		if (panelState->Settings)
+			m_SettingsPanel.OnUpdate(ts);
 
 		if (panelState->Toolbar)
 			m_ToolbarPanel.OnUpdate(ts);
@@ -99,6 +104,9 @@ namespace Asteroid {
 				break;
 			}
 		}
+
+		if (EditorState::GetShowPhysicsColliders())
+			OnOverlayRender();
 
 		EditorState::GetFramebuffer()->Unbind();
 	}
@@ -173,6 +181,9 @@ namespace Asteroid {
 			if (panelState->SceneHierarchy)
 				m_SceneHierarchyPanel.OnImGuiRender();
 
+			if (panelState->Settings)
+				m_SettingsPanel.OnImGuiRender();
+
 			if (panelState->Toolbar)
 				m_ToolbarPanel.OnImGuiRender();
 
@@ -197,6 +208,65 @@ namespace Asteroid {
 
 			ImGui::End();
 		}
+	}
+
+	void EditorLayer::OnOverlayRender()
+	{
+		if (EditorState::GetSceneState() == SceneState::Play)
+		{
+			Entity activeCamera = EditorState::GetActiveScene()->GetActiveCamera();
+			if (!activeCamera || !activeCamera.HasComponent<CameraComponent>())
+				return;
+
+			auto& camera = activeCamera.GetComponent<CameraComponent>().Camera;
+
+			if (activeCamera.HasComponent<TransformComponent>())
+			{
+				auto& cameraTransComp = activeCamera.GetComponent<TransformComponent>();
+				Renderer2D::BeginScene(camera.GetProjection(), cameraTransComp.GetTransform());
+			}
+			else
+			{
+				Renderer2D::BeginScene(camera.GetProjection(), glm::mat4(1.0f));
+			}
+		}
+		else
+		{
+			Renderer2D::BeginScene(EditorState::GetEditorCamera()->GetViewProjection());
+		}
+
+		// Box collider
+		{
+			auto view = EditorState::GetActiveScene()->GetAllEntitiesWith<TransformComponent, BoxCollider2DComponent>();
+			for (auto entity : view)
+			{
+				auto [tc, bc2d] = view.get<TransformComponent, BoxCollider2DComponent>(entity);
+
+				glm::mat4 translation = glm::translate(glm::mat4(1.0f), tc.Translation + glm::vec3(bc2d.Offset, 0.001f));
+				glm::mat4 rotation = glm::rotate(glm::mat4(1.0f), tc.Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+				glm::mat4 scale = glm::scale(glm::mat4(1.0f), tc.Scale * glm::vec3(bc2d.Size * 2.0f, 1.0f));
+				glm::mat4 transform = translation * rotation * scale;
+
+				Renderer2D::DrawRect(transform, { 0.0, 0.0f, 1.0, 1.0f });
+			}
+		}
+
+		// Circle collider
+		{
+			auto view = EditorState::GetActiveScene()->GetAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
+			for (auto entity : view)
+			{
+				auto [tc, cc2d] = view.get<TransformComponent, CircleCollider2DComponent>(entity);
+
+				glm::vec3 translation = tc.Translation + glm::vec3(cc2d.Offset, 0.001f);
+				glm::vec3 scale = tc.Scale * glm::vec3(cc2d.Radius * 2.0f);
+				glm::mat4 transform = glm::translate(glm::mat4(1.0f), translation) * glm::scale(glm::mat4(1.0f), scale);
+
+				Renderer2D::DrawCircle(transform, 0.05f, 0.005f, {0.0f, 0.0f, 1.0f, 1.0f});
+			}
+		}
+
+		Renderer2D::EndScene();
 	}
 
 	void EditorLayer::DuplicateSelectionContext()

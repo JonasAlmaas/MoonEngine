@@ -19,6 +19,8 @@ namespace Asteroid {
 		Ref<PanelState> PanelState;
 		SceneState SceneState = SceneState::Edit;
 
+		bool ShowPhysicsColliders = false;
+
 		EditorState::TextureLibrary TextureLibrary;
 	};
 
@@ -204,6 +206,16 @@ namespace Asteroid {
 	}
 
 	// ---- ----
+
+	bool EditorState::GetShowPhysicsColliders()
+	{
+		return s_Data.ShowPhysicsColliders;
+	}
+
+	void EditorState::SetShowPhysicsColliders(bool state)
+	{
+		s_Data.ShowPhysicsColliders = state;
+	}
 
 	const EditorState::TextureLibrary& EditorState::GetTextureLibrary()
 	{

@@ -389,13 +389,47 @@ namespace Moon {
 		#endif
 	}
 
-	//void Renderer2D::DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color)
-	//{
-	//}
+	void Renderer2D::Super_DrawCircle(const glm::vec3& position, float radius, float thickness, float fade, const Color& color)
+	{
+		ME_PROFILE_FUNCTION();
 
-	//void Renderer2D::DrawCircle(float radius, float thickness, float fade, const Color& color)
-	//{
-	//}
+		float diamater = radius * 2.0f;
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { diamater, diamater, 0.0f });
+		glm::mat4 transform = translation * scale;
+
+		Uber_DrawCircle(transform, thickness, fade, color);
+	}
+
+	void Renderer2D::DrawCircle(const glm::mat4& transform, float thickness, float fade)
+	{
+		Uber_DrawCircle(transform, thickness, fade, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color)
+	{
+		Uber_DrawCircle(transform, thickness, fade, color);
+	}
+
+	void Renderer2D::DrawCircle(const glm::vec2& position, float radius, float thickness, float fade)
+	{
+		Super_DrawCircle({ position, 0.0f }, radius, thickness, fade, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawCircle(const glm::vec3& position, float radius, float thickness, float fade)
+	{
+		Super_DrawCircle(position, radius, thickness, fade, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawCircle(const glm::vec2& position, float radius, float thickness, float fade, const Color& color)
+	{
+		Super_DrawCircle({ position, 0.0f }, radius, thickness, fade, color);
+	}
+
+	void Renderer2D::DrawCircle(const glm::vec3& position, float radius, float thickness, float fade, const Color& color)
+	{
+		Super_DrawCircle(position, radius, thickness, fade, color);
+	}
 
 	// -- Line --
 

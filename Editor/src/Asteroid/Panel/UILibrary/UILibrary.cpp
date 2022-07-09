@@ -4,7 +4,9 @@
 
 namespace Asteroid {
 
-	bool UILibrary::DrawFloatControl(const std::string& label, float& value, float resetValue, float speed, float min, float max, const char* format, bool isLast, float firstColumnWidth)
+	float UILibrary::s_FirstColumnWidth = 175.0f;
+
+	bool UILibrary::DrawFloatControl(const std::string& label, float& value, float resetValue, float speed, float min, float max, const char* format, bool isLast)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
@@ -12,7 +14,7 @@ namespace Asteroid {
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, firstColumnWidth);
+		ImGui::SetColumnWidth(0, s_FirstColumnWidth);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -49,7 +51,7 @@ namespace Asteroid {
 		return hasChanged;
 	}
 
-	bool UILibrary::DrawFloat2Control(const std::string& label, const std::string& xLabel, const std::string& yLabel, glm::vec2& values, float speed, float resetValue, bool isLast, float firstColumnWidth)
+	bool UILibrary::DrawFloat2Control(const std::string& label, const std::string& xLabel, const std::string& yLabel, glm::vec2& values, float resetValue, float speed, bool isLast)
 	{
 		bool changed = false;
 
@@ -59,7 +61,7 @@ namespace Asteroid {
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, firstColumnWidth);
+		ImGui::SetColumnWidth(0, s_FirstColumnWidth);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -140,7 +142,7 @@ namespace Asteroid {
 		return changed;
 	}
 
-	bool UILibrary::DrawFloat3Control(const std::string& label, glm::vec3& values, float speed, float resetValue, bool isLast, float firstColumnWidth)
+	bool UILibrary::DrawFloat3Control(const std::string& label, glm::vec3& values, float speed, float resetValue, bool isLast)
 	{
 		bool changed = false;
 
@@ -150,7 +152,7 @@ namespace Asteroid {
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, firstColumnWidth);
+		ImGui::SetColumnWidth(0, s_FirstColumnWidth);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -275,12 +277,12 @@ namespace Asteroid {
 		return changed;
 	}
 
-	bool UILibrary::DrawColor3Control(const std::string& label, float* value, bool isLast, float firstColumnWidth)
+	bool UILibrary::DrawColor3Control(const std::string& label, float* value, bool isLast)
 	{
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, firstColumnWidth);
+		ImGui::SetColumnWidth(0, s_FirstColumnWidth);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -299,12 +301,12 @@ namespace Asteroid {
 		return changed;
 	}
 
-	bool UILibrary::DrawColor4Control(const std::string& label, float* value, bool isLast, float firstColumnWidth)
+	bool UILibrary::DrawColor4Control(const std::string& label, float* value, bool isLast)
 	{
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, firstColumnWidth);
+		ImGui::SetColumnWidth(0, s_FirstColumnWidth);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
@@ -323,12 +325,12 @@ namespace Asteroid {
 		return changed;
 	}
 
-	bool UILibrary::Checkbox(const std::string& label, bool* value, bool isLast, float firstColumnWidth)
+	bool UILibrary::Checkbox(const std::string& label, bool* value, bool isLast)
 	{
 		ImGui::PushID(label.c_str());
 
 		ImGui::Columns(2);
-		ImGui::SetColumnWidth(0, firstColumnWidth);
+		ImGui::SetColumnWidth(0, s_FirstColumnWidth);
 		ImGui::Text(label.c_str());
 		ImGui::NextColumn();
 
