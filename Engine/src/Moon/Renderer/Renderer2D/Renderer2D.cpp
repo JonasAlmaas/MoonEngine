@@ -19,7 +19,19 @@ namespace Moon {
 		glm::vec2 UV;
 		float TextureIndex;
 
-		// Editor Only
+		// Editor only
+		int EntityID;
+	};
+
+	struct CircleVertex
+	{
+		glm::vec3 WorldPosition;
+		glm::vec3 LocalPosition;
+		glm::vec4 Color;
+		float Thickness;
+		float Fade;
+
+		// Editor only
 		int EntityID;
 	};
 
@@ -33,15 +45,23 @@ namespace Moon {
 
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
-		Ref<Shader> Shader;
+		Ref<Shader> QuadShader;
 
-		Ref<Texture2D> WhiteTexture;
-		Color WhiteColor;
-		glm::vec2 DefaultTileFactor;
+		Ref<VertexArray> CircleVertexArray;
+		Ref<VertexBuffer> CircleVertexBuffer;
+		Ref<Shader> CircleShader;
 
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
+
+		uint32_t CircleIndexCount = 0;
+		CircleVertex* CircleVertexBufferBase = nullptr;
+		CircleVertex* CircleVertexBufferPtr = nullptr;
+
+		Ref<Texture2D> WhiteTexture;
+		Color WhiteColor;
+		glm::vec2 DefaultTileFactor;
 
 		glm::vec4 QuadVertexPositions[4];
 		glm::vec2 QuadUVCoords[4];
@@ -68,13 +88,15 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
+		s_Data.QuadShader = Shader::Create("Content/Shaders/Renderer2D_Quad.glsl");
+		s_Data.CircleShader = Shader::Create("Content/Shaders/Renderer2D_Circle.glsl");
+
 		int32_t samplers[Renderer2DData::MaxTextureSlots];
 		for (uint32_t i = 0; i < Renderer2DData::MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.Shader = Shader::Create("Content/Shaders/Quad2D.glsl");
-		s_Data.Shader->Bind();
-		s_Data.Shader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
+		s_Data.QuadShader->Bind();
+		s_Data.QuadShader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
 
 		// Generate a 1x1 white texture
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
@@ -88,18 +110,17 @@ namespace Moon {
 		s_Data.WhiteColor = Color(ColorFormat::RGBANormalized, 1.0f, 1.0f, 1.0f, 1.0f);
 		s_Data.DefaultTileFactor = { 1.0f, 1.0f };
 
+		// -- Quad --
 		s_Data.QuadVertexArray = VertexArray::Create();
 
 		s_Data.QuadVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(QuadVertex));
-
-		VertexBufferLayout layout = {
+		s_Data.QuadVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "Position XYZ" },
 			{ ShaderDataType::Float4, "Color" },
 			{ ShaderDataType::Float2, "UV" },
 			{ ShaderDataType::Float, "TextureIndex" },
 			{ ShaderDataType::Int, "EntityID" },
-		};
-		s_Data.QuadVertexBuffer->SetLayout(layout);
+		});
 
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
 
@@ -123,6 +144,23 @@ namespace Moon {
 		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, Renderer2DData::MaxIndices);
 		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices;
+
+		// -- Circle --
+		s_Data.CircleVertexArray = VertexArray::Create();
+
+		s_Data.CircleVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(CircleVertex));
+		s_Data.CircleVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "World Position XYZ" },
+			{ ShaderDataType::Float3, "Local Position XYZ" },
+			{ ShaderDataType::Float4, "Color" },
+			{ ShaderDataType::Float, "Thickness" },
+			{ ShaderDataType::Float, "Fade" },
+			{ ShaderDataType::Int, "EntityID" },
+		});
+
+		s_Data.CircleVertexArray->AddVertexBuffer(s_Data.CircleVertexBuffer);
+		s_Data.CircleVertexBufferBase = new CircleVertex[Renderer2DData::MaxVertices];
+		s_Data.CircleVertexArray->SetIndexBuffer(quadIB);	// Use Quad IB
 
 		// ---- Create basic quad information -----
 		s_Data.QuadVertexPositions[0] = { -0.5, -0.5, 0, 1.0f };
@@ -152,7 +190,8 @@ namespace Moon {
 		s_Data.CameraBuffer.ViewProjection = viewProjectionMatrix;
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
-		StartBatch();
+		StartQuadBatch();
+		StartCircleBatch();
 	}
 
 	void Renderer2D::BeginScene(const glm::mat4& cameraProj, const glm::mat4& transform)
@@ -167,17 +206,28 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		FlushBatch();
+		FlushQuadBatch();
+		FlushCircleBatch();
 	}
 
-	void Renderer2D::StartBatch()
+	// -- Start Batches --
+
+	void Renderer2D::StartQuadBatch()
 	{
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
 		s_Data.TextureSlotIndex = 1;
 	}
 
-	void Renderer2D::FlushBatch()
+	void Renderer2D::StartCircleBatch()
+	{
+		s_Data.CircleIndexCount = 0;
+		s_Data.CircleVertexBufferPtr = s_Data.CircleVertexBufferBase;
+	}
+
+	// -- Flush Batches --
+
+	void Renderer2D::FlushQuadBatch()
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -192,13 +242,34 @@ namespace Moon {
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 			s_Data.TextureSlots[i]->Bind(i);
 
-		s_Data.Shader->Bind();
+		s_Data.QuadShader->Bind();
 		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
 			s_Data.Stats.DrawCalls++;
 		#endif
 	}
+
+	void Renderer2D::FlushCircleBatch()
+	{
+		ME_PROFILE_FUNCTION();
+
+		// Nothing to draw
+		if (s_Data.CircleIndexCount == 0)
+			return;
+
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase);
+		s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
+
+		s_Data.CircleShader->Bind();
+		RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.DrawCalls++;
+		#endif
+	}
+
+	// -- Stats --
 
 	#if ME_ENABLE_RENDERER2D_STATISTICS
 		void Renderer2D::ResetStats()
@@ -213,15 +284,43 @@ namespace Moon {
 	#endif
 
 	// ---- Primitives ----
-	
+
+	void Renderer2D::Uber_DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color, int entityID)
+	{
+		ME_PROFILE_FUNCTION();
+
+		if (s_Data.CircleIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushCircleBatch();
+			StartCircleBatch();
+		}
+
+		for (uint32_t i = 0; i < 4; i++)
+		{
+			s_Data.CircleVertexBufferPtr->WorldPosition = transform * s_Data.QuadVertexPositions[i];
+			s_Data.CircleVertexBufferPtr->LocalPosition = s_Data.QuadVertexPositions[i] * 2.0f;
+			s_Data.CircleVertexBufferPtr->Thickness = thickness;
+			s_Data.CircleVertexBufferPtr->Fade = fade;
+			s_Data.CircleVertexBufferPtr->Color = color.Format == ColorFormat::RGBANormalized ? color : color.GetNormalized();
+			s_Data.CircleVertexBufferPtr->EntityID = entityID;
+			s_Data.CircleVertexBufferPtr++;
+		}
+
+		s_Data.CircleIndexCount += 6;
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.CircleCount++;
+		#endif
+	}
+
 	void Renderer2D::Uber_DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint, int entityID)
 	{
 		ME_PROFILE_FUNCTION();
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
-			FlushBatch();
-			StartBatch();
+			FlushQuadBatch();
+			StartQuadBatch();
 		}
 
 		int textureIndex = 0;
@@ -296,8 +395,8 @@ namespace Moon {
 
 		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
-			FlushBatch();
-			StartBatch();
+			FlushQuadBatch();
+			StartQuadBatch();
 		}
 
 		int textureIndex = 0;
@@ -363,13 +462,27 @@ namespace Moon {
 		Uber_DrawSprite(transform, subTexture, tint);
 	}
 
-	void Renderer2D::DrawSpriteComponent(const glm::mat4& transform, SpriteRendererComponent& spriteComponent, int entityID)
+	// -- Draw Renderer Components
+
+	void Renderer2D::DrawCircleRendererComponent(const glm::mat4& transform, CircleRendererComponent& component, int entityID)
 	{
-		if (spriteComponent.Texture)
-			Uber_DrawSprite(transform, spriteComponent.Texture, spriteComponent.TileFactor, spriteComponent.Color, entityID);
-		else
-			Uber_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, spriteComponent.Color, entityID);
+		Uber_DrawCircle(transform, component.Thickness, component.Fade, component.Color, entityID);
 	}
+
+	void Renderer2D::DrawSpriteRendererComponent(const glm::mat4& transform, SpriteRendererComponent& component, int entityID)
+	{
+		if (component.Texture)
+			Uber_DrawSprite(transform, component.Texture, component.TileFactor, component.Color, entityID);
+		else
+			Uber_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, component.Color, entityID);
+	}
+
+	// -- Draw Circle --
+
+	//void DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color)
+	//{
+
+	//}
 
 	// -- Draw Spite --
 
