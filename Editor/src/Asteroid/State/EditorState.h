@@ -21,6 +21,7 @@ namespace Asteroid {
 		bool Properties = true;
 		bool Renderer = true;
 		bool SceneHierarchy = true;
+		bool Settings = true;
 		bool Toolbar = true;
 		bool Viewport = true;
 	};
@@ -55,6 +56,9 @@ namespace Asteroid {
 		static void OnSceneStop();
 
 		static SceneState GetSceneState();
+
+		static bool GetShowPhysicsColliders();
+		static void SetShowPhysicsColliders(bool state);
 
 		static const TextureLibrary& GetTextureLibrary();
 
