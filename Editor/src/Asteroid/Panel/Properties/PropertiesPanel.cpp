@@ -197,7 +197,7 @@ namespace Asteroid {
 				UILibrary::DrawColor4Control("Color", component.Color);
 
 				glm::vec2 tileFactor = component.TileFactor;
-				if (UILibrary::DrawFloat2Control("Tile Factor", "U", "V", tileFactor, 0.1f, 1.0f, true))
+				if (UILibrary::DrawFloat2Control("Tile Factor", "U", "V", tileFactor, 1.0f, 0.1f, true))
 					component.TileFactor = tileFactor;
 
 				{
@@ -278,8 +278,8 @@ namespace Asteroid {
 			// -- Box Collider 2D Component --
 			DrawComponent<BoxCollider2DComponent>("Box Collider 2D", selectionContext, [](Entity& entity, BoxCollider2DComponent& component)
 			{
-				UILibrary::DrawFloat2Control("Size", "X", "Y", component.Size, 0.1f, 0.5f);
-				UILibrary::DrawFloat2Control("Offset", "X", "Y", component.Offset, 0.1f, 0.0f);
+				UILibrary::DrawFloat2Control("Size", "X", "Y", component.Size, 0.5f, 0.01f);
+				UILibrary::DrawFloat2Control("Offset", "X", "Y", component.Offset, 0.0f, 0.1f);
 				UILibrary::DrawFloatControl("Density", component.Density, 1.0f, 0.01f, 0.0f, 1.0f);
 				UILibrary::DrawFloatControl("Friction", component.Friction, 0.5f, 0.01f, 0.0f, 1.0f);
 				UILibrary::DrawFloatControl("Restitution", component.Restitution, 0.0f, 0.01f, 0.0f, 1.0f);
@@ -289,7 +289,7 @@ namespace Asteroid {
 			// -- Circle Collider 2D Component --
 			DrawComponent<CircleCollider2DComponent>("Circle Collider 2D", selectionContext, [](Entity& entity, CircleCollider2DComponent& component)
 			{
-				UILibrary::DrawFloat2Control("Offset", "X", "Y", component.Offset, 0.1f, 0.0f);
+				UILibrary::DrawFloat2Control("Offset", "X", "Y", component.Offset, 0.0f, 0.01f);
 				UILibrary::DrawFloatControl("Radius", component.Radius, 0.5f, 0.01f);
 				UILibrary::DrawFloatControl("Density", component.Density, 1.0f, 0.01f, 0.0f, 1.0f);
 				UILibrary::DrawFloatControl("Friction", component.Friction, 0.5f, 0.01f, 0.0f, 1.0f);

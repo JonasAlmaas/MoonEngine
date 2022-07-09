@@ -26,6 +26,7 @@ namespace Asteroid {
 		virtual void OnEvent(Event& e) override;
 
 	private:
+		void OnOverlayRender();
 		void DuplicateSelectionContext();
 
 	private:

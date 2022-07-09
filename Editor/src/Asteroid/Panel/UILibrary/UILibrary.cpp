@@ -49,7 +49,7 @@ namespace Asteroid {
 		return hasChanged;
 	}
 
-	bool UILibrary::DrawFloat2Control(const std::string& label, const std::string& xLabel, const std::string& yLabel, glm::vec2& values, float speed, float resetValue, bool isLast, float firstColumnWidth)
+	bool UILibrary::DrawFloat2Control(const std::string& label, const std::string& xLabel, const std::string& yLabel, glm::vec2& values, float resetValue, float speed, bool isLast, float firstColumnWidth)
 	{
 		bool changed = false;
 

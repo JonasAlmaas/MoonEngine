@@ -9,7 +9,7 @@ namespace Asteroid {
 	{
 	public:
 		static bool DrawFloatControl(const std::string& label, float& value, float resetValue = 0.0f, float speed = 0.1f, float min = 0.0f, float max = 0.0f, const char* format = "%.2f", bool isLast = false, float firstColumnWidth = 150.0f);
-		static bool DrawFloat2Control(const std::string& label, const std::string& xLabel, const std::string& yLabel, glm::vec2& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 150.0f);
+		static bool DrawFloat2Control(const std::string& label, const std::string& xLabel, const std::string& yLabel, glm::vec2& values, float resetValue = 0.0f, float speed = 0.1f, bool isLast = false, float firstColumnWidth = 150.0f);
 		static bool DrawFloat3Control(const std::string& label, glm::vec3& values, float speed = 0.1f, float resetValue = 0.0f, bool isLast = false, float firstColumnWidth = 150.0f);
 
 		static bool DrawColor3Control(const std::string& label, float* value, bool isLast = false, float firstColumnWidth = 150.0f);

@@ -65,7 +65,8 @@ namespace Moon {
 		// ---- Primitives ----
 
 		// -- Circle --
-		static void Uber_DrawCircle(const glm::mat4& transform, float thickness = 1.0f, float fade = 0.005f, const Color& color = Color(), int entityID = -1);
+		static void Uber_DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color, int entityID = -1);
+		static void Super_DrawCircle(const glm::vec3& position, float radius, float thickness, float fade, const Color& color);
 
 		// -- Line --
 		static void Uber_DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color, int entityID = -1);
@@ -90,8 +91,14 @@ namespace Moon {
 		static void DrawSpriteRendererComponent(const glm::mat4& transform, SpriteRendererComponent& component, int entityID);
 
 		// -- Circle --
-		//static void DrawCircle(const glm::mat4& transform, float thickness = 1.0f, float fade = 0.005f, const Color& color = Color());
-		//static void DrawCircle(float radius = 0.5f, float thickness = 1.0f, float fade = 0.005f, const Color& color = Color());
+		static void DrawCircle(const glm::mat4& transform, float thickness, float fade);
+		static void DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color);
+
+		static void DrawCircle(const glm::vec2& position, float radius, float thickness, float fade);
+		static void DrawCircle(const glm::vec3& position, float radius, float thickness, float fade);
+
+		static void DrawCircle(const glm::vec2& position, float radius, float thickness, float fade, const Color& color);
+		static void DrawCircle(const glm::vec3& position, float radius, float thickness, float fade, const Color& color);
 
 		// -- Line --
 		static void DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color);
