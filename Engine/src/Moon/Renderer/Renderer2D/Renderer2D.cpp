@@ -12,17 +12,6 @@
 
 namespace Moon {
 
-	struct QuadVertex
-	{
-		glm::vec3 Position;
-		glm::vec4 Color;
-		glm::vec2 UV;
-		float TextureIndex;
-
-		// Editor only
-		int EntityID;
-	};
-
 	struct CircleVertex
 	{
 		glm::vec3 WorldPosition;
@@ -30,6 +19,26 @@ namespace Moon {
 		glm::vec4 Color;
 		float Thickness;
 		float Fade;
+
+		// Editor only
+		int EntityID;
+	};
+
+	struct LineVertex
+	{
+		glm::vec3 Position;
+		glm::vec4 Color;
+
+		// Editor only
+		int EntityID;
+	};
+
+	struct QuadVertex
+	{
+		glm::vec3 Position;
+		glm::vec4 Color;
+		glm::vec2 UV;
+		float TextureIndex;
 
 		// Editor only
 		int EntityID;
@@ -43,21 +52,31 @@ namespace Moon {
 		static const uint32_t MaxIndices = MaxQuads * 6;
 		static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
 
+		Ref<VertexArray> CircleVertexArray;
+		Ref<VertexBuffer> CircleVertexBuffer;
+		Ref<Shader> CircleShader;
+
+		Ref<VertexArray> LineVertexArray;
+		Ref<VertexBuffer> LineVertexBuffer;
+		Ref<Shader> LineShader;
+
 		Ref<VertexArray> QuadVertexArray;
 		Ref<VertexBuffer> QuadVertexBuffer;
 		Ref<Shader> QuadShader;
 
-		Ref<VertexArray> CircleVertexArray;
-		Ref<VertexBuffer> CircleVertexBuffer;
-		Ref<Shader> CircleShader;
+		uint32_t CircleIndexCount = 0;
+		CircleVertex* CircleVertexBufferBase = nullptr;
+		CircleVertex* CircleVertexBufferPtr = nullptr;
 
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
 
-		uint32_t CircleIndexCount = 0;
-		CircleVertex* CircleVertexBufferBase = nullptr;
-		CircleVertex* CircleVertexBufferPtr = nullptr;
+		uint32_t LineVertexCount = 0;
+		LineVertex* LineVertexBufferBase = nullptr;
+		LineVertex* LineVertexBufferPtr = nullptr;
+
+		float LineWidth = 2.0f;
 
 		Ref<Texture2D> WhiteTexture;
 		Color WhiteColor;
@@ -88,8 +107,9 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		s_Data.QuadShader = Shader::Create("Content/Shaders/Renderer2D_Quad.glsl");
 		s_Data.CircleShader = Shader::Create("Content/Shaders/Renderer2D_Circle.glsl");
+		s_Data.LineShader = Shader::Create("Content/Shaders/Renderer2D_Line.glsl");
+		s_Data.QuadShader = Shader::Create("Content/Shaders/Renderer2D_Quad.glsl");
 
 		int32_t samplers[Renderer2DData::MaxTextureSlots];
 		for (uint32_t i = 0; i < Renderer2DData::MaxTextureSlots; i++)
@@ -162,6 +182,19 @@ namespace Moon {
 		s_Data.CircleVertexBufferBase = new CircleVertex[Renderer2DData::MaxVertices];
 		s_Data.CircleVertexArray->SetIndexBuffer(quadIB);	// Use Quad IB
 
+		// -- Line --
+		s_Data.LineVertexArray = VertexArray::Create();
+
+		s_Data.LineVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(LineVertex));
+		s_Data.LineVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "Position" },
+			{ ShaderDataType::Float4, "Color" },
+			{ ShaderDataType::Int, "a_EntityID" }
+		});
+
+		s_Data.LineVertexArray->AddVertexBuffer(s_Data.LineVertexBuffer);
+		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
+
 		// ---- Create basic quad information -----
 		s_Data.QuadVertexPositions[0] = { -0.5, -0.5, 0, 1.0f };
 		s_Data.QuadVertexPositions[1] = { 0.5, -0.5, 0, 1.0f };
@@ -192,6 +225,7 @@ namespace Moon {
 
 		StartQuadBatch();
 		StartCircleBatch();
+		StartLineBatch();
 	}
 
 	void Renderer2D::BeginScene(const glm::mat4& cameraProj, const glm::mat4& transform)
@@ -208,9 +242,22 @@ namespace Moon {
 
 		FlushQuadBatch();
 		FlushCircleBatch();
+		FlushLineBatch();
 	}
 
 	// -- Start Batches --
+
+	void Renderer2D::StartCircleBatch()
+	{
+		s_Data.CircleIndexCount = 0;
+		s_Data.CircleVertexBufferPtr = s_Data.CircleVertexBufferBase;
+	}
+
+	void Renderer2D::StartLineBatch()
+	{
+		s_Data.LineVertexCount = 0;
+		s_Data.LineVertexBufferPtr = s_Data.LineVertexBufferBase;
+	}
 
 	void Renderer2D::StartQuadBatch()
 	{
@@ -219,13 +266,46 @@ namespace Moon {
 		s_Data.TextureSlotIndex = 1;
 	}
 
-	void Renderer2D::StartCircleBatch()
+	// -- Flush Batches --
+
+	void Renderer2D::FlushCircleBatch()
 	{
-		s_Data.CircleIndexCount = 0;
-		s_Data.CircleVertexBufferPtr = s_Data.CircleVertexBufferBase;
+		ME_PROFILE_FUNCTION();
+
+		// Nothing to draw
+		if (s_Data.CircleIndexCount == 0)
+			return;
+
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase);
+		s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
+
+		s_Data.CircleShader->Bind();
+		RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.DrawCalls++;
+		#endif
 	}
 
-	// -- Flush Batches --
+	void Renderer2D::FlushLineBatch()
+	{
+		ME_PROFILE_FUNCTION();
+
+		// Nothing to draw
+		if (s_Data.LineVertexCount == 0)
+			return;
+
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.LineVertexBufferPtr - (uint8_t*)s_Data.LineVertexBufferBase);
+		s_Data.LineVertexBuffer->SetData(s_Data.LineVertexBufferBase, dataSize);
+
+		s_Data.LineShader->Bind();
+		RenderCommand::SetLineWidth(s_Data.LineWidth);
+		RenderCommand::DrawLines(s_Data.LineVertexArray, s_Data.LineVertexCount);
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.DrawCalls++;
+		#endif
+	}
 
 	void Renderer2D::FlushQuadBatch()
 	{
@@ -250,25 +330,6 @@ namespace Moon {
 		#endif
 	}
 
-	void Renderer2D::FlushCircleBatch()
-	{
-		ME_PROFILE_FUNCTION();
-
-		// Nothing to draw
-		if (s_Data.CircleIndexCount == 0)
-			return;
-
-		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase);
-		s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
-
-		s_Data.CircleShader->Bind();
-		RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
-
-		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.DrawCalls++;
-		#endif
-	}
-
 	// -- Stats --
 
 	#if ME_ENABLE_RENDERER2D_STATISTICS
@@ -283,7 +344,22 @@ namespace Moon {
 		}
 	#endif
 
-	// ---- Primitives ----
+	// -- Draw Renderer Components --
+
+	void Renderer2D::DrawCircleRendererComponent(const glm::mat4& transform, CircleRendererComponent& component, int entityID)
+	{
+		Uber_DrawCircle(transform, component.Thickness, component.Fade, component.Color, entityID);
+	}
+
+	void Renderer2D::DrawSpriteRendererComponent(const glm::mat4& transform, SpriteRendererComponent& component, int entityID)
+	{
+		if (component.Texture)
+			Uber_DrawSprite(transform, component.Texture, component.TileFactor, component.Color, entityID);
+		else
+			Uber_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, component.Color, entityID);
+	}
+
+	// -- Circle --
 
 	void Renderer2D::Uber_DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color, int entityID)
 	{
@@ -312,6 +388,49 @@ namespace Moon {
 			s_Data.Stats.CircleCount++;
 		#endif
 	}
+
+	//void Renderer2D::DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color)
+	//{
+	//}
+
+	//void Renderer2D::DrawCircle(float radius, float thickness, float fade, const Color& color)
+	//{
+	//}
+
+	// -- Line --
+
+	void Renderer2D::DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color, int entityID)
+	{
+		ME_PROFILE_FUNCTION();
+
+		s_Data.LineVertexBufferPtr->Position = p0;
+		s_Data.LineVertexBufferPtr->Color = color;
+		s_Data.LineVertexBufferPtr->EntityID = entityID;
+		s_Data.LineVertexBufferPtr++;
+
+		s_Data.LineVertexBufferPtr->Position = p1;
+		s_Data.LineVertexBufferPtr->Color = color;
+		s_Data.LineVertexBufferPtr->EntityID = entityID;
+		s_Data.LineVertexBufferPtr++;
+
+		s_Data.LineVertexCount += 2;
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.LineCount++;
+		#endif
+	}
+
+	float Renderer2D::GetLineWidth()
+	{
+		return s_Data.LineWidth;
+	}
+
+	void Renderer2D::SetLineWidth(float width)
+	{
+		s_Data.LineWidth = width;
+	}
+
+	// -- Sprite --
 
 	void Renderer2D::Uber_DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor, const Color& tint, int entityID)
 	{
@@ -387,7 +506,7 @@ namespace Moon {
 		Uber_DrawSprite(transform, texture, tileFactor, tint);
 	}
 	
-	// -- Using SubTexture --
+	// Draw Sprite Using SubTexture
 
 	void Renderer2D::Uber_DrawSprite(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& tint)
 	{
@@ -462,29 +581,7 @@ namespace Moon {
 		Uber_DrawSprite(transform, subTexture, tint);
 	}
 
-	// -- Draw Renderer Components
-
-	void Renderer2D::DrawCircleRendererComponent(const glm::mat4& transform, CircleRendererComponent& component, int entityID)
-	{
-		Uber_DrawCircle(transform, component.Thickness, component.Fade, component.Color, entityID);
-	}
-
-	void Renderer2D::DrawSpriteRendererComponent(const glm::mat4& transform, SpriteRendererComponent& component, int entityID)
-	{
-		if (component.Texture)
-			Uber_DrawSprite(transform, component.Texture, component.TileFactor, component.Color, entityID);
-		else
-			Uber_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, component.Color, entityID);
-	}
-
-	// -- Draw Circle --
-
-	//void DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color)
-	//{
-
-	//}
-
-	// -- Draw Spite --
+	// Draw sprite
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Color& color)
 	{
@@ -673,7 +770,7 @@ namespace Moon {
 		Super_DrawSprite(position, size, texture, tileFactor, tint);
 	}
 
-	// -- Draw Rotated Sprte --
+	// Draw Rotated Sprte
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Color& color)
 	{
@@ -827,7 +924,7 @@ namespace Moon {
 		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, texture, tileFactor, tint);
 	}
 
-	// -- Using SubTexture --
+	// -- Draw Sprite Using SubTexture --
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture)
 	{
@@ -882,6 +979,8 @@ namespace Moon {
 	{
 		Super_DrawSprite(position, size, subTexture, tint);
 	}
+
+	// Draw Rotated Sprite Using SubTexture
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture)
 	{

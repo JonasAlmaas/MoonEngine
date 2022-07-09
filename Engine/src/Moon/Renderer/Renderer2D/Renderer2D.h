@@ -16,11 +16,24 @@ namespace Moon {
 		struct Statistics
 		{
 			uint32_t DrawCalls = 0;
-			uint32_t QuadCount = 0;
 			uint32_t CircleCount = 0;
+			uint32_t LineCount = 0;
+			uint32_t QuadCount = 0;
 
-			uint32_t GetTotalVertexCount() const { return (CircleCount + QuadCount) * 4; }
-			uint32_t GetTotalIndexCount() const { return (CircleCount + QuadCount) * 6; }
+			uint32_t GetTotalVertexCount() const
+			{
+				uint32_t circleVertices = CircleCount * 4;
+				uint32_t linesVertices = LineCount * 2;
+				uint32_t quadVertices = QuadCount * 4;
+				return linesVertices + circleVertices + quadVertices;
+			}
+
+			uint32_t GetTotalIndexCount() const
+			{
+				uint32_t circleIndices = CircleCount * 6;
+				uint32_t quadIndices = QuadCount * 6;
+				return circleIndices + quadIndices;
+			}
 		};
 
 	public:
@@ -41,11 +54,13 @@ namespace Moon {
 		#endif
 
 	private:
-		static void StartQuadBatch();
 		static void StartCircleBatch();
+		static void StartLineBatch();
+		static void StartQuadBatch();
 
-		static void FlushQuadBatch();
 		static void FlushCircleBatch();
+		static void FlushLineBatch();
+		static void FlushQuadBatch();
 
 		// ---- Primitives ----
 
@@ -65,6 +80,11 @@ namespace Moon {
 
 		//static void DrawCircle(const glm::mat4& transform, float thickness = 1.0f, float fade = 0.005f, const Color& color = Color());
 		//static void DrawCircle(float radius = 0.5f, float thickness = 1.0f, float fade = 0.005f, const Color& color = Color());
+
+		static void DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color, int entityID = -1);
+
+		static float GetLineWidth();
+		static void SetLineWidth(float width);
 
 		/*
 		 * @brief If you try to define a tile factor as a vec2 it might be misstaken for a Color.
