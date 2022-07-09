@@ -25,6 +25,9 @@ namespace Moon {
 
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray, uint32_t indexCount = 0) = 0;
 
+		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
+		virtual void SetLineWidth(float width) = 0;
+
 		virtual const unsigned char* GetGPUVendor() = 0;
 		virtual const unsigned char* GetGPUName()  = 0;
 		virtual const unsigned char* GetGPUFirmwareVersion() = 0;

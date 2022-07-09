@@ -42,6 +42,16 @@ namespace Moon {
 			s_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}
 
+		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+		{
+			s_RendererAPI->DrawLines(vertexArray, vertexCount);
+		}
+
+		static void SetLineWidth(float width)
+		{
+			s_RendererAPI->SetLineWidth(width);
+		}
+
 		inline static const unsigned char* GetGPUVendor()
 		{
 			return s_RendererAPI->GetGPUVendor();
