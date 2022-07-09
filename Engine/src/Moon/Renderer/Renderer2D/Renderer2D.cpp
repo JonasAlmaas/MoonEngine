@@ -33,7 +33,7 @@ namespace Moon {
 		int EntityID;
 	};
 
-	struct QuadVertex
+	struct SpriteVertex
 	{
 		glm::vec3 Position;
 		glm::vec4 Color;
@@ -47,9 +47,9 @@ namespace Moon {
 	struct Renderer2DData
 	{
 		// Max per drawcall
-		static const uint32_t MaxQuads = 20000;
-		static const uint32_t MaxVertices = MaxQuads * 4;
-		static const uint32_t MaxIndices = MaxQuads * 6;
+		static const uint32_t MaxSprites = 20000;
+		static const uint32_t MaxVertices = MaxSprites * 4;
+		static const uint32_t MaxIndices = MaxSprites * 6;
 		static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
 
 		Ref<VertexArray> CircleVertexArray;
@@ -60,17 +60,17 @@ namespace Moon {
 		Ref<VertexBuffer> LineVertexBuffer;
 		Ref<Shader> LineShader;
 
-		Ref<VertexArray> QuadVertexArray;
-		Ref<VertexBuffer> QuadVertexBuffer;
-		Ref<Shader> QuadShader;
+		Ref<VertexArray> SpriteVertexArray;
+		Ref<VertexBuffer> SpriteVertexBuffer;
+		Ref<Shader> SpriteShader;
 
 		uint32_t CircleIndexCount = 0;
 		CircleVertex* CircleVertexBufferBase = nullptr;
 		CircleVertex* CircleVertexBufferPtr = nullptr;
 
-		uint32_t QuadIndexCount = 0;
-		QuadVertex* QuadVertexBufferBase = nullptr;
-		QuadVertex* QuadVertexBufferPtr = nullptr;
+		uint32_t SpriteIndexCount = 0;
+		SpriteVertex* SpriteVertexBufferBase = nullptr;
+		SpriteVertex* SpriteVertexBufferPtr = nullptr;
 
 		uint32_t LineVertexCount = 0;
 		LineVertex* LineVertexBufferBase = nullptr;
@@ -82,8 +82,8 @@ namespace Moon {
 		Color WhiteColor;
 		glm::vec2 DefaultTileFactor;
 
-		glm::vec4 QuadVertexPositions[4];
-		glm::vec2 QuadUVCoords[4];
+		glm::vec4 SpriteVertexPositions[4];
+		glm::vec2 SpriteUVCoords[4];
 
 		std::array<Ref<Texture2D>, MaxTextureSlots> TextureSlots;
 		uint32_t TextureSlotIndex = 1; // 0 = White texture
@@ -109,14 +109,14 @@ namespace Moon {
 
 		s_Data.CircleShader = Shader::Create("Content/Shaders/Renderer2D_Circle.glsl");
 		s_Data.LineShader = Shader::Create("Content/Shaders/Renderer2D_Line.glsl");
-		s_Data.QuadShader = Shader::Create("Content/Shaders/Renderer2D_Quad.glsl");
+		s_Data.SpriteShader = Shader::Create("Content/Shaders/Renderer2D_Sprite.glsl");
 
 		int32_t samplers[Renderer2DData::MaxTextureSlots];
 		for (uint32_t i = 0; i < Renderer2DData::MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.QuadShader->Bind();
-		s_Data.QuadShader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
+		s_Data.SpriteShader->Bind();
+		s_Data.SpriteShader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
 
 		// Generate a 1x1 white texture
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
@@ -130,11 +130,11 @@ namespace Moon {
 		s_Data.WhiteColor = Color(ColorFormat::RGBANormalized, 1.0f, 1.0f, 1.0f, 1.0f);
 		s_Data.DefaultTileFactor = { 1.0f, 1.0f };
 
-		// -- Quad --
-		s_Data.QuadVertexArray = VertexArray::Create();
+		// -- Sprite --
+		s_Data.SpriteVertexArray = VertexArray::Create();
 
-		s_Data.QuadVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(QuadVertex));
-		s_Data.QuadVertexBuffer->SetLayout({
+		s_Data.SpriteVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(SpriteVertex));
+		s_Data.SpriteVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "Position XYZ" },
 			{ ShaderDataType::Float4, "Color" },
 			{ ShaderDataType::Float2, "UV" },
@@ -142,28 +142,28 @@ namespace Moon {
 			{ ShaderDataType::Int, "EntityID" },
 		});
 
-		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
+		s_Data.SpriteVertexArray->AddVertexBuffer(s_Data.SpriteVertexBuffer);
 
-		s_Data.QuadVertexBufferBase = new QuadVertex[Renderer2DData::MaxVertices];
+		s_Data.SpriteVertexBufferBase = new SpriteVertex[Renderer2DData::MaxVertices];
 
-		uint32_t* quadIndices = new uint32_t[Renderer2DData::MaxIndices];
+		uint32_t* spriteIndices = new uint32_t[Renderer2DData::MaxIndices];
 		uint32_t offset = 0;
 		for (uint32_t i = 0; i < Renderer2DData::MaxIndices; i += 6)
 		{
-			quadIndices[i + 0] = offset + 0;
-			quadIndices[i + 1] = offset + 1;
-			quadIndices[i + 2] = offset + 2;
+			spriteIndices[i + 0] = offset + 0;
+			spriteIndices[i + 1] = offset + 1;
+			spriteIndices[i + 2] = offset + 2;
 
-			quadIndices[i + 3] = offset + 2;
-			quadIndices[i + 4] = offset + 3;
-			quadIndices[i + 5] = offset + 0;
+			spriteIndices[i + 3] = offset + 2;
+			spriteIndices[i + 4] = offset + 3;
+			spriteIndices[i + 5] = offset + 0;
 
 			offset += 4;
 		}
 
-		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, Renderer2DData::MaxIndices);
-		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
-		delete[] quadIndices;
+		Ref<IndexBuffer> spriteIB = IndexBuffer::Create(spriteIndices, Renderer2DData::MaxIndices);
+		s_Data.SpriteVertexArray->SetIndexBuffer(spriteIB);
+		delete[] spriteIndices;
 
 		// -- Circle --
 		s_Data.CircleVertexArray = VertexArray::Create();
@@ -180,7 +180,7 @@ namespace Moon {
 
 		s_Data.CircleVertexArray->AddVertexBuffer(s_Data.CircleVertexBuffer);
 		s_Data.CircleVertexBufferBase = new CircleVertex[Renderer2DData::MaxVertices];
-		s_Data.CircleVertexArray->SetIndexBuffer(quadIB);	// Use Quad IB
+		s_Data.CircleVertexArray->SetIndexBuffer(spriteIB);	// Use Sprite IB
 
 		// -- Line --
 		s_Data.LineVertexArray = VertexArray::Create();
@@ -195,16 +195,16 @@ namespace Moon {
 		s_Data.LineVertexArray->AddVertexBuffer(s_Data.LineVertexBuffer);
 		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
 
-		// ---- Create basic quad information -----
-		s_Data.QuadVertexPositions[0] = { -0.5, -0.5, 0, 1.0f };
-		s_Data.QuadVertexPositions[1] = { 0.5, -0.5, 0, 1.0f };
-		s_Data.QuadVertexPositions[2] = { 0.5,  0.5, 0, 1.0f };
-		s_Data.QuadVertexPositions[3] = { -0.5,  0.5, 0, 1.0f };
+		// ---- Create basic sprite information -----
+		s_Data.SpriteVertexPositions[0] = { -0.5, -0.5, 0, 1.0f };
+		s_Data.SpriteVertexPositions[1] = { 0.5, -0.5, 0, 1.0f };
+		s_Data.SpriteVertexPositions[2] = { 0.5,  0.5, 0, 1.0f };
+		s_Data.SpriteVertexPositions[3] = { -0.5,  0.5, 0, 1.0f };
 
-		s_Data.QuadUVCoords[0] = { 0, 0 };
-		s_Data.QuadUVCoords[1] = { 1.0f, 0.0f };
-		s_Data.QuadUVCoords[2] = { 1.0f, 1.0f };
-		s_Data.QuadUVCoords[3] = { 0.0f, 1.0f };
+		s_Data.SpriteUVCoords[0] = { 0, 0 };
+		s_Data.SpriteUVCoords[1] = { 1.0f, 0.0f };
+		s_Data.SpriteUVCoords[2] = { 1.0f, 1.0f };
+		s_Data.SpriteUVCoords[3] = { 0.0f, 1.0f };
 
 		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
 	}
@@ -213,7 +213,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		delete[] s_Data.QuadVertexBufferBase;
+		delete[] s_Data.SpriteVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const glm::mat4& viewProjectionMatrix)
@@ -223,7 +223,7 @@ namespace Moon {
 		s_Data.CameraBuffer.ViewProjection = viewProjectionMatrix;
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
-		StartQuadBatch();
+		StartSpriteBatch();
 		StartCircleBatch();
 		StartLineBatch();
 	}
@@ -240,7 +240,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		FlushQuadBatch();
+		FlushSpriteBatch();
 		FlushCircleBatch();
 		FlushLineBatch();
 	}
@@ -259,10 +259,10 @@ namespace Moon {
 		s_Data.LineVertexBufferPtr = s_Data.LineVertexBufferBase;
 	}
 
-	void Renderer2D::StartQuadBatch()
+	void Renderer2D::StartSpriteBatch()
 	{
-		s_Data.QuadIndexCount = 0;
-		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+		s_Data.SpriteIndexCount = 0;
+		s_Data.SpriteVertexBufferPtr = s_Data.SpriteVertexBufferBase;
 		s_Data.TextureSlotIndex = 1;
 	}
 
@@ -307,23 +307,23 @@ namespace Moon {
 		#endif
 	}
 
-	void Renderer2D::FlushQuadBatch()
+	void Renderer2D::FlushSpriteBatch()
 	{
 		ME_PROFILE_FUNCTION();
 
 		// Nothing to draw
-		if (s_Data.QuadIndexCount == 0)
+		if (s_Data.SpriteIndexCount == 0)
 			return;
 
-		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
-		s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.SpriteVertexBufferPtr - (uint8_t*)s_Data.SpriteVertexBufferBase);
+		s_Data.SpriteVertexBuffer->SetData(s_Data.SpriteVertexBufferBase, dataSize);
 
 		// Bind textures
 		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
 			s_Data.TextureSlots[i]->Bind(i);
 
-		s_Data.QuadShader->Bind();
-		RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+		s_Data.SpriteShader->Bind();
+		RenderCommand::DrawIndexed(s_Data.SpriteVertexArray, s_Data.SpriteIndexCount);
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
 			s_Data.Stats.DrawCalls++;
@@ -373,8 +373,8 @@ namespace Moon {
 
 		for (uint32_t i = 0; i < 4; i++)
 		{
-			s_Data.CircleVertexBufferPtr->WorldPosition = transform * s_Data.QuadVertexPositions[i];
-			s_Data.CircleVertexBufferPtr->LocalPosition = s_Data.QuadVertexPositions[i] * 2.0f;
+			s_Data.CircleVertexBufferPtr->WorldPosition = transform * s_Data.SpriteVertexPositions[i];
+			s_Data.CircleVertexBufferPtr->LocalPosition = s_Data.SpriteVertexPositions[i] * 2.0f;
 			s_Data.CircleVertexBufferPtr->Thickness = thickness;
 			s_Data.CircleVertexBufferPtr->Fade = fade;
 			s_Data.CircleVertexBufferPtr->Color = color.Format == ColorFormat::RGBANormalized ? color : color.GetNormalized();
@@ -436,10 +436,10 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+		if (s_Data.SpriteIndexCount >= Renderer2DData::MaxIndices)
 		{
-			FlushQuadBatch();
-			StartQuadBatch();
+			FlushSpriteBatch();
+			StartSpriteBatch();
 		}
 
 		int textureIndex = 0;
@@ -468,18 +468,18 @@ namespace Moon {
 
 		for (uint32_t i = 0; i < 4; i++)
 		{
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized();
-			s_Data.QuadVertexBufferPtr->UV = tileFactor * s_Data.QuadUVCoords[i];
-			s_Data.QuadVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
-			s_Data.QuadVertexBufferPtr->EntityID = entityID;
-			s_Data.QuadVertexBufferPtr++;
+			s_Data.SpriteVertexBufferPtr->Position = transform * s_Data.SpriteVertexPositions[i];
+			s_Data.SpriteVertexBufferPtr->Color = tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized();
+			s_Data.SpriteVertexBufferPtr->UV = tileFactor * s_Data.SpriteUVCoords[i];
+			s_Data.SpriteVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
+			s_Data.SpriteVertexBufferPtr->EntityID = entityID;
+			s_Data.SpriteVertexBufferPtr++;
 		}
 
-		s_Data.QuadIndexCount += 6;
+		s_Data.SpriteIndexCount += 6;
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.QuadCount++;
+			s_Data.Stats.SpriteCount++;
 		#endif
 	}
 
@@ -512,10 +512,10 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
+		if (s_Data.SpriteIndexCount >= Renderer2DData::MaxIndices)
 		{
-			FlushQuadBatch();
-			StartQuadBatch();
+			FlushSpriteBatch();
+			StartSpriteBatch();
 		}
 
 		int textureIndex = 0;
@@ -544,17 +544,17 @@ namespace Moon {
 
 		for (uint32_t i = 0; i < 4; i++)
 		{
-			s_Data.QuadVertexBufferPtr->Position = transform * s_Data.QuadVertexPositions[i];
-			s_Data.QuadVertexBufferPtr->Color = tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized();
-			s_Data.QuadVertexBufferPtr->UV = subTexture->GetUVCoords()[i];
-			s_Data.QuadVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
-			s_Data.QuadVertexBufferPtr++;
+			s_Data.SpriteVertexBufferPtr->Position = transform * s_Data.SpriteVertexPositions[i];
+			s_Data.SpriteVertexBufferPtr->Color = tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized();
+			s_Data.SpriteVertexBufferPtr->UV = subTexture->GetUVCoords()[i];
+			s_Data.SpriteVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
+			s_Data.SpriteVertexBufferPtr++;
 		}
 
-		s_Data.QuadIndexCount += 6;
+		s_Data.SpriteIndexCount += 6;
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.QuadCount++;
+			s_Data.Stats.SpriteCount++;
 		#endif
 	}
 

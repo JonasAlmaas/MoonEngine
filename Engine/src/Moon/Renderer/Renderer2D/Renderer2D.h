@@ -18,21 +18,21 @@ namespace Moon {
 			uint32_t DrawCalls = 0;
 			uint32_t CircleCount = 0;
 			uint32_t LineCount = 0;
-			uint32_t QuadCount = 0;
+			uint32_t SpriteCount = 0;
 
 			uint32_t GetTotalVertexCount() const
 			{
 				uint32_t circleVertices = CircleCount * 4;
 				uint32_t linesVertices = LineCount * 2;
-				uint32_t quadVertices = QuadCount * 4;
-				return linesVertices + circleVertices + quadVertices;
+				uint32_t spriteVertices = SpriteCount * 4;
+				return linesVertices + circleVertices + spriteVertices;
 			}
 
 			uint32_t GetTotalIndexCount() const
 			{
 				uint32_t circleIndices = CircleCount * 6;
-				uint32_t quadIndices = QuadCount * 6;
-				return circleIndices + quadIndices;
+				uint32_t spriteIndices = SpriteCount * 6;
+				return circleIndices + spriteIndices;
 			}
 		};
 
@@ -56,11 +56,11 @@ namespace Moon {
 	private:
 		static void StartCircleBatch();
 		static void StartLineBatch();
-		static void StartQuadBatch();
+		static void StartSpriteBatch();
 
 		static void FlushCircleBatch();
 		static void FlushLineBatch();
-		static void FlushQuadBatch();
+		static void FlushSpriteBatch();
 
 		// ---- Primitives ----
 
