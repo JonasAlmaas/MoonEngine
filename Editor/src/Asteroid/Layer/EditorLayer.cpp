@@ -23,6 +23,7 @@ namespace Asteroid {
 		m_PropertiesPanel.OnAttach();
 		m_RendererPanel.OnAttach();
 		m_SceneHierarchyPanel.OnAttach();
+		m_SettingsPanel.OnAttach();
 		m_ToolbarPanel.OnAttach();
 		m_ViewportPanel.OnAttach();
 
@@ -39,6 +40,7 @@ namespace Asteroid {
 		m_PropertiesPanel.OnDetach();
 		m_RendererPanel.OnDetach();
 		m_SceneHierarchyPanel.OnDetach();
+		m_SettingsPanel.OnDetach();
 		m_ToolbarPanel.OnDetach();
 		m_ViewportPanel.OnDetach();
 
@@ -64,6 +66,9 @@ namespace Asteroid {
 
 		if (panelState->SceneHierarchy)
 			m_SceneHierarchyPanel.OnUpdate(ts);
+
+		if (panelState->Settings)
+			m_SettingsPanel.OnUpdate(ts);
 
 		if (panelState->Toolbar)
 			m_ToolbarPanel.OnUpdate(ts);
@@ -100,7 +105,8 @@ namespace Asteroid {
 			}
 		}
 
-		OnOverlayRender();
+		if (EditorState::GetShowPhysicsColliders())
+			OnOverlayRender();
 
 		EditorState::GetFramebuffer()->Unbind();
 	}
@@ -174,6 +180,9 @@ namespace Asteroid {
 
 			if (panelState->SceneHierarchy)
 				m_SceneHierarchyPanel.OnImGuiRender();
+
+			if (panelState->Settings)
+				m_SettingsPanel.OnImGuiRender();
 
 			if (panelState->Toolbar)
 				m_ToolbarPanel.OnImGuiRender();

@@ -7,6 +7,7 @@ using namespace Moon;
 #include "Asteroid/Panel/Properties/PropertiesPanel.h"
 #include "Asteroid/Panel/Renderer/RendererPanel.h"
 #include "Asteroid/Panel/SceneHierarchy/SceneHierarchyPanel.h"
+#include "Asteroid/Panel/Settings/SettingsPanel.h"
 #include "Asteroid/Panel/Toolbar/ToolbarPanel.h"
 #include "Asteroid/Panel/Viewport/ViewportPanel.h"
 
@@ -40,6 +41,7 @@ namespace Asteroid {
 		PropertiesPanel m_PropertiesPanel;
 		RendererPanel m_RendererPanel;
 		SceneHierarchyPanel m_SceneHierarchyPanel;
+		SettingsPanel m_SettingsPanel;
 		ToolbarPanel m_ToolbarPanel;
 		ViewportPanel m_ViewportPanel;
 	};
