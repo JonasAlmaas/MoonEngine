@@ -28,6 +28,8 @@ namespace Asteroid {
 		m_ViewportPanel.OnAttach();
 
 		// -------------------------
+
+		Renderer2D::SetLineWidth(4.0f);
 	}
 
 	void EditorLayer::OnDetach()
