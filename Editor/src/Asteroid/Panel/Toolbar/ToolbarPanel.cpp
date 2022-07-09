@@ -10,6 +10,7 @@ namespace Asteroid {
 	{
 		m_IconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
 		m_IconStop = Texture2D::Create("Resources/Icons/StopButton.png");
+		m_IconSimulate = Texture2D::Create("Resources/Icons/SimulateButton.png");
 	}
 
 	void ToolbarPanel::OnDetach()
@@ -41,14 +42,38 @@ namespace Asteroid {
 
 		SceneState sceneState = EditorState::GetSceneState();
 
-		Ref<Texture2D> icon = sceneState == SceneState::Edit ? m_IconPlay : m_IconStop;
-		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-		if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+		switch (sceneState)
 		{
-			switch (sceneState)
+			case SceneState::Edit:
 			{
-				case SceneState::Edit:	EditorState::OnScenePlay(); break;
-				case SceneState::Play:	EditorState::OnSceneStop(); break;
+				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - size - (size * 0.5f));
+				if (ImGui::ImageButton((ImTextureID)m_IconPlay->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+					EditorState::OnScenePlay();
+
+				ImGui::SameLine();
+
+				if (ImGui::ImageButton((ImTextureID)m_IconSimulate->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+					EditorState::OnSimulateStart();
+
+				break;
+			}
+			case SceneState::Play:
+			{
+				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+				if (ImGui::ImageButton((ImTextureID)m_IconStop->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+					EditorState::OnSceneStop();
+
+				break;
+			}
+			case SceneState::Simulate:
+			{
+				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
+
+				if (ImGui::ImageButton((ImTextureID)m_IconStop->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+					EditorState::OnSimulateStop();
+
+				break;
 			}
 		}
 

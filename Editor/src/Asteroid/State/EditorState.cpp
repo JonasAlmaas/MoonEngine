@@ -120,8 +120,9 @@ namespace Asteroid {
 	{
 		switch (s_Data.SceneState)
 		{
-			case SceneState::Edit: return s_Data.EditorSn;
-			case SceneState::Play: return s_Data.RuntimeSn;
+			case SceneState::Edit:		return s_Data.EditorSn;
+			case SceneState::Play:		return s_Data.RuntimeSn;
+			case SceneState::Simulate:	return s_Data.RuntimeSn;
 		}
 
 		ME_CORE_ASSERT(false, "Unknown scene state!");
@@ -197,6 +198,20 @@ namespace Asteroid {
 	{
 		s_Data.SceneState = SceneState::Edit;
 		s_Data.RuntimeSn->OnRuntimeStop();
+		s_Data.RuntimeSn = nullptr;
+	}
+
+	void EditorState::OnSimulateStart()
+	{
+		s_Data.SceneState = SceneState::Simulate;
+		s_Data.RuntimeSn = s_Data.EditorSn->Copy();
+		s_Data.RuntimeSn->OnSimulationStart();
+	}
+
+	void EditorState::OnSimulateStop()
+	{
+		s_Data.SceneState = SceneState::Edit;
+		s_Data.RuntimeSn->OnSimulationStop();
 		s_Data.RuntimeSn = nullptr;
 	}
 

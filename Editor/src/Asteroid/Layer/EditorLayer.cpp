@@ -76,6 +76,9 @@ namespace Asteroid {
 		if (panelState->Viewport)
 			m_ViewportPanel.OnUpdate(ts);
 
+		if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
+			EditorState::GetEditorCamera()->OnUpdate(ts);
+
 		// ---- Render ----
 
 		EditorState::GetFramebuffer()->Bind();
@@ -90,19 +93,9 @@ namespace Asteroid {
 		SceneState sceneState = EditorState::GetSceneState();
 		switch (sceneState)
 		{
-			case SceneState::Edit:
-			{
-				if (m_ViewportPanel.GetHovered() || m_ViewportPanel.GetFocused())
-					EditorState::GetEditorCamera()->OnUpdate(ts);
-
-				EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera());
-				break;
-			}
-			case SceneState::Play:
-			{
-				EditorState::GetActiveScene()->OnRuntimeUpdate(ts);
-				break;
-			}
+			case SceneState::Edit:			EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera()); break;
+			case SceneState::Play:			EditorState::GetActiveScene()->OnRuntimeUpdate(ts); break;
+			case SceneState::Simulate:		EditorState::GetActiveScene()->OnUpdateSimulation(ts, EditorState::GetEditorCamera()->GetViewProjection()); break;
 		}
 
 		if (EditorState::GetShowPhysicsColliders())

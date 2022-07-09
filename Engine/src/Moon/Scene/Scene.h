@@ -11,11 +11,15 @@ namespace Moon {
 	{
 	public:
 		Scene() = default;
-		virtual ~Scene() = default;
+		virtual ~Scene();
 
 		void OnRuntimeStart();
 		void OnRuntimeStop();
 		void OnRuntimeUpdate(Timestep ts);
+
+		void OnSimulationStart();
+		void OnSimulationStop();
+		void OnUpdateSimulation(Timestep ts, const glm::mat4& viewProj);
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 
@@ -34,6 +38,12 @@ namespace Moon {
 		}
 
 		entt::registry& GetRegistry() { return m_Registry; }
+
+	private:
+		void OnPhysics2DStart();
+		void OnPhysics2DStop();
+
+		void RenderScene(const glm::mat4& viewProj);
 
 	protected:
 		entt::registry m_Registry;

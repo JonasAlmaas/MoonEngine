@@ -55,6 +55,9 @@ namespace Asteroid {
 		static void OnScenePlay();
 		static void OnSceneStop();
 
+		static void OnSimulateStart();
+		static void OnSimulateStop();
+
 		static SceneState GetSceneState();
 
 		static bool GetShowPhysicsColliders();
