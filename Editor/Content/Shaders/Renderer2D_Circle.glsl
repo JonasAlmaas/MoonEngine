@@ -60,15 +60,14 @@ void main()
 {
     // Calculate distance and fill circle with white
     float distance = 1.0 - length(Input.LocalPosition);
-    float circle = smoothstep(0.0, Input.Fade, distance);
-    circle *= smoothstep(Input.Thickness + Input.Fade, Input.Thickness, distance);
+    float alpha = smoothstep(0.0, Input.Fade, distance);
+    alpha *= smoothstep(Input.Thickness + Input.Fade, Input.Thickness, distance);
 
-	if (circle == 0.0)
-		discard;
-
-    // Set output color
     o_Color = Input.Color;
-	o_Color.a *= circle;
+	o_Color.a *= alpha;
+
+	if (alpha == 0.0)
+		discard;
 
 	o_EntityID = v_EntityID;
 }
