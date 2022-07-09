@@ -38,7 +38,7 @@ namespace Asteroid {
 			{
 				auto panelState = EditorState::GetPanelState();
 
-				if (ImGui::MenuItem("ContentBrowser", NULL, panelState->ContentBrowser))
+				if (ImGui::MenuItem("Content Browser", NULL, panelState->ContentBrowser))
 					panelState->ContentBrowser = !panelState->ContentBrowser;
 
 				if (ImGui::MenuItem("Properties", NULL, panelState->Properties))
@@ -47,8 +47,11 @@ namespace Asteroid {
 				if (ImGui::MenuItem("Renderer", NULL, panelState->Renderer))
 					panelState->Renderer = !panelState->Renderer;
 
-				if (ImGui::MenuItem("SceneHierarchy", NULL, panelState->SceneHierarchy))
+				if (ImGui::MenuItem("Scene Hierarchy", NULL, panelState->SceneHierarchy))
 					panelState->SceneHierarchy = !panelState->SceneHierarchy;
+
+				if (ImGui::MenuItem("Settings", NULL, panelState->Settings))
+					panelState->Settings = !panelState->Settings;
 
 				if (ImGui::MenuItem("Viewport", NULL, panelState->Viewport))
 					panelState->Viewport = !panelState->Viewport;
