@@ -72,7 +72,7 @@ namespace Moon {
 		for (uint32_t i = 0; i < Renderer2DData::MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.Shader = Shader::Create("Content/Shaders/2D.glsl");
+		s_Data.Shader = Shader::Create("Content/Shaders/Quad2D.glsl");
 		s_Data.Shader->Bind();
 		s_Data.Shader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
 
