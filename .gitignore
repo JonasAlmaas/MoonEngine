@@ -19,9 +19,6 @@ bin-int/
 # Moon assset files
 **/**.mmap
 
-# VulkanSDK
-Engine/vendor/VulkanSDK/**
-
 # Cache
 Editor/Content/cache
 **/__pycache__

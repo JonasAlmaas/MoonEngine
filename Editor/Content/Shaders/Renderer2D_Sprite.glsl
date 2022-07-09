@@ -96,5 +96,8 @@ void main()
 
 	o_Color = color;
 
+	if (texColor.a == 0.0)
+		discard;
+
 	o_EntityID = v_EntityID;
 }

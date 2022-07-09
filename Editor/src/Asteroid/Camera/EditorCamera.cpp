@@ -139,7 +139,7 @@ namespace Asteroid {
 
 	bool EditorCamera::OnKeyPressed(KeyPressedEvent& e)
 	{
-		if (e.GetRepeatCount() > 0)
+		if (e.IsRepeat())
 			return false;
 
 		switch (e.GetKeyCode())

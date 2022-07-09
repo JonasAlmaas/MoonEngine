@@ -52,8 +52,7 @@ namespace Asteroid {
 		for (auto& directoryEntry : std::filesystem::directory_iterator(m_CurrentDirectory))
 		{
 			const auto& path = directoryEntry.path();
-			auto relativePath = std::filesystem::relative(path, g_ContentPath);
-			std::string filenameString = relativePath.filename().string();
+			std::string filenameString = path.filename().string();
 
 			ImGui::PushID(filenameString.c_str());
 			Ref<Texture2D> icon = directoryEntry.is_directory() ? m_DirectoryIcon : m_FileIcon;
@@ -63,6 +62,8 @@ namespace Asteroid {
 			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
 			ImGui::PopStyleColor();
 			ImGui::PopStyleVar();
+
+			auto relativePath = std::filesystem::relative(path, g_ContentPath);
 
 			// TODO: Figure out how to show a tooltip when dragging
 			if (relativePath.extension().string() == ".mmap")

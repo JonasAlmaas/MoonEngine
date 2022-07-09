@@ -17,7 +17,7 @@ namespace Moon {
 
 		GLFWwindow* window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
 		int state = glfwGetKey(window, keycode);
-		return state == GLFW_PRESS || state == GLFW_REPEAT;
+		return state == GLFW_PRESS;
 	}
 
 	bool Input::IsMouseButtonPressed(KeyCode button)

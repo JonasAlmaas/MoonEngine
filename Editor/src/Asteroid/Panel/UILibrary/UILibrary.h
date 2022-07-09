@@ -54,19 +54,6 @@ namespace Asteroid {
 			ImGui::PopID();
 		}
 
-		template<typename T>
-		static void MenuItemAddComponent(const std::string& lable, Entity selectionContext)
-		{
-			if (!selectionContext.HasComponent<T>())
-			{
-				if (ImGui::MenuItem(lable.c_str()))
-				{
-					selectionContext.AddComponent<T>();
-					ImGui::CloseCurrentPopup();
-				}
-			}
-		}
-
 	};
 
 }

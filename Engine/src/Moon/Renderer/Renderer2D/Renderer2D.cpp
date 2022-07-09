@@ -477,10 +477,10 @@ namespace Moon {
 		for (size_t i = 0; i < 4; i++)
 			lineVertices[i] = transform * s_Data.SpriteVertexPositions[i];
 
-		DrawLine(lineVertices[0], lineVertices[1], color);
-		DrawLine(lineVertices[1], lineVertices[2], color);
-		DrawLine(lineVertices[2], lineVertices[3], color);
-		DrawLine(lineVertices[3], lineVertices[0], color);
+		Uber_DrawLine(lineVertices[0], lineVertices[1], color, entityID);
+		Uber_DrawLine(lineVertices[1], lineVertices[2], color, entityID);
+		Uber_DrawLine(lineVertices[2], lineVertices[3], color, entityID);
+		Uber_DrawLine(lineVertices[3], lineVertices[0], color, entityID);
 	}
 
 	void Renderer2D::Super_DrawRect(const glm::vec3& position, const glm::vec2 size, const Color& color)

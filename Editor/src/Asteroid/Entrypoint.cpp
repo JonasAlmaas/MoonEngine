@@ -8,7 +8,12 @@ namespace Moon {
 
 	Application* Application::Create(ApplicationCommandLineArgs args)
 	{
-		return new Asteroid::AsteroidApp(args);
+		ApplicationSpecification spec;
+		spec.Name = "Asteroid";
+		spec.WorkingDirectory = "../Editor";
+		spec.CommandLineArgs = args;
+
+		return new Asteroid::AsteroidApp(spec);
 	}
 
 }

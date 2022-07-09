@@ -35,7 +35,117 @@ namespace Moon {
 			dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
 	}
 
+	Scene::~Scene()
+	{
+		delete m_PhysicsWorld;
+	}
+
 	void Scene::OnRuntimeStart()
+	{
+		OnPhysics2DStart();
+	}
+
+	void Scene::OnRuntimeStop()
+	{
+		OnPhysics2DStop();
+	}
+
+	void Scene::OnRuntimeUpdate(Timestep ts)
+	{
+		// ---- Scripts ----
+		{
+			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+			{
+				// Move to scene begin play. But I don't have that yet.
+				if (!nsc.Instance)
+				{
+					nsc.Instance = nsc.InstantiateScript();
+					nsc.Instance->m_Entity = Entity(&m_Registry, entity);
+					nsc.Instance->OnCreate();
+				}
+
+				nsc.Instance->OnUpdate(ts);
+
+				// Call OnDestroy on scene stop.
+			});
+		}
+
+		// ---- Physics 2D ----
+		{
+			const int32_t velocityIterations = 6;
+			const int32_t positionIterations = 2;
+
+			m_PhysicsWorld->Step(ts, velocityIterations, positionIterations);
+
+			// Update renderable entities
+			auto view = m_Registry.view<Rigidbody2DComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { &m_Registry, e };
+
+				auto& transform = entity.GetComponent<TransformComponent>();
+				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+				b2Body* body = (b2Body*)rb2d.RuntimeBody;
+
+				const auto& position = body->GetPosition();
+				transform.Translation.x = position.x;
+				transform.Translation.y = position.y;
+				transform.Rotation.z = body->GetAngle();
+			}
+		}
+
+		if (!m_ActiveCamera || !m_ActiveCamera.HasComponent<TransformComponent>() || !m_ActiveCamera.HasComponent<CameraComponent>())
+			return;
+
+		auto& camera = m_ActiveCamera.GetComponent<CameraComponent>().Camera;
+		auto& cameraTransComp = m_ActiveCamera.GetComponent<TransformComponent>();
+		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(cameraTransComp.GetTransform());
+
+		RenderScene(viewProj);
+	}
+
+	void Scene::OnSimulationStart()
+	{
+		OnPhysics2DStart();
+	}
+
+	void Scene::OnSimulationStop()
+	{
+		OnPhysics2DStop();
+	}
+
+	void Scene::OnUpdateSimulation(Timestep ts, const glm::mat4& viewProj)
+	{
+		// ---- Physics 2D ----
+		{
+			const int32_t velocityIterations = 6;
+			const int32_t positionIterations = 2;
+
+			m_PhysicsWorld->Step(ts, velocityIterations, positionIterations);
+
+			// Update renderable entities
+			auto view = m_Registry.view<Rigidbody2DComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { &m_Registry, e };
+
+				auto& transform = entity.GetComponent<TransformComponent>();
+				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
+
+				b2Body* body = (b2Body*)rb2d.RuntimeBody;
+
+				const auto& position = body->GetPosition();
+				transform.Translation.x = position.x;
+				transform.Translation.y = position.y;
+				transform.Rotation.z = body->GetAngle();
+			}
+		}
+
+		RenderScene(viewProj);
+	}
+
+	void Scene::OnPhysics2DStart()
 	{
 		// Create phisics world
 		m_PhysicsWorld = new b2World({ 0.0f, -9.8f });
@@ -92,96 +202,37 @@ namespace Moon {
 		}
 	}
 
-	void Scene::OnRuntimeStop()
+	void Scene::OnPhysics2DStop()
 	{
 		delete m_PhysicsWorld;
 		m_PhysicsWorld = nullptr;
 	}
 
-	void Scene::OnRuntimeUpdate(Timestep ts)
+	void Scene::RenderScene(const glm::mat4& viewProj)
 	{
-		// ---- Scripts ----
+		Renderer2D::BeginScene(viewProj);
+
+		// Draw sprite
 		{
-			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+			auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+			for (auto entity : group)
 			{
-				// Move to scene begin play. But I don't have that yet.
-				if (!nsc.Instance)
-				{
-					nsc.Instance = nsc.InstantiateScript();
-					nsc.Instance->m_Entity = Entity(&m_Registry, entity);
-					nsc.Instance->OnCreate();
-				}
-
-				nsc.Instance->OnUpdate(ts);
-
-				// Call OnDestroy on scene stop.
-			});
-		}
-
-		// ---- Physics 2D ----
-		{
-			const int32_t velocityIterations = 6;
-			const int32_t positionIterations = 2;
-
-			m_PhysicsWorld->Step(ts, velocityIterations, positionIterations);
-
-			// Update renderable entities
-			auto view = m_Registry.view<Rigidbody2DComponent>();
-			for (auto e : view)
-			{
-				Entity entity = { &m_Registry, e };
-
-				auto& transform = entity.GetComponent<TransformComponent>();
-				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
-
-				b2Body* body = (b2Body*)rb2d.RuntimeBody;
-
-				const auto& position = body->GetPosition();
-				transform.Translation.x = position.x;
-				transform.Translation.y = position.y;
-				transform.Rotation.z = body->GetAngle();
+				auto [transformComp, spriteComp] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				Renderer2D::DrawSpriteRendererComponent(transformComp.GetTransform(), spriteComp, (int)entity);
 			}
 		}
 
-		// ---- Render 2D ----
+		// Draw circles
 		{
-			if (!m_ActiveCamera || !m_ActiveCamera.HasComponent<CameraComponent>())
-				return;
-
-			auto& camera = m_ActiveCamera.GetComponent<CameraComponent>().Camera;
-
-			if (m_ActiveCamera.HasComponent<TransformComponent>())
+			auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
+			for (auto entity : view)
 			{
-				auto& cameraTransComp = m_ActiveCamera.GetComponent<TransformComponent>();
-				Renderer2D::BeginScene(camera.GetProjection(), cameraTransComp.GetTransform());
+				auto [transformComp, circleComp] = view.get<TransformComponent, CircleRendererComponent>(entity);
+				Renderer2D::DrawCircleRendererComponent(transformComp.GetTransform(), circleComp, (int)entity);
 			}
-			else
-			{
-				Renderer2D::BeginScene(camera.GetProjection(), glm::mat4(1.0f));
-			}
-
-			// Draw sprite
-			{
-				auto group = m_Registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-				for (auto entity : group)
-				{
-					auto [transformComp, spriteComp] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-					Renderer2D::DrawSpriteRendererComponent(transformComp.GetTransform(), spriteComp, (int)entity);
-				}
-			}
-
-			// Draw circles
-			{
-				auto view = m_Registry.view<TransformComponent, CircleRendererComponent>();
-				for (auto entity : view)
-				{
-					auto [transformComp, circleComp] = view.get<TransformComponent, CircleRendererComponent>(entity);
-					Renderer2D::DrawCircleRendererComponent(transformComp.GetTransform(), circleComp, (int)entity);
-				}
-			}
-
-			Renderer2D::EndScene();
 		}
+
+		Renderer2D::EndScene();
 	}
 
 	void Scene::OnViewportResize(uint32_t width, uint32_t height)

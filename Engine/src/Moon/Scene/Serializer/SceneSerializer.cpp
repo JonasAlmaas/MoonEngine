@@ -357,6 +357,7 @@ namespace Moon {
 		}
 		catch (YAML::ParserException e)
 		{
+			ME_CORE_ERROR("Failed to load .mmap file '{0}'\n {1}", filepath, e.what());
 			return false;
 		}
 

@@ -8,7 +8,7 @@ namespace Asteroid {
 	class AsteroidApp : public Application
 	{
 	public:
-		AsteroidApp(ApplicationCommandLineArgs args);
+		AsteroidApp(const ApplicationSpecification& specs);
 		virtual ~AsteroidApp() = default;
 
 	};

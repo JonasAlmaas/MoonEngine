@@ -21,6 +21,7 @@ namespace Asteroid {
 	private:
 		Ref<Texture2D> m_IconPlay;
 		Ref<Texture2D> m_IconStop;
+		Ref<Texture2D> m_IconSimulate;
 
 	};
 

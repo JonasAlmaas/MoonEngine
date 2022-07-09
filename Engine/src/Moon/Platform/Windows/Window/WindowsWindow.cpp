@@ -121,7 +121,7 @@ namespace Moon {
 				}
 				case GLFW_REPEAT:
 				{
-					KeyPressedEvent e(keycode, 1);
+					KeyPressedEvent e(keycode, true);
 					data.EventCallback(e);
 					break;
 				}
