@@ -52,6 +52,19 @@ namespace Asteroid {
 		}
 	}
 
+	template<typename T>
+	static void DisplayAddComponentEntry(const std::string& lable, Entity selectionContext)
+	{
+		if (!selectionContext.HasComponent<T>())
+		{
+			if (ImGui::MenuItem(lable.c_str()))
+			{
+				selectionContext.AddComponent<T>();
+				ImGui::CloseCurrentPopup();
+			}
+		}
+	}
+
 	void PropertiesPanel::OnAttach()
 	{
 	}
@@ -103,13 +116,13 @@ namespace Asteroid {
 
 				if (ImGui::BeginPopup("AddComponent"))
 				{
-					UILibrary::MenuItemAddComponent<TransformComponent>("Add Transform Component", selectionContext);
-					UILibrary::MenuItemAddComponent<CameraComponent>("Add Camera Component", selectionContext);
-					UILibrary::MenuItemAddComponent<SpriteRendererComponent>("Add Sprite Renderer Component", selectionContext);
-					UILibrary::MenuItemAddComponent<CircleRendererComponent>("Add Circle Renderer Component", selectionContext);
-					UILibrary::MenuItemAddComponent<Rigidbody2DComponent>("Add Rigid Body 2D Component", selectionContext);
-					UILibrary::MenuItemAddComponent<BoxCollider2DComponent>("Add Box Collider 2D Component", selectionContext);
-					UILibrary::MenuItemAddComponent<CircleCollider2DComponent>("Add Circle Collider 2D Component", selectionContext);
+					DisplayAddComponentEntry<TransformComponent>("Add Transform Component", selectionContext);
+					DisplayAddComponentEntry<CameraComponent>("Add Camera Component", selectionContext);
+					DisplayAddComponentEntry<SpriteRendererComponent>("Add Sprite Renderer Component", selectionContext);
+					DisplayAddComponentEntry<CircleRendererComponent>("Add Circle Renderer Component", selectionContext);
+					DisplayAddComponentEntry<Rigidbody2DComponent>("Add Rigid Body 2D Component", selectionContext);
+					DisplayAddComponentEntry<BoxCollider2DComponent>("Add Box Collider 2D Component", selectionContext);
+					DisplayAddComponentEntry<CircleCollider2DComponent>("Add Circle Collider 2D Component", selectionContext);
 
 					ImGui::EndPopup();
 				}
