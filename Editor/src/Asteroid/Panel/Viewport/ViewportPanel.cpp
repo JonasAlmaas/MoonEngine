@@ -195,7 +195,7 @@ namespace Asteroid {
 
 	bool ViewportPanel::OnKeyPressed(KeyPressedEvent& e)
 	{
-		if (e.GetRepeatCount() > 0)
+		if (e.IsRepeat())
 			return false;
 
 		switch (e.GetKeyCode())
