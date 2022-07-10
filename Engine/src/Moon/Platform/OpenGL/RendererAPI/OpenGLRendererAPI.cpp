@@ -89,7 +89,7 @@ namespace Moon {
 		glLineWidth(width);
 	}
 
-	const const unsigned char* OpenGLRendererAPI::GetGPUVendor()
+	const unsigned char* OpenGLRendererAPI::GetGPUVendor()
 	{
 		return glGetString(GL_VENDOR);
 	}
