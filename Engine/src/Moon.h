@@ -30,6 +30,7 @@
 
 #include "Moon/Core/Renderer/Buffer/Framebuffer/Framebuffer.h"
 #include "Moon/Core/Renderer/Buffer/IndexBuffer/IndexBuffer.h"
+#include "Moon/Core/Renderer/Buffer/UniformBuffer/UniformBuffer.h"
 #include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
 #include "Moon/Core/Renderer/Buffer/VertexBuffer/Layout/VertexBufferLayout.h"
 
