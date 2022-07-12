@@ -32,6 +32,8 @@ namespace Moon {
 		virtual const unsigned char* GetGPUName()  = 0;
 		virtual const unsigned char* GetGPUFirmwareVersion() = 0;
 
+		virtual const void SetMultisample(bool state) const = 0;
+
 		inline static API GetAPI() { return s_API; }
 
 	private:
