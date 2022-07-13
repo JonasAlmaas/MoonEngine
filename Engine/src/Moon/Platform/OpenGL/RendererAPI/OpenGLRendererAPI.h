@@ -23,6 +23,8 @@ namespace Moon {
 		virtual const unsigned char* GetGPUName() override;
 		virtual const unsigned char* GetGPUFirmwareVersion() override;
 
+		virtual const void SetMultisample(bool state) const override;
+
 	};
 
 }

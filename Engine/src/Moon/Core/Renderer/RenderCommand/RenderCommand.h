@@ -52,6 +52,11 @@ namespace Moon {
 			s_RendererAPI->SetLineWidth(width);
 		}
 
+		static void SetMultisample(bool state)
+		{
+			s_RendererAPI->SetMultisample(state);
+		}
+
 		inline static const unsigned char* GetGPUVendor()
 		{
 			return s_RendererAPI->GetGPUVendor();

@@ -104,4 +104,12 @@ namespace Moon {
 		return glGetString(GL_VERSION);
 	}
 
+	const void OpenGLRendererAPI::SetMultisample(bool state) const
+	{
+		if (state)
+			glEnable(GL_MULTISAMPLE);
+		else
+			glDisable(GL_MULTISAMPLE);
+	}
+
 }

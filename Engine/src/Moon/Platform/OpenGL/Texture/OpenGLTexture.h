@@ -10,8 +10,8 @@ namespace Moon {
 	class OpenGLTexture2D : public Texture2D
 	{
 	public:
-		OpenGLTexture2D(uint32_t width, uint32_t height);
-		OpenGLTexture2D(const std::string& filepath);
+		OpenGLTexture2D(uint32_t width, uint32_t height, const Texture2DSpecification& spec);
+		OpenGLTexture2D(const std::string& filepath, const Texture2DSpecification& spec);
 
 		virtual ~OpenGLTexture2D();
 
@@ -25,6 +25,9 @@ namespace Moon {
 
 		virtual bool IsLoaded() const override { return m_IsLoaded; }
 
+		virtual Texture2DSpecification GetSpecification() override { return m_Specification; };
+		virtual void SetSpecification(const Texture2DSpecification& spec) override;
+
 		virtual const std::string& GetPath() const override { return m_Path; };
 
 		virtual bool operator==(const Texture& other) const override
@@ -34,8 +37,12 @@ namespace Moon {
 
 	private:
 		RendererID m_RendererID;
+
+		Texture2DSpecification m_Specification;
 		std::string m_Path;
+
 		bool m_IsLoaded = false;
+
 		uint32_t m_Width, m_Height;
 		GLenum m_InternalFormat, m_DataFormat;
 
