@@ -44,8 +44,6 @@ namespace Moon {
 
 	struct Texture2DSpecification
 	{
-		int s = 0;
-
 		Texture2DFilter MinFilter = Texture2DFilter::Linear;
 		Texture2DFilter MagFilter = Texture2DFilter::Linear;
 
