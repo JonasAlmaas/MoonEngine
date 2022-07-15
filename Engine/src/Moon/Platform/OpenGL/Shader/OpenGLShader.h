@@ -17,6 +17,8 @@ namespace Moon {
 		virtual void Bind() const override;
 		virtual void UnBind() const override;
 
+		virtual void Reload() override;
+
 		inline virtual const std::string& GetName() const override { return m_Name; }
 
 		// ---- Set Uniforms ----
@@ -32,6 +34,9 @@ namespace Moon {
 		virtual void SetMat4(const std::string& name, const glm::mat4& matrix) override;
 
 	private:
+		void LoadShaderFromFile();
+		void DeleteBinaries();
+
 		std::string ReadFile(const std::string& filepath);
 		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
 
@@ -55,7 +60,7 @@ namespace Moon {
 
 	private:
 		RendererID m_RendererID;
-		std::string m_FilePath;
+		std::string m_Filepath;
 		std::string m_Name;
 
 		std::unordered_map<GLenum, std::vector<uint32_t>> m_VulkanSPIRV;
