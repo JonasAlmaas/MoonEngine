@@ -47,6 +47,8 @@ namespace Asteroid {
 		m_ViewportPanel.OnDetach();
 
 		// -------------------------
+
+		EditorState::Shutdown();
 	}
 
 	void EditorLayer::OnUpdate(Timestep ts)

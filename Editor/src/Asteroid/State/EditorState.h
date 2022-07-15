@@ -37,6 +37,7 @@ namespace Asteroid {
 
 	public:
 		static void Init();
+		static void Shutdown();
 
 		static Ref<Framebuffer> GetFramebuffer();
 
