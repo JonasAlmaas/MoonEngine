@@ -160,12 +160,12 @@ namespace Moon {
 		std::filesystem::path cacheDirectory = Utils::GetCacheDirectory();
 		if (std::filesystem::exists(cacheDirectory))
 		{
-			std::filesystem::path shaderFilePath = m_Filepath;
+			std::filesystem::path shaderFilepath = m_Filepath;
 
 			for (auto& stage : { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER })
 			{
-				std::filesystem::path cachedOpenGLPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedOpenGLFileExtension(stage));
-				std::filesystem::path cachedVulkanPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedVulkanFileExtension(stage));
+				std::filesystem::path cachedOpenGLPath = cacheDirectory / (shaderFilepath.filename().string() + Utils::GLShaderStageCachedOpenGLFileExtension(stage));
+				std::filesystem::path cachedVulkanPath = cacheDirectory / (shaderFilepath.filename().string() + Utils::GLShaderStageCachedVulkanFileExtension(stage));
 				remove(cachedOpenGLPath);
 				remove(cachedVulkanPath);
 			}
@@ -241,8 +241,8 @@ namespace Moon {
 		shaderData.clear();
 		for (auto&& [stage, source] : shaderSources)
 		{
-			std::filesystem::path shaderFilePath = m_Filepath;
-			std::filesystem::path cachedPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedVulkanFileExtension(stage));
+			std::filesystem::path shaderFilepath = m_Filepath;
+			std::filesystem::path cachedPath = cacheDirectory / (shaderFilepath.filename().string() + Utils::GLShaderStageCachedVulkanFileExtension(stage));
 
 			std::ifstream in(cachedPath, std::ios::in | std::ios::binary);
 			if (in.is_open())
@@ -300,8 +300,8 @@ namespace Moon {
 		m_OpenGLSourceCode.clear();
 		for (auto&& [stage, spirv] : m_VulkanSPIRV)
 		{
-			std::filesystem::path shaderFilePath = m_Filepath;
-			std::filesystem::path cachedPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedOpenGLFileExtension(stage));
+			std::filesystem::path shaderFilepath = m_Filepath;
+			std::filesystem::path cachedPath = cacheDirectory / (shaderFilepath.filename().string() + Utils::GLShaderStageCachedOpenGLFileExtension(stage));
 
 			std::ifstream in(cachedPath, std::ios::in | std::ios::binary);
 			if (in.is_open())
