@@ -26,35 +26,26 @@ namespace Moon {
 
 		void SetViewportSize(uint32_t width, uint32_t height);
 
-		ProjectionType GetProjectionType() const { return m_ProjectionType; }
 		void SetProjectionType(ProjectionType type);
+		ProjectionType GetProjectionType() const { return m_ProjectionType; }
 
-		/**
-		 * @return Cameras vertical FOV in degrees.
-		 */
-		float GetPerspectiveVerticalFOV() const { return glm::degrees(m_PerspectiveFOV); }
-
-		/**
-		 * Sets the vertical field of view for the camera.
-		 * 
-		 * @param Vertical FOV in degrees.
-		 */
 		void SetPerspectiveVerticalFOV(float verticalFov);
+		float GetPerspectiveVerticalFOV() const { return m_PerspectiveFOV; }
 
-		float GetPerspectiveNearClip() const { return m_PerspectiveNear; }
 		void SetPerspectiveNearClip(float nearClip);
+		float GetPerspectiveNearClip() const { return m_PerspectiveNear; }
 
-		float GetPerspectiveFarClip() const { return m_PerspectiveFar; }
 		void SetPerspectiveFarClip(float farClip);
+		float GetPerspectiveFarClip() const { return m_PerspectiveFar; }
 
-		float GetOrthographicSize() const { return m_OrthographicSize; }
 		void SetOrthographicSize(float size);
+		float GetOrthographicSize() const { return m_OrthographicSize; }
 
-		float GetOrthographicNearClip() const { return m_OrthographicNear; }
 		void SetOrthographicNearClip(float nearClip);
+		float GetOrthographicNearClip() const { return m_OrthographicNear; }
 
-		float GetOrthographicFarClip() const { return m_OrthographicFar; }
 		void SetOrthographicFarClip(float farClip);
+		float GetOrthographicFarClip() const { return m_OrthographicFar; }
 
 	private:
 		void RecalculateProjection();
@@ -62,7 +53,7 @@ namespace Moon {
 	private:
 		ProjectionType m_ProjectionType = ProjectionType::Perspective;
 
-		float m_PerspectiveFOV = glm::radians(45.0f);
+		float m_PerspectiveFOV = 45.0f;
 		float m_PerspectiveNear = 0.01f;
 		float m_PerspectiveFar = 10000.0f;
 
