@@ -146,42 +146,42 @@ namespace Asteroid {
 				auto& camera = component.Camera;
 
 				const char* projectionTypeStrings[] = { "Perspective", "Orthographic" };
-				UILibrary::DrawCombo("Projection", projectionTypeStrings, 2, (int)camera.GetProjectionType(), component, [](CameraComponent& component, uint32_t i)
+				UILibrary::DrawCombo("Projection", projectionTypeStrings, 2, (int)camera->GetProjectionType(), component, [](CameraComponent& component, uint32_t i)
 				{
-					component.Camera.SetProjectionType((SceneCamera::ProjectionType)i);
+					component.Camera->SetProjectionType((SceneCamera::ProjectionType)i);
 				});
 
-				switch (camera.GetProjectionType())
+				switch (camera->GetProjectionType())
 				{
 					case SceneCamera::ProjectionType::Perspective:
 					{
-						float perspecVerticalFOV = camera.GetPerspectiveVerticalFOV();
+						float perspecVerticalFOV = camera->GetPerspectiveVerticalFOV();
 						if (UILibrary::DrawFloatControl("Vertical FOV", perspecVerticalFOV, 45.0f, 0.5f, 0.0f, 0.0f))
-							camera.SetPerspectiveVerticalFOV(perspecVerticalFOV);
+							camera->SetPerspectiveVerticalFOV(perspecVerticalFOV);
 
-						float perspecNearClip = camera.GetPerspectiveNearClip();
+						float perspecNearClip = camera->GetPerspectiveNearClip();
 						if (UILibrary::DrawFloatControl("Near Clip", perspecNearClip, 0.01f, 0.1f, 0.0f, 0.0f))
-							camera.SetPerspectiveNearClip(perspecNearClip);
+							camera->SetPerspectiveNearClip(perspecNearClip);
 
-						float perspecFarClip = camera.GetPerspectiveFarClip();
+						float perspecFarClip = camera->GetPerspectiveFarClip();
 						if (UILibrary::DrawFloatControl("Far Clip", perspecFarClip, 10000.0f, 1.0f, 0.0f, 0.0f))
-							camera.SetPerspectiveFarClip(perspecFarClip);
+							camera->SetPerspectiveFarClip(perspecFarClip);
 
 						break;
 					}
 					case SceneCamera::ProjectionType::Orthographic:
 					{
-						float orthoSize = camera.GetOrthographicSize();
+						float orthoSize = camera->GetOrthographicSize();
 						if (UILibrary::DrawFloatControl("Size", orthoSize, 10.0f, 0.1f, 0.0f, 0.0f))
-							camera.SetOrthographicSize(orthoSize);
+							camera->SetOrthographicSize(orthoSize);
 
-						float orthoNearClip = camera.GetOrthographicNearClip();
+						float orthoNearClip = camera->GetOrthographicNearClip();
 						if (UILibrary::DrawFloatControl("Near Clip", orthoNearClip, -1.0f, 0.01f, 0.0f, 0.0f))
-							camera.SetOrthographicNearClip(orthoNearClip);
+							camera->SetOrthographicNearClip(orthoNearClip);
 
-						float orthoFarClip = camera.GetOrthographicFarClip();
+						float orthoFarClip = camera->GetOrthographicFarClip();
 						if (UILibrary::DrawFloatControl("Far Clip", orthoFarClip, 1.0f, 0.01f, 0.0f, 0.0f))
-							camera.SetOrthographicFarClip(orthoFarClip);
+							camera->SetOrthographicFarClip(orthoFarClip);
 
 						break;
 					}

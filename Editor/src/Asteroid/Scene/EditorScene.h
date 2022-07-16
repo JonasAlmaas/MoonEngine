@@ -4,8 +4,6 @@ using namespace Moon;
 
 #include <Moon/Scene/Scene.h>
 
-#include "Asteroid/Camera/EditorCamera.h"
-
 
 namespace Asteroid {
 
@@ -20,7 +18,7 @@ namespace Asteroid {
 		 */
 		Ref<EditorScene> Copy();
 
-		void OnUpdateEditor(Timestep ts, const Ref<EditorCamera>& camera);
+		void OnUpdateEditor(Timestep ts, const Ref<RenderCamera>& camera);
 
 		Entity GetSelectionContext() { return m_SelectionContext; }
 		void SetSelectionContext(Entity entity = {}) { m_SelectionContext = entity; }

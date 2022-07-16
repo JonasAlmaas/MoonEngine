@@ -2,6 +2,7 @@
 
 using namespace Moon;
 
+#include "Asteroid/Camera/EditorCamera.h"
 #include "Asteroid/Scene/EditorScene.h"
 
 
