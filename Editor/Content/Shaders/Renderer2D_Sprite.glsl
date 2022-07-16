@@ -36,7 +36,7 @@ void main()
 }
 
 
-#type fragment
+#type pixel
 #version 450 core
 
 layout(location = 0) out vec4 o_Color;

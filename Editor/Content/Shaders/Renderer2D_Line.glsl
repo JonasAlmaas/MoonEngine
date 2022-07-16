@@ -29,7 +29,7 @@ void main()
 	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
 }
 
-#type fragment
+#type pixel
 #version 450 core
 
 layout(location = 0) out vec4 o_Color;
