@@ -1,7 +1,8 @@
 # MoonEngine [![License](https://img.shields.io/github/license/JonasAlmaas/MoonEngine.svg)](https://github.com/JonasAlmaas/MoonEngine/blob/main/LICENSE)
 Source code for the Moon Engine
 
-### Submodules
-**First time pull** `git submodule update --init`
+### Installation
+Run the Setup.bat script inside the script folder and follow the instructions given.
 
-**Update** `git submodule update --remote`
+### Games made with MoonEngine
+* [Minecraft Clone](https://github.com/JonasAlmaas/Minecraft-Clone)
