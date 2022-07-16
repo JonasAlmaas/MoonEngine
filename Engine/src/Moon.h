@@ -9,7 +9,7 @@
 
 // ---- Camera ----
 #include "Moon/Core/Camera/Perspective/PerspectiveCamera.h"
-//#include "Moon/Core/Camera/Orthographic/OrthographicCamera.h"
+#include "Moon/Core/Camera/Orthographic/OrthographicCamera.h"
 
 // ---- Event ----
 #include "Moon/Core/Event/Event.h"
