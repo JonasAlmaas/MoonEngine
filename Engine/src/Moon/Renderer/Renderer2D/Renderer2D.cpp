@@ -216,24 +216,16 @@ namespace Moon {
 		delete[] s_Data.SpriteVertexBufferBase;
 	}
 
-	void Renderer2D::BeginScene(const glm::mat4& viewProjectionMatrix)
+	void Renderer2D::BeginScene(const Ref<RenderCamera>& renderCamera)
 	{
 		ME_PROFILE_FUNCTION();
 
-		s_Data.CameraBuffer.ViewProjection = viewProjectionMatrix;
+		s_Data.CameraBuffer.ViewProjection = renderCamera->GetViewProjection();
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
 		StartSpriteBatch();
 		StartCircleBatch();
 		StartLineBatch();
-	}
-
-	void Renderer2D::BeginScene(const glm::mat4& cameraProj, const glm::mat4& transform)
-	{
-		ME_PROFILE_FUNCTION();
-
-		glm::mat4 viewProjectionMatrix = cameraProj * glm::inverse(transform);
-		BeginScene(viewProjectionMatrix);
 	}
 
 	void Renderer2D::EndScene()

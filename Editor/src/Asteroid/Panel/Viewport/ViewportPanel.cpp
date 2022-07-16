@@ -119,7 +119,7 @@ namespace Asteroid {
 					{
 						auto camera = EditorState::GetEditorCamera();
 						cameraProjection = glm::value_ptr(camera->GetProjection());
-						cameraView = camera->GetViewMatrix();
+						cameraView = camera->GetView();
 					}
 					else
 					{
@@ -127,7 +127,7 @@ namespace Asteroid {
 						if (cameraEntity)
 						{
 							const auto& camera = cameraEntity.GetComponent<CameraComponent>().Camera;
-							cameraProjection = glm::value_ptr(camera.GetProjection());
+							cameraProjection = glm::value_ptr(camera->GetProjection());
 							cameraView = glm::inverse(cameraEntity.GetComponent<TransformComponent>().GetTransform());
 						}
 					}

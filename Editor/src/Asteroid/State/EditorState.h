@@ -2,6 +2,7 @@
 
 using namespace Moon;
 
+#include "Asteroid/Camera/EditorCamera.h"
 #include "Asteroid/Scene/EditorScene.h"
 
 
@@ -37,6 +38,7 @@ namespace Asteroid {
 
 	public:
 		static void Init();
+		static void Shutdown();
 
 		static Ref<Framebuffer> GetFramebuffer();
 

@@ -36,8 +36,8 @@ namespace Moon {
 		{
 			switch (stage)
 			{
-				case GL_VERTEX_SHADER:   return "GL_VERTEX_SHADER";
-				case GL_FRAGMENT_SHADER: return "GL_FRAGMENT_SHADER";
+				case GL_VERTEX_SHADER:		return "GL_VERTEX_SHADER";
+				case GL_FRAGMENT_SHADER:	return "GL_FRAGMENT_SHADER";
 			}
 
 			ME_CORE_ASSERT(false, "Unknown shader stage!");
@@ -46,8 +46,8 @@ namespace Moon {
 
 		static const char* GetCacheDirectory()
 		{
-			// TODO: make sure the assets directory is valid
-			return "Content/cache/shader/opengl";
+			// TODO: make sure the Content directory is valid
+			return "Content/Cache/Shader/OpenGL";
 		}
 
 		static void CreateCacheDirectoryIfNeeded()
@@ -84,29 +84,19 @@ namespace Moon {
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
-		: m_FilePath(filepath)
+		: m_Filepath(filepath)
 	{
 		ME_PROFILE_FUNCTION();
 
 		Utils::CreateCacheDirectoryIfNeeded();
-
-		std::string source = ReadFile(filepath);
-		auto shaderSources = PreProcess(source);
-
-		{
-			Timer timer;
-			CompileOrGetVulkanBinaries(shaderSources);
-			CompileOrGetOpenGLBinaries();
-			CreateProgram();
-			ME_CORE_WARN("Shader creation took {0} ms", timer.ElapsedMillis());
-		}
+		LoadShaderFromFile();
 
 		// Extract name from filepath
-		size_t lastSlash = filepath.find_last_of("/\\");
+		size_t lastSlash = m_Filepath.find_last_of("/\\");
 		lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
-		size_t lastDot = filepath.rfind(".");
-		size_t count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
-		m_Name = filepath.substr(lastSlash, count);
+		size_t lastDot = m_Filepath.rfind(".");
+		size_t count = lastDot == std::string::npos ? m_Filepath.size() - lastSlash : lastDot - lastSlash;
+		m_Name = m_Filepath.substr(lastSlash, count);
 	}
 
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
@@ -128,6 +118,57 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		glDeleteProgram(m_RendererID);
+	}
+
+	void OpenGLShader::Bind() const
+	{
+		ME_PROFILE_FUNCTION();
+
+		glUseProgram(m_RendererID);
+	}
+
+	void OpenGLShader::UnBind() const
+	{
+		ME_PROFILE_FUNCTION();
+
+		glUseProgram(0);
+	}
+
+	void OpenGLShader::Reload()
+	{
+		DeleteBinaries();
+		LoadShaderFromFile();
+	}
+
+	void OpenGLShader::LoadShaderFromFile()
+	{
+		std::string source = ReadFile(m_Filepath);
+		auto shaderSources = PreProcess(source);
+
+		{
+			Timer timer;
+			CompileOrGetVulkanBinaries(shaderSources);
+			CompileOrGetOpenGLBinaries();
+			CreateProgram();
+			ME_CORE_WARN("Shader creation took {0} ms", timer.ElapsedMillis());
+		}
+	}
+
+	void OpenGLShader::DeleteBinaries()
+	{
+		std::filesystem::path cacheDirectory = Utils::GetCacheDirectory();
+		if (std::filesystem::exists(cacheDirectory))
+		{
+			std::filesystem::path shaderFilePath = m_Filepath;
+
+			for (auto& stage : { GL_VERTEX_SHADER, GL_FRAGMENT_SHADER })
+			{
+				std::filesystem::path cachedOpenGLPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedOpenGLFileExtension(stage));
+				std::filesystem::path cachedVulkanPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedVulkanFileExtension(stage));
+				remove(cachedOpenGLPath);
+				remove(cachedVulkanPath);
+			}
+		}
 	}
 
 	std::string OpenGLShader::ReadFile(const std::string& filepath)
@@ -199,7 +240,7 @@ namespace Moon {
 		shaderData.clear();
 		for (auto&& [stage, source] : shaderSources)
 		{
-			std::filesystem::path shaderFilePath = m_FilePath;
+			std::filesystem::path shaderFilePath = m_Filepath;
 			std::filesystem::path cachedPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedVulkanFileExtension(stage));
 
 			std::ifstream in(cachedPath, std::ios::in | std::ios::binary);
@@ -215,7 +256,7 @@ namespace Moon {
 			}
 			else
 			{
-				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_FilePath.c_str(), options);
+				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_Filepath.c_str(), options);
 				if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 				{
 					ME_CORE_ERROR(module.GetErrorMessage());
@@ -258,7 +299,7 @@ namespace Moon {
 		m_OpenGLSourceCode.clear();
 		for (auto&& [stage, spirv] : m_VulkanSPIRV)
 		{
-			std::filesystem::path shaderFilePath = m_FilePath;
+			std::filesystem::path shaderFilePath = m_Filepath;
 			std::filesystem::path cachedPath = cacheDirectory / (shaderFilePath.filename().string() + Utils::GLShaderStageCachedOpenGLFileExtension(stage));
 
 			std::ifstream in(cachedPath, std::ios::in | std::ios::binary);
@@ -278,7 +319,7 @@ namespace Moon {
 				m_OpenGLSourceCode[stage] = glslCompiler.compile();
 				auto& source = m_OpenGLSourceCode[stage];
 
-				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_FilePath.c_str());
+				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_Filepath.c_str());
 				if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 				{
 					ME_CORE_ERROR(module.GetErrorMessage());
@@ -325,7 +366,7 @@ namespace Moon {
 
 			std::vector<GLchar> infoLog(maxLength);
 			glGetProgramInfoLog(program, maxLength, &maxLength, infoLog.data());
-			ME_CORE_ERROR("Shader linking failed ({0}):\n{1}", m_FilePath, infoLog.data());
+			ME_CORE_ERROR("Shader linking failed ({0}):\n{1}", m_Filepath, infoLog.data());
 
 			glDeleteProgram(program);
 
@@ -349,7 +390,7 @@ namespace Moon {
 		spirv_cross::Compiler compiler(shaderData);
 		spirv_cross::ShaderResources resources = compiler.get_shader_resources();
 
-		ME_CORE_TRACE("OpenGLShader::Reflect - {0} {1}", Utils::GLShaderStageToString(stage), m_FilePath);
+		ME_CORE_TRACE("OpenGLShader::Reflect - {0} {1}", Utils::GLShaderStageToString(stage), m_Filepath);
 		ME_CORE_TRACE("    {0} uniform buffers", resources.uniform_buffers.size());
 		ME_CORE_TRACE("    {0} resources", resources.sampled_images.size());
 
@@ -366,20 +407,6 @@ namespace Moon {
 			ME_CORE_TRACE("    Binding = {0}", binding);
 			ME_CORE_TRACE("    Members = {0}", memberCount);
 		}
-	}
-
-	void OpenGLShader::Bind() const
-	{
-		ME_PROFILE_FUNCTION();
-
-		glUseProgram(m_RendererID);
-	}
-
-	void OpenGLShader::UnBind() const
-	{
-		ME_PROFILE_FUNCTION();
-
-		glUseProgram(0);
 	}
 
 	// ---- Set Uniforms ----

@@ -47,7 +47,7 @@ namespace Moon {
 
 	void SceneCamera::SetPerspectiveVerticalFOV(float verticalFov)
 	{
-		m_PerspectiveFOV = glm::radians(verticalFov);
+		m_PerspectiveFOV = verticalFov;
 		RecalculateProjection();
 	}
 

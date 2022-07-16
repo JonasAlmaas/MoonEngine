@@ -44,6 +44,7 @@ namespace Asteroid {
 		SettingsPanel m_SettingsPanel;
 		ToolbarPanel m_ToolbarPanel;
 		ViewportPanel m_ViewportPanel;
+
 	};
 
 }

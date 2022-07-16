@@ -47,6 +47,8 @@ namespace Asteroid {
 		m_ViewportPanel.OnDetach();
 
 		// -------------------------
+
+		EditorState::Shutdown();
 	}
 
 	void EditorLayer::OnUpdate(Timestep ts)
@@ -97,7 +99,7 @@ namespace Asteroid {
 		{
 			case SceneState::Edit:			EditorState::GetActiveScene()->OnUpdateEditor(ts, EditorState::GetEditorCamera()); break;
 			case SceneState::Play:			EditorState::GetActiveScene()->OnRuntimeUpdate(ts); break;
-			case SceneState::Simulate:		EditorState::GetActiveScene()->OnUpdateSimulation(ts, EditorState::GetEditorCamera()->GetViewProjection()); break;
+			case SceneState::Simulate:		EditorState::GetActiveScene()->OnUpdateSimulation(ts, EditorState::GetEditorCamera()); break;
 		}
 
 		OnOverlayRender();
@@ -213,20 +215,14 @@ namespace Asteroid {
 				return;
 
 			auto& camera = activeCamera.GetComponent<CameraComponent>().Camera;
+			auto& cameraTransComp = activeCamera.GetComponent<TransformComponent>();
+			camera->SetViewWithTransform(cameraTransComp.GetTransform());
 
-			if (activeCamera.HasComponent<TransformComponent>())
-			{
-				auto& cameraTransComp = activeCamera.GetComponent<TransformComponent>();
-				Renderer2D::BeginScene(camera.GetProjection(), cameraTransComp.GetTransform());
-			}
-			else
-			{
-				Renderer2D::BeginScene(camera.GetProjection(), glm::mat4(1.0f));
-			}
+			Renderer2D::BeginScene(camera);
 		}
 		else
 		{
-			Renderer2D::BeginScene(EditorState::GetEditorCamera()->GetViewProjection());
+			Renderer2D::BeginScene(EditorState::GetEditorCamera());
 		}
 
 		if (EditorState::GetShowPhysicsColliders())

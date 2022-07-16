@@ -7,14 +7,12 @@ namespace Moon {
 
 	struct CameraComponent
 	{
-		SceneCamera Camera;
+		Ref<SceneCamera> Camera = CreateRef<SceneCamera>();
 
 		bool FixedAspectRatio = false;
 
 		CameraComponent() = default;
 		CameraComponent(const CameraComponent&) = default;
-
-		operator const SceneCamera& () { return Camera; }
 	};
 
 }

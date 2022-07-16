@@ -56,9 +56,9 @@ namespace Asteroid {
 		return newScene;
 	}
 
-	void EditorScene::OnUpdateEditor(Timestep ts, const Ref<EditorCamera>& camera)
+	void EditorScene::OnUpdateEditor(Timestep ts, const Ref<RenderCamera>& camera)
 	{
-		Renderer2D::BeginScene(camera->GetViewProjection());
+		Renderer2D::BeginScene(camera);
 
 		// Draw sprites
 		{

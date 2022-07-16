@@ -7,6 +7,10 @@
 // ---- Application ----
 #include "Moon/Core/Application/Application.h"
 
+// ---- Camera ----
+#include "Moon/Core/Camera/Perspective/PerspectiveCamera.h"
+#include "Moon/Core/Camera/Orthographic/OrthographicCamera.h"
+
 // ---- Event ----
 #include "Moon/Core/Event/Event.h"
 #include "Moon/Core/Event/ApplicationEvent.h"
@@ -33,9 +37,6 @@
 #include "Moon/Core/Renderer/Buffer/UniformBuffer/UniformBuffer.h"
 #include "Moon/Core/Renderer/Buffer/VertexBuffer/VertexBuffer.h"
 #include "Moon/Core/Renderer/Buffer/VertexBuffer/Layout/VertexBufferLayout.h"
-
-#include "Moon/Core/Renderer/Camera/Camera.h"
-#include "Moon/Core/Renderer/Camera/Orthographic/OrthographicCamera.h"
 
 #include "Moon/Core/Renderer/Shader/Shader.h"
 #include "Moon/Core/Renderer/Shader/ShaderLibrary/ShaderLibrary.h"

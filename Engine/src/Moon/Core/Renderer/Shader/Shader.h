@@ -11,6 +11,11 @@ namespace Moon {
 		virtual void Bind() const = 0;
 		virtual void UnBind() const = 0;
 
+		/**
+		 * Can only be done if reading in from a file!
+		*/
+		virtual void Reload() = 0;
+
 		virtual const std::string& GetName() const = 0;
 
 		virtual void SetInt(const std::string& name, int value) = 0;
