@@ -24,8 +24,8 @@ namespace Moon {
 		{
 			switch (stage)
 			{
-				case GL_VERTEX_SHADER:   return shaderc_glsl_vertex_shader;
-				case GL_FRAGMENT_SHADER: return shaderc_glsl_fragment_shader;
+				case GL_VERTEX_SHADER:		return shaderc_glsl_vertex_shader;
+				case GL_FRAGMENT_SHADER:	return shaderc_glsl_fragment_shader;
 			}
 
 			ME_CORE_ASSERT(false, "Unknown shader stage!");
@@ -62,7 +62,8 @@ namespace Moon {
 			switch (stage)
 			{
 				case GL_VERTEX_SHADER:    return ".cached_opengl.vert";
-				case GL_FRAGMENT_SHADER:  return ".cached_opengl.frag";
+				case GL_FRAGMENT_SHADER:  return ".cached_opengl.pixel";
+					
 			}
 
 			ME_CORE_ASSERT(false, "Unknown shader stage!");
@@ -74,7 +75,7 @@ namespace Moon {
 			switch (stage)
 			{
 				case GL_VERTEX_SHADER:    return ".cached_vulkan.vert";
-				case GL_FRAGMENT_SHADER:  return ".cached_vulkan.frag";
+				case GL_FRAGMENT_SHADER:  return ".cached_vulkan.pixel";
 			}
 
 			ME_CORE_ASSERT(false, "Unknown shader stage!");
@@ -99,14 +100,14 @@ namespace Moon {
 		m_Name = m_Filepath.substr(lastSlash, count);
 	}
 
-	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc)
+	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& pixelSrc)
 		: m_Name(name)
 	{
 		ME_PROFILE_FUNCTION();
 
 		std::unordered_map<GLenum, std::string> sources;
 		sources[GL_VERTEX_SHADER] = vertexSrc;
-		sources[GL_FRAGMENT_SHADER] = fragmentSrc;
+		sources[GL_FRAGMENT_SHADER] = pixelSrc;
 		
 		CompileOrGetVulkanBinaries(sources);
 		CompileOrGetOpenGLBinaries();
