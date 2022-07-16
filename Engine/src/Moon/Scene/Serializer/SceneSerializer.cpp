@@ -239,7 +239,7 @@ namespace Moon {
 			out << YAML::Key << "Color" << YAML::Value << spriteRendererComponent.Color;
 
 			if (spriteRendererComponent.Texture)
-				out << YAML::Key << "TexturePath" << YAML::Value << spriteRendererComponent.Texture->GetPath();
+				out << YAML::Key << "TexturePath" << YAML::Value << spriteRendererComponent.Texture->GetPath().string();
 
 			out << YAML::Key << "TileFactor" << YAML::Value << spriteRendererComponent.TileFactor;
 

@@ -19,7 +19,7 @@ namespace Moon {
 		return nullptr;
 	}
 
-	Ref<Texture2D> Texture2D::Create(const std::string& filepath, const Texture2DSpecification& spec)
+	Ref<Texture2D> Texture2D::Create(const std::filesystem::path& filepath, const Texture2DSpecification& spec)
 	{
 		switch (Renderer::GetAPI())
 		{

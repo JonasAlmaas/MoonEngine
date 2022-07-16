@@ -56,7 +56,7 @@ namespace Moon {
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Texture2DWrapToGlint(spec.WrapT));
 	}
 	
-	OpenGLTexture2D::OpenGLTexture2D(const std::string& filepath, const Texture2DSpecification& spec)
+	OpenGLTexture2D::OpenGLTexture2D(const std::filesystem::path& filepath, const Texture2DSpecification& spec)
 		: m_Path(filepath), m_Specification(spec)
 	{
 		ME_PROFILE_FUNCTION();
@@ -68,7 +68,7 @@ namespace Moon {
 		unsigned char* data = nullptr;
 		{
 			ME_PROFILE_SCOPE("stbi_load - OpenGLTexture2D::OpenGLTexture2D(const std::string&)");
-			data = data = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+			data = data = stbi_load(filepath.string().c_str(), &width, &height, &channels, 0);
 		}
 
 		if (data)

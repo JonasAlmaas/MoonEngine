@@ -1,6 +1,8 @@
 #pragma once
 
 
+namespace std::filesystem { class path; }
+
 namespace Moon {
 
 	class Texture
@@ -55,14 +57,12 @@ namespace Moon {
 	{
 	public:
 		static Ref<Texture2D> Create(uint32_t width, uint32_t height, const Texture2DSpecification& spec = Texture2DSpecification());
-		static Ref<Texture2D> Create(const std::string& filepath, const Texture2DSpecification& spec = Texture2DSpecification());
-		// TODO: Makes textures take in an "std::filesystem::path"
-		// Maybe just as an alternative
+		static Ref<Texture2D> Create(const std::filesystem::path& filepath, const Texture2DSpecification& spec = Texture2DSpecification());
 
 		virtual Texture2DSpecification GetSpecification() = 0;
 		virtual void SetSpecification(const Texture2DSpecification& spec) = 0;
 
-		virtual const std::string& GetPath() const = 0;
+		virtual const std::filesystem::path& GetPath() const = 0;
 
 	};
 
