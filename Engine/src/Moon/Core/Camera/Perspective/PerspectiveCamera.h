@@ -14,9 +14,8 @@ namespace Moon {
 		~PerspectiveCamera() = default;
 		
 		void SetPosition(const glm::vec3& pos);
-		inline glm::vec3 GetPosition() { return m_Position; };
-		inline glm::vec3* GetPositionValuePtr() { return &m_Position; }
-		inline const glm::vec3* GetPositionValuePtr() const { return &m_Position; }
+		inline glm::vec3 GetPosition() const { return m_Position; };
+		inline glm::vec3& GetPosition() { return m_Position; };
 
 		void SetPitchDegrees(float pitchDegrees);
 		void SetPitchRadians(float pitchRadians);
