@@ -28,11 +28,11 @@ namespace Moon {
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::BeginScene(OrthographicCamera& camera)
+	void Renderer::BeginScene(RenderCamera& camera)
 	{
 		ME_PROFILE_FUNCTION();
 
-		m_SceneData->ViewProjectionMatrix = camera.GetViewProjectionMatrix();
+		m_SceneData->ViewProjectionMatrix = camera.GetViewProjection();
 	}
 	
 	void Renderer::EndScene()
