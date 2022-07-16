@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Moon/Core/Renderer/Camera/Camera.h"
+#include "Moon/Core/Renderer/Camera/RenderCamera.h"
 
 
 namespace Moon {
 
-	class SceneCamera : public Camera
+	class SceneCamera : public RenderCamera
 	{
 	public:
 		enum class ProjectionType
@@ -18,8 +18,11 @@ namespace Moon {
 		SceneCamera();
 		virtual ~SceneCamera() = default;
 
+
 		void SetPerspective(float verticalFov, float nearClip, float farClip);
 		void SetOrthographic(float size, float nearClip, float farClip);
+
+		void SetViewWithTransform(const glm::mat4& transform) { m_View = glm::inverse(transform); }
 
 		void SetViewportSize(uint32_t width, uint32_t height);
 

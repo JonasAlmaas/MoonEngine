@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Moon/Scene/Entity/Entity.h"
+#include "Moon/Core/Renderer/Camera/RenderCamera.h"
 
 class b2World;
 
@@ -19,7 +20,7 @@ namespace Moon {
 
 		void OnSimulationStart();
 		void OnSimulationStop();
-		void OnUpdateSimulation(Timestep ts, const glm::mat4& viewProj);
+		void OnUpdateSimulation(Timestep ts, const Ref<RenderCamera>& camera);
 
 		void OnViewportResize(uint32_t width, uint32_t height);
 
@@ -43,7 +44,7 @@ namespace Moon {
 		void OnPhysics2DStart();
 		void OnPhysics2DStop();
 
-		void RenderScene(const glm::mat4& viewProj);
+		void RenderScene(const Ref<RenderCamera>& camera);
 
 	protected:
 		entt::registry m_Registry;

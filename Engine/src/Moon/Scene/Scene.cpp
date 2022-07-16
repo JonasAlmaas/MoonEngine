@@ -100,9 +100,8 @@ namespace Moon {
 
 		auto& camera = m_ActiveCamera.GetComponent<CameraComponent>().Camera;
 		auto& cameraTransComp = m_ActiveCamera.GetComponent<TransformComponent>();
-		glm::mat4 viewProj = camera.GetProjection() * glm::inverse(cameraTransComp.GetTransform());
-
-		RenderScene(viewProj);
+		camera->SetViewWithTransform(cameraTransComp.GetTransform());
+		RenderScene(camera);
 	}
 
 	void Scene::OnSimulationStart()
@@ -115,7 +114,7 @@ namespace Moon {
 		OnPhysics2DStop();
 	}
 
-	void Scene::OnUpdateSimulation(Timestep ts, const glm::mat4& viewProj)
+	void Scene::OnUpdateSimulation(Timestep ts, const Ref<RenderCamera>& camera)
 	{
 		// ---- Physics 2D ----
 		{
@@ -142,7 +141,7 @@ namespace Moon {
 			}
 		}
 
-		RenderScene(viewProj);
+		RenderScene(camera);
 	}
 
 	void Scene::OnPhysics2DStart()
@@ -208,9 +207,9 @@ namespace Moon {
 		m_PhysicsWorld = nullptr;
 	}
 
-	void Scene::RenderScene(const glm::mat4& viewProj)
+	void Scene::RenderScene(const Ref<RenderCamera>& camera)
 	{
-		Renderer2D::BeginScene(viewProj);
+		Renderer2D::BeginScene(camera);
 
 		// Draw sprite
 		{
@@ -246,7 +245,7 @@ namespace Moon {
 		{
 			auto& cameraComponent = view.get<CameraComponent>(entity);
 			if (!cameraComponent.FixedAspectRatio)
-				cameraComponent.Camera.SetViewportSize(width, height);
+				cameraComponent.Camera->SetViewportSize(width, height);
 		}
 	}
 
@@ -296,7 +295,7 @@ namespace Moon {
 		{
 			// TODO: If you have a fixed aspect ratio this might be an issue. It kinda just updates the aspect ratio when setting it as active.
 			if (m_ViewportWidth != 0 && m_ViewportHeight != 0)
-				camera.GetComponent<CameraComponent>().Camera.SetViewportSize(m_ViewportWidth, m_ViewportHeight);
+				camera.GetComponent<CameraComponent>().Camera->SetViewportSize(m_ViewportWidth, m_ViewportHeight);
 		}
 	}
 
