@@ -42,7 +42,7 @@ namespace Moon {
 		void UpdateView();
 
 	protected:
-		glm::vec3 m_Position;
+		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
 
 		// Unit is radian
 		float m_Pitch = glm::radians(-90.0f);
