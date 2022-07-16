@@ -14,6 +14,8 @@ namespace Moon {
 		virtual ~PerspectiveRenderCamera() = default;
 
 		void SetViewportSize(float width, float height);
+		inline float GetViewportWidth() const { return m_ViewportWidth; }
+		inline float GetViewportHeight() const { return m_ViewportHeight; }
 
 		void SetFOV(float fov);
 		inline float GetFOV() const { return m_FOV; }
@@ -26,6 +28,7 @@ namespace Moon {
 
 		void SetFarClip(float farClip);
 		inline float GetFarClip() const { return m_FarClip; }
+
 
 	protected:
 		void UpdateProjection();
