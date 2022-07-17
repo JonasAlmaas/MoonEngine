@@ -59,7 +59,7 @@ namespace Asteroid {
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
-			ImGui::ImageButton((ImTextureID)icon->GetRendererID(), { thumbnailSize, thumbnailSize }, { 0, 1 }, { 1, 0 });
+			ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), {thumbnailSize, thumbnailSize}, {0, 1}, {1, 0});
 			ImGui::PopStyleColor();
 			ImGui::PopStyleVar();
 

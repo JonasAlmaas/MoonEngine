@@ -34,7 +34,7 @@ namespace Asteroid {
 			ImGui::SetNextItemWidth(ImGui::GetContentRegionAvail().x + 2);
 			if (ImGui::BeginCombo("##Combo", options[activeIndex]))
 			{
-				for (int i = 0; i < optionsCount; i++)
+				for (uint32_t i = 0; i < optionsCount; i++)
 				{
 					bool isSelected = options[activeIndex] == options[i];
 					if (ImGui::Selectable(options[i], isSelected))

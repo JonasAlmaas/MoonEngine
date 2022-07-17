@@ -5,7 +5,7 @@
 namespace Moon {
 
 	OrthographicRenderCamera::OrthographicRenderCamera(float size, float aspectRatio)
-		: m_Left(-size * aspectRatio * 0.5f), m_Right(size* aspectRatio * 0.5f), m_Bottom(-size * 0.5f), m_Top(size * 0.5),
+		: m_Left(-size * aspectRatio * 0.5f), m_Right(size* aspectRatio * 0.5f), m_Bottom(-size * 0.5f), m_Top(size * 0.5f),
 			m_Size(size), m_AspectRatio(aspectRatio)
 	{
 		UpdateProjection();

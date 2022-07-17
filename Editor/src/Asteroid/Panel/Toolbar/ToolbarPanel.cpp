@@ -47,12 +47,12 @@ namespace Asteroid {
 			case SceneState::Edit:
 			{
 				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - size - (size * 0.5f));
-				if (ImGui::ImageButton((ImTextureID)m_IconPlay->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+				if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconPlay->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 					EditorState::OnScenePlay();
 
 				ImGui::SameLine();
 
-				if (ImGui::ImageButton((ImTextureID)m_IconSimulate->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+				if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconSimulate->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 					EditorState::OnSimulateStart();
 
 				break;
@@ -61,7 +61,7 @@ namespace Asteroid {
 			{
 				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-				if (ImGui::ImageButton((ImTextureID)m_IconStop->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+				if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 					EditorState::OnSceneStop();
 
 				break;
@@ -70,7 +70,7 @@ namespace Asteroid {
 			{
 				ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
-				if (ImGui::ImageButton((ImTextureID)m_IconStop->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
+				if (ImGui::ImageButton((ImTextureID)(uint64_t)m_IconStop->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0))
 					EditorState::OnSimulateStop();
 
 				break;
