@@ -31,7 +31,7 @@ namespace Moon {
 		}
 	}
 
-	std::string UUID::ToString()
+	std::string UUID::ToHexString()
 	{
 		std::string result;
 		for (int8_t byteIndex = 7; byteIndex >= 0; byteIndex--)

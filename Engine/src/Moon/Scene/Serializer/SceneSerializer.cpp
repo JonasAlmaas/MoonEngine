@@ -175,7 +175,7 @@ namespace Moon {
 		ME_CORE_ASSERT(entity.HasComponent<IDComponent>(), "Every entity has to have an ID component!");
 
 		out << YAML::BeginMap; // Entity
-		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID().ToString();
+		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID().ToHexString();
 
 		// -- TagComponent --
 		if (entity.HasComponent<TagComponent>())
@@ -323,7 +323,7 @@ namespace Moon {
 
 		auto activeCamera = m_Scene->GetActiveCamera();
 		if (activeCamera)
-			out << YAML::Key << "ActiveCamera" << YAML::Value << activeCamera.GetUUID().ToString();
+			out << YAML::Key << "ActiveCamera" << YAML::Value << activeCamera.GetUUID().ToHexString();
 
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_Scene->GetRegistry().each([&](auto entityID)
@@ -377,7 +377,7 @@ namespace Moon {
 				if (tagComponent)
 					name = tagComponent["Tag"].as<std::string>();
 
-				ME_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid.ToString(), name);
+				ME_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid.ToHexString(), name);
 
 				Entity deserializedEntity = m_Scene->CreateEntityWithUUID(uuid, name);
 

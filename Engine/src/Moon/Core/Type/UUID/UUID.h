@@ -12,7 +12,7 @@ namespace Moon {
 
 		UUID(const UUID&) = default;
 
-		std::string ToString();
+		std::string ToHexString();
 
 		operator uint64_t() const { return m_UUID; }
 
