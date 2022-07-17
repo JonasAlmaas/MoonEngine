@@ -10,6 +10,8 @@ namespace Moon {
 		UUID(uint64_t uuid);
 		UUID(const UUID&) = default;
 
+		std::string ToString();
+
 		operator uint64_t() const { return m_UUID; }
 
 	private:
@@ -20,6 +22,7 @@ namespace Moon {
 }
 
 namespace std {
+
 	template <typename T> struct hash;
 
 	template<>
