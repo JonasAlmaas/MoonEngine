@@ -1,9 +1,7 @@
 #include "mepch.h"
 #include "Moon/Core/Type/UUID/UUID.h"
 
-#include "Moon/Core/Type/Hex/Hex.h"
-
-#include <random>
+#include "Moon/Core/Util/Conversion/Hexadecimal/Hexadecimal.h"
 
 
 namespace Moon {

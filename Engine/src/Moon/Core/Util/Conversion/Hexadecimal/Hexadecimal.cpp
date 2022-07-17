@@ -1,5 +1,5 @@
 #include "mepch.h"
-#include "Moon/Core/Type/Hex/Hex.h"
+#include "Moon/Core/Util/Conversion/Hexadecimal/Hexadecimal.h"
 
 
 namespace Moon {
