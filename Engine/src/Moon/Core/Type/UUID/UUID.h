@@ -8,6 +8,8 @@ namespace Moon {
 	public:
 		UUID();
 		UUID(uint64_t uuid);
+		UUID(const std::string& uuid);
+
 		UUID(const UUID&) = default;
 
 		std::string ToString();
