@@ -175,7 +175,7 @@ namespace Moon {
 		ME_CORE_ASSERT(entity.HasComponent<IDComponent>(), "Every entity has to have an ID component!");
 
 		out << YAML::BeginMap; // Entity
-		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID();
+		out << YAML::Key << "Entity" << YAML::Value << entity.GetUUID().ToString();
 
 		// -- TagComponent --
 		if (entity.HasComponent<TagComponent>())
@@ -323,9 +323,7 @@ namespace Moon {
 
 		auto activeCamera = m_Scene->GetActiveCamera();
 		if (activeCamera)
-			out << YAML::Key << "ActiveCamera" << YAML::Value << activeCamera.GetUUID();
-		else
-			out << YAML::Key << "ActiveCamera" << YAML::Value << "0";
+			out << YAML::Key << "ActiveCamera" << YAML::Value << activeCamera.GetUUID().ToString();
 
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;
 		m_Scene->GetRegistry().each([&](auto entityID)
@@ -372,14 +370,14 @@ namespace Moon {
 		{
 			for (auto entity : entities)
 			{
-				uint64_t uuid = entity["Entity"].as<uint64_t>();
+				UUID uuid(entity["Entity"].as<std::string>());
 
 				std::string name;
 				auto tagComponent = entity["TagComponent"];
 				if (tagComponent)
 					name = tagComponent["Tag"].as<std::string>();
 
-				ME_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid, name);
+				ME_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid.ToString(), name);
 
 				Entity deserializedEntity = m_Scene->CreateEntityWithUUID(uuid, name);
 
@@ -467,9 +465,15 @@ namespace Moon {
 					cc2d.RestitutionThreshold = circleCollider2DComponent["RestitutionThreshold"].as<float>();
 				}
 
-				// If the current entity is the active camera, link it
-				if (uuid == data["ActiveCamera"].as<uint64_t>())
-					m_Scene->SetActiveCamera(deserializedEntity);
+				auto activeCamera = data["ActiveCamera"];
+				if (activeCamera)
+				{
+					UUID cameraUUID(activeCamera.as<std::string>());
+
+					// If the current entity is the active camera, link it
+					if (uuid == cameraUUID)
+						m_Scene->SetActiveCamera(deserializedEntity);
+				}
 			}
 		}
 
