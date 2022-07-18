@@ -108,7 +108,7 @@ namespace Moon {
 		s_Data = new ScriptEngineData();
 
 		InitMono();
-		LoadAssembly("Resources/Scripts/ScriptCore.dll");
+		LoadAssembly("Resources/Scripts/Moon-ScriptCore.dll");
 
 		ScriptGlue::RegisterFunctions();
 
