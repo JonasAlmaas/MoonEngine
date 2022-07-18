@@ -7,7 +7,7 @@ import utils
 class VulkanConfiguration:
 	required_vulkan_version = "1.3."
 	install_vulkan_version = "1.3.216.0"
-	vulkan_directory = "./Moon/vendor/VulkanSDK"
+	vulkan_directory = "../../Moon-Engine/vendor/VulkanSDK"
 
 	@classmethod
 	def validate(cls):
