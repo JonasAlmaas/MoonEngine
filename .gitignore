@@ -2,6 +2,7 @@
 **/bin/
 !vendor/**/bin/
 bin-int/
+**/Intermediates/
 
 # Moon files
 *.log
@@ -12,6 +13,8 @@ bin-int/
 **.vcxproj
 **.vcxproj.filters
 **.vcxproj.user
+**.csproj
+**.csproj.user
 
 # Imgui ini files
 **/imgui.ini
@@ -22,3 +25,5 @@ bin-int/
 # Cache
 Moon-Editor/Content/cache
 **/__pycache__
+
+Moon-Editor/Resources/Scripts/
