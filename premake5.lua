@@ -3,7 +3,7 @@ include "Dependencies.lua"
 
 workspace "MoonEngine"
     architecture "x86_64"
-    startproject "Editor"
+    startproject "Moon-Editor"
 
     configurations
 	{
@@ -24,16 +24,18 @@ workspace "MoonEngine"
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
-group "Dependencies"
-    include "Engine/vendor/Box2D"
-    include "Engine/vendor/Glad"
-    include "Engine/vendor/GLFW"
-    include "Engine/vendor/ImGui"
-	include "Engine/vendor/yaml"
+group "Core"
+	include "Moon-Engine"
 group ""
 
 group "Tools"
-    include "Editor"
+	include "Moon-Editor"
 group ""
 
-include "Engine"
+group "Dependencies"
+    include "Moon-Engine/vendor/Box2D"
+    include "Moon-Engine/vendor/Glad"
+    include "Moon-Engine/vendor/GLFW"
+    include "Moon-Engine/vendor/ImGui"
+	include "Moon-Engine/vendor/yaml"
+group ""

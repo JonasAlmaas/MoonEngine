@@ -1,4 +1,4 @@
-project "Engine"
+project "Moon-Engine"
     kind "StaticLib"
     language "C++"
     cppdialect "C++20"

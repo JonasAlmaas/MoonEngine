@@ -10,7 +10,7 @@ namespace Moon {
 	{
 		ApplicationSpecification spec;
 		spec.Name = "Asteroid";
-		spec.WorkingDirectory = "../Editor";
+		spec.WorkingDirectory = "../Moon-Editor";
 		spec.CommandLineArgs = args;
 
 		return new Asteroid::AsteroidApp(spec);

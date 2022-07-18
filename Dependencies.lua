@@ -3,19 +3,19 @@
 VULKAN_SDK = os.getenv("VULKAN_SDK")
 
 IncludeDir = {}
-IncludeDir["Box2D"] = "%{wks.location}/Engine/vendor/Box2D/include"
-IncludeDir["entt"] = "%{wks.location}/Engine/vendor/entt/include"
-IncludeDir["Glad"] = "%{wks.location}/Engine/vendor/Glad/include"
-IncludeDir["GLFW"] = "%{wks.location}/Engine/vendor/GLFW/include"
-IncludeDir["glm"] = "%{wks.location}/Engine/vendor/glm"
-IncludeDir["ImGui"] = "%{wks.location}/Engine/vendor/ImGui"
-IncludeDir["ImGuizmo"] = "%{wks.location}/Engine/vendor/ImGuizmo"
-IncludeDir["shaderc"] = "%{wks.location}/Engine/vendor/shaderc/include"
-IncludeDir["spdlog"] = "%{wks.location}/Engine/vendor/spdlog/include"
-IncludeDir["SPIRV_Cross"] = "%{wks.location}/Engine/vendor/SPIRV-Cross"
-IncludeDir["stb_image"] = "%{wks.location}/Engine/vendor/stb_image"
+IncludeDir["Box2D"] = "%{wks.location}/Moon-Engine/vendor/Box2D/include"
+IncludeDir["entt"] = "%{wks.location}/Moon-Engine/vendor/entt/include"
+IncludeDir["Glad"] = "%{wks.location}/Moon-Engine/vendor/Glad/include"
+IncludeDir["GLFW"] = "%{wks.location}/Moon-Engine/vendor/GLFW/include"
+IncludeDir["glm"] = "%{wks.location}/Moon-Engine/vendor/glm"
+IncludeDir["ImGui"] = "%{wks.location}/Moon-Engine/vendor/ImGui"
+IncludeDir["ImGuizmo"] = "%{wks.location}/Moon-Engine/vendor/ImGuizmo"
+IncludeDir["shaderc"] = "%{wks.location}/Moon-Engine/vendor/shaderc/include"
+IncludeDir["spdlog"] = "%{wks.location}/Moon-Engine/vendor/spdlog/include"
+IncludeDir["SPIRV_Cross"] = "%{wks.location}/Moon-Engine/vendor/SPIRV-Cross"
+IncludeDir["stb_image"] = "%{wks.location}/Moon-Engine/vendor/stb_image"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
-IncludeDir["yaml"] = "%{wks.location}/Engine/vendor/yaml/include"
+IncludeDir["yaml"] = "%{wks.location}/Moon-Engine/vendor/yaml/include"
 
 LibraryDir = {}
 

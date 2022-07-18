@@ -1,4 +1,4 @@
-project "Editor"
+project "Moon-Editor"
     kind "ConsoleApp"
 	language "C++"
     cppdialect "C++20"
@@ -20,8 +20,8 @@ project "Editor"
     {
         "src",
 
-        "../Engine/src",
-        "../Engine/vendor/spdlog/include",
+        "../Moon-Engine/src",
+        "../Moon-Engine/vendor/spdlog/include",
 
         "%{IncludeDir.entt}",
         "%{IncludeDir.glm}",
@@ -31,7 +31,7 @@ project "Editor"
 
     links
     {
-        "Engine"
+        "Moon-Engine"
     }
 
 	filter "system:windows"
