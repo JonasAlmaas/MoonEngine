@@ -1,24 +1,21 @@
-[submodule "Engine/vendor/spdlog"]
-	path = Engine/vendor/spdlog
+[submodule "Moon-Engine/vendor/spdlog"]
+	path = Moon-Engine/vendor/spdlog
 	url = https://github.com/gabime/spdlog
-[submodule "Engine/vendor/GLFW"]
-	path = Engine/vendor/GLFW
+[submodule "Moon-Engine/vendor/GLFW"]
+	path = Moon-Engine/vendor/GLFW
 	url = https://github.com/JonasAlmaas/glfw
-[submodule "Engine/vendor/glm"]
-	path = Engine/vendor/glm
+[submodule "Moon-Engine/vendor/glm"]
+	path = Moon-Engine/vendor/glm
 	url = https://github.com/g-truc/glm
-[submodule "Engine/vendor/ImGui"]
-	path = Engine/vendor/ImGui
+[submodule "Moon-Engine/vendor/ImGui"]
+	path = Moon-Engine/vendor/ImGui
 	url = https://github.com/JonasAlmaas/imgui
-[submodule "Engine/vendor/yaml"]
-	path = Engine/vendor/yaml
+[submodule "Moon-Engine/vendor/yaml"]
+	path = Moon-Engine/vendor/yaml
 	url = https://github.com/JonasAlmaas/yaml-cpp/
-[submodule "Engine/vendor/ImGuizmo"]
-	path = Engine/vendor/ImGuizmo
+[submodule "Moon-Engine/vendor/ImGuizmo"]
+	path = Moon-Engine/vendor/ImGuizmo
 	url = https://github.com/thecherno/imguizmo
-[submodule "Engine/vendor/box2d"]
-	path = Engine/vendor/box2d
-	url = https://github.com/JonasAlmaas/box2d
-[submodule "Engine/vendor/Box2D"]
-	path = Engine/vendor/Box2D
+[submodule "Moon-Engine/vendor/box2d"]
+	path = Moon-Engine/vendor/box2d
 	url = https://github.com/JonasAlmaas/box2d
