@@ -41,3 +41,9 @@ Library["SPIRV_Cross_GLSL_Release"] = "%{LibraryDir.VulkanSDK}/spirv-cross-glsl.
 
 Library["Vulkan"] = "%{LibraryDir.VulkanSDK}/vulkan-1.lib"
 Library["VulkanUtils"] = "%{LibraryDir.VulkanSDK}/VkLayer_utils.lib"
+
+-- Windows
+Library["WinSock"] = "Ws2_32.lib"
+Library["WinMM"] = "Winmm.lib"
+Library["WinVersion"] = "Version.lib"
+Library["Bcrypt"] = "Bcrypt.lib"
