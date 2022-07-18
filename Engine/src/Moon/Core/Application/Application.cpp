@@ -24,8 +24,8 @@ namespace Moon {
 		m_Window = Window::Create({ m_Specification.Name });
 		m_Window->SetEventCallback(ME_BIND_EVENT_FN(Application::OnEvent));
 
-		Renderer::Init();
 		Util::Init();
+		Renderer::Init();
 
 		m_ImGuiLayer = CreateRef<ImGuiLayer>();
 		PushOverlay(m_ImGuiLayer);
