@@ -11,7 +11,7 @@ namespace Moon {
 		PerspectiveCamera() = default;
 		PerspectiveCamera(float fov, float aspectRatio, float nearClip, float farClip);
 
-		~PerspectiveCamera() = default;
+		virtual ~PerspectiveCamera() = default;
 		
 		void SetPosition(const glm::vec3& pos);
 		inline glm::vec3 GetPosition() const { return m_Position; };
