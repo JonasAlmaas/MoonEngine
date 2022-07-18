@@ -3,6 +3,7 @@
 
 #include "Moon/Core/Renderer/Renderer.h"
 #include "Moon/Core/Util/Util.h"
+#include "Moon/Scripting/Engine/ScriptEngine.h"
 
 
 namespace Moon {
@@ -26,6 +27,7 @@ namespace Moon {
 
 		Util::Init();
 		Renderer::Init();
+		ScriptEngine::Init();
 
 		m_ImGuiLayer = CreateRef<ImGuiLayer>();
 		PushOverlay(m_ImGuiLayer);
@@ -35,6 +37,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
+		ScriptEngine::Shutdown();
 		Renderer::Shutdown();
 	}
 
