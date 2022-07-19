@@ -186,7 +186,7 @@ namespace Asteroid {
 
 		if (path.extension().string() != ".mmap")
 		{
-			ME_WARN("Could not load {0} - not a scene file", path.filename().string());
+			ME_CORE_LOG_WARN("Could not load {0} - not a scene file", path.filename().string());
 			return;
 		}
 

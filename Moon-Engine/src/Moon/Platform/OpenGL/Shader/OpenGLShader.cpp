@@ -151,7 +151,7 @@ namespace Moon {
 			CompileOrGetVulkanBinaries(shaderSources);
 			CompileOrGetOpenGLBinaries();
 			CreateProgram();
-			ME_CORE_WARN("Shader creation took {0} ms", timer.ElapsedMillis());
+			ME_CORE_LOG_WARN("Shader creation took {0} ms", timer.ElapsedMillis());
 		}
 	}
 
@@ -188,7 +188,7 @@ namespace Moon {
 		}
 		else
 		{
-			ME_CORE_ERROR("Could not open file '{0}'", filepath);
+			ME_CORE_LOG_ERROR("Could not open file '{0}'", filepath);
 		}
 
 		return result;
@@ -260,7 +260,7 @@ namespace Moon {
 				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_Filepath.c_str(), options);
 				if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 				{
-					ME_CORE_ERROR(module.GetErrorMessage());
+					ME_CORE_LOG_ERROR(module.GetErrorMessage());
 					ME_CORE_ASSERT(false, "Shader Compilation Failed!");
 				}
 
@@ -323,7 +323,7 @@ namespace Moon {
 				shaderc::SpvCompilationResult module = compiler.CompileGlslToSpv(source, Utils::GLShaderStageToShaderC(stage), m_Filepath.c_str());
 				if (module.GetCompilationStatus() != shaderc_compilation_status_success)
 				{
-					ME_CORE_ERROR(module.GetErrorMessage());
+					ME_CORE_LOG_ERROR(module.GetErrorMessage());
 					ME_CORE_ASSERT(false, "Shader Compilation Failed!");
 				}
 
@@ -367,7 +367,7 @@ namespace Moon {
 
 			std::vector<GLchar> infoLog(maxLength);
 			glGetProgramInfoLog(program, maxLength, &maxLength, infoLog.data());
-			ME_CORE_ERROR("Shader linking failed ({0}):\n{1}", m_Filepath, infoLog.data());
+			ME_CORE_LOG_ERROR("Shader linking failed ({0}):\n{1}", m_Filepath, infoLog.data());
 
 			glDeleteProgram(program);
 
@@ -391,11 +391,11 @@ namespace Moon {
 		spirv_cross::Compiler compiler(shaderData);
 		spirv_cross::ShaderResources resources = compiler.get_shader_resources();
 
-		ME_CORE_TRACE("OpenGLShader::Reflect - {0} {1}", Utils::GLShaderStageToString(stage), m_Filepath);
-		ME_CORE_TRACE("    {0} uniform buffers", resources.uniform_buffers.size());
-		ME_CORE_TRACE("    {0} resources", resources.sampled_images.size());
+		ME_CORE_LOG("OpenGLShader::Reflect - {0} {1}", Utils::GLShaderStageToString(stage), m_Filepath);
+		ME_CORE_LOG("    {0} uniform buffers", resources.uniform_buffers.size());
+		ME_CORE_LOG("    {0} resources", resources.sampled_images.size());
 
-		ME_CORE_TRACE("Uniform buffers:");
+		ME_CORE_LOG("Uniform buffers:");
 		for (const auto& resource : resources.uniform_buffers)
 		{
 			const auto& bufferType = compiler.get_type(resource.base_type_id);
@@ -403,10 +403,10 @@ namespace Moon {
 			size_t binding = compiler.get_decoration(resource.id, spv::DecorationBinding);
 			size_t memberCount = bufferType.member_types.size();
 
-			ME_CORE_TRACE("  {0}", resource.name);
-			ME_CORE_TRACE("    Size = {0}", bufferSize);
-			ME_CORE_TRACE("    Binding = {0}", binding);
-			ME_CORE_TRACE("    Members = {0}", memberCount);
+			ME_CORE_LOG("  {0}", resource.name);
+			ME_CORE_LOG("    Size = {0}", bufferSize);
+			ME_CORE_LOG("    Binding = {0}", binding);
+			ME_CORE_LOG("    Members = {0}", memberCount);
 		}
 	}
 

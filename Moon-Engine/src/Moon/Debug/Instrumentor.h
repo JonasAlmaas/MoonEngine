@@ -36,7 +36,7 @@ namespace Moon {
 				// profiling output.
 				if (Log::GetCoreLogger()) // Edge case: BeginSession() might be before Log::Init()
 				{
-					ME_CORE_ERROR("Instrumentor::BeginSession('{0}') when session '{1}' already open.", name, m_CurrentSession->Name);
+					ME_CORE_LOG_ERROR("Instrumentor::BeginSession('{0}') when session '{1}' already open.", name, m_CurrentSession->Name);
 				}
 				InternalEndSession();
 			}
@@ -51,7 +51,7 @@ namespace Moon {
 			{
 				if (Log::GetCoreLogger()) // Edge case: BeginSession() might be before Log::Init()
 				{
-					ME_CORE_ERROR("Instrumentor could not open results file '{0}'.", filepath);
+					ME_CORE_LOG_ERROR("Instrumentor could not open results file '{0}'.", filepath);
 				}
 			}
 		}

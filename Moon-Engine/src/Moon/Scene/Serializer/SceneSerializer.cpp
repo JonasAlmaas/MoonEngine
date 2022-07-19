@@ -355,7 +355,7 @@ namespace Moon {
 		}
 		catch (YAML::ParserException e)
 		{
-			ME_CORE_ERROR("Failed to load .mmap file '{0}'\n {1}", filepath, e.what());
+			ME_CORE_LOG_ERROR("Failed to load .mmap file '{0}'\n {1}", filepath, e.what());
 			return false;
 		}
 
@@ -363,7 +363,7 @@ namespace Moon {
 			return false;
 
 		std::string sceneName = data["Scene"].as<std::string>();
-		ME_CORE_TRACE("Deserializing scene '{0}'", sceneName);
+		ME_CORE_LOG("Deserializing scene '{0}'", sceneName);
 
 		auto entities = data["Entities"];
 		if (entities)
@@ -377,7 +377,7 @@ namespace Moon {
 				if (tagComponent)
 					name = tagComponent["Tag"].as<std::string>();
 
-				ME_CORE_TRACE("Deserialized entity with ID = {0}, name = {1}", uuid.ToHexString(), name);
+				ME_CORE_LOG("Deserialized entity with ID = {0}, name = {1}", uuid.ToHexString(), name);
 
 				Entity deserializedEntity = m_Scene->CreateEntityWithUUID(uuid, name);
 

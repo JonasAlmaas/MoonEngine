@@ -215,7 +215,7 @@ namespace Moon {
 		// Check if the buffer is an invalid size
 		if (width == 0 || height == 0 || width > s_MaxFrameBufferSize || height > s_MaxFrameBufferSize)
 		{
-			ME_CORE_WARN("Attempted to resize frame buffer to {0}, {1}", width, height);
+			ME_CORE_LOG_WARN("Attempted to resize frame buffer to {0}, {1}", width, height);
 			return;
 		}
 

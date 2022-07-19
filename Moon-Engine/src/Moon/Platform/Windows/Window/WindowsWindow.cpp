@@ -10,7 +10,7 @@ namespace Moon {
 
 	static void GLFWErrorCallback(int error, const char* description)
 	{
-		ME_CORE_ERROR("GLFE Error ({0}): {1}", error, description);
+		ME_CORE_LOG_ERROR("GLFE Error ({0}): {1}", error, description);
 	}
 
 	WindowsWindow::WindowsWindow(const WindowProps& props)
@@ -33,7 +33,7 @@ namespace Moon {
 		m_Data.Width = props.Width;
 		m_Data.Height = props.Height;
 
-		ME_CORE_INFO("Creating window \"{0}\" ({1}, {2})", props.Title, props.Width, props.Height);
+		ME_CORE_LOG_INFO("Creating window \"{0}\" ({1}, {2})", props.Title, props.Width, props.Height);
 
 		// Initialize GLFW
 		if (s_GLFWWindowCount == 0)

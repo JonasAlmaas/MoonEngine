@@ -254,7 +254,7 @@ namespace Asteroid {
 							if (texture->IsLoaded())
 								component.Texture = texture;
 							else
-								ME_WARN("Could not load texture {0}", texturePath.filename().string());
+								ME_CORE_LOG_WARN("Could not load texture {0}", texturePath.filename().string());
 						}
 
 						ImGui::EndDragDropTarget();

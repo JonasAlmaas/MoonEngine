@@ -44,15 +44,15 @@ inline OStream& operator<<(OStream& os, glm::qua<T, Q> quaternion)
 }
 
 // Core log macros
-#define ME_CORE_TRACE(...)			::Moon::Log::GetCoreLogger()->trace(__VA_ARGS__)
-#define ME_CORE_INFO(...)			::Moon::Log::GetCoreLogger()->info(__VA_ARGS__)
-#define ME_CORE_WARN(...)			::Moon::Log::GetCoreLogger()->warn(__VA_ARGS__)
-#define ME_CORE_ERROR(...)			::Moon::Log::GetCoreLogger()->error(__VA_ARGS__)
-#define ME_CORE_CRITICAL(...)		::Moon::Log::GetCoreLogger()->critical(__VA_ARGS__)
+#define ME_CORE_LOG(...)			::Moon::Log::GetCoreLogger()->trace(__VA_ARGS__)
+#define ME_CORE_LOG_INFO(...)		::Moon::Log::GetCoreLogger()->info(__VA_ARGS__)
+#define ME_CORE_LOG_WARN(...)		::Moon::Log::GetCoreLogger()->warn(__VA_ARGS__)
+#define ME_CORE_LOG_ERROR(...)		::Moon::Log::GetCoreLogger()->error(__VA_ARGS__)
+#define ME_CORE_LOG_CRITICAL(...)	::Moon::Log::GetCoreLogger()->critical(__VA_ARGS__)
 
 // Client log macros
-#define ME_TRACE(...)				::Moon::Log::GetClientLogger()->trace(__VA_ARGS__)
-#define ME_INFO(...)				::Moon::Log::GetClientLogger()->info(__VA_ARGS__)
-#define ME_WARN(...)				::Moon::Log::GetClientLogger()->warn(__VA_ARGS__)
-#define ME_ERROR(...)				::Moon::Log::GetClientLogger()->error(__VA_ARGS__)
-#define ME_CRITICAL(...)			::Moon::Log::GetClientLogger()->critical(__VA_ARGS__)
+#define ME_LOG(...)					::Moon::Log::GetClientLogger()->trace(__VA_ARGS__)
+#define ME_LOG_INFO(...)			::Moon::Log::GetClientLogger()->info(__VA_ARGS__)
+#define ME_LOG_WARN(...)			::Moon::Log::GetClientLogger()->warn(__VA_ARGS__)
+#define ME_LOG_ERROR(...)			::Moon::Log::GetClientLogger()->error(__VA_ARGS__)
+#define ME_LOG_CRITICAL(...)		::Moon::Log::GetClientLogger()->critical(__VA_ARGS__)

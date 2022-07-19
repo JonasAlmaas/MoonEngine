@@ -13,7 +13,7 @@
 
 	// Currently accepts at least the condition and one additional parameter (the message) being optional
 	#define ME_ASSERT(...) ME_EXPAND_MACRO( ME_INTERNAL_ASSERT_GET_MACRO(__VA_ARGS__)(_, __VA_ARGS__) )
-	#define ME_CORE_ASSERT(...) ME_EXPAND_MACRO( ME_INTERNAL_ASSERT_GET_MACRO(__VA_ARGS__)(_CORE_, __VA_ARGS__) )
+	#define ME_CORE_ASSERT(...) ME_EXPAND_MACRO( ME_INTERNAL_ASSERT_GET_MACRO(__VA_ARGS__)(_CORE_LOG_, __VA_ARGS__) )
 #else
 	#define ME_ASSERT(...)
 	#define ME_CORE_ASSERT(...)

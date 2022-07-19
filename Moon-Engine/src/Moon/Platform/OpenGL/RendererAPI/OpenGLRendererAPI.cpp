@@ -10,10 +10,10 @@ namespace Moon {
 	{
 		switch (severity)
 		{
-			case GL_DEBUG_SEVERITY_HIGH:			ME_CORE_CRITICAL(message); return;
-			case GL_DEBUG_SEVERITY_MEDIUM:			ME_CORE_ERROR(message); return;
-			case GL_DEBUG_SEVERITY_LOW:				ME_CORE_WARN(message); return;
-			case GL_DEBUG_SEVERITY_NOTIFICATION:	ME_CORE_TRACE(message); return;
+			case GL_DEBUG_SEVERITY_HIGH:			ME_CORE_LOG_CRITICAL(message); return;
+			case GL_DEBUG_SEVERITY_MEDIUM:			ME_CORE_LOG_ERROR(message); return;
+			case GL_DEBUG_SEVERITY_LOW:				ME_CORE_LOG_WARN(message); return;
+			case GL_DEBUG_SEVERITY_NOTIFICATION:	ME_CORE_LOG(message); return;
 		}
 
 		ME_CORE_ASSERT(false, "Unknown severity level!");
