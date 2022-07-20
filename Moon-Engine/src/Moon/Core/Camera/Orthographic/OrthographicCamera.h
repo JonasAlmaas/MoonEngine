@@ -1,11 +1,12 @@
 #pragma once
 
+#include "Moon/GameFramework/Actor/Actor.h"
 #include "Moon/Core/Renderer/Camera/Orthographic/OrthographicRenderCamera.h"
 
 
 namespace Moon {
 
-	class OrthographicCamera : public OrthographicRenderCamera
+	class OrthographicCamera : public Actor, public OrthographicRenderCamera
 	{
 	public:
 		OrthographicCamera() = default;
@@ -14,24 +15,37 @@ namespace Moon {
 
 		virtual ~OrthographicCamera() = default;
 
-		void SetPosition(const glm::vec3& pos);
-		inline glm::vec3 GetPosition() { return m_Position; };
-		inline glm::vec3* GetPositionValuePtr() { return &m_Position; }
-		inline const glm::vec3* GetPositionValuePtr() const { return &m_Position; }
+		// -- Positions --
+		virtual void SetPosition(const glm::vec3& pos) override;
 
+		// -- Rotaion --
 		void SetRotationDegrees(float rotationDegrees);
 		void SetRotationRadians(float rotationRadians);
-		inline const float GetRotationDegrees() const { return glm::degrees(m_Rotation); }
-		inline const float GetRotationRadians() const { return m_Rotation; }
+		inline float GetRotationDegrees() const { return glm::degrees(m_Rotation.z); }
+		inline float GetRotationRadians() const { return m_Rotation.z; }
 
 	protected:
 		void UpdateView();
 
-	protected:
-		glm::vec3 m_Position = { 0.0f, 0.0f, 0.0f };
-
-		// Unit is radians
-		float m_Rotation = 0.0f;
+	private:
+		// Remove methods from the API
+		using Actor::SetRotation;
+		using Actor::GetRotation;
+		using Actor::SetPitchDegrees;
+		using Actor::GetPitchDegrees;
+		using Actor::SetPitchRadians;
+		using Actor::GetPitchRadians;
+		using Actor::SetYawDegrees;
+		using Actor::SetYawRadians;
+		using Actor::GetYawDegrees;
+		using Actor::GetYawRadians;
+		using Actor::SetRollDegrees;
+		using Actor::SetRollRadians;
+		using Actor::GetRollDegrees;
+		using Actor::GetRollRadians;
+		using Actor::SetScale;
+		using Actor::GetScale;
 
 	};
+
 }
