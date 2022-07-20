@@ -29,7 +29,6 @@ namespace Moon {
 		void SetFarClip(float farClip);
 		inline float GetFarClip() const { return m_FarClip; }
 
-
 	protected:
 		void UpdateProjection();
 
