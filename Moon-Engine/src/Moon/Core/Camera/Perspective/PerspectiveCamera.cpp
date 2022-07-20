@@ -12,64 +12,50 @@ namespace Moon {
 
 	void PerspectiveCamera::SetPosition(const glm::vec3& pos)
 	{
-		m_Position = pos;
+		Actor::SetPosition(pos);
+		UpdateView();
+	}
+
+	void PerspectiveCamera::SetRotation(const glm::vec3& rotation)
+	{
+		Actor::SetRotation(rotation);
 		UpdateView();
 	}
 
 	void PerspectiveCamera::SetPitchDegrees(float pitchDegrees)
 	{
-		m_Pitch = glm::radians(pitchDegrees);
+		Actor::SetPitchDegrees(pitchDegrees);
 		UpdateView();
 	}
 
 	void PerspectiveCamera::SetPitchRadians(float pitchRadians)
 	{
-		m_Pitch = pitchRadians;
+		Actor::SetPitchRadians(pitchRadians);
 		UpdateView();
 	}
 
 	void PerspectiveCamera::SetYawDegrees(float yawDegrees)
 	{
-		m_Yaw = glm::radians(yawDegrees);
+		Actor::SetYawDegrees(yawDegrees);
 		UpdateView();
 	}
 
 	void PerspectiveCamera::SetYawRadians(float yawRadians)
 	{
-		m_Yaw = yawRadians;
+		Actor::SetYawRadians(yawRadians);
 		UpdateView();
 	}
 
 	void PerspectiveCamera::SetRollDegrees(float rollDegrees)
 	{
-		m_Roll = glm::radians(rollDegrees);
+		Actor::SetRollDegrees(rollDegrees);
 		UpdateView();
 	}
 
 	void PerspectiveCamera::SetRollRadians(float rollRadians)
 	{
-		m_Roll = rollRadians;
+		Actor::SetRollRadians(rollRadians);
 		UpdateView();
-	}
-
-	glm::vec3 PerspectiveCamera::GetUpVector() const
-	{
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 1.0f, 0.0f));
-	}
-
-	glm::vec3 PerspectiveCamera::GetRightVector() const
-	{
-		return glm::rotate(GetOrientation(), glm::vec3(1.0f, 0.0f, 0.0f));
-	}
-
-	glm::vec3 PerspectiveCamera::GetForwardVector() const
-	{
-		return glm::rotate(GetOrientation(), glm::vec3(0.0f, 0.0f, -1.0f));
-	}
-
-	glm::quat PerspectiveCamera::GetOrientation() const
-	{
-		return glm::quat(glm::vec3(-m_Pitch, -m_Roll, -m_Yaw));
 	}
 
 	void PerspectiveCamera::UpdateView()
