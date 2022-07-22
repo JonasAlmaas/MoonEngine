@@ -53,7 +53,7 @@ namespace Moon {
 
 		// ---- Operator overrides ----
 
-		bool operator == (const Color& other)
+		bool operator==(const Color& other)
 		{
 			return (Format == other.Format) && (r == other.r) && (g == other.g) && (b == other.b) && (a == other.a);
 		}

@@ -58,8 +58,8 @@ namespace Moon {
 		operator uint32_t() const { return (uint32_t)m_EntityHandle; }
 		operator entt::entity() const { return m_EntityHandle; }
 
-		bool operator== (const Entity& other) const { return m_EntityHandle == other.m_EntityHandle && m_Registry == other.m_Registry; }
-		bool operator!= (const Entity& other) const { return !(*this == other); }
+		bool operator==(const Entity& other) const { return m_EntityHandle == other.m_EntityHandle && m_Registry == other.m_Registry; }
+		bool operator!=(const Entity& other) const { return !(*this == other); }
 
 	private:
 		entt::registry* m_Registry = nullptr;
