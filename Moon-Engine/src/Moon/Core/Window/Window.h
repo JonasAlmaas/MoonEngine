@@ -3,18 +3,14 @@
 
 namespace Moon {
 
-	struct WindowProps
+	struct WindowSpecification
 	{
-		std::string Title;
-		uint32_t Width;
-		uint32_t Height;
-
-		WindowProps(const std::string& title = "Window Title",
-					uint32_t width = 1920,
-					uint32_t height = 1080)
-			: Title(title), Width(width), Height(height)
-		{
-		}
+		std::string Title = "Window Title";
+		uint32_t Width = 1920;
+		uint32_t Height = 1080;
+		bool Decorated = true;
+		bool Fullscreen = false;
+		bool VSync = true;
 	};
 
 	// Interface representing a desktop system based window
@@ -25,22 +21,33 @@ namespace Moon {
 
 		virtual ~Window() = default;
 
+		virtual void Init() = 0;
 		virtual void OnUpdate() = 0;
 
-		virtual unsigned int GetWidth() const = 0;
-		virtual unsigned int GetHeight() const = 0;
+		virtual uint32_t GetWidth() const = 0;
+		virtual uint32_t GetHeight() const = 0;
+
+		virtual std::pair<uint32_t, uint32_t> GetSize() const = 0;
+		virtual std::pair<float, float> GetWindowPos() const = 0;
 
 		// Window attributes
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetVSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
+		virtual void SetResizable(bool resizable) const = 0;
+
+		virtual void Maximize() = 0;
+		virtual void CenterWindow() = 0;
 
 		virtual void EnableCursor() = 0;
 		virtual void DisableCursor() = 0;
 
+		virtual const std::string& GetTitle() const = 0;
+		virtual void SetTitle(const std::string& title) = 0;
+
 		virtual void* GetNativeWindow() const = 0;
 
-		static Scope<Window> Create(const WindowProps& props = WindowProps());
+		static Scope<Window> Create(const WindowSpecification& spec = WindowSpecification());
 	};
 
 }

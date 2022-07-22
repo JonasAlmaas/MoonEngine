@@ -24,13 +24,20 @@ namespace Moon {
 	{
 		std::string Name = "Moon Application";
 		std::string WorkingDirectory;
+		uint32_t WindowWidth = 1920, WindowHeight = 1080;
+		bool WindowDecorated = false;
+		bool Fullscreen = false;
+		bool VSync = true;
+		bool StartMaximized = false;
+		bool Resizable = true;
+		bool EnableImGui = true;
 		ApplicationCommandLineArgs CommandLineArgs;
 	};
 	
 	class Application
 	{
 	public:
-		Application(const ApplicationSpecification& specs);
+		Application(const ApplicationSpecification& spec);
 		virtual ~Application();
 
 		// To be defined in client
@@ -69,7 +76,6 @@ namespace Moon {
 		ImGuiLayer* m_ImGuiLayer;
 
 		Timestep m_Timestep;
-
 		float m_LastFrameTime = 0.0f;
 
 	private:

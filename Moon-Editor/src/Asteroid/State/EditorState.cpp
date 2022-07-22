@@ -85,10 +85,10 @@ namespace Asteroid {
 		NewActiveScene();
 
 		// Load scene if a path was specified as a command line argument
-		auto appSpecs = Application::Get().GetSpecification();
-		if (appSpecs.CommandLineArgs.Count > 1)
+		auto appSpec = Application::Get().GetSpecification();
+		if (appSpec.CommandLineArgs.Count > 1)
 		{
-			s_Data->EditorScenePath = std::filesystem::path(appSpecs.CommandLineArgs[1]);
+			s_Data->EditorScenePath = std::filesystem::path(appSpec.CommandLineArgs[1]);
 			SceneSerializer serializer(s_Data->EditorSn);
 			serializer.Deserialize(s_Data->EditorScenePath);
 		}

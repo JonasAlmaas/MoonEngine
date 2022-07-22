@@ -7,12 +7,12 @@
 
 namespace Moon {
 
-	Scope<Window> Window::Create(const WindowProps& props)
+	Scope<Window> Window::Create(const WindowSpecification& spec)
 	{
 		switch (Renderer::GetAPI())
 		{
 			case RendererAPI::API::None:			ME_CORE_ASSERT(false, "RendererAPI::API::None is currently not supported"); return nullptr;
-			case RendererAPI::API::OpenGL:			return CreateScope<WindowsWindow>(props);
+			case RendererAPI::API::OpenGL:			return CreateScope<WindowsWindow>(spec);
 		}
 
 		ME_CORE_ASSERT(false, "Unknown RendererAPI!");

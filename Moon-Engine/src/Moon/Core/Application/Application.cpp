@@ -9,25 +9,43 @@ namespace Moon {
 
 	Application* Application::s_Instance = nullptr;
 	
-	Application::Application(const ApplicationSpecification& specs)
-		: m_Specification(specs)
+	Application::Application(const ApplicationSpecification& spec)
+		: m_Specification(spec)
 	{
 		ME_PROFILE_FUNCTION();
 
 		ME_CORE_ASSERT(!s_Instance, "Application already exists!");
 		s_Instance = this;
 
-		// Set working directory here
 		if (!m_Specification.WorkingDirectory.empty())
 			std::filesystem::current_path(m_Specification.WorkingDirectory);
 
-		m_Window = Window::Create({ m_Specification.Name });
-		m_Window->SetEventCallback(ME_BIND_EVENT_FN(Application::OnEvent));
+		{
+			WindowSpecification windowSpec;
+			windowSpec.Title = spec.Name;
+			windowSpec.Width = spec.WindowWidth;
+			windowSpec.Height = spec.WindowHeight;
+			windowSpec.Decorated = spec.WindowDecorated;
+			windowSpec.Fullscreen = spec.Fullscreen;
+			windowSpec.VSync = spec.VSync;
+
+			m_Window = Window::Create(windowSpec);
+			m_Window->Init();
+
+			m_Window->SetEventCallback(ME_BIND_EVENT_FN(Application::OnEvent));
+
+			if (spec.StartMaximized)
+				m_Window->Maximize();
+			else
+				m_Window->CenterWindow();
+
+			m_Window->SetResizable(spec.Resizable);
+		}
 
 		Util::Init();
 		Renderer::Init();
 
-		if (specs.EnableImGui)
+		if (spec.EnableImGui)
 		{
 			m_ImGuiLayer = new ImGuiLayer();
 			PushOverlay(m_ImGuiLayer);
@@ -55,6 +73,8 @@ namespace Moon {
 		{	
 			ME_PROFILE_SCOPE("RunLoop");
 
+			static uint64_t frameCounter = 0;
+
 			// Get delta time
 			float time = Time::Get();
 			m_Timestep = time - m_LastFrameTime;
@@ -65,9 +85,12 @@ namespace Moon {
 				m_LayerStack.OnUpdate(m_Timestep);
 			}
 
-			m_ImGuiLayer->Begin();
-			m_LayerStack.OnImGuiRender();
-			m_ImGuiLayer->End();
+			if (m_Specification.EnableImGui)
+			{
+				m_ImGuiLayer->Begin();
+				m_LayerStack.OnImGuiRender();
+				m_ImGuiLayer->End();
+			}
 
 			m_Window->OnUpdate();
 		}
@@ -112,7 +135,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		m_Running = false;
+		Close();
 		return true;
 	}
 
@@ -120,7 +143,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		m_Minimized = e.GetMinimizedState();
+		m_Minimized = e.IsMinimized();
 		return false;
 	}
 

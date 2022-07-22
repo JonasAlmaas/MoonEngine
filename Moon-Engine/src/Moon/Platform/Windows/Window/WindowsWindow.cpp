@@ -13,11 +13,9 @@ namespace Moon {
 		ME_CORE_LOG_ERROR("GLFE Error ({0}): {1}", error, description);
 	}
 
-	WindowsWindow::WindowsWindow(const WindowProps& props)
+	WindowsWindow::WindowsWindow(const WindowSpecification& spec)
+		: m_Specification(spec)
 	{
-		ME_PROFILE_FUNCTION();
-
-		Init(props);
 	}
 
 	WindowsWindow::~WindowsWindow()
@@ -25,15 +23,15 @@ namespace Moon {
 		Shutdown();
 	}
 
-	void WindowsWindow::Init(const WindowProps& props)
+	void WindowsWindow::Init()
 	{
 		ME_PROFILE_FUNCTION();
 
-		m_Data.Title = props.Title;
-		m_Data.Width = props.Width;
-		m_Data.Height = props.Height;
+		m_Data.Title = m_Specification.Title;
+		m_Data.Width = m_Specification.Width;
+		m_Data.Height = m_Specification.Height;
 
-		ME_CORE_LOG_INFO("Creating window \"{0}\" ({1}, {2})", props.Title, props.Width, props.Height);
+		ME_CORE_LOG_INFO("Creating window \"{0}\" ({1}, {2})", m_Specification.Title, m_Specification.Width, m_Specification.Height);
 
 		// Initialize GLFW
 		if (s_GLFWWindowCount == 0)
@@ -46,9 +44,32 @@ namespace Moon {
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
+
+		if (!m_Specification.Decorated)
+		{
+			glfwWindowHint(GLFW_DECORATED, false);
+		}
+
+		if (m_Specification.Fullscreen)
 		{
 			ME_PROFILE_SCOPE("glfwCreateWindow");
-			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+
+			GLFWmonitor* primaryMonitor = glfwGetPrimaryMonitor();
+			const GLFWvidmode* mode = glfwGetVideoMode(primaryMonitor);
+
+			glfwWindowHint(GLFW_DECORATED, false);
+			glfwWindowHint(GLFW_RED_BITS, mode->redBits);
+			glfwWindowHint(GLFW_GREEN_BITS, mode->greenBits);
+			glfwWindowHint(GLFW_BLUE_BITS, mode->blueBits);
+			glfwWindowHint(GLFW_REFRESH_RATE, mode->refreshRate);
+
+			m_Window = glfwCreateWindow(mode->width, mode->height, m_Data.Title.c_str(), primaryMonitor, nullptr);
+			++s_GLFWWindowCount;
+		}
+		else
+		{
+			ME_PROFILE_SCOPE("glfwCreateWindow");
+			m_Window = glfwCreateWindow((int)m_Specification.Width, (int)m_Specification.Height, m_Data.Title.c_str(), nullptr, nullptr);
 			++s_GLFWWindowCount;
 		}
 
@@ -169,6 +190,14 @@ namespace Moon {
 			MouseMovedEvent e((float)xPos, (float)yPos);
 			data.EventCallback(e);
 		});
+
+		// Update window size to actual size
+		{
+			int width, height;
+			glfwGetWindowSize(m_Window, &width, &height);
+			m_Data.Width = width;
+			m_Data.Height = height;
+		}
 	}
 
 	void WindowsWindow::Shutdown()
@@ -192,6 +221,13 @@ namespace Moon {
 		m_Context->SwapBuffers();
 	}
 
+	std::pair<float, float> WindowsWindow::GetWindowPos() const
+	{
+		int x, y;
+		glfwGetWindowPos(m_Window, &x, &y);
+		return { (float)x, (float)y };
+	}
+
 	void WindowsWindow::SetVSync(bool enabled)
 	{
 		ME_PROFILE_FUNCTION();
@@ -201,12 +237,30 @@ namespace Moon {
 		else
 			glfwSwapInterval(0);
 
-		m_Data.VSync = enabled;
+		m_Specification.VSync = enabled;
 	}
 
 	bool WindowsWindow::IsVSync() const
 	{
-		return m_Data.VSync;
+		return m_Specification.VSync;
+	}
+
+	void WindowsWindow::SetResizable(bool resizable) const
+	{
+		glfwSetWindowAttrib(m_Window, GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
+	}
+
+	void WindowsWindow::Maximize()
+	{
+		glfwMaximizeWindow(m_Window);
+	}
+
+	void WindowsWindow::CenterWindow()
+	{
+		const GLFWvidmode* videmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+		int x = (videmode->width / 2) - (m_Data.Width / 2);
+		int y = (videmode->height / 2) - (m_Data.Height / 2);
+		glfwSetWindowPos(m_Window, x, y);
 	}
 
 	void WindowsWindow::EnableCursor()
@@ -217,6 +271,12 @@ namespace Moon {
 	void WindowsWindow::DisableCursor()
 	{
 		glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	}
+
+	void WindowsWindow::SetTitle(const std::string& title)
+	{
+		m_Data.Title = title;
+		glfwSetWindowTitle(m_Window, m_Data.Title.c_str());
 	}
 
 }

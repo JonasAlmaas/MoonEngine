@@ -20,7 +20,7 @@ namespace Moon {
 		WindowMinimizeEvent(bool minimized)
 			: m_Minimized(minimized) {}
 
-		inline bool GetMinimizedState() const { return m_Minimized; }
+		inline bool IsMinimized() const { return m_Minimized; }
 
 		EVENT_CLASS_TYPE(WindowMinimize)
 			EVENT_CLASS_CATEGORY(EventCategoryApplication)

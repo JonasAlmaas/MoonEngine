@@ -6,8 +6,8 @@
 
 namespace Asteroid {
 
-	AsteroidApp::AsteroidApp(const ApplicationSpecification& specs)
-		: Application(specs)
+	AsteroidApp::AsteroidApp(const ApplicationSpecification& spec)
+		: Application(spec)
 	{
 		PushLayer(new EditorLayer());
 	}
