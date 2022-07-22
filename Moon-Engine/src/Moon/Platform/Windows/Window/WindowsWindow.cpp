@@ -77,8 +77,7 @@ namespace Moon {
 		m_Context->Init();
 
 		glfwSetWindowUserPointer(m_Window, &m_Data);
-		SetVSync(true);
-
+		SetVSync(m_Specification.VSync);
 
 		// ---- Set GLFW callbacks ----
 		// Window Resize Event
