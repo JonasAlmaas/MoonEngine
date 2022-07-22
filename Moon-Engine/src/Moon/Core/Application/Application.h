@@ -25,7 +25,7 @@ namespace Moon {
 		std::string Name = "Moon Application";
 		std::string WorkingDirectory;
 		uint32_t WindowWidth = 1920, WindowHeight = 1080;
-		bool WindowDecorated = false;
+		bool WindowDecorated = true;
 		bool Fullscreen = false;
 		bool VSync = true;
 		bool StartMaximized = false;
