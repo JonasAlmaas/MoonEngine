@@ -12,7 +12,7 @@ namespace Moon {
 	{
 	}
 
-	void LayerStack::PushLayer(Ref<Layer> layer)
+	void LayerStack::PushLayer(Layer* layer)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -20,14 +20,14 @@ namespace Moon {
 		m_LayerInsertIndex++;
 	}
 
-	void LayerStack::PushOverlay(Ref<Layer> overlay)
+	void LayerStack::PushOverlay(Layer* overlay)
 	{
 		ME_PROFILE_FUNCTION();
 
 		m_Layers.emplace_back(overlay);
 	}
 
-	bool LayerStack::PopLayer(Ref<Layer> layer)
+	bool LayerStack::PopLayer(Layer* layer)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -42,7 +42,7 @@ namespace Moon {
 		return false;
 	}
 
-	bool LayerStack::PopOverlay(Ref<Layer> overlay)
+	bool LayerStack::PopOverlay(Layer* overlay)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -60,7 +60,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		for (Ref<Layer> layer : m_Layers)
+		for (Layer* layer : m_Layers)
 			layer->OnUpdate(ts);
 	}
 
@@ -68,7 +68,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		for (Ref<Layer> layer : m_Layers)
+		for (Layer* layer : m_Layers)
 			layer->OnImGuiRender();
 	}
 

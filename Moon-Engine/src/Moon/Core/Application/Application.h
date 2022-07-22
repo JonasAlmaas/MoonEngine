@@ -36,51 +36,20 @@ namespace Moon {
 		// To be defined in client
 		static Application* Create(ApplicationCommandLineArgs args);
 		
-		/**
-		 * @brief Starts the main application loop.
-		 */
 		void Run();
+		void Close();
 
-		/**
-		 * @brief Closes Application.
-		 */
-		void Close()
-		{
-			m_Running = false;
-		}
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* overlay);
 
-		/**
-		 * Adds a layer to the layer stack.
-		 * 
-		 * @param A child class of Layer. Initialized with the keyword new.
-		 */
-		void PushLayer(Ref<Layer> layer);
-
-		/**
-		 * Adds an overlay to the layer stack.
-		 *
-		 * @param A child class of Layer. Initialized with the keyword new.
-		 */
-		void PushOverlay(Ref<Layer> overlay);
-
-		/**
-		 * Handler for all application and input events.
-		 * Distributes events to the rest of the application.
-		 * 
-		 * @param A child class of Event.
-		 */
 		void OnEvent(Event& e);
 
-		inline Ref<ImGuiLayer> GetImGuiLayer() { return m_ImGuiLayer; }
-
-		/**
-		 * @return Delta time in the Timestep format.
-		 */
-		inline Timestep GetTimestep() const { return m_Timestep; }
-		
+		static inline Application& Get() { return *s_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
 
-		inline static Application& Get() { return *s_Instance; }
+		Timestep GetTimestep() const { return m_Timestep; }
+
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer; }
 
 		const ApplicationSpecification& GetSpecification() const { return m_Specification; }
 
@@ -91,17 +60,17 @@ namespace Moon {
 
 	private:
 		ApplicationSpecification m_Specification;
+		Scope<Window> m_Window;
 
 		bool m_Running = true;
 		bool m_Minimized = false;
 
-		Scope<Window> m_Window;
-
 		LayerStack m_LayerStack;
-		Ref<ImGuiLayer> m_ImGuiLayer;
+		ImGuiLayer* m_ImGuiLayer;
+
+		Timestep m_Timestep;
 
 		float m_LastFrameTime = 0.0f;
-		Timestep m_Timestep = 0.0f;
 
 	private:
 		static Application* s_Instance;

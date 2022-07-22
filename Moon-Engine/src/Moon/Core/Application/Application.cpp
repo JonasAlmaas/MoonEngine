@@ -27,13 +27,22 @@ namespace Moon {
 		Util::Init();
 		Renderer::Init();
 
-		m_ImGuiLayer = CreateRef<ImGuiLayer>();
-		PushOverlay(m_ImGuiLayer);
+		if (specs.EnableImGui)
+		{
+			m_ImGuiLayer = new ImGuiLayer();
+			PushOverlay(m_ImGuiLayer);
+		}
 	}
 
 	Application::~Application()
 	{
 		ME_PROFILE_FUNCTION();
+
+		for (Layer* layer : m_LayerStack)
+		{
+			layer->OnDetach();
+			delete layer;
+		}
 
 		Renderer::Shutdown();
 	}
@@ -64,7 +73,12 @@ namespace Moon {
 		}
 	}
 
-	void Application::PushLayer(Ref<Layer> layer)
+	void Application::Close()
+	{
+		m_Running = false;
+	}
+
+	void Application::PushLayer(Layer* layer)
 	{
 		ME_PROFILE_FUNCTION();
 
@@ -72,7 +86,7 @@ namespace Moon {
 		layer->OnAttach();
 	}
 
-	void Application::PushOverlay(Ref<Layer> overlay)
+	void Application::PushOverlay(Layer* overlay)
 	{
 		ME_PROFILE_FUNCTION();
 
