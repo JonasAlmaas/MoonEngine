@@ -8,9 +8,9 @@ namespace Asteroid {
 
 	void ToolbarPanel::OnAttach()
 	{
-		m_IconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
-		m_IconStop = Texture2D::Create("Resources/Icons/StopButton.png");
-		m_IconSimulate = Texture2D::Create("Resources/Icons/SimulateButton.png");
+		m_IconPlay = Texture2D::Create("Resources/Editor/Viewport/Play.png");
+		m_IconStop = Texture2D::Create("Resources/Editor/Viewport/Stop.png");
+		m_IconSimulate = Texture2D::Create("Resources/Editor/Viewport/Simulate.png");
 	}
 
 	void ToolbarPanel::OnDetach()

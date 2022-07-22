@@ -14,8 +14,8 @@ namespace Asteroid {
 
 	void ContentBrowserPanel::OnAttach()
 	{
-		m_DirectoryIcon = Texture2D::Create("Resources/Icons/ContentBrowser/DirectoryIcon.png");
-		m_FileIcon = Texture2D::Create("Resources/Icons/ContentBrowser/FileIcon.png");
+		m_IconFolder = Texture2D::Create("Resources/Editor/ContentBrowser/Folder.png");
+		m_IconFile = Texture2D::Create("Resources/Editor/ContentBrowser/File.png");
 	}
 
 	void ContentBrowserPanel::OnDetach()
@@ -55,7 +55,7 @@ namespace Asteroid {
 			std::string filenameString = path.filename().string();
 
 			ImGui::PushID(filenameString.c_str());
-			Ref<Texture2D> icon = directoryEntry.is_directory() ? m_DirectoryIcon : m_FileIcon;
+			Ref<Texture2D> icon = directoryEntry.is_directory() ? m_IconFolder : m_IconFile;
 
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 0.0f);
 			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0,0,0,0));
