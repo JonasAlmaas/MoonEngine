@@ -52,6 +52,11 @@ namespace Moon {
 			s_RendererAPI->SetLineWidth(width);
 		}
 
+		static void SetDepthTest(bool state)
+		{
+			s_RendererAPI->SetDepthTest(state);
+		}
+
 		static void SetMultisample(bool state)
 		{
 			s_RendererAPI->SetMultisample(state);

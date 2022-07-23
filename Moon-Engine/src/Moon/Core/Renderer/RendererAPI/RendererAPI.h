@@ -28,11 +28,12 @@ namespace Moon {
 		virtual void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
 		virtual void SetLineWidth(float width) = 0;
 
+		virtual void SetDepthTest(bool state) const = 0;
+		virtual void SetMultisample(bool state) const = 0;
+
 		virtual const unsigned char* GetGPUVendor() = 0;
 		virtual const unsigned char* GetGPUName()  = 0;
 		virtual const unsigned char* GetGPUFirmwareVersion() = 0;
-
-		virtual const void SetMultisample(bool state) const = 0;
 
 		inline static API GetAPI() { return s_API; }
 

@@ -87,6 +87,22 @@ namespace Moon {
 		glLineWidth(width);
 	}
 
+	void OpenGLRendererAPI::SetDepthTest(bool state) const
+	{
+		if (state)
+			glEnable(GL_DEPTH_TEST);
+		else
+			glDisable(GL_DEPTH_TEST);
+	}
+
+	void OpenGLRendererAPI::SetMultisample(bool state) const
+	{
+		if (state)
+			glEnable(GL_MULTISAMPLE);
+		else
+			glDisable(GL_MULTISAMPLE);
+	}
+
 	const unsigned char* OpenGLRendererAPI::GetGPUVendor()
 	{
 		return glGetString(GL_VENDOR);
@@ -100,14 +116,6 @@ namespace Moon {
 	const unsigned char* OpenGLRendererAPI::GetGPUFirmwareVersion()
 	{
 		return glGetString(GL_VERSION);
-	}
-
-	const void OpenGLRendererAPI::SetMultisample(bool state) const
-	{
-		if (state)
-			glEnable(GL_MULTISAMPLE);
-		else
-			glDisable(GL_MULTISAMPLE);
 	}
 
 }
