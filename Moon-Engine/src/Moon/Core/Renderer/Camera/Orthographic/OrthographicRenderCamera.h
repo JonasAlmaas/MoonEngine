@@ -41,13 +41,13 @@ namespace Moon {
 		void UpdateProjection();
 
 	protected:
-		float m_Size;
+		float m_Size = 1.0f;
 		float m_Left, m_Right, m_Bottom, m_Top;
 
 		float m_NearClip = -1.0f;
 		float m_FarClip = 1.0f;
 
-		float m_AspectRatio;
+		float m_AspectRatio = 1.778f;
 
 		float m_ViewportWidth = 1920.0f;
 		float m_ViewportHeight = 1080.0f;

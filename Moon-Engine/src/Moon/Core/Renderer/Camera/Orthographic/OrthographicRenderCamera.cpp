@@ -69,8 +69,8 @@ namespace Moon {
 	{
 		m_Left = -m_Size * m_AspectRatio * 0.5f;;
 		m_Right = m_Size * m_AspectRatio * 0.5f;
-		m_Bottom = -m_AspectRatio * 0.5f;
-		m_Top = m_AspectRatio * 0.5f;
+		m_Bottom = -m_Size * 0.5f;
+		m_Top = m_Size * 0.5f;
 	}
 
 	void OrthographicRenderCamera::UpdateProjection()
