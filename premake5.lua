@@ -26,6 +26,7 @@ outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Core"
 	include "Moon-Engine"
+	include "Moon-ScriptCore"
 group ""
 
 group "Tools"
