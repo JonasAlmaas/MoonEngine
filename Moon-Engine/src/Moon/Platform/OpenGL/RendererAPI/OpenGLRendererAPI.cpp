@@ -56,8 +56,7 @@ namespace Moon {
 	{
 		ME_PROFILE_RENDERER_FUNCTION();
 
-		Color c = color.GetNormalized();
-		glClearColor(c.r, c.g, c.b, c.a);
+		glClearColor(color.r, color.g, color.b, color.a);
 	}
 
 	void OpenGLRendererAPI::Clear()

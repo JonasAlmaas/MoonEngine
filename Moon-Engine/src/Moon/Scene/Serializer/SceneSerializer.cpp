@@ -137,11 +137,8 @@ namespace Moon {
 		return out;
 	}
 
-	YAML::Emitter& operator<<(YAML::Emitter& out, const Color& v)
+	YAML::Emitter& operator<<(YAML::Emitter& out, const Color& c)
 	{
-		// Always serialize colors as normalized
-		Color c = v.GetNormalized();
-
 		out << YAML::Flow;
 		out << YAML::BeginSeq << c.r << c.g << c.b << c.a << YAML::EndSeq;
 		return out;

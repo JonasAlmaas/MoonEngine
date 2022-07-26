@@ -127,7 +127,7 @@ namespace Moon {
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
 		// Set up defaults
-		s_Data.WhiteColor = Color(ColorFormat::RGBANormalized, 1.0f, 1.0f, 1.0f, 1.0f);
+		s_Data.WhiteColor = Color();
 		s_Data.DefaultTileFactor = { 1.0f, 1.0f };
 
 		// -- Sprite --
@@ -369,7 +369,7 @@ namespace Moon {
 			s_Data.CircleVertexBufferPtr->LocalPosition = s_Data.SpriteVertexPositions[i] * 2.0f;
 			s_Data.CircleVertexBufferPtr->Thickness = thickness;
 			s_Data.CircleVertexBufferPtr->Fade = fade;
-			s_Data.CircleVertexBufferPtr->Color = color.Format == ColorFormat::RGBANormalized ? color : color.GetNormalized();
+			s_Data.CircleVertexBufferPtr->Color = color;
 			s_Data.CircleVertexBufferPtr->EntityID = entityID;
 			s_Data.CircleVertexBufferPtr++;
 		}
@@ -631,7 +631,7 @@ namespace Moon {
 		for (uint32_t i = 0; i < 4; i++)
 		{
 			s_Data.SpriteVertexBufferPtr->Position = transform * s_Data.SpriteVertexPositions[i];
-			s_Data.SpriteVertexBufferPtr->Color = tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized();
+			s_Data.SpriteVertexBufferPtr->Color = tint;
 			s_Data.SpriteVertexBufferPtr->UV = tileFactor * s_Data.SpriteUVCoords[i];
 			s_Data.SpriteVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
 			s_Data.SpriteVertexBufferPtr->EntityID = entityID;
@@ -707,7 +707,7 @@ namespace Moon {
 		for (uint32_t i = 0; i < 4; i++)
 		{
 			s_Data.SpriteVertexBufferPtr->Position = transform * s_Data.SpriteVertexPositions[i];
-			s_Data.SpriteVertexBufferPtr->Color = tint.Format == ColorFormat::RGBANormalized ? tint : tint.GetNormalized();
+			s_Data.SpriteVertexBufferPtr->Color = tint;
 			s_Data.SpriteVertexBufferPtr->UV = subTexture->GetUVCoords()[i];
 			s_Data.SpriteVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
 			s_Data.SpriteVertexBufferPtr++;

@@ -242,7 +242,7 @@ namespace Asteroid {
 						* glm::rotate(glm::mat4(1.0f), tc.Rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
 						* glm::scale(glm::mat4(1.0f), scale);
 
-					Renderer2D::DrawRect(transform, { 0.0, 0.0f, 1.0, 1.0f });
+					Renderer2D::DrawRect(transform, { 0.0f, 0.0f, 1.0f, 1.0f });
 				}
 			}
 
@@ -274,7 +274,7 @@ namespace Asteroid {
 			glm::mat4 scale = glm::scale(glm::mat4(1.0f), tc.Scale);
 			glm::mat4 transform = translation * rotation * scale;
 
-			Renderer2D::DrawRect(tc.GetTransform(), { ColorFormat::RGBADecimal, 255.0f, 128.0f, 0.0f });
+			Renderer2D::DrawRect(tc.GetTransform(), { 255, 128, 0 });
 		}
 
 		Renderer2D::EndScene();
