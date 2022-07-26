@@ -4,6 +4,8 @@
 #include "Asteroid/Panel/UILibrary.h"
 #include "Asteroid/EditorState.h"
 
+#include <Moon/Scripting/ScriptEngine.h>
+
 
 namespace Asteroid {
 
@@ -117,6 +119,7 @@ namespace Asteroid {
 				if (ImGui::BeginPopup("AddComponent"))
 				{
 					DisplayAddComponentEntry<TransformComponent>("Add Transform Component", selectionContext);
+					DisplayAddComponentEntry<ScriptComponent>("Add Script Component", selectionContext);
 					DisplayAddComponentEntry<CameraComponent>("Add Camera Component", selectionContext);
 					DisplayAddComponentEntry<SpriteRendererComponent>("Add Sprite Renderer Component", selectionContext);
 					DisplayAddComponentEntry<CircleRendererComponent>("Add Circle Renderer Component", selectionContext);
@@ -138,6 +141,24 @@ namespace Asteroid {
 				component.Rotation = glm::radians(rotation);
 
 				UILibrary::DrawFloat3Control("Scale", component.Scale, 0.01f, 1.0f, true);
+			});
+
+			// -- Script Component --
+			DrawComponent<ScriptComponent>("C# Script", selectionContext, [](Entity& entity, ScriptComponent& component)
+			{
+				bool scriptClassExists = ScriptEngine::EntityClassExists(component.ClassName);
+
+				static char buffer[64];
+				strcpy(buffer, component.ClassName.c_str());
+
+				if (!scriptClassExists)
+					ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.9f, 0.3f, 0.2f, 1.0f));
+
+				if (ImGui::InputText("Class", buffer, sizeof(buffer)))
+					component.ClassName = buffer;
+
+				if (!scriptClassExists)
+					ImGui::PopStyleColor();
 			});
 
 			// -- Camera Component --

@@ -38,6 +38,7 @@ namespace Moon {
 			return m_Registry.view<Components...>();
 		}
 
+		Entity GetEntityByUUID(UUID entityID);
 		entt::registry& GetRegistry() { return m_Registry; }
 
 	private:
@@ -48,6 +49,8 @@ namespace Moon {
 
 	protected:
 		entt::registry m_Registry;
+
+		std::unordered_map<UUID, entt::entity> m_EntityMap;
 
 		Entity m_ActiveCamera{};
 

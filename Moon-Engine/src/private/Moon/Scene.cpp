@@ -5,6 +5,7 @@
 #include "Moon/Renderer/Renderer2D.h"
 #include "Moon/Scene/Component/SceneComponents.h"
 #include "Moon/Scene/Entity/ScriptableEntity.h"
+#include "Moon/Scripting/ScriptEngine.h"
 
 #include <box2d/b2_world.h>
 #include <box2d/b2_body.h>
@@ -43,31 +44,85 @@ namespace Moon {
 	void Scene::OnRuntimeStart()
 	{
 		OnPhysics2DStart();
+
+		// ---- Native Scripts ----
+		{
+			auto view = m_Registry.view<NativeScriptComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { &m_Registry, e };
+				auto& nsc = entity.GetComponent<NativeScriptComponent>();
+
+				if (!nsc.Instance)
+				{
+					nsc.Instance = nsc.InstantiateScript();
+					nsc.Instance->m_Entity = entity;
+					nsc.Instance->OnCreate();
+				}
+			}
+		}
+
+		// C# Scripting
+		{
+			ScriptEngine::OnRuntimeStart(this);
+
+			// Instantiate all script entities
+			auto view = m_Registry.view<ScriptComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { &m_Registry, e };
+				ScriptEngine::OnCreateEntity(entity);
+			}
+		}
 	}
 
 	void Scene::OnRuntimeStop()
 	{
+		// ---- Native Scripts ----
+		{
+			auto view = m_Registry.view<NativeScriptComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { &m_Registry, e };
+				entity.GetComponent<NativeScriptComponent>().Instance->OnDestroy();
+			}
+		}
+
+		// ---- C# Scripts ----
+		{
+			auto view = m_Registry.view<ScriptComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { &m_Registry, e };
+				ScriptEngine::OnDestroyEntity(entity);
+			}
+
+			ScriptEngine::OnRuntimeStop();
+		}
+
 		OnPhysics2DStop();
 	}
 
 	void Scene::OnRuntimeUpdate(Timestep ts)
 	{
-		// ---- Scripts ----
+		// ---- Native Scripts ----
 		{
-			m_Registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc)
+			auto view = m_Registry.view<NativeScriptComponent>();
+			for (auto e : view)
 			{
-				// Move to scene begin play. But I don't have that yet.
-				if (!nsc.Instance)
-				{
-					nsc.Instance = nsc.InstantiateScript();
-					nsc.Instance->m_Entity = Entity(&m_Registry, entity);
-					nsc.Instance->OnCreate();
-				}
+				Entity entity = { &m_Registry, e };
+				entity.GetComponent<NativeScriptComponent>().Instance->OnUpdate(ts);
+			}
+		}
 
-				nsc.Instance->OnUpdate(ts);
-
-				// Call OnDestroy on scene stop.
-			});
+		// ---- C# Scripts ----
+		{
+			auto view = m_Registry.view<ScriptComponent>();
+			for (auto e : view)
+			{
+				Entity entity = { &m_Registry, e };
+				ScriptEngine::OnUpdate(entity, ts);
+			}
 		}
 
 		// ---- Physics 2D ----
@@ -264,6 +319,8 @@ namespace Moon {
 		auto& tagComp = entity.AddComponent<TagComponent>(name);
 		tagComp.Tag = name.empty() ? "Unnamed Entity" : name;
 
+		m_EntityMap[uuid] = entity;
+
 		return entity;
 	}
 
@@ -285,6 +342,7 @@ namespace Moon {
 	void Scene::DestroyEntity(Entity entity)
 	{
 		m_Registry.destroy(entity);
+		m_EntityMap.erase(entity.GetUUID());
 	}
 
 	void Scene::SetActiveCamera(Entity camera)
@@ -297,6 +355,12 @@ namespace Moon {
 			if (m_ViewportWidth != 0 && m_ViewportHeight != 0)
 				camera.GetComponent<CameraComponent>().Camera->SetViewportSize(m_ViewportWidth, m_ViewportHeight);
 		}
+	}
+
+	Entity Scene::GetEntityByUUID(UUID entityID)
+	{
+		ME_CORE_ASSERT(m_EntityMap.find(entityID) != m_EntityMap.end(), "Entity does not exist!");
+		return { &m_Registry, m_EntityMap.at(entityID) };
 	}
 
 }

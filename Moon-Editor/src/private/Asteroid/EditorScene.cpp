@@ -45,6 +45,7 @@ namespace Asteroid {
 
 		// Copy components (except IDComponent and TagComponent)
 		CopyComponent<TransformComponent>(dstSceneRegistry, m_Registry, enttMap);
+		CopyComponent<ScriptComponent>(dstSceneRegistry, m_Registry, enttMap);
 		CopyComponent<SpriteRendererComponent>(dstSceneRegistry, m_Registry, enttMap);
 		CopyComponent<CircleRendererComponent>(dstSceneRegistry, m_Registry, enttMap);
 		CopyComponent<CameraComponent>(dstSceneRegistry, m_Registry, enttMap);

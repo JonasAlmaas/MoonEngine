@@ -226,6 +226,19 @@ namespace Moon {
 			out << YAML::EndMap; // CameraComponent
 		}
 
+		// -- ScriptComponent --
+		if (entity.HasComponent<ScriptComponent>())
+		{
+			out << YAML::Key << "ScriptComponent";
+			out << YAML::BeginMap; // ScriptComponent
+
+			auto& scriptComponent = entity.GetComponent<ScriptComponent>();
+
+			out << YAML::Key << "ClassName" << YAML::Value << scriptComponent.ClassName;
+
+			out << YAML::EndMap; // ScriptComponent
+		}
+
 		// -- SpriteRendererComponent --
 		if (entity.HasComponent<SpriteRendererComponent>())
 		{
@@ -406,6 +419,13 @@ namespace Moon {
 					cc.Camera->SetOrthographicSize(cameraComponent["Camera"]["OrthographicSize"].as<float>());
 					cc.Camera->SetOrthographicNearClip(cameraComponent["Camera"]["OrthographicNear"].as<float>());
 					cc.Camera->SetOrthographicFarClip(cameraComponent["Camera"]["OrthographicFar"].as<float>());
+				}
+
+				auto scriptComponent = entity["ScriptComponent"];
+				if (scriptComponent)
+				{
+					auto& sc = deserializedEntity.AddComponent<ScriptComponent>();
+					sc.ClassName = scriptComponent["ClassName"].as<std::string>();
 				}
 
 				auto spriteRendererComponent = entity["SpriteRendererComponent"];
