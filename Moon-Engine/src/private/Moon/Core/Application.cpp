@@ -3,6 +3,7 @@
 
 #include "Moon/Core/Renderer.h"
 #include "Moon/Core/Util.h"
+#include "Moon/Scripting/ScriptEngine.h"
 
 
 namespace Moon {
@@ -44,6 +45,7 @@ namespace Moon {
 
 		Util::Init();
 		Renderer::Init();
+		ScriptEngine::Init();
 
 		if (spec.EnableImGui)
 		{
@@ -62,6 +64,7 @@ namespace Moon {
 			delete layer;
 		}
 
+		ScriptEngine::Shutdown();
 		Renderer::Shutdown();
 	}
 
