@@ -1,153 +1,247 @@
 #pragma once
 
 #include "Moon/Core/Util/Math/Math.h"
+#include "Moon/Core/Util/Conversion/Hexadecimal/Hexadecimal.h"
 
 
 namespace Moon {
 
-	/**
-	 * @brief Helps with knowing how to tream values.
-	 */
-	enum class ColorFormat
+	class Color
 	{
-		None = 0,
-		RGBADecimal,		/**< range: 0 to 255 */
-		RGBANormalized,		/**< range: 0 to 1 */
-		RGBAFloat,			/**< HDR */
-	};
+	public:
+		/**
+		 * @brief RGBA.
+		 * Default color is full white.
+		 */
+		Color()
+			: r(1.0f), g(1.0f), b(1.0f), a(1.0f) {}
 
-	struct Color
-	{
-		float r, g, b, a;
-		ColorFormat Format;
-
-		constexpr Color(const Color& other)
-			: r(other.r), g(other.g), b(other.b), a(other.a), Format(other.Format) {}
-
-		constexpr Color()
-			: r(1.0f), g(1.0f), b(1.0f), a(1.0f), Format(ColorFormat::RGBANormalized) {}
-
-		constexpr Color(float _v)
-			: r(_v), g(_v), b(_v), a(1.0f), Format(ColorFormat::RGBANormalized) {}
-
-		constexpr Color(ColorFormat _format, float _v)
-			: r(_v), g(_v), b(_v), a(_format == ColorFormat::RGBADecimal ? 255.0f : 1.0f), Format(_format) {}
-
-		constexpr Color(float _r, float _g, float _b)
-			: r(_r), g(_g), b(_b), a(1.0f), Format(ColorFormat::RGBANormalized) {}
-
-		constexpr Color(ColorFormat _format, float _r, float _g, float _b)
-			: r(_r), g(_g), b(_b), a(_format == ColorFormat::RGBADecimal ? 255.0f : 1.0f), Format(_format) {}
-
-		constexpr Color(float _v, float _a)
-			: r(_v), g(_v), b(_v), a(_a), Format(ColorFormat::RGBANormalized) {}
-
-		constexpr Color(ColorFormat _format, float _v, float _a)
-			: r(_v), g(_v), b(_v), a(_a), Format(_format) {}
-
-		constexpr Color(float _r, float _g, float _b, float _a)
-			: r(_r), g(_g), b(_b), a(_a), Format(ColorFormat::RGBANormalized) {}
-
-		constexpr Color(ColorFormat _format, float _r, float _g, float _b, float _a)
-			: r(_r), g(_g), b(_b), a(_a), Format(_format) {}
-
-		// ---- Operator overrides ----
-
-		bool operator==(const Color& other)
-		{
-			return (Format == other.Format) && (r == other.r) && (g == other.g) && (b == other.b) && (a == other.a);
-		}
-
-		operator glm::vec3 () { return { r, g, b }; }
-		operator const glm::vec3 () const { return { r, g, b }; }
-
-		operator glm::vec4 () { return { r, g, b, a }; }
-		operator const glm::vec4 () const { return { r, g, b, a }; }
-
-		operator ImVec4() const
-		{
-			switch (Format)
-			{
-				case ColorFormat::RGBADecimal:		return { r * DecimalToNormalizedFactor, g * DecimalToNormalizedFactor, b * DecimalToNormalizedFactor, a * DecimalToNormalizedFactor };
-			}
-			return { r, g, b, a };
-		}
-
-		// The same thing as Color::GetValuePtr
-		operator float* () { return &r; }
 
 		/**
-		 * @return A new instance of Color.
+		 * Grayscale float.
+		 *
+		 * @param Scalar value used for color rgb.
 		 */
-		Color Copy() const
-		{
-			return Color(Format, r, g, b, a);
-		}
+		Color(float s)
+			: r(s), g(s), b(s), a(1.0f) {}
 
 		/**
-		 * @brief Converts the color into a 0 to 1 range.
-		 * This only happends if it is not already normalized.
+		 * Grayscale float.
+		 *
+		 * @param Scalar value used for color rgb.
+		 * @param Alpha for color alpha.
 		 */
-		void Normalize()
+		Color(float s, float a)
+			: r(s), g(s), b(s), a(a) {}
+
+		/**
+		 * RGB float.
+		 *
+		 * @param rgb, usaly in the range 0 to 1. (But can be higher.)
+		 */
+		Color(float r, float g, float b)
+			: r(r), g(g), b(b), a(1.0f) {}
+
+		/**
+		 * RGBA float.
+		 *
+		 * @param rgba, usaly in the range 0 to 1. (But can be higher.)
+		 */
+		Color(float r, float g, float b, float a)
+			: r(r), g(g), b(b), a(a) {}
+
+		/**
+		 * Grayscale double (stored as float).
+		 *
+		 * @param Scalar value used for color rgb.
+		 */
+		Color(double s)
+			: r((float)s), g((float)s), b((float)s), a(1.0f) {}
+
+		/**
+		 * Grayscale double (stored as float).
+		 *
+		 * @param Scalar value used for color rgb.
+		 * @param Alpha for color alpha.
+		 */
+		Color(double s, double a)
+			: r((float)s), g((float)s), b((float)s), a((float)a) {}
+
+		/**
+		 * RGB double (stored as float).
+		 *
+		 * @param rgb, usaly in the range 0 to 1. (But can be higher.)
+		 */
+		Color(double r, double g, double b)
+			: r((float)r), g((float)g), b((float)b), a(1.0f) {}
+
+		/**
+		 * RGBA double (stored as float).
+		 *
+		 * @param rgba, usaly in the range 0 to 1. (But can be higher.)
+		 */
+		Color(double r, double g, double b, double a)
+			: r((float)r), g((float)g), b((float)b), a((float)a) {}
+
+		/**
+		 * Grayscale decimal (stored as float).
+		 *
+		 * Value usaly ranges from 0 to 255. (But can be higher.)
+		 * @param Scalar value used for color rgb.
+		 */
+		Color(int s)
+			: r((float)s* DecimalConversionFactor), g((float)s* DecimalConversionFactor), b((float)s* DecimalConversionFactor), a(1.0f) {}
+
+		/**
+		 * Grayscale decimal (stored as float).
+		 *
+		 * Value usaly ranges from 0 to 255. (But can be higher.)
+		 * @param Scalar value used for color rgb.
+		 * @param Alpha for color alpha.
+		 */
+		Color(int s, int a)
+			: r((float)s* DecimalConversionFactor), g((float)s* DecimalConversionFactor), b((float)s* DecimalConversionFactor), a((float)a* DecimalConversionFactor) {}
+
+		/**
+		 * RGB decimal (stored as float).
+		 *
+		 * @param rgb, usaly in the range 0 to 255. (But can be higher.)
+		 */
+		Color(int r, int g, int b)
+			: r((float)r* DecimalConversionFactor), g((float)g* DecimalConversionFactor), b((float)b* DecimalConversionFactor), a(1.0f) {}
+
+		/**
+		 * RGBA decimal (stored as float).
+		 *
+		 * @param rgba, usaly in the range 0 to 255. (But can be higher.)
+		 */
+		Color(int r, int g, int b, int a)
+			: r((float)r* DecimalConversionFactor), g((float)g* DecimalConversionFactor), b((float)b* DecimalConversionFactor), a((float)a* DecimalConversionFactor) {}
+
+		/**
+		 * RGBA decimal (stored as float).
+		 *
+		 * @param rgba as a string
+		 */
+		Color(const std::string& hexValue)
+			: r(1.0f), g(1.0f), b(1.0f), a(1.0f)
 		{
-			switch (Format)
+			ME_CORE_ASSERT(hexValue[0] == '#', "Incorrect declaration of a hex value!");
+
+			switch (hexValue.length())
 			{
-				case ColorFormat::RGBADecimal:
+				// Grayscale ("#ff")
+				case 3:
 				{
-					r = r * DecimalToNormalizedFactor;
-					g = g * DecimalToNormalizedFactor;
-					b = b * DecimalToNormalizedFactor;
-					a = a * DecimalToNormalizedFactor;
+					r = (float)Hex::HexToByte({ hexValue[1], hexValue[2], 0 }) * DecimalConversionFactor;
+					g = r;
+					b = r;
+					a = 1.0f;
+					break;
+				}
+				// Grayscale Alpha ("#ff00")
+				case 5:
+				{
+					r = (float)Hex::HexToByte({ hexValue[1], hexValue[2], 0 }) * DecimalConversionFactor;
+					g = r;
+					b = r;
+					a = (float)Hex::HexToByte({ hexValue[7], hexValue[8], 0 }) * DecimalConversionFactor;
+					break;
+				}
+				// RGB ("#ff00ff")
+				case 7:
+				{
+					r = (float)Hex::HexToByte({ hexValue[1], hexValue[2], 0 }) * DecimalConversionFactor;
+					g = (float)Hex::HexToByte({ hexValue[3], hexValue[4], 0 }) * DecimalConversionFactor;
+					b = (float)Hex::HexToByte({ hexValue[5], hexValue[6], 0 }) * DecimalConversionFactor;
+					a = 1.0f;
+					break;
+				}
+				// RGBA ("#ff00ff00")
+				case 9:
+				{
+					r = (float)Hex::HexToByte({ hexValue[1], hexValue[2], 0 }) * DecimalConversionFactor;
+					g = (float)Hex::HexToByte({ hexValue[3], hexValue[4], 0 }) * DecimalConversionFactor;
+					b = (float)Hex::HexToByte({ hexValue[5], hexValue[6], 0 }) * DecimalConversionFactor;
+					a = (float)Hex::HexToByte({ hexValue[7], hexValue[8], 0 }) * DecimalConversionFactor;
+					break;
 				}
 			}
 		}
 
-		Color Lerp(Color other, float percent) const
-		{
-			float _r = Math::Lerp(r, other.r, percent);
-			float _g = Math::Lerp(g, other.g, percent);
-			float _b = Math::Lerp(b, other.b, percent);
-			float _a = Math::Lerp(a, other.a, percent);
+		Color(const Color& other)
+			: r(other.r), g(other.g), b(other.b), a(other.a) {}
 
-			return Color(Format, _r, _g, _b, _a);
-		}
-
-		// ---- Setters ----
-
+	public:
 		/**
-		 * Sets the color format. This should only have to be used if Color was initialize Color without ColorFormat.
-		 * 
-		 * @param Format which is an enum from ColorFormat
+		 * Gives an interpolated new color based on a factor.
+		 *
+		 * @param Color you want to interpolate with.
+		 * @param interpolation factor.
 		 */
-		void SetColorFormat(ColorFormat _format)
+		Color Lerp(const Color& other, float factor)
 		{
-			Format = _format;
+			return {
+				Math::Lerp(r, other.r, factor),
+				Math::Lerp(g, other.g, factor),
+				Math::Lerp(b, other.b, factor),
+				Math::Lerp(a, other.a, factor)
+			};
 		}
 
-		// ---- Getters ----
-		
-		/*
-		 * @return A pointer to the first value in the struct. In this case the float for Red. 
-		 */
-		inline float* GetValuePtr()
+	public:
+		bool operator==(const Color& other)
+		{
+			return (r == other.r) && (g == other.g) && (b == other.b) && (a == other.a);
+		}
+
+		bool operator!=(const Color& other)
+		{
+			return !(*this == other);
+		}
+
+		// -- Type override --
+
+		operator float* ()
 		{
 			return &r;
 		}
 
-		/**
-		 * @return A normalized copy of the Color.
-		*/
-		Color GetNormalized() const
+		operator glm::vec3()
 		{
-			Color c = this->Copy();
-			c.Normalize();
-			return c;
+			return { r, g, b };
 		}
 
+		operator const glm::vec3() const
+		{
+			return { r, g, b };
+		}
+
+		operator glm::vec4()
+		{
+			return { r, g, b, a };
+		}
+
+		operator const glm::vec4() const
+		{
+			return { r, g, b, a };
+		}
+
+		operator ImVec4() const
+		{
+			return { r, g, b, a };
+		}
+
+		operator std::string() const
+		{
+			return "Color: (r: " + std::to_string(r) + ", g: " + std::to_string(g) + ", b: " + std::to_string(b) + ", a: " + std::to_string(a) + ")";
+		}
+
+	public:
+		float r, g, b, a;
+
 	private:
-		// I multiply by this instead of dividing by 255
-		// to save a microscopical amount of time :)
-		static constexpr float DecimalToNormalizedFactor = 0.003921568627451f;
+		static constexpr float DecimalConversionFactor = 0.003921568627451f;
 
 	};
 
