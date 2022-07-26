@@ -40,6 +40,7 @@ project "Moon-Engine"
         "%{IncludeDir.glm}",
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.ImGuizmo}",
+		"%{IncludeDir.mono}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.VulkanSDK}",
@@ -54,6 +55,8 @@ project "Moon-Engine"
 		"ImGui",
 		"yaml-cpp",
 		"opengl32.lib",
+
+		"%{Library.mono}"
 	}
 
 	filter "files:vendor/ImGuizmo/**.cpp"
@@ -66,6 +69,14 @@ project "Moon-Engine"
         {
             "ME_PLATFORM_WINDOWS"
         }
+
+		links
+		{
+			"%{Library.WinSock}",
+			"%{Library.WinMM}",
+			"%{Library.WinVersion}",
+			"%{Library.Bcrypt}",
+		}
 
     filter "configurations:Debug"
 		defines "ME_DEBUG"
