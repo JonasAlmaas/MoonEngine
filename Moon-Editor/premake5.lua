@@ -8,7 +8,7 @@ project "Moon-Editor"
     objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
     pchheader "aopch.h"
-    pchsource "src/aopch.cpp"
+    pchsource "src/private/aopch.cpp"
 
     files
     {
@@ -18,9 +18,9 @@ project "Moon-Editor"
 
     includedirs
     {
-        "src",
+        "src/public",
 
-        "../Moon-Engine/src",
+        "../Moon-Engine/src/public",
         "../Moon-Engine/vendor/spdlog/include",
 
         "%{IncludeDir.entt}",

@@ -8,7 +8,7 @@ project "Moon-Engine"
     objdir ("%{wks.location}/bin-int/" .. outputdir .. "/%{prj.name}")
 
     pchheader "mepch.h"
-    pchsource "src/mepch.cpp"
+    pchsource "src/private/mepch.cpp"
 
     files
     {
@@ -30,7 +30,7 @@ project "Moon-Engine"
 
     includedirs
     {
-        "src",
+        "src/public",
         "resource",
 
         "%{IncludeDir.Box2D}",
