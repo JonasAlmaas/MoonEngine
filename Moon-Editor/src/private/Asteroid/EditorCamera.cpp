@@ -6,9 +6,18 @@
 
 namespace Asteroid {
 
+	EditorCamera::EditorCamera()
+	{
+		m_Pitch = glm::radians(-45.0f);
+		m_Position = CalculatePosition();
+		UpdateView();
+	}
+
 	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)
 		: PerspectiveCamera(fov, aspectRatio, nearClip, farClip)
 	{
+		m_Position = CalculatePosition();
+		UpdateView();
 	}
 
 	void EditorCamera::OnUpdate(Timestep ts)

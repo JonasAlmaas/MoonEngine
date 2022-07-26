@@ -8,7 +8,7 @@ namespace Asteroid {
 	class EditorCamera : public PerspectiveCamera
 	{
 	public:
-		EditorCamera() = default;
+		EditorCamera();
 		EditorCamera(float fov, float aspectRatio, float nearClip, float farClip);
 
 		virtual ~EditorCamera() = default;
