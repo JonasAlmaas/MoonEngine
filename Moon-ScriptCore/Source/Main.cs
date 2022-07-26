@@ -20,66 +20,67 @@ namespace Moon
 	{
 		public float x, y, z;
 
+		public static Float3 Zero => new Float3(0.0f);
+
+		public Float3(float scalar)
+		{
+			x = scalar;
+			y = scalar;
+			z = scalar;
+		}
+
 		public Float3(float _x, float _y, float _z)
 		{
 			x = _x;
 			y = _y;
 			z = _z;
 		}
+
+		public static Float3 operator+(Float3 a, Float3 b)
+		{
+			return new Float3(a.x + b.x, a.y + b.y, a.z + b.z);
+		}
+
+		public static Float3 operator*(Float3 vector, float scalar)
+		{
+			return new Float3(vector.x * scalar, vector.y * scalar, vector.z * scalar);
+		}
 	}
 
 	public static class InternalCalls
 	{
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		internal extern static void NativeLog(string text, int parameter);
+		internal extern static bool Input_IsKeyPressed(KeyCode keyCode);
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		internal extern static void NativeLog_Float3(ref Float3 parameter);
+		internal extern static void Entity_GetTranslation(ulong entityID, out Float3 translation);
+
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		internal extern static void Entity_SetTranslation(ulong entityID, ref Float3 translation);
 	}
 
 	public class Entity
 	{
+		protected Entity() { ID = 0; }
 
-		public float FloatVar { get; set; }
-
-		public Entity()
+		internal Entity(ulong id)
 		{
-			Console.WriteLine("Main constructor!");
-
-			Log("Native Log", 34251);
-
-			Float3 pos = new Float3(1, 2.5f, 3);
-			Log(pos);
+			ID = id;
 		}
 
-		public void PrintMessage()
-		{
-			Console.WriteLine("Hello World from C#!");
-		}
+		public readonly ulong ID;
 
-		public void PrintInt(int value)
+		public Float3 Translation
 		{
-			Console.WriteLine($"C# says: {value}");
-		}
-
-		public void PrintInts(int value1, int value2)
-		{
-			Console.WriteLine($"C# says: {value1} and {value2}");
-		}
-
-		public void PrintCustomMessage(string message)
-		{
-			Console.WriteLine($"C# says: {message}");
-		}
-
-		private void Log(string text, int parameter)
-		{
-			InternalCalls.NativeLog(text, parameter);
-		}
-
-		private void Log(Float3 parameter)
-		{
-			InternalCalls.NativeLog_Float3(ref parameter);
+			get
+			{
+				InternalCalls.Entity_GetTranslation(ID, out Float3 translation);
+				return translation;
+			}
+			set
+			{
+				InternalCalls.Entity_SetTranslation(ID, ref value);
+			}
 		}
 
 	}
