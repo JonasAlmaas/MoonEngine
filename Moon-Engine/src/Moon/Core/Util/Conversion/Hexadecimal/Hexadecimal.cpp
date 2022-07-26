@@ -21,22 +21,22 @@ namespace Moon {
 	{
 		switch (hex)
 		{
-			case 48:	return 0;
-			case 49:	return 1;
-			case 50:	return 2;
-			case 51:	return 3;
-			case 52:	return 4;
-			case 53:	return 5;
-			case 54:	return 6;
-			case 55:	return 7;
-			case 56:	return 8;
-			case 57:	return 9;
-			case 97:	return 10;
-			case 98:	return 11;
-			case 99:	return 12;
-			case 100:	return 13;
-			case 101:	return 14;
-			case 102:	return 15;
+			case 48:				return 0;
+			case 49:				return 1;
+			case 50:				return 2;
+			case 51:				return 3;
+			case 52:				return 4;
+			case 53:				return 5;
+			case 54:				return 6;
+			case 55:				return 7;
+			case 56:				return 8;
+			case 57:				return 9;
+			case 65: case 97:		return 10; // A | a
+			case 66: case 98:		return 11; // B | b
+			case 67: case 99:		return 12; // C | c
+			case 68: case 100:		return 13; // D | d
+			case 69: case 101:		return 14; // E | e
+			case 70: case 102:		return 15; // F | f
 		}
 
 		ME_CORE_ASSERT(false, "Value is not recoginces as a hexadecimal value!");
