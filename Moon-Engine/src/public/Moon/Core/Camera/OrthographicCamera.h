@@ -10,6 +10,7 @@ namespace Moon {
 	{
 	public:
 		OrthographicCamera() = default;
+		OrthographicCamera(float size);
 		OrthographicCamera(float size, float aspectRatio);
 		OrthographicCamera(float left, float right, float bottom, float top);
 

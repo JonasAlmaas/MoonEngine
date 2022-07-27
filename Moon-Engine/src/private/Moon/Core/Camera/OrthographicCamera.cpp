@@ -4,6 +4,12 @@
 
 namespace Moon {
 
+	OrthographicCamera::OrthographicCamera(float size)
+		: OrthographicRenderCamera(size, 1.0f)
+	{
+		UpdateView();
+	}
+
 	OrthographicCamera::OrthographicCamera(float size, float aspectRatio)
 		: OrthographicRenderCamera(size, aspectRatio)
 	{
