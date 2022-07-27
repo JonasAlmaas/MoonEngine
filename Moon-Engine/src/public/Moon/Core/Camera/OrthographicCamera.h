@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Moon/GameFramework/Actor.h"
+#include "Moon/Core/Actor.h"
 #include "Moon/Core/Renderer/Camera/OrthographicRenderCamera.h"
 
 
