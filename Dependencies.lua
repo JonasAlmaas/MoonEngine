@@ -5,6 +5,7 @@ VULKAN_SDK = os.getenv("VULKAN_SDK")
 IncludeDir = {}
 IncludeDir["Box2D"] = "%{wks.location}/Moon-Engine/vendor/Box2D/include"
 IncludeDir["entt"] = "%{wks.location}/Moon-Engine/vendor/entt/include"
+IncludeDir["FastNoise"] = "%{wks.location}/Moon-Engine/vendor/FastNoise"
 IncludeDir["Glad"] = "%{wks.location}/Moon-Engine/vendor/Glad/include"
 IncludeDir["GLFW"] = "%{wks.location}/Moon-Engine/vendor/GLFW/include"
 IncludeDir["glm"] = "%{wks.location}/Moon-Engine/vendor/glm"

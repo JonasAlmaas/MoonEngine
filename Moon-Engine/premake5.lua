@@ -15,6 +15,9 @@ project "Moon-Engine"
         "src/**.h",
         "src/**.cpp",
 
+		"vendor/FastNoise/**.h",
+		"vendor/FastNoise/**.cpp",
+
         "vendor/ImGuizmo/ImGuizmo.h",
         "vendor/ImGuizmo/ImGuizmo.cpp",
 
@@ -35,6 +38,7 @@ project "Moon-Engine"
 
         "%{IncludeDir.Box2D}",
         "%{IncludeDir.entt}",
+		"%{IncludeDir.FastNoise}",
         "%{IncludeDir.Glad}",
         "%{IncludeDir.GLFW}",
         "%{IncludeDir.glm}",
