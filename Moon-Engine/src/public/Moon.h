@@ -25,6 +25,11 @@
 	#include "Moon/Core/Input/MouseCode.h"
 	#pragma endregion
 
+	#pragma region Math
+	#include "Moon/Core/Math.h"
+	#include "Moon/Core/Math/Noise.h"
+	#pragma endregion
+
 	#pragma region Renderer
 		#pragma region Buffer
 		#include "Moon/Core/Renderer/Buffer/Framebuffer.h"
@@ -54,7 +59,6 @@
 	#include "Moon/Core/Util.h"
 	#include "Moon/Core/Util/FileDialog.h"
 	#include "Moon/Core/Util/Timer.h"
-	#include "Moon/Core/Math.h"
 	#include "Moon/Core/Util/Random.h"
 	#include "Moon/Core/Util/Conversion/Hexadecimal.h"
 	#pragma endregion
