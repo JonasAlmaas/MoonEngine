@@ -451,6 +451,21 @@ namespace Moon {
 		Uber_DrawLine(p0, p1, color);
 	}
 
+	void Renderer2D::DrawLine(const glm::vec2& p0, const glm::vec2& p1, const Color& color)
+	{
+		Uber_DrawLine({ p0, 0.0f }, { p1, 0.0f }, color);
+	}
+
+	void Renderer2D::DrawLine(const glm::vec3& p0, const glm::vec3& p1)
+	{
+		Uber_DrawLine(p0, p1, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawLine(const glm::vec2& p0, const glm::vec2& p1)
+	{
+		Uber_DrawLine({ p0, 0.0f }, { p1, 0.0f }, s_Data.WhiteColor);
+	}
+
 	float Renderer2D::GetLineWidth()
 	{
 		return s_Data.LineWidth;

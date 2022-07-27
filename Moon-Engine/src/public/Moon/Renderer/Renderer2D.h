@@ -99,6 +99,10 @@ namespace Moon {
 
 		// -- Line --
 		static void DrawLine(const glm::vec3& p0, const glm::vec3& p1, const Color& color);
+		static void DrawLine(const glm::vec2& p0, const glm::vec2& p1, const Color& color);
+
+		static void DrawLine(const glm::vec3& p0, const glm::vec3& p1);
+		static void DrawLine(const glm::vec2& p0, const glm::vec2& p1);
 
 		static float GetLineWidth();
 		static void SetLineWidth(float width);
