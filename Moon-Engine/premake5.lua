@@ -60,7 +60,7 @@ project "Moon-Engine"
 		"opengl32.lib",
 	}
 
-	filter "files:vendor/ImGuizmo/**.cpp"
+	filter "files:vendor/ImGuizmo/**.cpp or files:vendor/FastNoise/**.cpp"
 	flags { "NoPCH" }
 
     filter "system:windows"
