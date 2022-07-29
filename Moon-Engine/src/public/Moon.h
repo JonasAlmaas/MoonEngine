@@ -73,6 +73,10 @@
 	#pragma endregion
 #pragma endregion
 
+#pragma region Asset
+#include "Moon/Asset.h"
+#pragma endregion
+
 #pragma region Debug
 #include "Moon/Debug/Instrumentor.h"
 #pragma endregion
