@@ -6,11 +6,15 @@ namespace Moon {
 
 	bool Ray::IntersectsAABB(const AABB& aabb, float& t) const
 	{
+		// https://gamedev.stackexchange.com/questions/18436/most-efficient-aabb-vs-ray-collision-algorithms
+
 		glm::vec3 dirfrac;
+
 		// r.dir is unit direction vector of ray
 		dirfrac.x = 1.0f / m_Direction.x;
 		dirfrac.y = 1.0f / m_Direction.y;
 		dirfrac.z = 1.0f / m_Direction.z;
+
 		// lb is the corner of AABB with minimal coordinates - left bottom, rt is maximal corner
 		// r.org is origin of ray
 		const glm::vec3& lb = aabb.Min;
@@ -25,14 +29,14 @@ namespace Moon {
 		float tmin = glm::max(glm::max(glm::min(t1, t2), glm::min(t3, t4)), glm::min(t5, t6));
 		float tmax = glm::min(glm::min(glm::max(t1, t2), glm::max(t3, t4)), glm::max(t5, t6));
 
-		// if tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
+		// If tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
 		if (tmax < 0)
 		{
 			t = tmax;
 			return false;
 		}
 
-		// if tmin > tmax, ray doesn't intersect AABB
+		// If tmin > tmax, ray doesn't intersect AABB
 		if (tmin > tmax)
 		{
 			t = tmax;

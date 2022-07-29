@@ -19,7 +19,7 @@ namespace Moon {
 
 		/**
 		 * @param Axis Aligned Bounding Box (AABB).
-		 * @param t (Time / Distance).
+		 * @param t distance to intersection.
 		 *
 		 * @return Whether the ray hit or not.
 		 */
@@ -27,6 +27,7 @@ namespace Moon {
 
 		/**
 		 * @param 3 positions forming a triangle.
+		 * @param t distance to intersection.
 		 * 
 		 * @return Whether the ray hit or not.
 		 */
