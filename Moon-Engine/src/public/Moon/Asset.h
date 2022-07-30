@@ -11,6 +11,8 @@ namespace Moon {
 	class Asset
 	{
 	public:
+		Asset() { m_AssetHandle = AssetHandle(); }
+
 		virtual ~Asset() = default;
 
 		bool IsValid() const { return ((m_Flags & (uint16_t)AssetFlag::Missing) | (m_Flags & (uint16_t)AssetFlag::Invalid)) == 0; }
@@ -27,15 +29,8 @@ namespace Moon {
 		}
 
 	public:
-		virtual bool operator==(const Asset& other) const
-		{
-			return m_AssetHandle == other.m_AssetHandle;
-		}
-
-		virtual bool operator!=(const Asset& other) const
-		{
-			return !(*this == other);
-		}
+		virtual bool operator==(const Asset& other) const { return m_AssetHandle == other.m_AssetHandle; }
+		virtual bool operator!=(const Asset& other) const { return !(*this == other); }
 
 	protected:
 		AssetHandle m_AssetHandle = 0;
