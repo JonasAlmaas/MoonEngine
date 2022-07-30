@@ -107,9 +107,9 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		s_Data.CircleShader = Shader::Create("Content/Shaders/Renderer2D_Circle.glsl");
-		s_Data.LineShader = Shader::Create("Content/Shaders/Renderer2D_Line.glsl");
-		s_Data.SpriteShader = Shader::Create("Content/Shaders/Renderer2D_Sprite.glsl");
+		s_Data.CircleShader = Shader::Create("Content/Shaders/Renderer2D/Renderer2D_Circle.glsl");
+		s_Data.LineShader = Shader::Create("Content/Shaders/Renderer2D/Renderer2D_Line.glsl");
+		s_Data.SpriteShader = Shader::Create("Content/Shaders/Renderer2D/Renderer2D_Sprite.glsl");
 
 		int32_t samplers[Renderer2DData::MaxTextureSlots];
 		for (uint32_t i = 0; i < Renderer2DData::MaxTextureSlots; i++)
