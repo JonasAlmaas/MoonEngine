@@ -14,10 +14,10 @@ namespace Moon {
 	{
 		None = 0,
 		Mesh,
-		StaticMesh,
-		MeshSource,
-		Material,
-		Texture,
+		//StaticMesh,
+		//MeshSource,
+		//Material,
+		//Texture,
 	};
 
 	namespace Utils {
@@ -26,10 +26,10 @@ namespace Moon {
 		{
 			if (assetType == "None")				return AssetType::None;
 			if (assetType == "Mesh")				return AssetType::Mesh;
-			if (assetType == "StaticMesh")			return AssetType::StaticMesh;
-			if (assetType == "MeshSource")			return AssetType::MeshSource;
-			if (assetType == "Material")			return AssetType::Material;
-			if (assetType == "Texture")				return AssetType::Texture;
+			//if (assetType == "StaticMesh")			return AssetType::StaticMesh;
+			//if (assetType == "MeshSource")			return AssetType::MeshSource;
+			//if (assetType == "Material")			return AssetType::Material;
+			//if (assetType == "Texture")				return AssetType::Texture;
 
 			ME_CORE_ASSERT(false, "Unknown Asset Type");
 			return AssetType::None;
@@ -41,10 +41,10 @@ namespace Moon {
 			{
 				case AssetType::None:					return "None";
 				case AssetType::Mesh:					return "Mesh";
-				case AssetType::StaticMesh:				return "StaticMesh";
-				case AssetType::MeshSource:				return "MeshSource";
-				case AssetType::Material:				return "Material";
-				case AssetType::Texture:				return "Texture";
+				//case AssetType::StaticMesh:				return "StaticMesh";
+				//case AssetType::MeshSource:				return "MeshSource";
+				//case AssetType::Material:				return "Material";
+				//case AssetType::Texture:				return "Texture";
 			}
 
 			ME_CORE_ASSERT(false, "Unknown Asset Type");
