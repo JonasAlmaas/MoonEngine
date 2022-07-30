@@ -14,6 +14,10 @@ namespace Moon {
 
 		std::string ToHexString();
 
+	public:
+		virtual bool operator==(const UUID& other) const { return m_UUID == other.m_UUID; }
+		virtual bool operator!=(const UUID& other) const { return !(*this == other); }
+
 		operator uint64_t() const { return m_UUID; }
 
 	private:
