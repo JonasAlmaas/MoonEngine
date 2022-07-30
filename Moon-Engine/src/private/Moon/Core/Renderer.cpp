@@ -5,6 +5,7 @@
 
 
 namespace Moon {
+	// TODO: Rewrite everything here, this is very outdated!
 
 	Ref<Renderer::SceneData> Renderer::m_SceneData = CreateRef<Renderer::SceneData>();
 	
@@ -28,11 +29,11 @@ namespace Moon {
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
-	void Renderer::BeginScene(RenderCamera& camera)
+	void Renderer::BeginScene(const Ref<RenderCamera>& renderCamera)
 	{
 		ME_PROFILE_FUNCTION();
 
-		m_SceneData->ViewProjectionMatrix = camera.GetViewProjection();
+		m_SceneData->ViewProjectionMatrix = renderCamera->GetViewProjection();
 	}
 	
 	void Renderer::EndScene()
@@ -45,8 +46,7 @@ namespace Moon {
 		ME_PROFILE_RENDERER_FUNCTION()
 
 		shader->Bind();
-		shader->SetMat4("u_ViewProjection", m_SceneData->ViewProjectionMatrix);
-		shader->SetMat4("u_Transform", transform);
+		//shader->SetMat4("u_Transform", transform);
 
 		vertexArray->Bind();
 		RenderCommand::DrawIndexed(vertexArray);
