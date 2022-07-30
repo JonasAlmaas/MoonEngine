@@ -27,6 +27,7 @@ namespace Moon {
 			return CreateRef<OBJMesh>(filepath);
 
 		ME_CORE_ASSERT(false, "Unknown file extension!");
+		return nullptr;
 	}
 
 	OBJMesh::OBJMesh(const std::filesystem::path& filepath)
