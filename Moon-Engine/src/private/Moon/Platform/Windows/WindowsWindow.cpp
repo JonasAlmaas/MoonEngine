@@ -44,7 +44,6 @@ namespace Moon {
 			glfwSetErrorCallback(GLFWErrorCallback);
 		}
 
-
 		if (!m_Specification.Decorated)
 		{
 			glfwWindowHint(GLFW_DECORATED, false);
