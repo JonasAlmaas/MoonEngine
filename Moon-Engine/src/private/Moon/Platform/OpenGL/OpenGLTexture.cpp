@@ -1,6 +1,7 @@
 #include "mepch.h"
 #include "Moon/Platform/OpenGL/OpenGLTexture.h"
 
+#include <glad/glad.h>
 #include <stb_image.h>
 
 

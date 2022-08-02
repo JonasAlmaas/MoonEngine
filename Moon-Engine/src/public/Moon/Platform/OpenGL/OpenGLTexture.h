@@ -2,8 +2,6 @@
 
 #include "Moon/Core/Renderer/Texture.h"
 
-#include <glad/glad.h>
-
 
 namespace Moon {
 
@@ -44,7 +42,7 @@ namespace Moon {
 		bool m_IsLoaded = false;
 
 		uint32_t m_Width, m_Height;
-		GLenum m_InternalFormat, m_DataFormat;
+		unsigned int m_InternalFormat, m_DataFormat;
 
 	};
 
