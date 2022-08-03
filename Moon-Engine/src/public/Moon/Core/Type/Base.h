@@ -29,4 +29,3 @@ namespace Moon {
 }
 
 #include "Moon/Core/Type/Timestep.h"
-#include "Moon/Core/Type/Color.h"

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Moon/Scene/Component/IDComponent.h"
-#include "Moon/Scene/Component/TagComponent.h"
+#include "Moon/Scene/Components.h"
 
 #include <entt.hpp>
 

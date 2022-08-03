@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Moon/Core/Renderer/RendererAPI.h"
+#include "Moon/Core/Type/Color.h"
 
 
 namespace Moon {

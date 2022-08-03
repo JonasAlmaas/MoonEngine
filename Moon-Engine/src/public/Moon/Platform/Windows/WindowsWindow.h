@@ -3,6 +3,10 @@
 #include "Moon/Core/Window.h"
 #include "Moon/Core/Renderer/GraphicsContext.h"
 
+#include "Moon/Core/Event/KeyEvent.h"
+#include "Moon/Core/Event/MouseEvent.h"
+#include "Moon/Core/Event/WindowEvent.h"
+
 struct GLFWwindow;
 
 

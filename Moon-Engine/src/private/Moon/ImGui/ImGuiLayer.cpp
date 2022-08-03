@@ -2,6 +2,7 @@
 #include "Moon/ImGui/ImGuiLayer.h"
 
 #include "Moon/Core/Application.h"
+#include "Moon/Core/Type/Color.h"
 
 // Emedded font
 #include "Font/Roboto/Roboto-Bold.embed"

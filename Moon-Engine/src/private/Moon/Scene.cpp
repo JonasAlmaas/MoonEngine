@@ -3,7 +3,7 @@
 
 #include "Moon/Core/Renderer/RenderCommand.h"
 #include "Moon/Renderer/Renderer2D.h"
-#include "Moon/Scene/Component/SceneComponents.h"
+#include "Moon/Scene/Components.h"
 #include "Moon/Scene/Entity/ScriptableEntity.h"
 
 #include <box2d/b2_world.h>
@@ -28,11 +28,20 @@ namespace Moon {
 		return b2_staticBody;
 	}
 
-	template<typename Component>
+	template<typename... Component>
 	static void CopyComponentIfExists(Entity dst, Entity src)
 	{
-		if (src.HasComponent<Component>())
-			dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+		([&]()
+		{
+			if (src.HasComponent<Component>())
+				dst.AddOrReplaceComponent<Component>(src.GetComponent<Component>());
+		}(), ...);
+	}
+
+	template<typename... Component>
+	static void CopyComponentIfExists(ComponentGroup<Component...>, Entity dst, Entity src)
+	{
+		CopyComponentIfExists<Component...>(dst, src);
 	}
 
 	Scene::~Scene()
@@ -272,14 +281,7 @@ namespace Moon {
 		std::string name = entity.GetName();
 		Entity newEntity = CreateEntity(name);
 
-		CopyComponentIfExists<TransformComponent>(newEntity, entity);
-		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
-		CopyComponentIfExists<CircleRendererComponent>(newEntity, entity);
-		CopyComponentIfExists<CameraComponent>(newEntity, entity);
-		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
-		CopyComponentIfExists<Rigidbody2DComponent>(newEntity, entity);
-		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
-		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
+		CopyComponentIfExists(AllComponents{}, newEntity, entity);
 	}
 
 	void Scene::DestroyEntity(Entity entity)

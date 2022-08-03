@@ -1,6 +1,8 @@
 #include "mepch.h"
 #include "Moon/Platform/OpenGL/OpenGLShader.h"
 
+#include "Moon/Core/Util/Timer.h"
+
 #include <shaderc/shaderc.hpp>
 
 #include <spirv_cross/spirv_cross.hpp>
