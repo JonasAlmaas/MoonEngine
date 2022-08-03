@@ -6,19 +6,28 @@
 
 namespace Asteroid {
 
-	template<typename Component>
+	template<typename... Component>
 	static void CopyComponent(entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
 	{
-		auto view = src.view<Component>();
-		for (auto e : view)
+		([&]()
 		{
-			UUID uuid = src.get<IDComponent>(e).ID;
-			ME_CORE_ASSERT(enttMap.find(uuid) != enttMap.end());
-			entt::entity dstEnttID = enttMap.at(uuid);
+			auto view = src.view<Component>();
+			for (auto e : view)
+			{
+				UUID uuid = src.get<IDComponent>(e).ID;
+				ME_CORE_ASSERT(enttMap.find(uuid) != enttMap.end());
+				entt::entity dstEnttID = enttMap.at(uuid);
 
-			auto& component = src.get<Component>(e);
-			dst.emplace_or_replace<Component>(dstEnttID, component);
-		}
+				auto& component = src.get<Component>(e);
+				dst.emplace_or_replace<Component>(dstEnttID, component);
+			}
+		}(), ...);
+	}
+
+	template<typename... Component>
+	static void CopyComponent(ComponentGroup<Component...>, entt::registry& dst, entt::registry& src, const std::unordered_map<UUID, entt::entity>& enttMap)
+	{
+		CopyComponent<Component...>(dst, src, enttMap);
 	}
 
 	Ref<EditorScene> EditorScene::Copy()
@@ -43,16 +52,7 @@ namespace Asteroid {
 			enttMap[uuid] = (entt::entity)newEntity;
 		}
 
-		// Copy components (except IDComponent and TagComponent)
-		CopyComponent<TransformComponent>(dstSceneRegistry, m_Registry, enttMap);
-		CopyComponent<ScriptComponent>(dstSceneRegistry, m_Registry, enttMap);
-		CopyComponent<SpriteRendererComponent>(dstSceneRegistry, m_Registry, enttMap);
-		CopyComponent<CircleRendererComponent>(dstSceneRegistry, m_Registry, enttMap);
-		CopyComponent<CameraComponent>(dstSceneRegistry, m_Registry, enttMap);
-		CopyComponent<NativeScriptComponent>(dstSceneRegistry, m_Registry, enttMap);
-		CopyComponent<Rigidbody2DComponent>(dstSceneRegistry, m_Registry, enttMap);
-		CopyComponent<BoxCollider2DComponent>(dstSceneRegistry, m_Registry, enttMap);
-		CopyComponent<CircleCollider2DComponent>(dstSceneRegistry, m_Registry, enttMap);
+		CopyComponent(AllComponents{}, dstSceneRegistry, m_Registry, enttMap);
 
 		return newScene;
 	}
