@@ -37,6 +37,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/quaternion.hpp>
+#include "glm/gtx/string_cast.hpp"
 
 #include <imgui.h>
 #include <imgui_internal.h>
