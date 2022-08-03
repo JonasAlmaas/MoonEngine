@@ -12,7 +12,6 @@ namespace Moon {
 	{
 	public:
 		Asset() { m_AssetHandle = AssetHandle(); }
-
 		virtual ~Asset() = default;
 
 		bool IsValid() const { return ((m_Flags & (uint16_t)AssetFlag::Missing) | (m_Flags & (uint16_t)AssetFlag::Invalid)) == 0; }

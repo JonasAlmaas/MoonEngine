@@ -13,28 +13,22 @@ namespace Moon {
 		glm::vec2 UV;
 	};
 
-	class Mesh : public Asset
+	class MeshAsset : public Asset
 	{
 	public:
-		virtual ~Mesh() = default;
+		MeshAsset() = default;
+		virtual ~MeshAsset() = default;
 
 		Ref<VertexArray> GetVertexArray() const { return m_VertexArray; }
 
-		virtual AssetType GetAssetType() { return AssetType::Mesh; }
-
-		static Ref<Mesh> Create(const std::filesystem::path& filepath);
+		virtual AssetType GetAssetType() override { return AssetType::Mesh; }
 
 	protected:
 		std::filesystem::path m_Filepath;
 		Ref<VertexArray> m_VertexArray;
 
-	};
-
-	class OBJMesh : public Mesh
-	{
-	public:
-		OBJMesh(const std::filesystem::path& filepath);
-		virtual ~OBJMesh() {}
+	private:
+		friend Ref<MeshAsset> MeshFromObj(const std::filesystem::path&);
 
 	};
 

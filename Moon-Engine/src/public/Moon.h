@@ -71,8 +71,7 @@
 #pragma endregion
 
 #pragma region Asset
-#include "Moon/Asset.h"
-#include "Moon/Asset/Mesh.h"
+#include "Moon/Asset/AssetImporter.h"
 #pragma endregion
 
 #pragma region Debug
