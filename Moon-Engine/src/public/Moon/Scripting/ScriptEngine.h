@@ -1,6 +1,6 @@
 #pragma once
 
-#include  "Moon/Scene.h"
+#include "Moon/Scene.h"
 
 
 extern "C" {
@@ -8,6 +8,7 @@ extern "C" {
 	typedef struct _MonoObject MonoObject;
 	typedef struct _MonoMethod MonoMethod;
 	typedef struct _MonoAssembly MonoAssembly;
+	typedef struct _MonoImage MonoImage;
 }
 
 namespace Moon {
@@ -71,6 +72,8 @@ namespace Moon {
 		static Scene* GetSceneContext();
 		static std::unordered_map<std::string, Ref<ScriptClass>> GetEntityClasses();
 
+		static MonoImage* GetCoreAssemblyImage();
+
 	private:
 		static void InitMono();
 		static void ShutdownMono();
@@ -79,6 +82,7 @@ namespace Moon {
 		static void LoadAssemblyClasses(MonoAssembly* assembly);
 
 		friend class ScriptClass;
+		friend class ScriptGlue;
 
 	};
 

@@ -1,7 +1,8 @@
 #include "mepch.h"
 #include "Moon/Scripting/ScriptEngine.h"
 
-#include "Moon/Scene/Component/ScriptComponent.h"
+#include "Moon/Core/Base.h"
+#include "Moon/Scene/Components.h"
 #include "Moon/Scripting/ScriptGlue.h"
 
 #include <mono/jit/jit.h>
@@ -119,6 +120,7 @@ namespace Moon {
 		LoadAssembly("Resources/Scripts/Moon-ScriptCore.dll");
 		LoadAssemblyClasses(s_Data->CoreAssembly);
 
+		ScriptGlue::RegisterComponents();
 		ScriptGlue::RegisterFunctions();
 
 		s_Data->EntityClass = ScriptClass("Moon", "Entity");
@@ -252,6 +254,11 @@ namespace Moon {
 		return s_Data->EntityClasses;
 	}
 
+	MonoImage* ScriptEngine::GetCoreAssemblyImage()
+	{
+		return s_Data->CoreAssemblyImage;
+	}
+
 	void ScriptEngine::LoadAssemblyClasses(MonoAssembly* assembly)
 	{
 		s_Data->EntityClasses.clear();
@@ -337,18 +344,23 @@ namespace Moon {
 
 	void ScriptInstance::InvokeOnCreate()
 	{
-		m_ScriptClass->InvokeMethod(m_Instance, m_OnCreateMethod);
+		if (m_OnCreateMethod)
+			m_ScriptClass->InvokeMethod(m_Instance, m_OnCreateMethod);
 	}
 
 	void ScriptInstance::InvokeOnUpdate(Timestep ts)
 	{
-		void* param = &ts;
-		m_ScriptClass->InvokeMethod(m_Instance, m_OnUpdateMethod, &param);
+		if (m_OnUpdateMethod)
+		{
+			void* param = &ts;
+			m_ScriptClass->InvokeMethod(m_Instance, m_OnUpdateMethod, &param);
+		}
 	}
 
 	void ScriptInstance::InvokeOnDestroy()
 	{
-		m_ScriptClass->InvokeMethod(m_Instance, m_OnDestroyMethod);
+		if (m_OnDestroyMethod)
+			m_ScriptClass->InvokeMethod(m_Instance, m_OnDestroyMethod);
 	}
 
 }
