@@ -23,7 +23,7 @@ namespace Moon {
 		inline bool IsMinimized() const { return m_Minimized; }
 
 		EVENT_CLASS_TYPE(WindowMinimize)
-			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
 	private:
 		bool m_Minimized;
@@ -46,7 +46,7 @@ namespace Moon {
 		}
 
 		EVENT_CLASS_TYPE(WindowResize)
-			EVENT_CLASS_CATEGORY(EventCategoryApplication)
+		EVENT_CLASS_CATEGORY(EventCategoryApplication)
 
 	private:
 		unsigned int m_Width, m_Height;

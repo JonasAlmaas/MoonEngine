@@ -3,8 +3,7 @@
 #include "Moon/Core/Renderer/RenderCamera.h"
 #include "Moon/Core/Renderer/Texture.h"
 #include "Moon/Renderer/SubTexture2D.h"
-#include "Moon/Scene/Component/Renderer/CircleRendererComponent.h"
-#include "Moon/Scene/Component/Renderer/SpriteRendererComponent.h"
+#include "Moon/Scene/Components.h"
 
 
 namespace Moon {

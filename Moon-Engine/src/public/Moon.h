@@ -35,18 +35,15 @@
 
 		#include "Moon/Core/Renderer.h"
 		#include "Moon/Core/Renderer/RenderCommand.h"
-
-		#pragma region Shader
 		#include "Moon/Core/Renderer/Shader.h"
-		#include "Moon/Core/Renderer/Shader/ShaderLibrary.h"
-		#pragma endregion
 
 		#include "Moon/Core/Renderer/Texture.h"
 		#include "Moon/Core/Renderer/VertexArray.h"
 	#pragma endregion
 
 	#pragma region Type
-	#include "Moon/Core/Types.h"
+	#include "Moon/Core/Type/Base.h"
+	#include "Moon/Core/Type/Color.h"
 	#include "Moon/Core/Type/UUID.h"
 	#pragma endregion
 
@@ -74,12 +71,13 @@
 
 #pragma region Renderer
 #include "Moon/Renderer/Renderer2D.h"
+#include "Moon/Renderer/ShaderLibrary.h"
 #include "Moon/Renderer/SubTexture2D.h"
 #pragma endregion
 
 #pragma region Scene
 #include "Moon/Scene.h"
-#include "Moon/Scene/Component/SceneComponents.h"
+#include "Moon/Scene/Components.h"
 #include "Moon/Scene/Entity.h"
 #include "Moon/Scene/Entity/ScriptableEntity.h"
 #pragma endregion

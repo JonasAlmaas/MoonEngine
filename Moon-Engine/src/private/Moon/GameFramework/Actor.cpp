@@ -1,6 +1,8 @@
 #include "mepch.h"
 #include "Moon/GameFramework/Actor.h"
 
+#include "Moon/Core/Math.h"
+
 
 namespace Moon {
 	

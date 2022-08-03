@@ -3,7 +3,7 @@
 
 #include "Moon/Core/Renderer/RenderCommand.h"
 #include "Moon/Renderer/Renderer2D.h"
-#include "Moon/Scene/Component/SceneComponents.h"
+#include "Moon/Scene/Components.h"
 #include "Moon/Scene/Entity/ScriptableEntity.h"
 #include "Moon/Scripting/ScriptEngine.h"
 

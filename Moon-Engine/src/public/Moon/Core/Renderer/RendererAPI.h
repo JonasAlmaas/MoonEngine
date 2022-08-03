@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Moon/Core/Renderer/VertexArray.h"
+#include "Moon/Core/Type/Color.h"
 
 
 namespace Moon {

@@ -1,7 +1,7 @@
 #include "mepch.h"
 #include "Moon/Scene/SceneSerializer.h"
 
-#include "Moon/Scene/Component/SceneComponents.h"
+#include "Moon/Scene/Components.h"
 #include "Moon/Scene/Entity.h"
 
 #include <yaml-cpp/yaml.h>
