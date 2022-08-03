@@ -8,18 +8,24 @@ namespace Sandbox
 
 	public class Player : Entity
 	{
+		private TransformComponent m_Transform;
+		private Rigidbody2DComponent m_Rigidbody;
 
 		void OnCreate()
 		{
 			Console.WriteLine($"Player::OnCreate - {ID}");
+
+			// Should check if we have the component before getting it
+			m_Transform = GetComponent<TransformComponent>();
+			m_Rigidbody = GetComponent<Rigidbody2DComponent>();
 		}
 
 		void OnUpdate(float ts)
 		{
 			Console.WriteLine($"Player::OnUpdate: {ts}");
 
-			float speed = 5.0f;
-			Float3 velocity = new Float3();
+			float speed = 0.1f;
+			Float3 velocity = Float3.Zero;
 
 			if (Input.IsKeyPressed(KeyCode.W))
 				velocity.y = 1.0f;
@@ -33,9 +39,7 @@ namespace Sandbox
 
 			velocity *= speed;
 
-			Float3 translation = Translation;
-			translation += velocity * ts;
-			Translation = translation;
+			m_Rigidbody.ApplyLinearImpulse(velocity.xy, true);
 		}
 
 		void OnDestroy()
