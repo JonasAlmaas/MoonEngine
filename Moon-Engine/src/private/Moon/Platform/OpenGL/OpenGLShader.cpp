@@ -130,7 +130,7 @@ namespace Moon {
 		glUseProgram(m_RendererID);
 	}
 
-	void OpenGLShader::UnBind() const
+	void OpenGLShader::Unbind() const
 	{
 		ME_PROFILE_FUNCTION();
 

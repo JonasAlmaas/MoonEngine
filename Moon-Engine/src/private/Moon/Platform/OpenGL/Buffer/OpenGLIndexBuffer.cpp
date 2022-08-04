@@ -31,7 +31,7 @@ namespace Moon {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_RendererID);
 	}
 
-	void OpenGLIndexBuffer::UnBind() const
+	void OpenGLIndexBuffer::Unbind() const
 	{
 		ME_PROFILE_FUNCTION();
 

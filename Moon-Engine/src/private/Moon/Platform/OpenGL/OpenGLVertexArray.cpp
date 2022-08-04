@@ -48,7 +48,7 @@ namespace Moon {
 		glBindVertexArray(m_RendererID);
 	}
 
-	void OpenGLVertexArray::UnBind() const
+	void OpenGLVertexArray::Unbind() const
 	{
 		ME_PROFILE_FUNCTION();
 

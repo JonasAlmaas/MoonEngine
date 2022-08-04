@@ -38,7 +38,7 @@ namespace Moon {
 		glBindBuffer(GL_ARRAY_BUFFER, m_RendererID);
 	}
 
-	void OpenGLVertexBuffer::UnBind() const
+	void OpenGLVertexBuffer::Unbind() const
 	{
 		ME_PROFILE_FUNCTION();
 

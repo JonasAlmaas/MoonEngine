@@ -15,7 +15,7 @@ namespace Moon {
 		virtual ~OpenGLShader();
 
 		virtual void Bind() const override;
-		virtual void UnBind() const override;
+		virtual void Unbind() const override;
 
 		virtual void Reload() override;
 

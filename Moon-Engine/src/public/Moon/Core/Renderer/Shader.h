@@ -11,7 +11,7 @@ namespace Moon {
 		virtual ~Shader() = default;
 
 		virtual void Bind() const = 0;
-		virtual void UnBind() const = 0;
+		virtual void Unbind() const = 0;
 
 		/**
 		 * Can only be done if reading in from a file!

@@ -13,7 +13,7 @@ namespace Moon {
 		virtual ~OpenGLVertexBuffer();
 
 		virtual void Bind() const override;
-		virtual void UnBind() const override;
+		virtual void Unbind() const override;
 
 		virtual void SetData(const void* data, uint32_t size) override;
 
