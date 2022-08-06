@@ -20,5 +20,5 @@ bin-int/
 **/**.mmap
 
 # Cache
-Moon-Editor/Content/cache
+Moon-Editor/Resources/cache
 **/__pycache__

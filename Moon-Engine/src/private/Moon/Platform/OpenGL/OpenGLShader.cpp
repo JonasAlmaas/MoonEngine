@@ -48,8 +48,7 @@ namespace Moon {
 
 		static const char* GetCacheDirectory()
 		{
-			// TODO: make sure the Content directory is valid
-			return "Content/Cache/Shader/OpenGL";
+			return "Resources/Cache/Shader/OpenGL";
 		}
 
 		static void CreateCacheDirectoryIfNeeded()
