@@ -21,7 +21,7 @@ namespace Moon {
 
 		Ref<VertexArray> GetVertexArray() const { return m_VertexArray; }
 
-		virtual AssetType GetAssetType() override { return AssetType::Mesh; }
+		virtual AssetType GetAssetType() const override { return AssetType::Mesh; }
 
 	protected:
 		std::filesystem::path m_Filepath;

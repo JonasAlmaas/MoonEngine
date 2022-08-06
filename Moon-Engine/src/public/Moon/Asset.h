@@ -16,7 +16,7 @@ namespace Moon {
 
 		bool IsValid() const { return ((m_Flags & (uint16_t)AssetFlag::Missing) | (m_Flags & (uint16_t)AssetFlag::Invalid)) == 0; }
 
-		virtual AssetType GetAssetType() { return AssetType::None; }
+		virtual AssetType GetAssetType() const { return AssetType::None; }
 
 		bool IsFlagSet(AssetFlag flag) const { return (uint16_t)flag & m_Flags; }
 		void SetFlag(AssetFlag flag, bool value = true)
