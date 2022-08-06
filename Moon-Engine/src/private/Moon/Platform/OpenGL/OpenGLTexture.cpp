@@ -7,34 +7,38 @@
 
 namespace Moon {
 
-	static GLint Texture2DFilterToGlint(const Texture2DFilter& filter)
-	{
-		switch (filter)
+	namespace Utils {
+
+		static GLint Texture2DFilterToGlint(const Texture2DFilter& filter)
 		{
-			case Texture2DFilter::Linear:					return GL_LINEAR;
-			case Texture2DFilter::Nearest:					return GL_NEAREST;
-			case Texture2DFilter::LinearMipmapLinear:		return GL_LINEAR_MIPMAP_LINEAR;
-			case Texture2DFilter::LinearMipmapNearest:		return GL_LINEAR_MIPMAP_NEAREST;
-			case Texture2DFilter::NearestMipmapLinear:		return GL_NEAREST_MIPMAP_LINEAR;
-			case Texture2DFilter::NearestMipmapNearest:		return GL_NEAREST_MIPMAP_NEAREST;
+			switch (filter)
+			{
+				case Texture2DFilter::Linear:					return GL_LINEAR;
+				case Texture2DFilter::Nearest:					return GL_NEAREST;
+				case Texture2DFilter::LinearMipmapLinear:		return GL_LINEAR_MIPMAP_LINEAR;
+				case Texture2DFilter::LinearMipmapNearest:		return GL_LINEAR_MIPMAP_NEAREST;
+				case Texture2DFilter::NearestMipmapLinear:		return GL_NEAREST_MIPMAP_LINEAR;
+				case Texture2DFilter::NearestMipmapNearest:		return GL_NEAREST_MIPMAP_NEAREST;
+			}
+
+			ME_CORE_ASSERT(false, "Unknown Texture 2D Filter!");
+			return GL_LINEAR;
 		}
 
-		ME_CORE_ASSERT(false, "Unknown Texture 2D Filter!");
-		return GL_LINEAR;
-	}
-
-	static GLint Texture2DWrapToGlint(const Texture2DWrap& wrap)
-	{
-		switch (wrap)
+		static GLint Texture2DWrapToGlint(const Texture2DWrap& wrap)
 		{
-			case Texture2DWrap::Repeat:				return GL_REPEAT;
-			case Texture2DWrap::MirroredRepeat:		return GL_MIRRORED_REPEAT;
-			case Texture2DWrap::ClampToEdge:		return GL_CLAMP_TO_EDGE;
-			case Texture2DWrap::ClampToBorder:		return GL_CLAMP_TO_BORDER;
+			switch (wrap)
+			{
+				case Texture2DWrap::Repeat:				return GL_REPEAT;
+				case Texture2DWrap::MirroredRepeat:		return GL_MIRRORED_REPEAT;
+				case Texture2DWrap::ClampToEdge:		return GL_CLAMP_TO_EDGE;
+				case Texture2DWrap::ClampToBorder:		return GL_CLAMP_TO_BORDER;
+			}
+
+			ME_CORE_ASSERT(false, "Unknown Texture 2D Wrap!");
+			return GL_REPEAT;
 		}
 
-		ME_CORE_ASSERT(false, "Unknown Texture 2D Wrap!");
-		return GL_REPEAT;
 	}
 
 	OpenGLTexture2D::OpenGLTexture2D(uint32_t width, uint32_t height, const Texture2DSpecification& spec)
@@ -50,11 +54,11 @@ namespace Moon {
 		glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 		glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
 
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, Texture2DFilterToGlint(spec.MinFilter));
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, Texture2DFilterToGlint(spec.MagFilter));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, Utils::Texture2DFilterToGlint(spec.MinFilter));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, Utils::Texture2DFilterToGlint(spec.MagFilter));
 
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Texture2DWrapToGlint(spec.WrapS));
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Texture2DWrapToGlint(spec.WrapT));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Utils::Texture2DWrapToGlint(spec.WrapS));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Utils::Texture2DWrapToGlint(spec.WrapT));
 	}
 	
 	OpenGLTexture2D::OpenGLTexture2D(const std::filesystem::path& filepath, const Texture2DSpecification& spec)
@@ -109,11 +113,11 @@ namespace Moon {
 			glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
 			glTextureStorage2D(m_RendererID, 1, m_InternalFormat, m_Width, m_Height);
 
-			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, Texture2DFilterToGlint(spec.MinFilter));
-			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, Texture2DFilterToGlint(spec.MagFilter));
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, Utils::Texture2DFilterToGlint(spec.MinFilter));
+			glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, Utils::Texture2DFilterToGlint(spec.MagFilter));
 
-			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Texture2DWrapToGlint(spec.WrapS));
-			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Texture2DWrapToGlint(spec.WrapT));
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Utils::Texture2DWrapToGlint(spec.WrapS));
+			glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Utils::Texture2DWrapToGlint(spec.WrapT));
 
 			glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
 
@@ -152,11 +156,11 @@ namespace Moon {
 	{
 		m_Specification = spec;
 
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, Texture2DFilterToGlint(spec.MinFilter));
-		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, Texture2DFilterToGlint(spec.MagFilter));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, Utils::Texture2DFilterToGlint(spec.MinFilter));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, Utils::Texture2DFilterToGlint(spec.MagFilter));
 
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Texture2DWrapToGlint(spec.WrapS));
-		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Texture2DWrapToGlint(spec.WrapT));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, Utils::Texture2DWrapToGlint(spec.WrapS));
+		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, Utils::Texture2DWrapToGlint(spec.WrapT));
 	}
 
 }
