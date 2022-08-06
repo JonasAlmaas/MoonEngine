@@ -14,7 +14,7 @@ IncludeDir["ImGuizmo"] = "%{wks.location}/Moon-Engine/vendor/ImGuizmo"
 IncludeDir["shaderc"] = "%{wks.location}/Moon-Engine/vendor/shaderc/include"
 IncludeDir["spdlog"] = "%{wks.location}/Moon-Engine/vendor/spdlog/include"
 IncludeDir["SPIRV_Cross"] = "%{wks.location}/Moon-Engine/vendor/SPIRV-Cross"
-IncludeDir["stb_image"] = "%{wks.location}/Moon-Engine/vendor/stb_image"
+IncludeDir["stb"] = "%{wks.location}/Moon-Engine/vendor/stb"
 IncludeDir["VulkanSDK"] = "%{VULKAN_SDK}/Include"
 IncludeDir["yaml"] = "%{wks.location}/Moon-Engine/vendor/yaml/include"
 

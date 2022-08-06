@@ -21,8 +21,8 @@ project "Moon-Engine"
         "vendor/ImGuizmo/ImGuizmo.h",
         "vendor/ImGuizmo/ImGuizmo.cpp",
 
-        "vendor/stb_image/**.h",
-        "vendor/stb_image/**.cpp",
+        "vendor/stb/**.h",
+        "vendor/stb/**.cpp",
     }
 
     defines
@@ -45,7 +45,7 @@ project "Moon-Engine"
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.ImGuizmo}",
         "%{IncludeDir.spdlog}",
-        "%{IncludeDir.stb_image}",
+        "%{IncludeDir.stb}",
         "%{IncludeDir.VulkanSDK}",
         "%{IncludeDir.yaml}",
     }
