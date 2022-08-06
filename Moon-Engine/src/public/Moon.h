@@ -56,6 +56,7 @@
 	#pragma region Util
 	#include "Moon/Core/Util.h"
 	#include "Moon/Core/Util/FileDialog.h"
+	#include "Moon/Core/Util/FileSystem.h"
 	#include "Moon/Core/Util/Timer.h"
 	#include "Moon/Core/Util/Random.h"
 	#include "Moon/Core/Util/Conversion/Hexadecimal.h"
