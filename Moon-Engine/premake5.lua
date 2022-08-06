@@ -44,6 +44,8 @@ project "Moon-Engine"
         "%{IncludeDir.glm}",
         "%{IncludeDir.ImGui}",
         "%{IncludeDir.ImGuizmo}",
+        "%{IncludeDir.msdf_atlas_gen}",
+		"%{IncludeDir.msdfgen}",
         "%{IncludeDir.spdlog}",
         "%{IncludeDir.stb_image}",
         "%{IncludeDir.VulkanSDK}",
@@ -56,6 +58,7 @@ project "Moon-Engine"
 		"Glad",
 		"GLFW",
 		"ImGui",
+        "msdf-atlas-gen",
 		"yaml-cpp",
 		"opengl32.lib",
 	}

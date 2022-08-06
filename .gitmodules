@@ -19,3 +19,6 @@
 [submodule "Moon-Engine/vendor/box2d"]
 	path = Moon-Engine/vendor/box2d
 	url = https://github.com/JonasAlmaas/box2d
+[submodule "Moon-Engine/vendor/msdf-atlas-gen"]
+	path = Moon-Engine/vendor/msdf-atlas-gen
+	url = https://github.com/JonasAlmaas/msdf-atlas-gen
