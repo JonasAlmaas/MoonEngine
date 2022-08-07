@@ -66,10 +66,10 @@ namespace Moon {
 
 	struct TextureProperties
 	{
-		//std::string DebugName;
+		std::string DebugName;
 		TextureWrap SamplerWrap = TextureWrap::Repeat;
 		TextureFilter SamplerFilter = TextureFilter::Linear;
-		//bool GenerateMips = true;
+		bool GenerateMips = true;
 		//bool SRGB = false;
 		//bool Storage = false;
 	};

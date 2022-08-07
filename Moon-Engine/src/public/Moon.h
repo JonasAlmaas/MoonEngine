@@ -80,6 +80,7 @@
 #pragma endregion
 
 #pragma region Renderer
+#include "Moon/Renderer/Font.h"
 #include "Moon/Renderer/Renderer2D.h"
 #include "Moon/Renderer/ShaderLibrary.h"
 #include "Moon/Renderer/SubTexture2D.h"
