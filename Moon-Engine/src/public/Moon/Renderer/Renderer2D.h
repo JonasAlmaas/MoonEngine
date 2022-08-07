@@ -2,6 +2,7 @@
 
 #include "Moon/Core/Renderer/RenderCamera.h"
 #include "Moon/Core/Renderer/Texture.h"
+#include "Moon/Renderer/Font.h"
 #include "Moon/Renderer/SubTexture2D.h"
 #include "Moon/Scene/Components.h"
 
@@ -53,12 +54,16 @@ namespace Moon {
 		static void StartCircleBatch();
 		static void StartLineBatch();
 		static void StartSpriteBatch();
+		static void StartTextBatch();
 
 		static void FlushCircleBatch();
 		static void FlushLineBatch();
 		static void FlushSpriteBatch();
+		static void FlushTextBatch();
 
-		// ---- Primitives ----
+		// -- Text --
+		static void Uber_DrawText(const std::string& string, const Ref<Font>& font, const glm::mat4& transform, const Color& color);
+		static void Super_DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, const glm::vec2 size, const Color& color);
 
 		// -- Circle --
 		static void Uber_DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color, int entityID = -1);
@@ -85,6 +90,25 @@ namespace Moon {
 		// -- Draw Renderer Components --
 		static void DrawCircleRendererComponent(const glm::mat4& transform, CircleRendererComponent& component, int entityID);
 		static void DrawSpriteRendererComponent(const glm::mat4& transform, SpriteRendererComponent& component, int entityID);
+
+		// -- Text --
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position);
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position);
+
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, float size);
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position, float size);
+
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, const glm::vec2 size);
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position, const glm::vec2 size);
+
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, float size, const Color& color);
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position, float size, const Color& color);
+
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, const glm::vec2 size, const Color& color);
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position, const glm::vec2 size, const Color& color);
+
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::mat4& transform);
+		static void DrawText(const std::string& string, const Ref<Font>& font, const glm::mat4& transform, const Color& color);
 
 		// -- Circle --
 		static void DrawCircle(const glm::mat4& transform, float thickness, float fade);

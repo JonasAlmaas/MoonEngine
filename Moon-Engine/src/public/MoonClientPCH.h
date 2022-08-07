@@ -14,6 +14,7 @@
 #include <algorithm>
 #include <array>
 #include <chrono>
+#include <codecvt>
 #include <filesystem>
 #include <fstream>
 #include <functional>
@@ -30,6 +31,7 @@
 #include <utility>
 #include <vector>
 #include <xhash>
+#include <xstring>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>

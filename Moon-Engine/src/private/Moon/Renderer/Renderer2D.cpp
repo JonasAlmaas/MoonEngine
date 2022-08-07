@@ -8,6 +8,7 @@
 #include "Moon/Core/Renderer/Shader.h"
 #include "Moon/Core/Renderer/Texture.h"
 #include "Moon/Core/Renderer/VertexArray.h"
+#include "Moon/Renderer/MSDFData.h"
 
 
 namespace Moon {
@@ -44,6 +45,14 @@ namespace Moon {
 		int EntityID;
 	};
 
+	struct TextVertex
+	{
+		glm::vec3 Position;
+		glm::vec4 Color;
+		glm::vec2 UV;
+		float TextureIndex;
+	};
+
 	struct Renderer2DData
 	{
 		// Max per drawcall
@@ -64,6 +73,10 @@ namespace Moon {
 		Ref<VertexBuffer> SpriteVertexBuffer;
 		Ref<Shader> SpriteShader;
 
+		Ref<VertexArray> TextVertexArray;
+		Ref<VertexBuffer> TextVertexBuffer;
+		Ref<Shader> TextShader;
+
 		uint32_t CircleIndexCount = 0;
 		CircleVertex* CircleVertexBufferBase = nullptr;
 		CircleVertex* CircleVertexBufferPtr = nullptr;
@@ -77,6 +90,13 @@ namespace Moon {
 		LineVertex* LineVertexBufferPtr = nullptr;
 
 		float LineWidth = 2.0f;
+
+		uint32_t TextIndexCount = 0;
+		TextVertex* TextVertexBufferBase = nullptr;
+		TextVertex* TextVertexBufferPtr = nullptr;
+
+		std::array<Ref<Texture2D>, MaxTextureSlots> TextTextureSlots;
+		uint32_t TextTextureSlotIndex = 0;
 
 		Ref<Texture2D> WhiteTexture;
 		Color WhiteColor;
@@ -110,6 +130,7 @@ namespace Moon {
 		s_Data.CircleShader = Shader::Create("Content/Shaders/Renderer2D/Renderer2D_Circle.glsl");
 		s_Data.LineShader = Shader::Create("Content/Shaders/Renderer2D/Renderer2D_Line.glsl");
 		s_Data.SpriteShader = Shader::Create("Content/Shaders/Renderer2D/Renderer2D_Sprite.glsl");
+		s_Data.TextShader = Shader::Create("Content/Shaders/Renderer2D/Renderer2D_Text.glsl");
 
 		int32_t samplers[Renderer2DData::MaxTextureSlots];
 		for (uint32_t i = 0; i < Renderer2DData::MaxTextureSlots; i++)
@@ -117,6 +138,9 @@ namespace Moon {
 
 		s_Data.SpriteShader->Bind();
 		s_Data.SpriteShader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
+
+		s_Data.TextShader->Bind();
+		s_Data.TextShader->SetIntArray("u_FontAtlases", samplers, Renderer2DData::MaxTextureSlots);
 
 		// Generate a 1x1 white texture
 		s_Data.WhiteTexture = Texture2D::Create(ImageFormat::RGBA8 ,1, 1);
@@ -195,6 +219,21 @@ namespace Moon {
 		s_Data.LineVertexArray->AddVertexBuffer(s_Data.LineVertexBuffer);
 		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
 
+		// -- Text (String) --
+		s_Data.TextVertexArray = VertexArray::Create();
+
+		s_Data.TextVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(TextVertex));
+		s_Data.TextVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3, "World Position XYZ" },
+			{ ShaderDataType::Float4, "Color" },
+			{ ShaderDataType::Float2, "UV" },
+			{ ShaderDataType::Float, "TextureIndex" },
+		});
+
+		s_Data.TextVertexArray->AddVertexBuffer(s_Data.TextVertexBuffer);
+		s_Data.TextVertexBufferBase = new TextVertex[Renderer2DData::MaxVertices];
+		s_Data.TextVertexArray->SetIndexBuffer(spriteIB);	// Use Sprite IB
+
 		// ---- Create basic sprite information -----
 		s_Data.SpriteVertexPositions[0] = { -0.5, -0.5, 0, 1.0f };
 		s_Data.SpriteVertexPositions[1] = { 0.5, -0.5, 0, 1.0f };
@@ -214,6 +253,9 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		delete[] s_Data.SpriteVertexBufferBase;
+		delete[] s_Data.CircleVertexBufferBase;
+		delete[] s_Data.LineVertexBufferBase;
+		delete[] s_Data.TextVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const Ref<RenderCamera>& renderCamera)
@@ -226,6 +268,7 @@ namespace Moon {
 		StartSpriteBatch();
 		StartCircleBatch();
 		StartLineBatch();
+		StartTextBatch();
 	}
 
 	void Renderer2D::EndScene()
@@ -235,6 +278,7 @@ namespace Moon {
 		FlushSpriteBatch();
 		FlushCircleBatch();
 		FlushLineBatch();
+		FlushTextBatch();
 	}
 
 	// -- Start Batches --
@@ -256,6 +300,13 @@ namespace Moon {
 		s_Data.SpriteIndexCount = 0;
 		s_Data.SpriteVertexBufferPtr = s_Data.SpriteVertexBufferBase;
 		s_Data.TextureSlotIndex = 1;
+	}
+
+	void Renderer2D::StartTextBatch()
+	{
+		s_Data.TextIndexCount = 0;
+		s_Data.TextVertexBufferPtr = s_Data.TextVertexBufferBase;
+		s_Data.TextTextureSlotIndex = 0;
 	}
 
 	// -- Flush Batches --
@@ -321,6 +372,29 @@ namespace Moon {
 			s_Data.Stats.DrawCalls++;
 		#endif
 	}
+	
+	void Renderer2D::FlushTextBatch()
+	{
+		ME_PROFILE_FUNCTION();
+
+		// Nothing to draw
+		if (s_Data.TextIndexCount == 0)
+			return;
+
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.TextVertexBufferPtr - (uint8_t*)s_Data.TextVertexBufferBase);
+		s_Data.TextVertexBuffer->SetData(s_Data.TextVertexBufferBase, dataSize);
+
+		// Bind textures
+		for (uint32_t i = 0; i < s_Data.TextTextureSlotIndex; i++)
+			s_Data.TextTextureSlots[i]->Bind(i);
+
+		s_Data.TextShader->Bind();
+		RenderCommand::DrawIndexed(s_Data.TextVertexArray, s_Data.TextIndexCount);
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.DrawCalls++;
+		#endif
+	}
 
 	// -- Stats --
 
@@ -349,6 +423,204 @@ namespace Moon {
 			Uber_DrawSprite(transform, component.Texture, component.TileFactor, component.Color, entityID);
 		else
 			Uber_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, component.Color, entityID);
+	}
+
+	// -- String --
+
+	static bool NextLine(int index, const std::vector<int>& lines)
+	{
+		for (int line : lines)
+		{
+			if (line == index)
+				return true;
+		}
+		return false;
+	}
+
+	//From https://stackoverflow.com/questions/31302506/stdu32string-conversion-to-from-stdstring-and-stdu16string
+	static std::u32string To_UTF32(const std::string& s)
+	{
+		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> conv;
+		return conv.from_bytes(s);
+	}
+
+	void Renderer2D::Uber_DrawText(const std::string& string, const Ref<Font>& font, const glm::mat4& transform, const Color& color)
+	{
+		// TODO: Implement later
+		static float maxWidth = 999999.9f;
+		static float lineHeightOffset = 0.0f;
+		static float kerningOffset = 0.0f;
+
+		if (string.empty())
+			return;
+
+		if (s_Data.TextIndexCount >= Renderer2DData::MaxIndices)
+		{
+			FlushTextBatch();
+			StartTextBatch();
+		}
+
+		uint32_t textureIndex = 0;
+
+		std::u32string utf32string = To_UTF32(string);
+
+		Ref<Texture2D> fontAtlas = font->GetFontAtlas();
+		ME_CORE_ASSERT(fontAtlas, "Failed to get font atlas!");
+
+		// Get texture index, only if it has been added previusly.
+		for (uint32_t i = 1; i < s_Data.TextTextureSlotIndex; i++)
+		{
+			if (*s_Data.TextTextureSlots[i] == *fontAtlas)
+			{
+				textureIndex = i;
+				break;
+			}
+		}
+
+		// If the texture isn't in a texture slot, add it.
+		if (textureIndex == 0)
+		{
+			textureIndex = s_Data.TextTextureSlotIndex;
+			s_Data.TextTextureSlots[textureIndex] = fontAtlas;
+			s_Data.TextTextureSlotIndex++;
+		}
+
+		auto& fontGeometry = font->GetMSDFData()->FontGeometry;
+		const auto& metrics = fontGeometry.getMetrics();
+
+		std::vector<int> nextLines;
+		{
+			double x = 0.0;
+			double fsScale = 1 / (metrics.ascenderY - metrics.descenderY);
+			double y = -fsScale * metrics.ascenderY;
+			int lastSpace = -1;
+			for (int i = 0; i < utf32string.size(); i++)
+			{
+				char32_t character = utf32string[i];
+				if (character == '\n')
+				{
+					x = 0;
+					y -= fsScale * metrics.lineHeight + lineHeightOffset;
+					continue;
+				}
+
+				auto glyph = fontGeometry.getGlyph(character);
+				if (!glyph)
+					glyph = fontGeometry.getGlyph('?');
+				if (!glyph)
+					continue;
+
+				if (character != ' ')
+				{
+					// Calc geo
+					double pl, pb, pr, pt;
+					glyph->getQuadPlaneBounds(pl, pb, pr, pt);
+					glm::vec2 quadMin((float)pl, (float)pb);
+					glm::vec2 quadMax((float)pr, (float)pt);
+
+					quadMin *= fsScale;
+					quadMax *= fsScale;
+					quadMin += glm::vec2(x, y);
+					quadMax += glm::vec2(x, y);
+
+					if (quadMax.x > maxWidth && lastSpace != -1)
+					{
+						i = lastSpace;
+						nextLines.emplace_back(lastSpace);
+						lastSpace = -1;
+						x = 0;
+						y -= fsScale * metrics.lineHeight + lineHeightOffset;
+					}
+				}
+				else
+				{
+					lastSpace = i;
+				}
+
+				double advance = glyph->getAdvance();
+				fontGeometry.getAdvance(advance, character, utf32string[i + 1]);
+				x += fsScale * advance + kerningOffset;
+			}
+		}
+
+		{
+			double x = 0.0;
+			double fsScale = 1 / (metrics.ascenderY - metrics.descenderY);
+			double y = 0.0;// -fsScale * metrics.ascenderY;
+
+			for (int i = 0; i < utf32string.size(); i++)
+			{
+				char32_t character = utf32string[i];
+				if (character == '\n' || NextLine(i, nextLines))
+				{
+					x = 0;
+					y -= fsScale * metrics.lineHeight + lineHeightOffset;
+					continue;
+				}
+
+				auto glyph = fontGeometry.getGlyph(character);
+				if (!glyph)
+					glyph = fontGeometry.getGlyph('?');
+				if (!glyph)
+					continue;
+
+				double l, b, r, t;
+				glyph->getQuadAtlasBounds(l, b, r, t);
+
+				double pl, pb, pr, pt;
+				glyph->getQuadPlaneBounds(pl, pb, pr, pt);
+
+				pl *= fsScale, pb *= fsScale, pr *= fsScale, pt *= fsScale;
+				pl += x, pb += y, pr += x, pt += y;
+
+				double texelWidth = 1. / fontAtlas->GetWidth();
+				double texelHeight = 1. / fontAtlas->GetHeight();
+				l *= texelWidth, b *= texelHeight, r *= texelWidth, t *= texelHeight;
+
+				s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(pl, pt, 0.0f, 1.0f);
+				s_Data.TextVertexBufferPtr->Color = color;
+				s_Data.TextVertexBufferPtr->UV = { l, t };
+				s_Data.TextVertexBufferPtr->TextureIndex = (float)textureIndex;
+				s_Data.TextVertexBufferPtr++;
+
+				s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(pl, pb, 0.0f, 1.0f);
+				s_Data.TextVertexBufferPtr->Color = color;
+				s_Data.TextVertexBufferPtr->UV = { l, b };
+				s_Data.TextVertexBufferPtr->TextureIndex = (float)textureIndex;
+				s_Data.TextVertexBufferPtr++;
+				
+				s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(pr, pb, 0.0f, 1.0f);
+				s_Data.TextVertexBufferPtr->Color = color;
+				s_Data.TextVertexBufferPtr->UV = { r, b };
+				s_Data.TextVertexBufferPtr->TextureIndex = (float)textureIndex;
+				s_Data.TextVertexBufferPtr++;
+
+				s_Data.TextVertexBufferPtr->Position = transform * glm::vec4(pr, pt, 0.0f, 1.0f);
+				s_Data.TextVertexBufferPtr->Color = color;
+				s_Data.TextVertexBufferPtr->UV = { r, t };
+				s_Data.TextVertexBufferPtr->TextureIndex = (float)textureIndex;
+				s_Data.TextVertexBufferPtr++;
+
+				s_Data.TextIndexCount += 6;
+
+				double advance = glyph->getAdvance();
+				fontGeometry.getAdvance(advance, character, utf32string[i + 1]);
+				x += fsScale * advance + kerningOffset;
+			}
+		}
+
+		#if ME_ENABLE_RENDERER2D_STATISTICS
+			s_Data.Stats.SpriteCount++;
+		#endif
+	}
+
+	void Renderer2D::Super_DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, const glm::vec2 size, const Color& color)
+	{
+		glm::mat4 translation = glm::translate(glm::mat4(1.0f), position);
+		glm::mat4 scale = glm::scale(glm::mat4(1.0f), { size , 0.0f });
+		glm::mat4 transform = translation * scale;
+
+		Uber_DrawText(string, font, transform, color);
 	}
 
 	// -- Circle --
@@ -393,6 +665,69 @@ namespace Moon {
 		Uber_DrawCircle(transform, thickness, fade, color);
 	}
 
+	// -- String --
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position)
+	{
+		Super_DrawText(string, font, position, { 1.0f, 1.0f }, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position)
+	{
+		Super_DrawText(string, font, { position, 0.0f }, { 1.0f, 1.0f }, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, float size)
+	{
+		Super_DrawText(string, font, position, { size, size }, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position, float size)
+	{
+		Super_DrawText(string, font, { position, 0.0f }, { size, size }, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, const glm::vec2 size)
+	{
+		Super_DrawText(string, font, position, size, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position, const glm::vec2 size)
+	{
+		Super_DrawText(string, font, { position, 0.0f }, size, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, float size, const Color& color)
+	{
+		Super_DrawText(string, font, position, { size, size }, color);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position, float size, const Color& color)
+	{
+		Super_DrawText(string, font, { position, 0.0f }, { size, size }, color);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec3& position, const glm::vec2 size, const Color& color)
+	{
+		Super_DrawText(string, font, position, size, color);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::vec2& position, const glm::vec2 size, const Color& color)
+	{
+		Super_DrawText(string, font, { position, 0.0f }, size, color);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::mat4& transform)
+	{
+		Uber_DrawText(string, font, transform, s_Data.WhiteColor);
+	}
+
+	void Renderer2D::DrawText(const std::string& string, const Ref<Font>& font, const glm::mat4& transform, const Color& color)
+	{
+		Uber_DrawText(string, font, transform, color);
+	}
+
+	// -- Circle --
 	void Renderer2D::DrawCircle(const glm::mat4& transform, float thickness, float fade)
 	{
 		Uber_DrawCircle(transform, thickness, fade, s_Data.WhiteColor);
