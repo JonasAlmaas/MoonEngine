@@ -8,41 +8,35 @@ namespace Moon {
 	class OpenGLTexture2D : public Texture2D
 	{
 	public:
-		OpenGLTexture2D(uint32_t width, uint32_t height, const Texture2DSpecification& spec);
-		OpenGLTexture2D(const std::filesystem::path& filepath, const Texture2DSpecification& spec);
+		OpenGLTexture2D(ImageFormat format, uint32_t width, uint32_t height, const void* data, const TextureProperties& properties);
+		OpenGLTexture2D(const std::filesystem::path& filepath, const TextureProperties& properties);
 
 		virtual ~OpenGLTexture2D();
 
+		virtual void Bind(uint32_t slot) const override;
+		virtual ImageFormat GetFormat() const override { return m_Format; }
+
 		virtual uint32_t GetWidth() const override { return m_Width; }
 		virtual uint32_t GetHeight() const override { return m_Height; }
-		virtual const RendererID& GetRendererID() const override { return m_RendererID; }
+		virtual glm::uvec2 GetSize() const override { return { m_Width, m_Height }; }
+
+		virtual RendererID GetRendererID() const override { return m_RendererID; }
 
 		virtual void SetData(void* data, uint32_t size) override;
 
-		virtual void Bind(uint32_t slot) const override;
-
-		virtual bool IsLoaded() const override { return m_IsLoaded; }
-
-		virtual Texture2DSpecification GetSpecification() override { return m_Specification; };
-		virtual void SetSpecification(const Texture2DSpecification& spec) override;
+		virtual bool Loaded() const override { return m_Loaded; }
 
 		virtual const std::filesystem::path& GetPath() const override { return m_Path; };
 
-		virtual bool operator==(const Texture& other) const override
-		{
-			return m_RendererID == other.GetRendererID();
-		}
-
 	private:
 		RendererID m_RendererID;
-
-		Texture2DSpecification m_Specification;
 		std::filesystem::path m_Path;
+		uint32_t m_Width;
+		uint32_t m_Height;
 
-		bool m_IsLoaded = false;
+		bool m_Loaded = false;
 
-		uint32_t m_Width, m_Height;
-		unsigned int m_InternalFormat, m_DataFormat;
+		ImageFormat m_Format = ImageFormat::None;
 
 	};
 

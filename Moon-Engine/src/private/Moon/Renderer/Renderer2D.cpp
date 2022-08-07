@@ -119,7 +119,7 @@ namespace Moon {
 		s_Data.SpriteShader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
 
 		// Generate a 1x1 white texture
-		s_Data.WhiteTexture = Texture2D::Create(1, 1);
+		s_Data.WhiteTexture = Texture2D::Create(ImageFormat::RGBA8 ,1, 1);
 		uint32_t textureData = 0xffffffff;
 		s_Data.WhiteTexture->SetData(&textureData, sizeof(uint32_t));
 

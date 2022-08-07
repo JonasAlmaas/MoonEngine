@@ -33,7 +33,7 @@ namespace Asteroid {
 			ME_PROFILE_SCOPE("GenerateTexture-Checkerboard");
 
 			uint32_t* textureData = new uint32_t[2 * 2]{ 0xffcccccc, 0xffffffff, 0xffffffff, 0xffcccccc };
-			s_Data->TextureLibrary.Checkerboard = Texture2D::Create(2, 2);
+			s_Data->TextureLibrary.Checkerboard = Texture2D::Create(ImageFormat::RGBA8,2, 2);
 			s_Data->TextureLibrary.Checkerboard->SetData(textureData, sizeof(uint32_t) * 2 * 2);
 			delete[] textureData;
 		}
@@ -61,7 +61,7 @@ namespace Asteroid {
 					textureData[x + y * width] = r + (g << 8) + (b << 16) | 0xff000000;
 				}
 			}
-			s_Data->TextureLibrary.ColorGrid = Texture2D::Create(width, height);
+			s_Data->TextureLibrary.ColorGrid = Texture2D::Create(ImageFormat::RGBA8, width, height);
 			s_Data->TextureLibrary.ColorGrid->SetData(textureData, sizeof(uint32_t) * width * height);
 			delete[] textureData;
 		}

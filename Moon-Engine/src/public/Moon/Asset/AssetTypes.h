@@ -17,6 +17,7 @@ namespace Moon {
 		None = 0,
 		Mesh,
 		Font,
+		Texture,
 	};
 
 	namespace Utils {
@@ -26,6 +27,7 @@ namespace Moon {
 			if (assetType == "None")				return AssetType::None;
 			if (assetType == "Mesh")				return AssetType::Mesh;
 			if (assetType == "Font")				return AssetType::Font;
+			if (assetType == "Texture")				return AssetType::Texture;
 
 			ME_CORE_ASSERT(false, "Unknown Asset Type");
 			return AssetType::None;
@@ -38,6 +40,7 @@ namespace Moon {
 				case AssetType::None:					return "None";
 				case AssetType::Mesh:					return "Mesh";
 				case AssetType::Font:					return "Font";
+				case AssetType::Texture:				return "Texture";
 			}
 
 			ME_CORE_ASSERT(false, "Unknown Asset Type");

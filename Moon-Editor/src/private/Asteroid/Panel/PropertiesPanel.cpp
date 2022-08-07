@@ -251,7 +251,7 @@ namespace Asteroid {
 							const wchar_t* path = (const wchar_t*)payload->Data;
 							std::filesystem::path texturePath = std::filesystem::path(g_ContentPath) / path;
 							Ref<Texture2D> texture = Texture2D::Create(texturePath.string());
-							if (texture->IsLoaded())
+							if (texture->Loaded())
 								component.Texture = texture;
 							else
 								ME_CORE_LOG_WARN("Could not load texture {0}", texturePath.filename().string());
