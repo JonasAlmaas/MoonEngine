@@ -53,13 +53,13 @@
 	#include "Moon/Core/Type/UUID.h"
 	#pragma endregion
 
-	#pragma region Util
-	#include "Moon/Core/Util.h"
-	#include "Moon/Core/Util/FileDialog.h"
-	#include "Moon/Core/Util/FileSystem.h"
-	#include "Moon/Core/Util/Timer.h"
-	#include "Moon/Core/Util/Random.h"
-	#include "Moon/Core/Util/Conversion/Hexadecimal.h"
+	#pragma region Utilities
+	#include "Moon/Core/Utilities.h"
+	#include "Moon/Core/Utilities/FileDialog.h"
+	#include "Moon/Core/Utilities/FileSystem.h"
+	#include "Moon/Core/Utilities/Timer.h"
+	#include "Moon/Core/Utilities/Random.h"
+	#include "Moon/Core/Utilities/Conversion/Hexadecimal.h"
 	#pragma endregion
 
 	#pragma region Window

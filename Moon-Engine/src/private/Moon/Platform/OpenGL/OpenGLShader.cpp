@@ -1,7 +1,7 @@
 #include "mepch.h"
 #include "Moon/Platform/OpenGL/OpenGLShader.h"
 
-#include "Moon/Core/Util/Timer.h"
+#include "Moon/Core/Utilities/Timer.h"
 
 #include <shaderc/shaderc.hpp>
 

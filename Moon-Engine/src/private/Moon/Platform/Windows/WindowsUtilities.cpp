@@ -2,7 +2,7 @@
 
 #ifdef ME_PLATFORM_WINDOWS
 
-#include "Moon/Core/Util.h"
+#include "Moon/Core/Utilities.h"
 
 #include <GLFW/glfw3.h>
 
