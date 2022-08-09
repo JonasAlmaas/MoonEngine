@@ -19,6 +19,7 @@ namespace Moon {
 	private:
 		RendererID m_RendererID;
 		uint32_t m_Count;
+
 	};
 
 }
