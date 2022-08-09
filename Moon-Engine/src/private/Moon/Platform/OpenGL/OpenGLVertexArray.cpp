@@ -6,27 +6,6 @@
 
 namespace Moon {
 
-	static GLenum ShaderDataTypeToOpenGLBaseType(ShaderDataType type)
-	{
-		switch (type)
-		{
-			case Moon::ShaderDataType::Bool:		return GL_BOOL;
-			case Moon::ShaderDataType::Int:			return GL_INT;
-			case Moon::ShaderDataType::Int2:		return GL_INT;
-			case Moon::ShaderDataType::Int3:		return GL_INT;
-			case Moon::ShaderDataType::Int4:		return GL_INT;
-			case Moon::ShaderDataType::Float:		return GL_FLOAT;
-			case Moon::ShaderDataType::Float2:		return GL_FLOAT;
-			case Moon::ShaderDataType::Float3:		return GL_FLOAT;
-			case Moon::ShaderDataType::Float4:		return GL_FLOAT;
-			case Moon::ShaderDataType::Mat3:		return GL_FLOAT;
-			case Moon::ShaderDataType::Mat4:		return GL_FLOAT;
-		}
-
-		ME_CORE_ASSERT(false, "Unknows ShaderDataType!");
-		return 0;
-	}
-
 	OpenGLVertexArray::OpenGLVertexArray()
 	{
 		ME_PROFILE_FUNCTION();
@@ -75,7 +54,7 @@ namespace Moon {
 				case ShaderDataType::Float4:
 				{
 					glEnableVertexAttribArray(m_VertexBufferIndex);
-					glVertexAttribPointer(m_VertexBufferIndex, element.GetComponentCount(), ShaderDataTypeToOpenGLBaseType(element.Type), element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)element.Offset);
+					glVertexAttribPointer(m_VertexBufferIndex, element.GetComponentCount(), GL_FLOAT, element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)element.Offset);
 					m_VertexBufferIndex++;
 					break;
 				}
@@ -83,10 +62,16 @@ namespace Moon {
 				case ShaderDataType::Int2:
 				case ShaderDataType::Int3:
 				case ShaderDataType::Int4:
+				{
+					glEnableVertexAttribArray(m_VertexBufferIndex);
+					glVertexAttribIPointer(m_VertexBufferIndex, element.GetComponentCount(), GL_INT, layout.GetStride(), (const void*)element.Offset);
+					m_VertexBufferIndex++;
+					break;
+				}
 				case ShaderDataType::Bool:
 				{
 					glEnableVertexAttribArray(m_VertexBufferIndex);
-					glVertexAttribIPointer(m_VertexBufferIndex, element.GetComponentCount(), ShaderDataTypeToOpenGLBaseType(element.Type), layout.GetStride(), (const void*)element.Offset);
+					glVertexAttribIPointer(m_VertexBufferIndex, element.GetComponentCount(), GL_BOOL, layout.GetStride(), (const void*)element.Offset);
 					m_VertexBufferIndex++;
 					break;
 				}
@@ -97,7 +82,7 @@ namespace Moon {
 					for (uint8_t i = 0; i < count; i++)
 					{
 						glEnableVertexAttribArray(m_VertexBufferIndex);
-						glVertexAttribPointer(m_VertexBufferIndex, count, ShaderDataTypeToOpenGLBaseType(element.Type), element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)(element.Offset + sizeof(float) * count * i));
+						glVertexAttribPointer(m_VertexBufferIndex, count, GL_FLOAT, element.Normalized ? GL_TRUE : GL_FALSE, layout.GetStride(), (const void*)(element.Offset + sizeof(float) * count * i));
 						glVertexAttribDivisor(m_VertexBufferIndex, 1);
 						m_VertexBufferIndex++;
 					}
