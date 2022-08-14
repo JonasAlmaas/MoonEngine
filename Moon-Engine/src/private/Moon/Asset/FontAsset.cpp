@@ -1,8 +1,8 @@
 #include "mepch.h"
-#include "Moon/Renderer/Font.h"
+#include "Moon/Asset/FontAsset.h"
 
 #include "Moon/Core/Utilities/FileSystem.h"
-#include "Moon/Renderer/MSDFData.h"
+#include "Moon/Asset/Font/MSDFData.h"
 
 
 namespace Moon {
@@ -130,7 +130,7 @@ namespace Moon {
 		return texture;
 	}
 
-	Font::Font(const std::filesystem::path& filepath)
+	FontAsset::FontAsset(const std::filesystem::path& filepath)
 		: m_FilePath(filepath), m_MSDFData(new MSDFData())
     {
 		int result = 0;
@@ -346,14 +346,9 @@ namespace Moon {
 		}
     }
 
-	Font::~Font()
+	FontAsset::~FontAsset()
 	{
 		delete m_MSDFData;
-	}
-
-	Ref<Font> Font::Create(const std::filesystem::path& filepath)
-	{
-		return CreateRef<Font>(filepath);
 	}
 
 }

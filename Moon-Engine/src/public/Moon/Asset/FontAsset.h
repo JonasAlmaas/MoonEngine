@@ -7,19 +7,16 @@ namespace Moon {
 
 	struct MSDFData;
 
-	class Font : public Asset
+	class FontAsset : public Asset
 	{
 	public:
-		Font(const std::filesystem::path& filepath);
-		virtual ~Font();
+		FontAsset(const std::filesystem::path& filepath);
+		virtual ~FontAsset();
 
 		Ref<Texture2D> GetFontAtlas() const { return m_TextureAtlas; }
 		const MSDFData* GetMSDFData() const { return m_MSDFData; }
 
 		virtual AssetType GetAssetType() const override { return AssetType::Font; }
-
-	public:
-		static Ref<Font> Create(const std::filesystem::path& filepath);
 
 	private:
 		std::filesystem::path m_FilePath;
