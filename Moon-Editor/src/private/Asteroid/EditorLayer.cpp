@@ -193,7 +193,6 @@ namespace Asteroid {
 				auto stats = Renderer2D::GetStats();
 				ImGui::Text("Renderer2D Stats:");
 				ImGui::Text("Draw Calls: %d", stats.DrawCalls);
-				ImGui::Text("Circles: %d", stats.CircleCount);
 				ImGui::Text("Lines: %d", stats.LineCount);
 				ImGui::Text("Sprites: %d", stats.SpriteCount);
 				ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
