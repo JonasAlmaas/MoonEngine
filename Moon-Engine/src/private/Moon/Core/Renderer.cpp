@@ -7,7 +7,7 @@
 namespace Moon {
 	// TODO: Rewrite everything here, this is very outdated!
 
-	Ref<Renderer::SceneData> Renderer::m_SceneData = CreateRef<Renderer::SceneData>();
+	Ref<Renderer::SceneData> Renderer::s_SceneData = CreateRef<Renderer::SceneData>();
 	
 	void Renderer::Init()
 	{
@@ -29,11 +29,12 @@ namespace Moon {
 		RenderCommand::SetViewport(0, 0, width, height);
 	}
 
+	// This does not do anything at the moment. Major rewrite of the while renderer is due.
 	void Renderer::BeginScene(const Ref<RenderCamera>& renderCamera)
 	{
 		ME_PROFILE_FUNCTION();
 
-		m_SceneData->ViewProjectionMatrix = renderCamera->GetViewProjection();
+		s_SceneData->ViewProjectionMatrix = renderCamera->GetViewProjection();
 	}
 	
 	void Renderer::EndScene()
