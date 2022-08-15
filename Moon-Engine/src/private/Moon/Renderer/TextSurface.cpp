@@ -19,69 +19,8 @@ namespace Moon {
 		return conv.from_bytes(s);
 	}
 
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::mat4& transform, const Color& color)
-		: m_Width(0), m_Height(0)
-	{
-		Setup(text, font, transform, color);
-	}
-
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, const glm::vec2& scale, const glm::vec3 rotation, const Color& color)
-		: m_Width(0), m_Height(0)
-	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::toMat4(glm::quat(rotation)) * glm::scale(glm::mat4(1.0f), { scale, 0.0f });
-		Setup(text, font, transform, color);
-	}
-
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, const glm::vec2& scale, const Color& color)
-		: m_Width(0), m_Height(0)
-	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale, 0.0f });
-		Setup(text, font, transform, color);
-	}
-
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, float scale, const glm::vec3 rotation, const Color& color)
-		: m_Width(0), m_Height(0)
-	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::toMat4(glm::quat(rotation)) * glm::scale(glm::mat4(1.0f), { scale, scale, 0.0f });
-		Setup(text, font, transform, color);
-	}
-
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, float scale, const Color& color)
-		: m_Width(0), m_Height(0)
-	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale, scale, 0.0f });
-		Setup(text, font, transform, color);
-	}
-
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, const glm::vec2& scale, float rotation, const Color& color)
-		: m_Width(0), m_Height(0)
-	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { scale, 0.0f });
-		Setup(text, font, transform, color);
-	}
-
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, const glm::vec2& scale, const Color& color)
-		: m_Width(0), m_Height(0)
-	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::scale(glm::mat4(1.0f), { scale, 0.0f });
-		Setup(text, font, transform, color);
-	}
-
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, float scale, float rotation, const Color& color)
-		: m_Width(0), m_Height(0)
-	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { scale, scale, 0.0f });
-		Setup(text, font, transform, color);
-	}
-
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, float scale, const Color& color)
-		: m_Width(0), m_Height(0)
-	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::scale(glm::mat4(1.0f), { scale, scale, 0.0f });
-		Setup(text, font, transform, color);
-	}
-
-	void TextSurface::Setup(const std::string& text, const Ref<FontAsset>& font, const glm::mat4& transform, const Color& color)
+	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset> font, float textSize, const Color& color)
+		: m_Width(0), m_Height(0), m_Font(font)
 	{
 		if (text.empty())
 			return;
@@ -91,7 +30,7 @@ namespace Moon {
 
 		std::u32string utf32string = To_UTF32(text);
 
-		// Get visible character count (not space nor new line)
+		// Get visible character count (exclude space and new line characters)
 		uint32_t charCount = 0;
 		for (int i = 0; i < utf32string.size(); i++)
 		{
@@ -119,7 +58,7 @@ namespace Moon {
 		double fsScale = 1.0 / (metrics.ascenderY - metrics.descenderY);
 		double y = 0.0;
 
-		float scaledLineHeight = (float)fsScale * (glm::vec4(0.0f, metrics.lineHeight, 0.0f, 1.0f) * transform).y;
+		float scaledLineHeight = (float)(fsScale * metrics.lineHeight) * textSize;
 		m_LineHeight = scaledLineHeight * 0.5f;
 		m_Height = m_LineHeight;
 
@@ -135,7 +74,6 @@ namespace Moon {
 				continue;
 			}
 
-
 			// Get the glyph geometry
 			auto glyph = fontGeometry.getGlyph(character);
 			if (!glyph)
@@ -149,10 +87,7 @@ namespace Moon {
 				double advance = glyph->getAdvance();
 				fontGeometry.getAdvance(advance, character, utf32string[i + 1]);
 				x += fsScale * advance;
-
-				float scaledLineWidth = (glm::vec4((float)x, 0.0f, 0.0f, 1.0f) * transform).x;
-				m_Width = glm::max<float>(m_Width, scaledLineWidth);
-
+				m_Width = glm::max<float>(m_Width, ((float)x * textSize));
 				continue;
 			}
 
@@ -181,25 +116,25 @@ namespace Moon {
 			t *= texelHeight;
 
 			// Bottom left
-			vertexBufferPtr->Position = transform * glm::vec4(pl, pb, 0.0f, 1.0f);
+			vertexBufferPtr->Position = glm::vec3(pl, pb, 0.0f) * textSize;
 			vertexBufferPtr->Color = color;
 			vertexBufferPtr->UV = { l, b };
 			vertexBufferPtr++;
 
 			// Bottom right
+			vertexBufferPtr->Position = glm::vec3(pr, pb, 0.0f) * textSize;
 			vertexBufferPtr->Color = color;
-			vertexBufferPtr->Position = transform * glm::vec4(pr, pb, 0.0f, 1.0f);
 			vertexBufferPtr->UV = { r, b };
 			vertexBufferPtr++;
 
 			// Top Left
-			vertexBufferPtr->Position = transform * glm::vec4(pl, pt, 0.0f, 1.0f);
+			vertexBufferPtr->Position = glm::vec3(pl, pt, 0.0f) * textSize;
 			vertexBufferPtr->Color = color;
 			vertexBufferPtr->UV = { l, t };
 			vertexBufferPtr++;
 
 			// Top right
-			vertexBufferPtr->Position = transform * glm::vec4(pr, pt, 0.0f, 1.0f);
+			vertexBufferPtr->Position = glm::vec3(pr, pt, 0.0f) * textSize;
 			vertexBufferPtr->Color = color;
 			vertexBufferPtr->UV = { r, t };
 			vertexBufferPtr++;
@@ -207,9 +142,7 @@ namespace Moon {
 			double advance = glyph->getAdvance();
 			fontGeometry.getAdvance(advance, character, utf32string[i + 1]);
 			x += fsScale * advance;
-
-			float scaledLineWidth = (glm::vec4((float)x, 0.0f, 0.0f, 1.0f) * transform).x;
-			m_Width = glm::max<float>(m_Width, scaledLineWidth);
+			m_Width = glm::max<float>(m_Width, ((float)x * textSize));
 		}
 
 		m_VertexArray = VertexArray::Create();

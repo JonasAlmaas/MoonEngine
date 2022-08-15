@@ -10,18 +10,7 @@ namespace Moon {
 	class TextSurface
 	{
 	public:
-		TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::mat4& transform, const Color& color);
-
-		TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, const glm::vec2& scale, const glm::vec3 rotation, const Color& color);
-		TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, const glm::vec2& scale, const Color& color);
-		TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, float scale, const glm::vec3 rotation, const Color& color);
-		TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, float scale, const Color& color);
-
-		TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, const glm::vec2& scale, float rotation, const Color& color);
-		TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, const glm::vec2& scale, const Color& color);
-		TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, float scale, float rotation, const Color& color);
-		TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, float scale, const Color& color);
-
+		TextSurface(const std::string& text, const Ref<FontAsset> font, float textSize, const Color& color);
 		~TextSurface() = default;
 
 		inline float GetWidth() const { return m_Width; }
@@ -30,14 +19,12 @@ namespace Moon {
 
 		inline float GetLineHeight() const { return m_LineHeight; }
 
+		Ref<FontAsset> GetFont() const { return m_Font; }
 		Ref<VertexArray> GetVertexArray() const { return m_VertexArray; }
 
 	private:
-		void Setup(const std::string& text, const Ref<FontAsset>& font, const glm::mat4& transform, const Color& color);
-
-	private:
 		float m_Width, m_Height, m_LineHeight;
-
+		Ref<FontAsset> m_Font;
 		Ref<VertexArray> m_VertexArray;
 
 	};
