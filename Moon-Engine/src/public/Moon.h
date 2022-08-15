@@ -27,7 +27,9 @@
 
 	#pragma region Math
 	#include "Moon/Core/Math.h"
+	#include "Moon/Core/Math/AABB.h"
 	#include "Moon/Core/Math/Noise.h"
+	#include "Moon/Core/Math/Ray.h"
 	#include "Moon/Core/Math/Spline.h"
 	#pragma endregion
 
