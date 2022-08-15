@@ -25,59 +25,59 @@ namespace Moon {
 		Setup(text, font, transform, color);
 	}
 
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, const glm::vec3& size, const glm::vec3 rotation, const Color& color)
+	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, const glm::vec2& scale, const glm::vec3 rotation, const Color& color)
 		: m_Width(0), m_Height(0)
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::toMat4(glm::quat(rotation)) * glm::scale(glm::mat4(1.0f), size);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::toMat4(glm::quat(rotation)) * glm::scale(glm::mat4(1.0f), { scale, 0.0f });
 		Setup(text, font, transform, color);
 	}
 
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, const glm::vec3& size, const Color& color)
+	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, const glm::vec2& scale, const Color& color)
 		: m_Width(0), m_Height(0)
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), size);
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale, 0.0f });
 		Setup(text, font, transform, color);
 	}
 
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, float size, const glm::vec3 rotation, const Color& color)
+	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, float scale, const glm::vec3 rotation, const Color& color)
 		: m_Width(0), m_Height(0)
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::toMat4(glm::quat(rotation)) * glm::scale(glm::mat4(1.0f), { size, size, 0.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::toMat4(glm::quat(rotation)) * glm::scale(glm::mat4(1.0f), { scale, scale, 0.0f });
 		Setup(text, font, transform, color);
 	}
 
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, float size, const Color& color)
+	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec3& position, float scale, const Color& color)
 		: m_Width(0), m_Height(0)
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size, size, 0.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { scale, scale, 0.0f });
 		Setup(text, font, transform, color);
 	}
 
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, const glm::vec2& size, float rotation, const Color& color)
+	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, const glm::vec2& scale, float rotation, const Color& color)
 		: m_Width(0), m_Height(0)
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size, 0.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { scale, 0.0f });
 		Setup(text, font, transform, color);
 	}
 
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, const glm::vec2& size, const Color& color)
+	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, const glm::vec2& scale, const Color& color)
 		: m_Width(0), m_Height(0)
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::scale(glm::mat4(1.0f), { size, 0.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::scale(glm::mat4(1.0f), { scale, 0.0f });
 		Setup(text, font, transform, color);
 	}
 
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, float size, float rotation, const Color& color)
+	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, float scale, float rotation, const Color& color)
 		: m_Width(0), m_Height(0)
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { size, size, 0.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f }) * glm::scale(glm::mat4(1.0f), { scale, scale, 0.0f });
 		Setup(text, font, transform, color);
 	}
 
-	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, float size, const Color& color)
+	TextSurface::TextSurface(const std::string& text, const Ref<FontAsset>& font, const glm::vec2& position, float scale, const Color& color)
 		: m_Width(0), m_Height(0)
 	{
-		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::scale(glm::mat4(1.0f), { size, size, 0.0f });
+		glm::mat4 transform = glm::translate(glm::mat4(1.0f), { position, 0.0f }) * glm::scale(glm::mat4(1.0f), { scale, scale, 0.0f });
 		Setup(text, font, transform, color);
 	}
 
