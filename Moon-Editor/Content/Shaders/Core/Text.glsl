@@ -12,6 +12,11 @@ layout(std140, binding = 0) uniform Camera
 	mat4 u_ViewProjection;
 };
 
+layout(std140, binding = 1) uniform Model
+{
+	mat4 u_Transform;
+};
+
 struct VertexOutput
 {
 	vec4 Color;
@@ -25,7 +30,7 @@ void main()
 	Output.Color = a_Color;
 	Output.UV = a_UV;
 
-	gl_Position = u_ViewProjection * vec4(a_Position, 1.0);
+	gl_Position = u_ViewProjection * u_Transform * vec4(a_Position, 1.0);
 }
 
 #type pixel
