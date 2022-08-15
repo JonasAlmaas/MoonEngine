@@ -10,6 +10,7 @@ namespace Moon {
 	class TextSurface
 	{
 	public:
+		TextSurface() = default;
 		TextSurface(const std::string& text, const Ref<FontAsset> font, float textSize, const Color& color);
 		~TextSurface() = default;
 
