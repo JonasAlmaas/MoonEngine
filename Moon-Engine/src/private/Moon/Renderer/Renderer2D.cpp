@@ -1,8 +1,8 @@
 #include "mepch.h"
 #include "Moon/Renderer/Renderer2D.h"
 
+#include "Moon/Core/Renderer.h"
 #include "Moon/Core/Renderer/Buffer/IndexBuffer.h"
-#include "Moon/Core/Renderer/Buffer/UniformBuffer.h"
 #include "Moon/Core/Renderer/Buffer/VertexBuffer.h"
 #include "Moon/Core/Renderer/RenderCommand.h"
 #include "Moon/Core/Renderer/Shader.h"
@@ -91,50 +91,44 @@ namespace Moon {
 		#if ME_ENABLE_RENDERER2D_STATISTICS
 			Renderer2D::Statistics Stats;
 		#endif
-
-		// Uniform buffer data to be sent to the gpu
-		struct CameraData
-		{
-			glm::mat4 ViewProjection;
-		};
-		CameraData CameraBuffer;
-		Ref<UniformBuffer> CameraUniformBuffer;
 	};
 
-	static Renderer2DData s_Data;
+	static Renderer2DData* s_Data = nullptr;
 
 	void Renderer2D::Init()
 	{
 		ME_PROFILE_FUNCTION();
 
-		s_Data.CircleShader = Shader::Create("Content/Shaders/Core/Renderer2D/Renderer2D_Circle.glsl");
-		s_Data.LineShader = Shader::Create("Content/Shaders/Core/Renderer2D/Renderer2D_Line.glsl");
-		s_Data.SpriteShader = Shader::Create("Content/Shaders/Core/Renderer2D/Renderer2D_Sprite.glsl");
+		s_Data = new Renderer2DData();
+
+		s_Data->CircleShader = Shader::Create("Content/Shaders/Core/Renderer2D/Renderer2D_Circle.glsl");
+		s_Data->LineShader = Shader::Create("Content/Shaders/Core/Renderer2D/Renderer2D_Line.glsl");
+		s_Data->SpriteShader = Shader::Create("Content/Shaders/Core/Renderer2D/Renderer2D_Sprite.glsl");
 
 		int32_t samplers[Renderer2DData::MaxTextureSlots];
 		for (uint32_t i = 0; i < Renderer2DData::MaxTextureSlots; i++)
 			samplers[i] = i;
 
-		s_Data.SpriteShader->Bind();
-		s_Data.SpriteShader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
+		s_Data->SpriteShader->Bind();
+		s_Data->SpriteShader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlots);
 
 		// Generate a 1x1 white texture
-		s_Data.WhiteTexture = Texture2D::Create(ImageFormat::RGBA8 ,1, 1);
+		s_Data->WhiteTexture = Texture2D::Create(ImageFormat::RGBA8 ,1, 1);
 		uint32_t textureData = 0xffffffff;
-		s_Data.WhiteTexture->SetData(&textureData, sizeof(uint32_t));
+		s_Data->WhiteTexture->SetData(&textureData, sizeof(uint32_t));
 
 		// Set the white texture to slot 0
-		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
+		s_Data->TextureSlots[0] = s_Data->WhiteTexture;
 
 		// Set up defaults
-		s_Data.WhiteColor = Color();
-		s_Data.DefaultTileFactor = { 1.0f, 1.0f };
+		s_Data->WhiteColor = Color();
+		s_Data->DefaultTileFactor = { 1.0f, 1.0f };
 
 		// -- Sprite --
-		s_Data.SpriteVertexArray = VertexArray::Create();
+		s_Data->SpriteVertexArray = VertexArray::Create();
 
-		s_Data.SpriteVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(SpriteVertex));
-		s_Data.SpriteVertexBuffer->SetLayout({
+		s_Data->SpriteVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(SpriteVertex));
+		s_Data->SpriteVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "Position XYZ" },
 			{ ShaderDataType::Float4, "Color" },
 			{ ShaderDataType::Float2, "UV" },
@@ -142,9 +136,9 @@ namespace Moon {
 			{ ShaderDataType::Int, "EntityID" },
 		});
 
-		s_Data.SpriteVertexArray->AddVertexBuffer(s_Data.SpriteVertexBuffer);
+		s_Data->SpriteVertexArray->AddVertexBuffer(s_Data->SpriteVertexBuffer);
 
-		s_Data.SpriteVertexBufferBase = new SpriteVertex[Renderer2DData::MaxVertices];
+		s_Data->SpriteVertexBufferBase = new SpriteVertex[Renderer2DData::MaxVertices];
 
 		uint32_t* spriteIndices = new uint32_t[Renderer2DData::MaxIndices];
 		uint32_t offset = 0;
@@ -162,14 +156,14 @@ namespace Moon {
 		}
 
 		Ref<IndexBuffer> spriteIB = IndexBuffer::Create(spriteIndices, Renderer2DData::MaxIndices);
-		s_Data.SpriteVertexArray->SetIndexBuffer(spriteIB);
+		s_Data->SpriteVertexArray->SetIndexBuffer(spriteIB);
 		delete[] spriteIndices;
 
 		// -- Circle --
-		s_Data.CircleVertexArray = VertexArray::Create();
+		s_Data->CircleVertexArray = VertexArray::Create();
 
-		s_Data.CircleVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(CircleVertex));
-		s_Data.CircleVertexBuffer->SetLayout({
+		s_Data->CircleVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVertices * sizeof(CircleVertex));
+		s_Data->CircleVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "World Position XYZ" },
 			{ ShaderDataType::Float3, "Local Position XYZ" },
 			{ ShaderDataType::Float4, "Color" },
@@ -178,52 +172,53 @@ namespace Moon {
 			{ ShaderDataType::Int, "EntityID" },
 		});
 
-		s_Data.CircleVertexArray->AddVertexBuffer(s_Data.CircleVertexBuffer);
-		s_Data.CircleVertexBufferBase = new CircleVertex[Renderer2DData::MaxVertices];
-		s_Data.CircleVertexArray->SetIndexBuffer(spriteIB);	// Use Sprite IB
+		s_Data->CircleVertexArray->AddVertexBuffer(s_Data->CircleVertexBuffer);
+		s_Data->CircleVertexBufferBase = new CircleVertex[Renderer2DData::MaxVertices];
+		s_Data->CircleVertexArray->SetIndexBuffer(spriteIB);	// Use Sprite IB
 
 		// -- Line --
-		s_Data.LineVertexArray = VertexArray::Create();
+		s_Data->LineVertexArray = VertexArray::Create();
 
-		s_Data.LineVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(LineVertex));
-		s_Data.LineVertexBuffer->SetLayout({
+		s_Data->LineVertexBuffer = VertexBuffer::Create(s_Data->MaxVertices * sizeof(LineVertex));
+		s_Data->LineVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3, "Position" },
 			{ ShaderDataType::Float4, "Color" },
 			{ ShaderDataType::Int, "a_EntityID" }
 		});
 
-		s_Data.LineVertexArray->AddVertexBuffer(s_Data.LineVertexBuffer);
-		s_Data.LineVertexBufferBase = new LineVertex[s_Data.MaxVertices];
+		s_Data->LineVertexArray->AddVertexBuffer(s_Data->LineVertexBuffer);
+		s_Data->LineVertexBufferBase = new LineVertex[s_Data->MaxVertices];
 
 		// ---- Create basic sprite information -----
-		s_Data.SpriteVertexPositions[0] = { -0.5, -0.5, 0, 1.0f };
-		s_Data.SpriteVertexPositions[1] = { 0.5, -0.5, 0, 1.0f };
-		s_Data.SpriteVertexPositions[2] = { 0.5,  0.5, 0, 1.0f };
-		s_Data.SpriteVertexPositions[3] = { -0.5,  0.5, 0, 1.0f };
+		s_Data->SpriteVertexPositions[0] = { -0.5, -0.5, 0, 1.0f };
+		s_Data->SpriteVertexPositions[1] = { 0.5, -0.5, 0, 1.0f };
+		s_Data->SpriteVertexPositions[2] = { 0.5,  0.5, 0, 1.0f };
+		s_Data->SpriteVertexPositions[3] = { -0.5,  0.5, 0, 1.0f };
 
-		s_Data.SpriteUVCoords[0] = { 0, 0 };
-		s_Data.SpriteUVCoords[1] = { 1.0f, 0.0f };
-		s_Data.SpriteUVCoords[2] = { 1.0f, 1.0f };
-		s_Data.SpriteUVCoords[3] = { 0.0f, 1.0f };
-
-		s_Data.CameraUniformBuffer = UniformBuffer::Create(sizeof(Renderer2DData::CameraData), 0);
+		s_Data->SpriteUVCoords[0] = { 0, 0 };
+		s_Data->SpriteUVCoords[1] = { 1.0f, 0.0f };
+		s_Data->SpriteUVCoords[2] = { 1.0f, 1.0f };
+		s_Data->SpriteUVCoords[3] = { 0.0f, 1.0f };
 	}
 
 	void Renderer2D::Shutdown()
 	{
 		ME_PROFILE_FUNCTION();
 
-		delete[] s_Data.SpriteVertexBufferBase;
-		delete[] s_Data.CircleVertexBufferBase;
-		delete[] s_Data.LineVertexBufferBase;
+		delete[] s_Data->SpriteVertexBufferBase;
+		delete[] s_Data->CircleVertexBufferBase;
+		delete[] s_Data->LineVertexBufferBase;
+
+		delete s_Data;
+		s_Data = nullptr;
 	}
 
 	void Renderer2D::BeginScene(const Ref<RenderCamera>& renderCamera)
 	{
 		ME_PROFILE_FUNCTION();
 
-		s_Data.CameraBuffer.ViewProjection = renderCamera->GetViewProjection();
-		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
+		// Set the view projection
+		Renderer::BeginScene(renderCamera);
 
 		StartSpriteBatch();
 		StartCircleBatch();
@@ -243,21 +238,21 @@ namespace Moon {
 
 	void Renderer2D::StartCircleBatch()
 	{
-		s_Data.CircleIndexCount = 0;
-		s_Data.CircleVertexBufferPtr = s_Data.CircleVertexBufferBase;
+		s_Data->CircleIndexCount = 0;
+		s_Data->CircleVertexBufferPtr = s_Data->CircleVertexBufferBase;
 	}
 
 	void Renderer2D::StartLineBatch()
 	{
-		s_Data.LineVertexCount = 0;
-		s_Data.LineVertexBufferPtr = s_Data.LineVertexBufferBase;
+		s_Data->LineVertexCount = 0;
+		s_Data->LineVertexBufferPtr = s_Data->LineVertexBufferBase;
 	}
 
 	void Renderer2D::StartSpriteBatch()
 	{
-		s_Data.SpriteIndexCount = 0;
-		s_Data.SpriteVertexBufferPtr = s_Data.SpriteVertexBufferBase;
-		s_Data.TextureSlotIndex = 1;
+		s_Data->SpriteIndexCount = 0;
+		s_Data->SpriteVertexBufferPtr = s_Data->SpriteVertexBufferBase;
+		s_Data->TextureSlotIndex = 1;
 	}
 
 	// -- Flush Batches --
@@ -267,17 +262,17 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		// Nothing to draw
-		if (s_Data.CircleIndexCount == 0)
+		if (s_Data->CircleIndexCount == 0)
 			return;
 
-		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.CircleVertexBufferPtr - (uint8_t*)s_Data.CircleVertexBufferBase);
-		s_Data.CircleVertexBuffer->SetData(s_Data.CircleVertexBufferBase, dataSize);
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data->CircleVertexBufferPtr - (uint8_t*)s_Data->CircleVertexBufferBase);
+		s_Data->CircleVertexBuffer->SetData(s_Data->CircleVertexBufferBase, dataSize);
 
-		s_Data.CircleShader->Bind();
-		RenderCommand::DrawIndexed(s_Data.CircleVertexArray, s_Data.CircleIndexCount);
+		s_Data->CircleShader->Bind();
+		RenderCommand::DrawIndexed(s_Data->CircleVertexArray, s_Data->CircleIndexCount);
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.DrawCalls++;
+			s_Data->Stats.DrawCalls++;
 		#endif
 	}
 
@@ -286,18 +281,18 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		// Nothing to draw
-		if (s_Data.LineVertexCount == 0)
+		if (s_Data->LineVertexCount == 0)
 			return;
 
-		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.LineVertexBufferPtr - (uint8_t*)s_Data.LineVertexBufferBase);
-		s_Data.LineVertexBuffer->SetData(s_Data.LineVertexBufferBase, dataSize);
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data->LineVertexBufferPtr - (uint8_t*)s_Data->LineVertexBufferBase);
+		s_Data->LineVertexBuffer->SetData(s_Data->LineVertexBufferBase, dataSize);
 
-		s_Data.LineShader->Bind();
-		RenderCommand::SetLineWidth(s_Data.LineWidth);
-		RenderCommand::DrawLines(s_Data.LineVertexArray, s_Data.LineVertexCount);
+		s_Data->LineShader->Bind();
+		RenderCommand::SetLineWidth(s_Data->LineWidth);
+		RenderCommand::DrawLines(s_Data->LineVertexArray, s_Data->LineVertexCount);
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.DrawCalls++;
+			s_Data->Stats.DrawCalls++;
 		#endif
 	}
 
@@ -306,21 +301,21 @@ namespace Moon {
 		ME_PROFILE_FUNCTION();
 
 		// Nothing to draw
-		if (s_Data.SpriteIndexCount == 0)
+		if (s_Data->SpriteIndexCount == 0)
 			return;
 
-		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.SpriteVertexBufferPtr - (uint8_t*)s_Data.SpriteVertexBufferBase);
-		s_Data.SpriteVertexBuffer->SetData(s_Data.SpriteVertexBufferBase, dataSize);
+		uint32_t dataSize = (uint32_t)((uint8_t*)s_Data->SpriteVertexBufferPtr - (uint8_t*)s_Data->SpriteVertexBufferBase);
+		s_Data->SpriteVertexBuffer->SetData(s_Data->SpriteVertexBufferBase, dataSize);
 
 		// Bind textures
-		for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
-			s_Data.TextureSlots[i]->Bind(i);
+		for (uint32_t i = 0; i < s_Data->TextureSlotIndex; i++)
+			s_Data->TextureSlots[i]->Bind(i);
 
-		s_Data.SpriteShader->Bind();
-		RenderCommand::DrawIndexed(s_Data.SpriteVertexArray, s_Data.SpriteIndexCount);
+		s_Data->SpriteShader->Bind();
+		RenderCommand::DrawIndexed(s_Data->SpriteVertexArray, s_Data->SpriteIndexCount);
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.DrawCalls++;
+			s_Data->Stats.DrawCalls++;
 		#endif
 	}
 
@@ -329,12 +324,12 @@ namespace Moon {
 	#if ME_ENABLE_RENDERER2D_STATISTICS
 		void Renderer2D::ResetStats()
 		{
-			memset(&s_Data.Stats, 0, sizeof(Statistics));
+			memset(&s_Data->Stats, 0, sizeof(Statistics));
 		}
 
 		Renderer2D::Statistics Renderer2D::GetStats()
 		{
-			return s_Data.Stats;
+			return s_Data->Stats;
 		}
 	#endif
 
@@ -350,7 +345,7 @@ namespace Moon {
 		if (component.Texture)
 			Uber_DrawSprite(transform, component.Texture, component.TileFactor, component.Color, entityID);
 		else
-			Uber_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, component.Color, entityID);
+			Uber_DrawSprite(transform, s_Data->WhiteTexture, s_Data->DefaultTileFactor, component.Color, entityID);
 	}
 
 	// -- Circle --
@@ -359,7 +354,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		if (s_Data.CircleIndexCount >= Renderer2DData::MaxIndices)
+		if (s_Data->CircleIndexCount >= Renderer2DData::MaxIndices)
 		{
 			FlushCircleBatch();
 			StartCircleBatch();
@@ -367,19 +362,19 @@ namespace Moon {
 
 		for (uint32_t i = 0; i < 4; i++)
 		{
-			s_Data.CircleVertexBufferPtr->WorldPosition = transform * s_Data.SpriteVertexPositions[i];
-			s_Data.CircleVertexBufferPtr->LocalPosition = s_Data.SpriteVertexPositions[i] * 2.0f;
-			s_Data.CircleVertexBufferPtr->Thickness = thickness;
-			s_Data.CircleVertexBufferPtr->Fade = fade;
-			s_Data.CircleVertexBufferPtr->Color = color;
-			s_Data.CircleVertexBufferPtr->EntityID = entityID;
-			s_Data.CircleVertexBufferPtr++;
+			s_Data->CircleVertexBufferPtr->WorldPosition = transform * s_Data->SpriteVertexPositions[i];
+			s_Data->CircleVertexBufferPtr->LocalPosition = s_Data->SpriteVertexPositions[i] * 2.0f;
+			s_Data->CircleVertexBufferPtr->Thickness = thickness;
+			s_Data->CircleVertexBufferPtr->Fade = fade;
+			s_Data->CircleVertexBufferPtr->Color = color;
+			s_Data->CircleVertexBufferPtr->EntityID = entityID;
+			s_Data->CircleVertexBufferPtr++;
 		}
 
-		s_Data.CircleIndexCount += 6;
+		s_Data->CircleIndexCount += 6;
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.SpriteCount++;
+			s_Data->Stats.SpriteCount++;
 		#endif
 	}
 
@@ -398,7 +393,7 @@ namespace Moon {
 	// -- Circle --
 	void Renderer2D::DrawCircle(const glm::mat4& transform, float thickness, float fade)
 	{
-		Uber_DrawCircle(transform, thickness, fade, s_Data.WhiteColor);
+		Uber_DrawCircle(transform, thickness, fade, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawCircle(const glm::mat4& transform, float thickness, float fade, const Color& color)
@@ -408,12 +403,12 @@ namespace Moon {
 
 	void Renderer2D::DrawCircle(const glm::vec2& position, float radius, float thickness, float fade)
 	{
-		Super_DrawCircle({ position, 0.0f }, radius, thickness, fade, s_Data.WhiteColor);
+		Super_DrawCircle({ position, 0.0f }, radius, thickness, fade, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawCircle(const glm::vec3& position, float radius, float thickness, float fade)
 	{
-		Super_DrawCircle(position, radius, thickness, fade, s_Data.WhiteColor);
+		Super_DrawCircle(position, radius, thickness, fade, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawCircle(const glm::vec2& position, float radius, float thickness, float fade, const Color& color)
@@ -432,20 +427,20 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		s_Data.LineVertexBufferPtr->Position = p0;
-		s_Data.LineVertexBufferPtr->Color = color;
-		s_Data.LineVertexBufferPtr->EntityID = entityID;
-		s_Data.LineVertexBufferPtr++;
+		s_Data->LineVertexBufferPtr->Position = p0;
+		s_Data->LineVertexBufferPtr->Color = color;
+		s_Data->LineVertexBufferPtr->EntityID = entityID;
+		s_Data->LineVertexBufferPtr++;
 
-		s_Data.LineVertexBufferPtr->Position = p1;
-		s_Data.LineVertexBufferPtr->Color = color;
-		s_Data.LineVertexBufferPtr->EntityID = entityID;
-		s_Data.LineVertexBufferPtr++;
+		s_Data->LineVertexBufferPtr->Position = p1;
+		s_Data->LineVertexBufferPtr->Color = color;
+		s_Data->LineVertexBufferPtr->EntityID = entityID;
+		s_Data->LineVertexBufferPtr++;
 
-		s_Data.LineVertexCount += 2;
+		s_Data->LineVertexCount += 2;
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.LineCount++;
+			s_Data->Stats.LineCount++;
 		#endif
 	}
 
@@ -461,22 +456,22 @@ namespace Moon {
 
 	void Renderer2D::DrawLine(const glm::vec3& p0, const glm::vec3& p1)
 	{
-		Uber_DrawLine(p0, p1, s_Data.WhiteColor);
+		Uber_DrawLine(p0, p1, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawLine(const glm::vec2& p0, const glm::vec2& p1)
 	{
-		Uber_DrawLine({ p0, 0.0f }, { p1, 0.0f }, s_Data.WhiteColor);
+		Uber_DrawLine({ p0, 0.0f }, { p1, 0.0f }, s_Data->WhiteColor);
 	}
 
 	float Renderer2D::GetLineWidth()
 	{
-		return s_Data.LineWidth;
+		return s_Data->LineWidth;
 	}
 
 	void Renderer2D::SetLineWidth(float width)
 	{
-		s_Data.LineWidth = width;
+		s_Data->LineWidth = width;
 	}
 
 	// -- Rectangle --
@@ -485,7 +480,7 @@ namespace Moon {
 	{
 		glm::vec3 lineVertices[4];
 		for (size_t i = 0; i < 4; i++)
-			lineVertices[i] = transform * s_Data.SpriteVertexPositions[i];
+			lineVertices[i] = transform * s_Data->SpriteVertexPositions[i];
 
 		Uber_DrawLine(lineVertices[0], lineVertices[1], color, entityID);
 		Uber_DrawLine(lineVertices[1], lineVertices[2], color, entityID);
@@ -520,7 +515,7 @@ namespace Moon {
 
 	void Renderer2D::DrawRect(const glm::mat4& transform)
 	{
-		Uber_DrawRect(transform, s_Data.WhiteColor);
+		Uber_DrawRect(transform, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRect(const glm::mat4& transform, const Color& color)
@@ -530,22 +525,22 @@ namespace Moon {
 
 	void Renderer2D::DrawRect(const glm::vec2& position, float size)
 	{
-		Super_DrawRect({ position, 0.0f }, { size, size }, s_Data.WhiteColor);
+		Super_DrawRect({ position, 0.0f }, { size, size }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRect(const glm::vec3& position, float size)
 	{
-		Super_DrawRect(position, { size, size }, s_Data.WhiteColor);
+		Super_DrawRect(position, { size, size }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRect(const glm::vec2& position, const glm::vec2& size)
 	{
-		Super_DrawRect({ position, 0.0f }, size, s_Data.WhiteColor);
+		Super_DrawRect({ position, 0.0f }, size, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRect(const glm::vec3& position, const glm::vec2& size)
 	{
-		Super_DrawRect(position, size, s_Data.WhiteColor);
+		Super_DrawRect(position, size, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRect(const glm::vec2& position, float size, const Color& color)
@@ -572,22 +567,22 @@ namespace Moon {
 
 	void Renderer2D::DrawRotatedRect(const glm::vec2& position, float rotationDegrees, float size)
 	{
-		Super_DrawRotatedRect({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, s_Data.WhiteColor);
+		Super_DrawRotatedRect({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedRect(const glm::vec3& position, float rotationDegrees, float size)
 	{
-		Super_DrawRotatedRect(position, glm::radians(rotationDegrees), { size, size }, s_Data.WhiteColor);
+		Super_DrawRotatedRect(position, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedRect(const glm::vec2& position, float rotationDegrees, const glm::vec2& size)
 	{
-		Super_DrawRotatedRect({ position, 0.0f }, glm::radians(rotationDegrees), size, s_Data.WhiteColor);
+		Super_DrawRotatedRect({ position, 0.0f }, glm::radians(rotationDegrees), size, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedRect(const glm::vec3& position, float rotationDegrees, const glm::vec2& size)
 	{
-		Super_DrawRotatedRect(position, glm::radians(rotationDegrees), size, s_Data.WhiteColor);
+		Super_DrawRotatedRect(position, glm::radians(rotationDegrees), size, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedRect(const glm::vec2& position, float rotationDegrees, float size, const Color& color)
@@ -616,7 +611,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		if (s_Data.SpriteIndexCount >= Renderer2DData::MaxIndices)
+		if (s_Data->SpriteIndexCount >= Renderer2DData::MaxIndices)
 		{
 			FlushSpriteBatch();
 			StartSpriteBatch();
@@ -625,12 +620,12 @@ namespace Moon {
 		int textureIndex = 0;
 
 		// Check that the texture isn't the white texture.
-		if (*s_Data.TextureSlots[0] != *texture)
+		if (*s_Data->TextureSlots[0] != *texture)
 		{
 			// Get texture index, only if it has been added previusly.
-			for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
+			for (uint32_t i = 1; i < s_Data->TextureSlotIndex; i++)
 			{
-				if (*s_Data.TextureSlots[i] == *texture)
+				if (*s_Data->TextureSlots[i] == *texture)
 				{
 					textureIndex = i;
 					break;
@@ -640,26 +635,26 @@ namespace Moon {
 			// If the texture isn't in a texture slot, add it.
 			if (textureIndex == 0)
 			{
-				textureIndex = s_Data.TextureSlotIndex;
-				s_Data.TextureSlots[textureIndex] = texture;
-				s_Data.TextureSlotIndex++;
+				textureIndex = s_Data->TextureSlotIndex;
+				s_Data->TextureSlots[textureIndex] = texture;
+				s_Data->TextureSlotIndex++;
 			}
 		}
 
 		for (uint32_t i = 0; i < 4; i++)
 		{
-			s_Data.SpriteVertexBufferPtr->Position = transform * s_Data.SpriteVertexPositions[i];
-			s_Data.SpriteVertexBufferPtr->Color = tint;
-			s_Data.SpriteVertexBufferPtr->UV = tileFactor * s_Data.SpriteUVCoords[i];
-			s_Data.SpriteVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
-			s_Data.SpriteVertexBufferPtr->EntityID = entityID;
-			s_Data.SpriteVertexBufferPtr++;
+			s_Data->SpriteVertexBufferPtr->Position = transform * s_Data->SpriteVertexPositions[i];
+			s_Data->SpriteVertexBufferPtr->Color = tint;
+			s_Data->SpriteVertexBufferPtr->UV = tileFactor * s_Data->SpriteUVCoords[i];
+			s_Data->SpriteVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
+			s_Data->SpriteVertexBufferPtr->EntityID = entityID;
+			s_Data->SpriteVertexBufferPtr++;
 		}
 
-		s_Data.SpriteIndexCount += 6;
+		s_Data->SpriteIndexCount += 6;
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.SpriteCount++;
+			s_Data->Stats.SpriteCount++;
 		#endif
 	}
 
@@ -692,7 +687,7 @@ namespace Moon {
 	{
 		ME_PROFILE_FUNCTION();
 
-		if (s_Data.SpriteIndexCount >= Renderer2DData::MaxIndices)
+		if (s_Data->SpriteIndexCount >= Renderer2DData::MaxIndices)
 		{
 			FlushSpriteBatch();
 			StartSpriteBatch();
@@ -701,12 +696,12 @@ namespace Moon {
 		int textureIndex = 0;
 
 		// Check that the texture isn't the white texture.
-		if (*s_Data.TextureSlots[0] != *subTexture->GetTexture())
+		if (*s_Data->TextureSlots[0] != *subTexture->GetTexture())
 		{
 			// Get texture index, only if it has been added previusly.
-			for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
+			for (uint32_t i = 1; i < s_Data->TextureSlotIndex; i++)
 			{
-				if (*s_Data.TextureSlots[i] == *subTexture->GetTexture())
+				if (*s_Data->TextureSlots[i] == *subTexture->GetTexture())
 				{
 					textureIndex = i;
 					break;
@@ -716,25 +711,25 @@ namespace Moon {
 			// If the texture isn't in a texture slot, add it.
 			if (textureIndex == 0)
 			{
-				textureIndex = s_Data.TextureSlotIndex;
-				s_Data.TextureSlots[textureIndex] = subTexture->GetTexture();
-				s_Data.TextureSlotIndex++;
+				textureIndex = s_Data->TextureSlotIndex;
+				s_Data->TextureSlots[textureIndex] = subTexture->GetTexture();
+				s_Data->TextureSlotIndex++;
 			}
 		}
 
 		for (uint32_t i = 0; i < 4; i++)
 		{
-			s_Data.SpriteVertexBufferPtr->Position = transform * s_Data.SpriteVertexPositions[i];
-			s_Data.SpriteVertexBufferPtr->Color = tint;
-			s_Data.SpriteVertexBufferPtr->UV = subTexture->GetUVCoords()[i];
-			s_Data.SpriteVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
-			s_Data.SpriteVertexBufferPtr++;
+			s_Data->SpriteVertexBufferPtr->Position = transform * s_Data->SpriteVertexPositions[i];
+			s_Data->SpriteVertexBufferPtr->Color = tint;
+			s_Data->SpriteVertexBufferPtr->UV = subTexture->GetUVCoords()[i];
+			s_Data->SpriteVertexBufferPtr->TextureIndex = (float)textureIndex; // This is a float because it be like that some times...
+			s_Data->SpriteVertexBufferPtr++;
 		}
 
-		s_Data.SpriteIndexCount += 6;
+		s_Data->SpriteIndexCount += 6;
 
 		#if ME_ENABLE_RENDERER2D_STATISTICS
-			s_Data.Stats.SpriteCount++;
+			s_Data->Stats.SpriteCount++;
 		#endif
 	}
 
@@ -765,27 +760,27 @@ namespace Moon {
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Color& color)
 	{
-		Uber_DrawSprite(transform, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Uber_DrawSprite(transform, s_Data->WhiteTexture, s_Data->DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture)
 	{
-		Uber_DrawSprite(transform, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Uber_DrawSprite(transform, texture, s_Data->DefaultTileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, float tileFactor)
 	{
-		Uber_DrawSprite(transform, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Uber_DrawSprite(transform, texture, { tileFactor, tileFactor }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
-		Uber_DrawSprite(transform, texture, tileFactor, s_Data.WhiteColor);
+		Uber_DrawSprite(transform, texture, tileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, const Color& tint)
 	{
-		Uber_DrawSprite(transform, texture, s_Data.DefaultTileFactor, tint);
+		Uber_DrawSprite(transform, texture, s_Data->DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
@@ -800,60 +795,60 @@ namespace Moon {
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Color& color)
 	{
-		Super_DrawSprite({ position, 0.0f }, { size, size }, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Super_DrawSprite({ position, 0.0f }, { size, size }, s_Data->WhiteTexture, s_Data->DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, float size, const Color& color)
 	{
-		Super_DrawSprite(position, { size, size }, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Super_DrawSprite(position, { size, size }, s_Data->WhiteTexture, s_Data->DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Ref<Texture2D>& texture)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawSprite({ position, 0.0f }, { size, size * aspectRatio }, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Super_DrawSprite({ position, 0.0f }, { size, size * aspectRatio }, texture, s_Data->DefaultTileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, float size, const Ref<Texture2D>& texture)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawSprite(position, { size, size * aspectRatio }, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Super_DrawSprite(position, { size, size * aspectRatio }, texture, s_Data->DefaultTileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Ref<Texture2D>& texture, float tileFactor)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawSprite({ position, 0.0f }, { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Super_DrawSprite({ position, 0.0f }, { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, float size, const Ref<Texture2D>& texture, float tileFactor)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawSprite(position, { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Super_DrawSprite(position, { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawSprite({ position, 0.0f }, { size, size * aspectRatio }, texture, tileFactor, s_Data.WhiteColor);
+		Super_DrawSprite({ position, 0.0f }, { size, size * aspectRatio }, texture, tileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawSprite(position, { size, size * aspectRatio }, texture, tileFactor, s_Data.WhiteColor);
+		Super_DrawSprite(position, { size, size * aspectRatio }, texture, tileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawSprite({ position, 0.0f }, { size, size * aspectRatio }, texture, s_Data.DefaultTileFactor, tint);
+		Super_DrawSprite({ position, 0.0f }, { size, size * aspectRatio }, texture, s_Data->DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, float size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawSprite(position, { size, size * aspectRatio }, texture, s_Data.DefaultTileFactor, tint);
+		Super_DrawSprite(position, { size, size * aspectRatio }, texture, s_Data->DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
@@ -882,52 +877,52 @@ namespace Moon {
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, const Color& color)
 	{
-		Super_DrawSprite({ position, 0.0f }, size, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Super_DrawSprite({ position, 0.0f }, size, s_Data->WhiteTexture, s_Data->DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, const glm::vec2& size, const Color& color)
 	{
-		Super_DrawSprite(position, size, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Super_DrawSprite(position, size, s_Data->WhiteTexture, s_Data->DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
-		Super_DrawSprite({ position, 0.0f }, size, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Super_DrawSprite({ position, 0.0f }, size, texture, s_Data->DefaultTileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
-		Super_DrawSprite(position, size, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Super_DrawSprite(position, size, texture, s_Data->DefaultTileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor)
 	{
-		Super_DrawSprite({ position, 0.0f }, size, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Super_DrawSprite({ position, 0.0f }, size, texture, { tileFactor, tileFactor }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor)
 	{
-		Super_DrawSprite(position, size, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Super_DrawSprite(position, size, texture, { tileFactor, tileFactor }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
-		Super_DrawSprite({ position, 0.0f }, size, texture, tileFactor, s_Data.WhiteColor);
+		Super_DrawSprite({ position, 0.0f }, size, texture, tileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
-		Super_DrawSprite(position, size, texture, tileFactor, s_Data.WhiteColor);
+		Super_DrawSprite(position, size, texture, tileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, const Color& tint)
 	{
-		Super_DrawSprite({ position, 0.0f }, size, texture, s_Data.DefaultTileFactor, tint);
+		Super_DrawSprite({ position, 0.0f }, size, texture, s_Data->DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, const Color& tint)
 	{
-		Super_DrawSprite(position, size, texture, s_Data.DefaultTileFactor, tint);
+		Super_DrawSprite(position, size, texture, s_Data->DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
@@ -954,60 +949,60 @@ namespace Moon {
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Color& color)
 	{
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, s_Data->DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, float size, const Color& color)
 	{
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size }, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size }, s_Data->WhiteTexture, s_Data->DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, s_Data->DefaultTileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, s_Data->DefaultTileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, float tileFactor)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, float tileFactor)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, { tileFactor, tileFactor }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, tileFactor, s_Data.WhiteColor);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, tileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, tileFactor, s_Data.WhiteColor);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, tileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, s_Data.DefaultTileFactor, tint);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, s_Data->DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, const Color& tint)
 	{
 		float aspectRatio = (float)texture->GetWidth() / (float)texture->GetHeight();
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, s_Data.DefaultTileFactor, tint);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size, size * aspectRatio }, texture, s_Data->DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
@@ -1036,52 +1031,52 @@ namespace Moon {
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Color& color)
 	{
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, s_Data->WhiteTexture, s_Data->DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Color& color)
 	{
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, s_Data.WhiteTexture, s_Data.DefaultTileFactor, color);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, s_Data->WhiteTexture, s_Data->DefaultTileFactor, color);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, s_Data->DefaultTileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture)
 	{
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, texture, s_Data.DefaultTileFactor, s_Data.WhiteColor);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, texture, s_Data->DefaultTileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor)
 	{
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, { tileFactor, tileFactor }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor)
 	{
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, texture, { tileFactor, tileFactor }, s_Data.WhiteColor);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, texture, { tileFactor, tileFactor }, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, tileFactor, s_Data.WhiteColor);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, tileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const glm::vec2& tileFactor)
 	{
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, texture, tileFactor, s_Data.WhiteColor);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, texture, tileFactor, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const Color& tint)
 	{
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, s_Data.DefaultTileFactor, tint);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, texture, s_Data->DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, const Color& tint)
 	{
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, texture, s_Data.DefaultTileFactor, tint);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, texture, s_Data->DefaultTileFactor, tint);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<Texture2D>& texture, float tileFactor, const Color& tint)
@@ -1108,7 +1103,7 @@ namespace Moon {
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture)
 	{
-		Uber_DrawSprite(transform, subTexture, s_Data.WhiteColor);
+		Uber_DrawSprite(transform, subTexture, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::mat4& transform, const Ref<SubTexture2D>& subTexture, const Color& tint)
@@ -1119,13 +1114,13 @@ namespace Moon {
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Ref<SubTexture2D>& subTexture)
 	{
 		glm::vec2 spriteSize = subTexture->GetSpriteSize();
-		Super_DrawSprite({ position, 0.0f }, { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data.WhiteColor);
+		Super_DrawSprite({ position, 0.0f }, { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, float size, const Ref<SubTexture2D>& subTexture)
 	{
 		glm::vec2 spriteSize = subTexture->GetSpriteSize();
-		Super_DrawSprite(position, { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data.WhiteColor);
+		Super_DrawSprite(position, { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
@@ -1142,12 +1137,12 @@ namespace Moon {
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
 	{
-		Super_DrawSprite({ position, 0.0f }, size, subTexture, s_Data.WhiteColor);
+		Super_DrawSprite({ position, 0.0f }, size, subTexture, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec3& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
 	{
-		Super_DrawSprite(position, size, subTexture, s_Data.WhiteColor);
+		Super_DrawSprite(position, size, subTexture, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawSprite(const glm::vec2& position, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint)
@@ -1165,13 +1160,13 @@ namespace Moon {
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture)
 	{
 		glm::vec2 spriteSize = subTexture->GetSpriteSize();
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data.WhiteColor);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture)
 	{
 		glm::vec2 spriteSize = subTexture->GetSpriteSize();
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data.WhiteColor);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), { size * spriteSize.x , size * spriteSize.y }, subTexture, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, float size, const Ref<SubTexture2D>& subTexture, const Color& tint)
@@ -1188,12 +1183,12 @@ namespace Moon {
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
 	{
-		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, subTexture, s_Data.WhiteColor);
+		Super_DrawRotatedSprite({ position, 0.0f }, glm::radians(rotationDegrees), size, subTexture, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec3& position, float rotationDegrees, const glm::vec2& size, const Ref<SubTexture2D>& subTexture)
 	{
-		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, subTexture, s_Data.WhiteColor);
+		Super_DrawRotatedSprite(position, glm::radians(rotationDegrees), size, subTexture, s_Data->WhiteColor);
 	}
 
 	void Renderer2D::DrawRotatedSprite(const glm::vec2& position, float rotationDegrees, const glm::vec2& size, const Ref<SubTexture2D>& subTexture, const Color& tint)
