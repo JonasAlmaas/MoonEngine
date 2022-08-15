@@ -10,22 +10,26 @@ namespace Moon {
 	{
 		glm::vec3 Min, Max;
 
-		AABB()
-			: Min(0.0f), Max(0.0f) {}
+		AABB();
+		AABB(const glm::vec3& min, const glm::vec3& max);
 
-		AABB(const glm::vec3& min, const glm::vec3& max)
-			: Min(min), Max(max) {}
+		/**
+		 * @return Whether p is within the aabb or not.
+		*/
+		bool IsWithin(const glm::vec3& p) const;
 	};
 
 	struct AABB2D
 	{
 		glm::vec2 Min, Max;
 
-		AABB2D()
-			: Min(0.0f), Max(0.0f) {}
+		AABB2D();
+		AABB2D(const glm::vec2& min, const glm::vec2& max);
 
-		AABB2D(const glm::vec2& min, const glm::vec2& max)
-			: Min(min), Max(max) {}
+		/**
+		 * @return Whether p is within the aabb or not.
+		 */
+		bool IsWithin(const glm::vec2& p) const;
 	};
 
 }
