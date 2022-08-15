@@ -90,6 +90,7 @@ namespace Asteroid {
 		Renderer2D::ResetStats();
 		RenderCommand::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		RenderCommand::Clear();
+		RenderCommand::SetDepthTest(true);
 
 		// Clear entity ID attachment to -1
 		EditorState::GetFramebuffer()->ClearAttachment(1, -1);
