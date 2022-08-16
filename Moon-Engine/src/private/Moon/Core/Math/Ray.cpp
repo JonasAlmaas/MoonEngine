@@ -8,17 +8,16 @@ namespace Moon {
 	{
 		// https://gamedev.stackexchange.com/questions/18436/most-efficient-aabb-vs-ray-collision-algorithms
 
-		glm::vec3 dirfrac;
-
-		// r.dir is unit direction vector of ray
-		dirfrac.x = 1.0f / m_Direction.x;
-		dirfrac.y = 1.0f / m_Direction.y;
-		dirfrac.z = 1.0f / m_Direction.z;
+		glm::vec3 dirfrac = {
+			1.0f / m_Direction.x,
+			1.0f / m_Direction.y,
+			1.0f / m_Direction.z
+		};
 
 		// lb is the corner of AABB with minimal coordinates - left bottom, rt is maximal corner
-		// r.org is origin of ray
 		const glm::vec3& lb = aabb.Min;
 		const glm::vec3& rt = aabb.Max;
+
 		float t1 = (lb.x - m_Origin.x) * dirfrac.x;
 		float t2 = (rt.x - m_Origin.x) * dirfrac.x;
 		float t3 = (lb.y - m_Origin.y) * dirfrac.y;
@@ -53,7 +52,7 @@ namespace Moon {
 		const glm::vec3 E2 = c - a;
 		const glm::vec3 N = cross(E1, E2);
 		const float det = -glm::dot(m_Direction, N);
-		const float invdet = 1.f / det;
+		const float invdet = 1.0f / det;
 		const glm::vec3 AO = m_Origin - a;
 		const glm::vec3 DAO = glm::cross(AO, m_Direction);
 		const float u = glm::dot(E2, DAO) * invdet;
