@@ -31,9 +31,19 @@ namespace Moon {
 		return s_UIntDistribution16(s_RandomEngine);
 	}
 
+	uint16_t Random::UInt16(uint16_t min, uint16_t max)
+	{
+		return min + (s_UIntDistribution16(s_RandomEngine) % (max - min + 1));
+	}
+
 	uint32_t Random::UInt32()
 	{
 		return s_UIntDistribution32(s_RandomEngine);
+	}
+
+	uint32_t Random::UInt32(uint32_t min, uint32_t max)
+	{
+		return min + (s_UIntDistribution32(s_RandomEngine) % (max - min + 1));
 	}
 
 	uint64_t Random::UInt64()

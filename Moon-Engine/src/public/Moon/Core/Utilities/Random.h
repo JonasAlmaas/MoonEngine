@@ -19,9 +19,19 @@ namespace Moon {
 		static uint16_t UInt16();
 
 		/*
+		 * Returns a random unsignend 16 bit integer between min and max. Inclusive.
+		 */
+		static uint16_t UInt16(uint16_t min, uint16_t max);
+
+		/*
 		 * @return A random unsignend 32 bit integer.
 		 */
 		static uint32_t UInt32();
+
+		/*
+		 * Returns a random unsignend 32 bit integer between min and max. Inclusive.
+		 */
+		static uint32_t UInt32(uint32_t min, uint32_t max);
 
 		/*
 		 * @return A random unsignend 64 bit integer.
@@ -30,9 +40,6 @@ namespace Moon {
 
 		/*
 		 * Returns a random unsignend 64 bit integer between min and max. Inclusive.
-		 * 
-		 * @param Minimum value the integer can be.
-		 * @param Maximum value the integer can be.
 		 */
 		static uint64_t UInt64(uint64_t min, uint64_t max);
 
