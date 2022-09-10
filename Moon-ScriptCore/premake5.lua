@@ -3,8 +3,8 @@ project "Moon-ScriptCore"
     language "C#"
 	dotnetframework "4.7.2"
 
-	targetdir ("%{wks.location}/Moon-Editor/Resources/Scripts")
-	objdir ("%{wks.location}/Moon-Editor/Resources/Scripts/Intermediates")
+	targetdir ("../Moon-Editor/Resources/Scripts")
+	objdir ("../Moon-Editor/Resources/Scripts/Intermediates")
 
     files
     {

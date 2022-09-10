@@ -2,6 +2,7 @@
 **/bin/
 !vendor/**/bin/
 bin-int/
+**/Binaries/
 **/Intermediates/
 
 # Moon files

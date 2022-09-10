@@ -96,6 +96,9 @@ namespace Moon {
 		MonoAssembly* CoreAssembly = nullptr;
 		MonoImage* CoreAssemblyImage = nullptr;
 
+		MonoAssembly* AppAssembly = nullptr;
+		MonoImage* AppAssemblyImage = nullptr;
+
 		ScriptClass EntityClass;
 
 		std::unordered_map<std::string, Ref<ScriptClass>> EntityClasses;
@@ -118,40 +121,13 @@ namespace Moon {
 		InitMono();
 
 		LoadAssembly("Resources/Scripts/Moon-ScriptCore.dll");
-		LoadAssemblyClasses(s_Data->CoreAssembly);
+		LoadAppAssembly("SandboxProject/Content/Scripts/Binaries/Sandbox.dll");
+		LoadAssemblyClasses();
 
 		ScriptGlue::RegisterComponents();
 		ScriptGlue::RegisterFunctions();
 
-		s_Data->EntityClass = ScriptClass("Moon", "Entity");
-
-#if 0
-		MonoObject* instance = s_Data->EntityClass.Instantiate();
-
-		// Call method
-		MonoMethod* printMessageFunc = s_Data->EntityClass.GetMethod("PrintMessage", 0);
-		s_Data->EntityClass.InvokeMethod(instance, printMessageFunc);
-
-		// Call methods with parameters
-
-		int value = 5;
-		int value2 = 508;
-		void* param = &value;
-		void* params[2] = { &value, &value2 };
-
-		MonoMethod* printIntFunc = s_Data->EntityClass.GetMethod("PrintInt", 1);
-		s_Data->EntityClass.InvokeMethod(instance, printIntFunc, &param);
-
-		MonoMethod* printIntsFunc = s_Data->EntityClass.GetMethod("PrintInts", 2);
-		s_Data->EntityClass.InvokeMethod(instance, printIntsFunc, params);
-
-		MonoString* monoString = mono_string_new(s_Data->AppDomain, "Hello World from C++!");
-		MonoMethod* printCustomMessageFunc = s_Data->EntityClass.GetMethod("PrintCustomMessage", 1);
-		void* stringParam = monoString;
-		s_Data->EntityClass.InvokeMethod(instance, printCustomMessageFunc, &stringParam);
-
-		ME_CORE_ASSERT(false, "MONO(C#) TESTING!");
-#endif
+		s_Data->EntityClass = ScriptClass("Moon", "Entity", true);
 	}
 
 	void ScriptEngine::Shutdown()
@@ -244,6 +220,13 @@ namespace Moon {
 		//Utils::PrintAssemblyTypes(s_Data->CoreAssembly);
 	}
 
+	void ScriptEngine::LoadAppAssembly(const std::filesystem::path& filepath)
+	{
+		s_Data->AppAssembly = Utils::LoadMonoAssembly(filepath);
+		s_Data->AppAssemblyImage = mono_assembly_get_image(s_Data->AppAssembly);
+		//Utils::PrintAssemblyTypes(s_Data->AppAssembly);
+	}
+
 	Scene* ScriptEngine::GetSceneContext()
 	{
 		return s_Data->SceneContext;
@@ -259,26 +242,27 @@ namespace Moon {
 		return s_Data->CoreAssemblyImage;
 	}
 
-	void ScriptEngine::LoadAssemblyClasses(MonoAssembly* assembly)
+	void ScriptEngine::LoadAssemblyClasses()
 	{
 		s_Data->EntityClasses.clear();
 
-		MonoImage* image = mono_assembly_get_image(assembly);
-		const MonoTableInfo* typeDefinitionsTable = mono_image_get_table_info(image, MONO_TABLE_TYPEDEF);
+		const MonoTableInfo* typeDefinitionsTable = mono_image_get_table_info(s_Data->AppAssemblyImage, MONO_TABLE_TYPEDEF);
+
+
 		int32_t numTypes = mono_table_info_get_rows(typeDefinitionsTable);
 
-		MonoClass* entityClass = mono_class_from_name(image, "Moon", "Entity");
+		MonoClass* entityClass = mono_class_from_name(s_Data->CoreAssemblyImage, "Moon", "Entity");
 
 		for (int32_t i = 0; i < numTypes; i++)
 		{
 			uint32_t cols[MONO_TYPEDEF_SIZE];
 			mono_metadata_decode_row(typeDefinitionsTable, i, cols, MONO_TYPEDEF_SIZE);
 
-			const char* nameSpace = mono_metadata_string_heap(image, cols[MONO_TYPEDEF_NAMESPACE]);
-			const char* name = mono_metadata_string_heap(image, cols[MONO_TYPEDEF_NAME]);
+			const char* nameSpace = mono_metadata_string_heap(s_Data->AppAssemblyImage, cols[MONO_TYPEDEF_NAMESPACE]);
+			const char* name = mono_metadata_string_heap(s_Data->AppAssemblyImage, cols[MONO_TYPEDEF_NAME]);
 			std::string fullName = strlen(nameSpace) != 0 ? fullName = fmt::format("{}.{}", nameSpace, name) : name;
 
-			MonoClass* monoClass = mono_class_from_name(image, nameSpace, name);
+			MonoClass* monoClass = mono_class_from_name(s_Data->AppAssemblyImage, nameSpace, name);
 
 			if (monoClass == entityClass)
 				continue;
@@ -299,10 +283,10 @@ namespace Moon {
 	// -------- ScriptClass --------
 	// -----------------------------
 
-	ScriptClass::ScriptClass(const std::string& classNamespace, const std::string& className)
+	ScriptClass::ScriptClass(const std::string& classNamespace, const std::string& className, bool isCore)
 		: m_ClassNamespace(classNamespace), m_ClassName(className)
 	{
-		m_MonoClass = mono_class_from_name(s_Data->CoreAssemblyImage, classNamespace.c_str(), className.c_str());
+		m_MonoClass = mono_class_from_name(isCore ? s_Data->CoreAssemblyImage : s_Data->AppAssemblyImage, classNamespace.c_str(), className.c_str());
 	}
 
 	MonoObject* ScriptClass::Instantiate()
