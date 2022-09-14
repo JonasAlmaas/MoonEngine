@@ -144,7 +144,7 @@ namespace Asteroid {
 			});
 
 			// -- Script Component --
-			DrawComponent<ScriptComponent>("C# Script", selectionContext, [](Entity& entity, ScriptComponent& component)
+			DrawComponent<ScriptComponent>("C# Script", selectionContext, [](Entity& entity, ScriptComponent& component) mutable
 			{
 				bool scriptClassExists = ScriptEngine::EntityClassExists(component.ClassName);
 
@@ -159,6 +159,23 @@ namespace Asteroid {
 
 				if (!scriptClassExists)
 					ImGui::PopStyleColor();
+
+				// Fields
+				Ref<ScriptInstance> scriptInstance = ScriptEngine::GetEntityScriptInstance(entity.GetUUID());
+				if (scriptInstance)
+				{
+					const auto& fields = scriptInstance->GetScriptClass()->GetFields();
+
+					for (const auto& [name, field] : fields)
+					{
+						if (field.Type == ScriptFieldType::Float)
+						{
+							float data = scriptInstance->GetFieldValue<float>(name);
+							if (ImGui::DragFloat(name.c_str(), &data))
+								scriptInstance->SetFieldValue(name, data);
+						}
+					}
+				}
 			});
 
 			// -- Camera Component --

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Moon;
 
 
@@ -8,6 +7,9 @@ namespace Sandbox
 
 	public class Player : Entity
 	{
+		public Entity OtherEntity;
+		public float Speed = 0.1f;
+
 		private TransformComponent m_Transform;
 		private Rigidbody2DComponent m_Rigidbody;
 
@@ -22,9 +24,8 @@ namespace Sandbox
 
 		void OnUpdate(float ts)
 		{
-			Console.WriteLine($"Player::OnUpdate: {ts}");
+			//Console.WriteLine($"Player::OnUpdate: {ts}");
 
-			float speed = 0.1f;
 			Float3 velocity = Float3.Zero;
 
 			if (Input.IsKeyPressed(KeyCode.W))
@@ -37,7 +38,7 @@ namespace Sandbox
 			else if (Input.IsKeyPressed(KeyCode.D))
 				velocity.x = 1.0f;
 
-			velocity *= speed;
+			velocity *= Speed;
 
 			m_Rigidbody.ApplyLinearImpulse(velocity.xy, true);
 		}
