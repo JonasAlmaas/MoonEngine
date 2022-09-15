@@ -29,6 +29,13 @@ namespace Asteroid {
 
 		// -------------------------
 
+		auto commandLineArgs = Application::Get().GetSpecification().CommandLineArgs;
+		if (commandLineArgs.Count > 1)
+		{
+			auto sceneFilePath = commandLineArgs[1];
+			EditorState::OpenScene(sceneFilePath);
+		}
+
 		Renderer2D::SetLineWidth(4.0f);
 	}
 

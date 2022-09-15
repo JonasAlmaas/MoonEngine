@@ -75,7 +75,7 @@ namespace Asteroid {
 		m_Focused = ImGui::IsWindowFocused();
 		m_Hovered = ImGui::IsWindowHovered();
 
-		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_Focused && !m_Hovered);
+		Application::Get().GetImGuiLayer()->SetBlockEvents(!m_Hovered);
 
 		ImVec2 panelSize = ImGui::GetContentRegionAvail();
 		m_Size = { panelSize.x, panelSize.y };

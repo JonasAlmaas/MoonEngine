@@ -52,7 +52,7 @@ namespace Moon {
 		template<typename T>
 		T GetFieldValue(const std::string& name)
 		{
-			static_assert(sizeof(T) <= 8, "Type too large!");
+			static_assert(sizeof(T) <= 16, "Type too large!");
 
 			if (!GetFieldValue_Internal(name, s_FieldValueBuffer))
 				return T();
@@ -63,7 +63,7 @@ namespace Moon {
 		template<typename T>
 		void SetFieldValue(const std::string& name, T value)
 		{
-			static_assert(sizeof(T) <= 8, "Type too large!");
+			static_assert(sizeof(T) <= 16, "Type too large!");
 
 			SetFieldValue_Internal(name, &value);
 		}
@@ -82,7 +82,7 @@ namespace Moon {
 		MonoMethod* m_OnUpdateMethod = nullptr;
 		MonoMethod* m_OnDestroyMethod = nullptr;
 
-		inline static char s_FieldValueBuffer[8];
+		inline static char s_FieldValueBuffer[16];
 
 		friend class ScriptEngine;
 		friend struct ScriptFieldInstance;

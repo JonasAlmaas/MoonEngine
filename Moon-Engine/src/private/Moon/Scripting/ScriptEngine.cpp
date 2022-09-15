@@ -121,31 +121,6 @@ namespace Moon {
 			return it->second;
 		}
 
-		const char* ScriptFieldTypeToString(ScriptFieldType type)
-		{
-			switch (type)
-			{
-				case ScriptFieldType::Float:	return "Float";
-				case ScriptFieldType::Float2:	return "Float2";
-				case ScriptFieldType::Float3:	return "Float3";
-				case ScriptFieldType::Float4:	return "Float4";
-				case ScriptFieldType::Double:	return "Double";
-				case ScriptFieldType::Bool:		return "Bool";
-				case ScriptFieldType::Char:		return "Char";
-				case ScriptFieldType::Byte:		return "Byte";
-				case ScriptFieldType::Short:	return "Short";
-				case ScriptFieldType::Int:		return "Int";
-				case ScriptFieldType::Long:		return "Long";
-				case ScriptFieldType::UByte:	return "UByte";
-				case ScriptFieldType::UShort:	return "UShort";
-				case ScriptFieldType::UInt:		return "UInt";
-				case ScriptFieldType::ULong:	return "ULong";
-				case ScriptFieldType::Entity:	return "Entity";
-			}
-
-			return "<Invalid>";
-		}
-
 	}
 
 	struct ScriptEngineData
