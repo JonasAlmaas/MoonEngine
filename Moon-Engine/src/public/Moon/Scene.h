@@ -42,6 +42,8 @@ namespace Moon {
 		Entity GetEntityByUUID(UUID entityID);
 		entt::registry& GetRegistry() { return m_Registry; }
 
+		bool IsRunning() const { return m_IsRunning; }
+
 	private:
 		void OnPhysics2DStart();
 		void OnPhysics2DStop();
@@ -54,6 +56,8 @@ namespace Moon {
 		std::unordered_map<UUID, entt::entity> m_EntityMap;
 
 		Entity m_ActiveCamera{};
+
+		bool m_IsRunning = false;
 
 		uint32_t m_ViewportWidth = 0;
 		uint32_t m_ViewportHeight = 0;

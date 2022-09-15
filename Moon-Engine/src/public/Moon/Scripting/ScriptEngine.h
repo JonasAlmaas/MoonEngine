@@ -32,6 +32,40 @@ namespace Moon {
 		MonoClassField* ClassField;
 	};
 
+	struct ScriptFieldInstance
+	{
+		ScriptField Field;
+
+		ScriptFieldInstance()
+		{
+			memset(m_Buffer, 0, sizeof(m_Buffer));
+		}
+
+		template<typename T>
+		T GetValue()
+		{
+			static_assert(sizeof(T) <= 8, "Typer too large!");
+			return *(T*)m_Buffer;
+		}
+
+		template<typename T>
+		void SetValue(T value)
+		{
+			static_assert(sizeof(T) <= 8, "Typer too large!");
+			memcpy(m_Buffer, &value, sizeof(T));
+		}
+
+	private:
+		uint8_t m_Buffer[8];
+
+	private:
+		friend class ScriptEngine;
+		friend class ScriptInstance;
+
+	};
+
+	using ScriptFieldMap = std::unordered_map<std::string, ScriptFieldInstance>;
+
 	class ScriptClass
 	{
 	public:
@@ -52,7 +86,6 @@ namespace Moon {
 
 		MonoClass* m_MonoClass = nullptr;
 
-	private:
 		friend class ScriptEngine;
 
 	};
@@ -71,6 +104,8 @@ namespace Moon {
 		template<typename T>
 		T GetFieldValue(const std::string& name)
 		{
+			static_assert(sizeof(T) <= 8, "Type too large!");
+
 			if (!GetFieldValue_Internal(name, s_FieldValueBuffer))
 				return T();
 
@@ -78,8 +113,10 @@ namespace Moon {
 		}
 
 		template<typename T>
-		void SetFieldValue(const std::string& name, const T& value)
+		void SetFieldValue(const std::string& name, T value)
 		{
+			static_assert(sizeof(T) <= 8, "Type too large!");
+
 			SetFieldValue_Internal(name, &value);
 		}
 
@@ -98,6 +135,9 @@ namespace Moon {
 		MonoMethod* m_OnDestroyMethod = nullptr;
 
 		inline static char s_FieldValueBuffer[8];
+
+		friend class ScriptEngine;
+		friend struct ScriptFieldInstance;
 
 	};
 
@@ -121,7 +161,10 @@ namespace Moon {
 
 		static Scene* GetSceneContext();
 		static Ref<ScriptInstance> GetEntityScriptInstance(UUID entityID);
+
+		static Ref<ScriptClass> GetEntityClass(const std::string& name);
 		static std::unordered_map<std::string, Ref<ScriptClass>> GetEntityClasses();
+		static ScriptFieldMap& GetScriptFieldMap(Entity entity);
 
 		static MonoImage* GetCoreAssemblyImage();
 

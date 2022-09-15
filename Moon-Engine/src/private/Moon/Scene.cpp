@@ -52,6 +52,8 @@ namespace Moon {
 
 	void Scene::OnRuntimeStart()
 	{
+		m_IsRunning = true;
+
 		OnPhysics2DStart();
 
 		// ---- Native Scripts ----
@@ -87,6 +89,8 @@ namespace Moon {
 
 	void Scene::OnRuntimeStop()
 	{
+		m_IsRunning = false;
+
 		// ---- Native Scripts ----
 		{
 			auto view = m_Registry.view<NativeScriptComponent>();

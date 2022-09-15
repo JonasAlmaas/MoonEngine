@@ -163,6 +163,7 @@ namespace Moon {
 
 		std::unordered_map<std::string, Ref<ScriptClass>> EntityClasses;
 		std::unordered_map<UUID, Ref<ScriptInstance>> EntityInstances;
+		std::unordered_map<UUID, ScriptFieldMap> EntityScriptFields;
 
 		// Runtime
 		Scene* SceneContext = nullptr;
@@ -236,32 +237,41 @@ namespace Moon {
 		const auto& sc = entity.GetComponent<ScriptComponent>();
 		if (ScriptEngine::EntityClassExists(sc.ClassName))
 		{
-			UUID entityUUID = entity.GetUUID();
+			UUID entityID = entity.GetUUID();
 
-			Ref<ScriptInstance> instance = s_Data->EntityInstances[entityUUID] = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName], entity);
-			s_Data->EntityInstances[entityUUID] = instance;
+			Ref<ScriptInstance> instance = s_Data->EntityInstances[entityID] = CreateRef<ScriptInstance>(s_Data->EntityClasses[sc.ClassName], entity);
+			s_Data->EntityInstances[entityID] = instance;
+
+			// Copy field values
+			if (s_Data->EntityScriptFields.find(entityID) != s_Data->EntityScriptFields.end())
+			{
+				const ScriptFieldMap& fieldMap = s_Data->EntityScriptFields.at(entityID);
+				for (const auto& [name, fieldInstance] : fieldMap)
+					instance->SetFieldValue_Internal(name, fieldInstance.m_Buffer);
+			}
+
 			instance->InvokeOnCreate();
 		}
 	}
 
 	void ScriptEngine::OnUpdate(Entity entity, Timestep ts)
 	{
-		UUID entityUUID = entity.GetUUID();
-		ME_CORE_ASSERT(s_Data->EntityInstances.find(entityUUID) != s_Data->EntityInstances.end(), "Entity does not have a script instance!");
+		UUID entityID = entity.GetUUID();
+		ME_CORE_ASSERT(s_Data->EntityInstances.find(entityID) != s_Data->EntityInstances.end(), "Entity does not have a script instance!");
 
-		Ref<ScriptInstance> instance = s_Data->EntityInstances[entityUUID];
+		Ref<ScriptInstance> instance = s_Data->EntityInstances[entityID];
 		instance->InvokeOnUpdate(ts);
 	}
 
 	void ScriptEngine::OnDestroyEntity(Entity entity)
 	{
-		UUID entityUUID = entity.GetUUID();
-		ME_CORE_ASSERT(s_Data->EntityInstances.find(entityUUID) != s_Data->EntityInstances.end(), "Entity does not have a script instance!");
+		UUID entityID = entity.GetUUID();
+		ME_CORE_ASSERT(s_Data->EntityInstances.find(entityID) != s_Data->EntityInstances.end(), "Entity does not have a script instance!");
 
-		Ref<ScriptInstance> instance = s_Data->EntityInstances[entityUUID];
+		Ref<ScriptInstance> instance = s_Data->EntityInstances[entityID];
 		instance->InvokeOnDestroy();
 
-		s_Data->EntityInstances.erase(entityUUID);
+		s_Data->EntityInstances.erase(entityID);
 	}
 
 	bool ScriptEngine::EntityClassExists(const std::string& fullClassName)
@@ -301,9 +311,25 @@ namespace Moon {
 		return it->second;
 	}
 
+	Ref<ScriptClass> ScriptEngine::GetEntityClass(const std::string& name)
+	{
+		if (s_Data->EntityClasses.find(name) == s_Data->EntityClasses.end())
+			return nullptr;
+
+		return s_Data->EntityClasses.at(name);
+	}
+
 	std::unordered_map<std::string, Ref<ScriptClass>> ScriptEngine::GetEntityClasses()
 	{
 		return s_Data->EntityClasses;
+	}
+
+	ScriptFieldMap& ScriptEngine::GetScriptFieldMap(Entity entity)
+	{
+		ME_CORE_ASSERT(entity);
+
+		UUID entityID = entity.GetUUID();
+		return s_Data->EntityScriptFields[entityID];
 	}
 
 	MonoImage* ScriptEngine::GetCoreAssemblyImage()
