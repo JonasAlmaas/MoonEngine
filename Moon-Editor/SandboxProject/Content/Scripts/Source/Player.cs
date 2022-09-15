@@ -38,7 +38,7 @@ namespace Sandbox
 			else if (Input.IsKeyPressed(KeyCode.D))
 				velocity.x = 1.0f;
 
-			velocity *= Speed;
+			velocity *= Speed * ts;
 
 			m_Rigidbody.ApplyLinearImpulse(velocity.xy, true);
 		}
