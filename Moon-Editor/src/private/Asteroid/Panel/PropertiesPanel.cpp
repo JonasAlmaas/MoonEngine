@@ -81,12 +81,15 @@ namespace Asteroid {
 
 	void PropertiesPanel::OnImGuiRender()
 	{
+		ImGui::Begin("Properties");
+
 		Entity selectionContext = EditorState::GetActiveScene()->GetSelectionContext();
 
 		if (!selectionContext)
+		{
+			ImGui::End();
 			return;
-
-		ImGui::Begin("Properties");
+		}
 
 		// -- Tag Component -- and add component
 		if (selectionContext.HasComponent<TagComponent>())
