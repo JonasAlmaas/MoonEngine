@@ -43,6 +43,26 @@ namespace Moon {
 		return s_EntityHasComponentFuncs.at(managedType)(entity);
 	}
 
+	static UUID Entity_FindEntityByName(MonoString* name)
+	{
+		char* nameCStr = mono_string_to_utf8(name);
+
+		Scene* scene = ScriptEngine::GetSceneContext();
+		ME_CORE_ASSERT(scene, "Script Engine does not currently have a scene context!");
+		Entity entity = scene->FindEntityByName(nameCStr);
+
+		mono_free(nameCStr);
+
+		if (!entity)
+			return 0;
+
+		return entity.GetUUID();
+	}
+
+	// ----------------------------
+	// -------- Components --------
+	// ----------------------------
+
 	static void TransformComponent_GetTranslation(UUID entityID, glm::vec3* outTranslation)
 	{
 		Entity entity = GetEntityFromID(entityID);

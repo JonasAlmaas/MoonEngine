@@ -39,7 +39,9 @@ namespace Moon {
 			return m_Registry.view<Components...>();
 		}
 
+		Entity FindEntityByName(std::string_view name);
 		Entity GetEntityByUUID(UUID entityID);
+
 		entt::registry& GetRegistry() { return m_Registry; }
 
 		bool IsRunning() const { return m_IsRunning; }

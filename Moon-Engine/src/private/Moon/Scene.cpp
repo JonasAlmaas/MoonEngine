@@ -363,6 +363,18 @@ namespace Moon {
 		}
 	}
 
+	Entity Scene::FindEntityByName(std::string_view name)
+	{
+		auto view = m_Registry.view<TagComponent>();
+		for (auto entity : view)
+		{
+			const TagComponent& tc = view.get<TagComponent>(entity);
+			if (tc.Tag == name)
+				return { &m_Registry, entity };
+		}
+		return {};
+	}
+
 	Entity Scene::GetEntityByUUID(UUID entityID)
 	{
 		ME_CORE_ASSERT(m_EntityMap.find(entityID) != m_EntityMap.end(), "Entity does not exist!");
