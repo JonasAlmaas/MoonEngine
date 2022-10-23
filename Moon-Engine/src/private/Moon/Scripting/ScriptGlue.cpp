@@ -93,33 +93,24 @@ namespace Moon {
 		body->ApplyLinearImpulseToCenter(b2Vec2(impulse->x, impulse->y), wake);
 	}
 
-	// -----------------------
-	// -------- Input --------
-	// -----------------------
-
-	static bool Input_IsKeyPressed(KeyCode keycode)
-	{
-		return Input::IsKeyPressed(keycode);
-	}
-
 	template<typename... Component>
 	static void RegisterComponent()
 	{
 		([]()
-		{
-			std::string_view typeName = typeid(Component).name();
-			size_t pos = typeName.find_last_of(':');
-			std::string_view structName = typeName.substr(pos + 1);
-			std::string managedTypename = fmt::format("Moon.{}", structName);
-
-			MonoType* managedType = mono_reflection_type_from_name(managedTypename.data(), ScriptEngine::GetCoreAssemblyImage());
-			if (!managedType)
 			{
-				ME_CORE_LOG_ERROR("Could not find component type {}", managedTypename);
-				return;
-			}
-			s_EntityHasComponentFuncs[managedType] = [](Entity entity) { return entity.HasComponent<Component>(); };
-		}(), ...);
+				std::string_view typeName = typeid(Component).name();
+				size_t pos = typeName.find_last_of(':');
+				std::string_view structName = typeName.substr(pos + 1);
+				std::string managedTypename = fmt::format("Moon.{}", structName);
+
+				MonoType* managedType = mono_reflection_type_from_name(managedTypename.data(), ScriptEngine::GetCoreAssemblyImage());
+				if (!managedType)
+				{
+					ME_CORE_LOG_ERROR("Could not find component type {}", managedTypename);
+					return;
+				}
+				s_EntityHasComponentFuncs[managedType] = [](Entity entity) { return entity.HasComponent<Component>(); };
+			}(), ...);
 	}
 
 	template<typename... Component>
@@ -131,6 +122,15 @@ namespace Moon {
 	void ScriptGlue::RegisterComponents()
 	{
 		RegisterComponent(AllComponents{});
+	}
+
+	// -----------------------
+	// -------- Input --------
+	// -----------------------
+
+	static bool Input_IsKeyPressed(KeyCode keycode)
+	{
+		return Input::IsKeyPressed(keycode);
 	}
 
 	void ScriptGlue::RegisterFunctions()
