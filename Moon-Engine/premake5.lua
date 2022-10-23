@@ -49,8 +49,6 @@ project "Moon-Engine"
 
     links
 	{
-		"Moon-ScriptCore",
-
 		"Box2D",
 		"Glad",
 		"GLFW",
