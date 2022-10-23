@@ -21,6 +21,20 @@ namespace Moon
 			z = _z;
 		}
 
+		public Float3(Float2 xy, float _z)
+		{
+			x = xy.x;
+			y = xy.y;
+			z = _z;
+		}
+
+		public Float3(float _x, Float2 yz)
+		{
+			x = _x;
+			y = yz.x;
+			z = yz.y;
+		}
+
 		public Float2 xy
 		{
 			get => new Float2(x, y);
